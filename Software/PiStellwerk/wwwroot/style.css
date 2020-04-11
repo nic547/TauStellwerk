@@ -1,0 +1,35 @@
+﻿body {
+    font-family: sans-serif;
+}
+#CommandButton {
+	position: absolute;
+	top: 0;
+	user-select: none;
+	width: 100%;
+	min-height: 80px;
+	text-align: center;
+}
+
+.StoppedButton {
+	background-color: red;
+	color: white;
+}
+
+.StoppedBlockingButton {
+	background-color: darkred;
+	color: white;
+}
+
+.RunningButton {
+	background-color: green;
+	color: black;
+}
+
+footer {
+	border-top-color: gray;
+	border-top-style: solid;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
