@@ -1,9 +1,6 @@
 ﻿using PiStellwerk.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace PiStellwerk
 {
     public static class TestDataService
@@ -16,7 +13,9 @@ namespace PiStellwerk
                 {
                     Name = "Roco BR 193 493 (Hupac Vollblau)",
                     SpeedSteps = 128,
+                    Address = 49,
                     TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions = new List<DccFunction>()
                     {
                         new DccFunction(0, "Headlights"),
@@ -55,6 +54,7 @@ namespace PiStellwerk
                     Name = "Roco BR 193 Gotthardo (SBB C Int)",
                     SpeedSteps = 128,
                     TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.Percent,
                     Functions = new List<DccFunction>()
                     {
                         new DccFunction(0, "Headlights"),

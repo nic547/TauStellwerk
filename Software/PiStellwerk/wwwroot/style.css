@@ -1,23 +1,57 @@
-﻿body {
+﻿:root {
     font-family: sans-serif;
-}
-#CommandButton {
-	position: absolute;
-	top: 0;
 	user-select: none;
+
+	--background-main: #303030;
+	--background-secondary: #202020;
+	--background-highlight: #404040;
+	--textcolor-main: #FFFFFF;
+	--textcolor-secondary: #EE EE EE; 
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	background-color: var(--background-main);
+	color: var(--textcolor-main);
+	display:flex;
+	height: 100%;
+	flex-direction:column;
+	align-items: stretch;
+}
+
+.title {
+	font-size: 1.5em
+}
+
+.secondary {
+	color: var(--textcolor-secondary);
+}
+
+#CommandButton {
+
 	width: 100%;
-	min-height: 80px;
+	margin: 0px;
 	text-align: center;
+	padding: 1em;
+	flex: 0, 0, auto;
+}
+
+@media (min-width: 900px) {
+	#CommandButton {
+		width: 80%;
+		margin: 0px auto;
+	}
 }
 
 .StoppedButton {
 	background-color: red;
-	color: white;
 }
 
 .StoppedBlockingButton {
 	background-color: darkred;
-	color: white;
 }
 
 .RunningButton {
@@ -25,11 +59,22 @@
 	color: black;
 }
 
+#EngineContainer {
+	display: flex;
+	flex: 1 0 auto;
+	flex-direction: row;
+	}
+
+.EngineControl {
+	background-color: var(--background-secondary);
+	width:25em;
+	padding: 2px;
+	margin: 3px;
+	height: 100%;
+}
+
 footer {
-	border-top-color: gray;
-	border-top-style: solid;
-	position: fixed;
-	left: 0;
-	bottom: 0;
 	width: 100%;
+	background-color: var(--background-highlight);
+	flex: 0, 0, auto;
 }

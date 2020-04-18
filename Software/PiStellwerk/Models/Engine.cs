@@ -8,8 +8,11 @@ namespace PiStellwerk.Models
     public class Engine
     {
         public string Name { get; set; }
+        public int Address { get; set; }
         public byte SpeedSteps { get; set; }
         public int TopSpeed { get; set; }
+
+        public SpeedDisplayType SpeedDisplayType { get; set; }
 
         public List<DccFunction> Functions { get; set; }
     }
@@ -38,5 +41,21 @@ namespace PiStellwerk.Models
         Momentary = 0,
         Continus = 1,
 
+    }
+
+    public enum SpeedDisplayType : byte
+    {
+        /// <summary>
+        /// Speed is supposed to be displayed as percent, from 0% to 100%
+        /// </summary>
+        Percent,
+        /// <summary>
+        /// Speed is supposed to be displayed as the actual dcc speed steps
+        /// </summary>
+        SpeedSteps,
+        /// <summary>
+        /// Speed is supposed to be displayed as the appoximation of speed based on the top speed and speed steps.
+        /// </summary>
+        TopSpeed,
     }
 }

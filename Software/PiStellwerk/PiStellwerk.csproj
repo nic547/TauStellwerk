@@ -1,8 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>PiStellwerk.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\scripts\Engine.ts" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

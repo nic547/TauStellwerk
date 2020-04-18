@@ -4,21 +4,29 @@
     <link rel="stylesheet" href="normalize.css" type="text/css"/>
     <link rel="stylesheet" href="style.css"  type="text/css"/>
     <script src="scripts/script.js"></script>
+    <script src="scripts/Engine.js"></script>
     <meta charset="utf-8" />
     <title></title>
 </head>
-<body onload="init()">
-    <header id="CommandButton" class="RunningButton" onclick="CommandButtonPressed()">
-        <h2 id="CommandTitle">RUNNING</h2>
-        <p id="CommandDetails">started by: SYSTEM</p>
+<body onload="">
+    <header id="CommandButton" class="RunningButton" onclick="">
+        <span class="title" id="CommandTitle">RUNNING</span>
+        <br/>
+        <span id="CommandDetails">started by: SYSTEM</span>
     </header>
     <div id="EngineContainer">
-        <section>
-
-        </section>
+        <!-- Template -->
+        <div class="EngineControl" id="EngineTemplate" style="display: none">
+            <header>Engine</header>
+            <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
+            <output>0</output>
+            <ul>
+            </ul>
+        </div>
     </div>
     <footer>
         <p id="username">User: Username</p>
+        <button onclick="TESTLoadEngines()">TEST</button>
     </footer>
 </body>
 </html>

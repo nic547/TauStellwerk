@@ -16,5 +16,11 @@ namespace PiStellwerk.Controllers
         {
             return TestDataService.GetEngines();
         }
+
+        [HttpPost("command/{id}")]
+        public void EngineAction(int id)
+        {
+
+        }
     }
 }
