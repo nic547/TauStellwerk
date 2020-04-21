@@ -8,20 +8,21 @@
     <meta charset="utf-8" />
     <title></title>
 </head>
-<body onload="">
-    <header id="CommandButton" class="RunningButton" onclick="">
-        <span class="title" id="CommandTitle">RUNNING</span>
+<body onload="init()">
+    <header id="CommandButton" class="StoppedBlockingButton">
+        <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
         <br/>
-        <span id="CommandDetails">started by: SYSTEM</span>
+        <span id="CommandDetails">stopped by: SYSTEM</span>
     </header>
     <div id="EngineContainer">
         <!-- Template -->
-        <div class="EngineControl" id="EngineTemplate" style="display: none">
+        <div class="EngineControl" id="EngineTemplate">
             <header>Engine</header>
             <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
             <output>0</output>
-            <ul>
-            </ul>
+            <div class="EngineFunctions">
+
+            </div>
         </div>
     </div>
     <footer>

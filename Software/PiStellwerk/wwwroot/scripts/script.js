@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var username;
-var isRunning;
+var isRunning = false;
 var isBlocked;
 var statusIntervalId;
 async function CommandButtonPressed() {
@@ -21,11 +21,12 @@ function handleStatusChange(isRunning, username) {
         isBlocked = true;
         div.classList.remove("RunningButton");
         div.classList.add("StoppedBlockingButton");
-        title.innerHTML = "STOPPED";
+        title.innerHTML = "STOPPED (LOCKED)";
         details.innerHTML = `PiStellwerk stopped by ${username} `;
         setTimeout(function () {
             isBlocked = false;
             div.classList.remove("StoppedBlockingButton");
+            title.innerHTML = "STOPPED";
             div.classList.add("StoppedButton");
         }, 2500);
     }
@@ -52,6 +53,7 @@ function init() {
     username = Math.floor(Math.random() * 10000000).toString();
     updateDisplayedUsername();
     statusIntervalId = setInterval(() => regularUpdate(), 500);
+    document.getElementById("CommandButton").addEventListener("click", CommandButtonPressed);
     document.getElementById("username").addEventListener("click", promttForUsername);
 }
 exports.init = init;

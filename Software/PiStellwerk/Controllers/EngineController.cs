@@ -3,6 +3,7 @@ using PiStellwerk.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PiStellwerk.Controllers
@@ -20,7 +21,8 @@ namespace PiStellwerk.Controllers
         [HttpPost("command/{id}")]
         public void EngineAction(int id)
         {
-
+            // TODO: Remove testing sleep
+            Thread.Sleep(1);
         }
     }
 }

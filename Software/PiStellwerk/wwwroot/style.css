@@ -47,15 +47,15 @@ body {
 }
 
 .StoppedButton {
-	background-color: red;
+	background-color: #B00020;
 }
 
 .StoppedBlockingButton {
-	background-color: darkred;
+	background-color: #CF6679;
 }
 
 .RunningButton {
-	background-color: green;
+	background-color: Highlight;
 	color: black;
 }
 
@@ -63,14 +63,44 @@ body {
 	display: flex;
 	flex: 1 0 auto;
 	flex-direction: row;
+	overflow-x: scroll;
+	overflow-y: hidden;
 	}
 
 .EngineControl {
 	background-color: var(--background-secondary);
-	width:25em;
 	padding: 2px;
 	margin: 3px;
 	height: 100%;
+	display: grid;
+	grid-template-areas: "header header"
+						 "slider functions"
+						 "speed functions";
+	grid-template-columns: 5em auto;
+	grid-template-rows: 2.5em auto 2.5em;
+	justify-items: center;
+	flex: 0 0 25em;
+}
+
+.EngineControl:first-child {
+	display: none;
+}
+
+
+.EngineControl > header {
+	grid-area: header;
+}
+
+.EngineControl > input {
+	grid-area: slider;
+}
+
+.EngineControl > output {
+	grid-area: speed;
+}
+
+.EngineControl > .EngineFunctions {
+	grid-area: functions;
 }
 
 footer {

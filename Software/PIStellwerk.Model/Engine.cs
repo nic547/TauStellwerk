@@ -7,14 +7,27 @@ namespace PiStellwerk.Models
 {
     public class Engine
     {
+
         public string Name { get; set; }
-        public int Address { get; set; }
+
+        public int Id { get; set; }
+
+        /// <summary>
+        /// The DCC Address of an Engine. Is not necessarily unique.
+        /// </summary>
+        public ushort Address { get; set; }
         public byte SpeedSteps { get; set; }
         public int TopSpeed { get; set; }
 
         public SpeedDisplayType SpeedDisplayType { get; set; }
 
         public List<DccFunction> Functions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
+        /// everything one might search for if the exact name is unkown. 
+        /// </summary>
+        public List<string> Tags { get; set; }
     }
 
     public class DccFunction

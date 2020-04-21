@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayTypeAttribute = "data-display-type";
+var EngineIDAttribute = "data-engine-id";
 function TESTLoadEngines() {
     let Container = document.getElementById("EngineContainer");
     fetch("/engine/list", {
@@ -14,7 +15,7 @@ function TESTLoadEngines() {
         data.forEach(engine => {
             var tempnode = document.getElementById("EngineTemplate").cloneNode(true);
             tempnode.querySelector("header").textContent = engine.name;
-            tempnode.style.display = "block";
+            tempnode.setAttribute(EngineIDAttribute, engine.id);
             let tempinput = tempnode.querySelector("input");
             tempinput.addEventListener("input", HandleRangeValueChanged);
             switch (engine.speedDisplayType) {
@@ -39,6 +40,12 @@ exports.TESTLoadEngines = TESTLoadEngines;
 function HandleRangeValueChanged(event) {
     let targetElement = event.target;
     writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(DisplayTypeAttribute));
+    fetch(`/engine/command/${targetElement.parentElement.getAttribute(EngineIDAttribute)}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then((response) => { });
 }
 function writeSpeed(output, value, displayType) {
     switch (displayType) {
