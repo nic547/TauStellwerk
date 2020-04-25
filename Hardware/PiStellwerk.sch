@@ -214,35 +214,13 @@ SPI_SS
 $Comp
 L Connector:Screw_Terminal_01x02 J3
 U 1 1 5E07B398
-P 1600 1200
-F 0 "J3" H 2300 1100 50  0000 C CNN
-F 1 "Screw_Terminal_01x02" H 2100 1200 50  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 1600 1200 50  0001 C CNN
-F 3 "~" H 1600 1200 50  0001 C CNN
-	1    1600 1200
-	-1   0    0    1   
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J4
-U 1 1 5E07CC87
-P 1600 1400
-F 0 "J4" H 2200 1400 50  0000 C CNN
-F 1 "Conn_01x01" H 1900 1400 50  0000 C CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill2.5mm" H 1600 1400 50  0001 C CNN
-F 3 "~" H 1600 1400 50  0001 C CNN
-	1    1600 1400
-	-1   0    0    1   
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J5
-U 1 1 5E07DBCA
-P 1600 1500
-F 0 "J5" H 2200 1500 50  0000 C CNN
-F 1 "Conn_01x01" H 1900 1500 50  0000 C CNN
-F 2 "Connector_Wire:SolderWirePad_1x01_Drill2.5mm" H 1600 1500 50  0001 C CNN
-F 3 "~" H 1600 1500 50  0001 C CNN
-	1    1600 1500
-	-1   0    0    1   
+P 1600 1100
+F 0 "J3" H 2300 1000 50  0000 C CNN
+F 1 "Screw_Terminal_01x02" H 2100 1100 50  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 1600 1100 50  0001 C CNN
+F 3 "~" H 1600 1100 50  0001 C CNN
+	1    1600 1100
+	-1   0    0    -1  
 $EndComp
 Text GLabel 1100 3950 0    50   Input ~ 0
 RPI_INDICATOR
@@ -285,17 +263,9 @@ $EndComp
 Text GLabel 3000 1050 1    50   Input ~ 0
 VIN
 Wire Wire Line
-	1800 1400 2050 1400
-Wire Wire Line
-	1800 1500 1950 1500
-Wire Wire Line
 	2050 1100 1800 1100
 Wire Wire Line
 	1800 1200 1950 1200
-Wire Wire Line
-	1950 1200 1950 1500
-Wire Wire Line
-	2050 1100 2050 1400
 $Comp
 L PiStellwerk_Libary:DRV8876 U3
 U 1 1 5E0BD95E
@@ -307,9 +277,9 @@ F 3 "" H 8200 7600 50  0001 C CNN
 	1    8200 7150
 	1    0    0    -1  
 $EndComp
-Text GLabel 4000 5800 0    50   Input ~ 0
-nFault
 Text GLabel 4000 5000 0    50   Input ~ 0
+nFault
+Text GLabel 4000 5800 0    50   Input ~ 0
 nSleep
 Text GLabel 4000 5900 0    50   Input ~ 0
 IN1
@@ -403,17 +373,6 @@ Text GLabel 6350 6200 0    50   Input ~ 0
 SWDIO
 Text GLabel 6350 6100 0    50   Input ~ 0
 SWCLK
-$Comp
-L Device:Polyfuse F1
-U 1 1 5E13E304
-P 8200 5850
-F 0 "F1" H 8288 5896 50  0000 L CNN
-F 1 "Polyfuse" H 8288 5805 50  0000 L CNN
-F 2 "Fuse:Fuse_1812_4532Metric_Pad1.30x3.40mm_HandSolder" H 8250 5650 50  0001 L CNN
-F 3 "~" H 8200 5850 50  0001 C CNN
-	1    8200 5850
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	3000 1050 3000 1100
 $Comp
@@ -439,7 +398,6 @@ F 4 "C6903" V 2250 1200 50  0001 C CNN "Feld4"
 	1    2250 1200
 	0    -1   -1   0   
 $EndComp
-Connection ~ 2050 1100
 $Comp
 L Device:D_Zener D1
 U 1 1 5E15DFB8
@@ -453,9 +411,6 @@ F 3 "~" H 2550 1250 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2250 1800 1950 1800
-Wire Wire Line
-	1950 1800 1950 1500
-Connection ~ 1950 1500
 Wire Wire Line
 	2250 1800 2500 1800
 Wire Wire Line
@@ -501,8 +456,6 @@ Text Label 7450 7450 0    50   ~ 0
 IMODE
 Text Label 7550 7550 0    50   ~ 0
 PMODE
-Wire Wire Line
-	8200 5700 8200 5600
 $Comp
 L power:GND #PWR0107
 U 1 1 5E1A6B94
@@ -528,12 +481,12 @@ $EndComp
 $Comp
 L Device:CP C3
 U 1 1 5E1AC5D5
-P 8350 5600
-F 0 "C3" H 8468 5646 50  0000 L CNN
-F 1 "35V/470uF" H 8468 5555 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" H 8388 5450 50  0001 C CNN
-F 3 "~" H 8350 5600 50  0001 C CNN
-	1    8350 5600
+P 8350 5800
+F 0 "C3" H 8468 5846 50  0000 L CNN
+F 1 "35V/220uF" H 8468 5755 50  0000 L CNN
+F 2 "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" H 8388 5650 50  0001 C CNN
+F 3 "~" H 8350 5800 50  0001 C CNN
+	1    8350 5800
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -663,13 +616,11 @@ F 3 "~" H 6900 1700 50  0001 C CNN
 	1    6900 1700
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	8200 6000 8200 6100
 Connection ~ 8200 6100
 Wire Wire Line
 	8200 6100 8200 6300
 Wire Wire Line
-	8500 6100 8500 5600
+	8500 6100 8500 5800
 Connection ~ 8500 6100
 $Comp
 L Device:C C23
@@ -768,7 +719,7 @@ Text GLabel 10850 1850 2    50   Input ~ 0
 5V
 Text GLabel 7850 1700 2    50   Input ~ 0
 18V
-Text GLabel 8200 5600 0    50   Input ~ 0
+Text GLabel 8200 5800 0    50   Input ~ 0
 18V
 Text Label 8950 9900 0    50   ~ 0
 3V3_UNFILTERED
@@ -1555,10 +1506,6 @@ Connection ~ 12850 8150
 Wire Wire Line
 	12850 8150 12950 8150
 Wire Wire Line
-	12250 7450 11500 7450
-Wire Wire Line
-	11500 7550 12250 7550
-Wire Wire Line
 	12550 7750 12100 7750
 Wire Wire Line
 	12100 7750 12100 7650
@@ -1704,24 +1651,6 @@ Connection ~ 14300 5300
 Wire Wire Line
 	14200 5300 14300 5300
 Wire Wire Line
-	13400 4600 12800 4600
-Wire Wire Line
-	13400 4700 13400 4600
-Wire Wire Line
-	13050 4800 13400 4800
-Wire Wire Line
-	13050 4700 13050 4800
-Wire Wire Line
-	12800 4700 13050 4700
-Wire Wire Line
-	12800 4500 13400 4500
-Wire Wire Line
-	13050 4300 13400 4300
-Wire Wire Line
-	13050 4400 13050 4300
-Wire Wire Line
-	12800 4400 13050 4400
-Wire Wire Line
 	13150 5300 13600 5300
 Connection ~ 13150 5300
 Wire Wire Line
@@ -1735,14 +1664,10 @@ Connection ~ 13600 5300
 Wire Wire Line
 	12800 5300 13150 5300
 Wire Wire Line
-	12800 4800 12800 5100
-Wire Wire Line
 	13150 3900 13700 3900
 Connection ~ 13150 3900
 Wire Wire Line
 	12800 3900 13150 3900
-Wire Wire Line
-	12800 4300 12800 3900
 $Comp
 L Device:C C20
 U 1 1 5ECC5A1D
@@ -1781,13 +1706,13 @@ Text GLabel 14300 3900 2    50   Input ~ 0
 $Comp
 L Connector_Generic:Conn_01x06 J8
 U 1 1 5ECABE71
-P 12600 4600
-F 0 "J8" H 12518 4075 50  0000 C CNN
-F 1 "Conn_01x06" H 12518 4166 50  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical" H 12600 4600 50  0001 C CNN
-F 3 "~" H 12600 4600 50  0001 C CNN
-	1    12600 4600
-	-1   0    0    1   
+P 12450 4500
+F 0 "J8" H 12368 4917 50  0000 C CNN
+F 1 "Conn_01x06" H 12368 4826 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical" H 12450 4500 50  0001 C CNN
+F 3 "~" H 12450 4500 50  0001 C CNN
+	1    12450 4500
+	-1   0    0    -1  
 $EndComp
 $Comp
 L Interface_UART:ISO3088DW U6
@@ -1820,7 +1745,6 @@ Wire Wire Line
 	12650 3800 12800 3800
 Wire Wire Line
 	12800 3800 12800 3900
-Connection ~ 12800 3900
 $Comp
 L Device:Jumper JP1
 U 1 1 5EE6A7CD
@@ -1833,8 +1757,7 @@ F 3 "~" H 12300 5100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	12600 5100 12800 5100
-Connection ~ 12800 5100
+	12600 5100 12750 5100
 Wire Wire Line
 	12800 5100 12800 5300
 Wire Wire Line
@@ -2043,10 +1966,10 @@ TRACESWO
 Text GLabel 6350 6000 0    50   Input ~ 0
 3V3
 $Comp
-L power:GND #PWR?
+L power:GND #PWR0102
 U 1 1 5F0A085E
 P 6350 6400
-F 0 "#PWR?" H 6350 6150 50  0001 C CNN
+F 0 "#PWR0102" H 6350 6150 50  0001 C CNN
 F 1 "GND" H 6355 6227 50  0000 C CNN
 F 2 "" H 6350 6400 50  0001 C CNN
 F 3 "" H 6350 6400 50  0001 C CNN
@@ -2076,4 +1999,58 @@ Text GLabel 14600 4500 2    50   Input ~ 0
 UART_TX
 Text GLabel 14600 4700 2    50   Input ~ 0
 UART_RX
+Wire Wire Line
+	1950 1200 1950 1800
+Wire Wire Line
+	13400 4700 12650 4700
+Wire Wire Line
+	13400 4800 13050 4800
+Wire Wire Line
+	13050 4800 13050 4600
+Wire Wire Line
+	13050 4600 12650 4600
+Wire Wire Line
+	13400 4300 13000 4300
+Wire Wire Line
+	13000 4300 13000 4500
+Wire Wire Line
+	13000 4500 12650 4500
+Wire Wire Line
+	13400 4400 13400 4500
+Wire Wire Line
+	12650 4400 13400 4400
+Wire Wire Line
+	12650 4300 12750 4300
+Wire Wire Line
+	12750 4300 12750 5100
+Connection ~ 12750 5100
+Wire Wire Line
+	12750 5100 12800 5100
+Wire Wire Line
+	12800 3900 12800 4800
+Wire Wire Line
+	12800 4800 12650 4800
+Connection ~ 12800 3900
+Wire Wire Line
+	11500 7450 12000 7450
+Wire Wire Line
+	12000 7450 12000 7550
+Wire Wire Line
+	12000 7550 12250 7550
+Wire Wire Line
+	12250 7450 12050 7450
+Wire Wire Line
+	12050 7450 12050 7500
+Wire Wire Line
+	12050 7500 11950 7500
+Wire Wire Line
+	11950 7500 11950 7550
+Wire Wire Line
+	11950 7550 11500 7550
+Text GLabel 5300 6100 2    50   Input ~ 0
+SWDIO
+Text GLabel 5300 6200 2    50   Input ~ 0
+SWCLK
+Wire Wire Line
+	8200 5800 8200 6100
 $EndSCHEMATC
