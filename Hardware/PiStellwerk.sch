@@ -680,8 +680,6 @@ F 3 "" H 2300 3750 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Connection ~ 2300 3750
-Text GLabel 3200 5450 0    50   Input ~ 0
-ENABLE_5V
 $Comp
 L power:+3V3 #PWR0128
 U 1 1 5E3B9CAF
@@ -723,8 +721,6 @@ Text GLabel 8200 5800 0    50   Input ~ 0
 18V
 Text Label 8950 9900 0    50   ~ 0
 3V3_UNFILTERED
-Text GLabel 3200 5050 0    50   Input ~ 0
-ENABLE_18V
 Wire Wire Line
 	7200 7250 7350 7250
 Wire Wire Line
@@ -2053,4 +2049,10 @@ Text GLabel 5300 6200 2    50   Input ~ 0
 SWCLK
 Wire Wire Line
 	8200 5800 8200 6100
+Text GLabel 4000 5700 0    50   Input ~ 0
+ENABLE_5V
+Text GLabel 4000 5600 0    50   Input ~ 0
+EN_SEC_5V
+Text GLabel 5300 6300 2    50   Input ~ 0
+ENABLE_18V
 $EndSCHEMATC
