@@ -2181,7 +2181,7 @@ Wire Wire Line
 Text GLabel 3850 7900 1    50   Input ~ 0
 3VA3
 Text GLabel 3850 8600 3    50   Input ~ 0
-NTC_EN
+NTC2_EN
 $Comp
 L power:GND #PWR0128
 U 1 1 5EC0E9ED
@@ -2266,7 +2266,7 @@ Wire Wire Line
 Text GLabel 3600 8250 0    50   Input ~ 0
 NTC1_ADC
 Text GLabel 3600 8600 3    50   Input ~ 0
-NTC_EN
+NTC1_EN
 Text GLabel 5300 4800 2    50   Input ~ 0
 NTC1_ADC
 Text GLabel 4000 4800 0    50   Input ~ 0
@@ -2310,4 +2310,18 @@ Wire Wire Line
 	8200 5900 8200 6100
 Connection ~ 8200 5900
 Connection ~ 8200 6100
+Text GLabel 4000 6100 0    50   Input ~ 0
+NTC1_EN
+Text GLabel 4000 5500 0    50   Input ~ 0
+NTC2_EN
+NoConn ~ 4000 5200
+NoConn ~ 4000 5300
+NoConn ~ 4000 6200
+NoConn ~ 4000 6300
+NoConn ~ 4000 4600
+NoConn ~ 4000 4500
+NoConn ~ 4000 4400
+NoConn ~ 4000 4200
+NoConn ~ 4000 4100
+NoConn ~ 4000 5400
 $EndSCHEMATC
