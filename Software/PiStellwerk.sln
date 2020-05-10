@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PIStellwerk.Model", "PIStellwerk.Model\PIStellwerk.Model.csproj", "{4251F256-1FB7-4750-9483-8512979CBB89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{EB376DEF-DF3E-4313-BC14-26D99A66B53F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB376DEF-DF3E-4313-BC14-26D99A66B53F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB376DEF-DF3E-4313-BC14-26D99A66B53F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4251F256-1FB7-4750-9483-8512979CBB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4251F256-1FB7-4750-9483-8512979CBB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4251F256-1FB7-4750-9483-8512979CBB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4251F256-1FB7-4750-9483-8512979CBB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0C57B46-6109-499C-A192-7B381117CE1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C57B46-6109-499C-A192-7B381117CE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C57B46-6109-499C-A192-7B381117CE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C57B46-6109-499C-A192-7B381117CE1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

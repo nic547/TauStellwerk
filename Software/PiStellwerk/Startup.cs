@@ -4,6 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
+using PiStellwerk.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Linq;
 
 namespace PiStellwerk
 {
@@ -12,6 +16,17 @@ namespace PiStellwerk
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            using (var client = new StwDbContext())
+            {
+                client.Database.EnsureDeleted();
+                client.Database.EnsureCreated();
+                if (!client.Engines.Any())
+                {
+                    client.Engines.AddRange(TestDataService.GetEngines());
+                    client.SaveChanges();
+                }
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -23,6 +38,8 @@ namespace PiStellwerk
             {
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+
+            services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
             services.AddHostedService<BackgroundServices.HardwareStatusService>();
             services.AddHostedService<BackgroundServices.UserService>();

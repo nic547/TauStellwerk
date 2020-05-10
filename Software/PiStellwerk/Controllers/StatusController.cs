@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.BackgroundServices;
 using PiStellwerk.Controllers;
+using PiStellwerk.Data;
 
-namespace RpiStellwerk.Controllers
+namespace PiStellwerk.Controllers
 {
     [ApiController]
     [Route("[Controller]")]

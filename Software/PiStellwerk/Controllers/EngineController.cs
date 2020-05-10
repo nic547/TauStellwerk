@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PiStellwerk.Models;
+﻿#nullable enable
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
+using PiStellwerk.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +16,19 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class EngineController
     {
-        [HttpGet("List")]
-        public IReadOnlyList<Engine> GetEngines()
+        private StwDbContext _dbContext;
+        public EngineController (StwDbContext dbContext)
         {
-            return TestDataService.GetEngines();
+            _dbContext = dbContext;
+        }
+        [HttpGet("List")]
+        public IReadOnlyList<Engine>? GetEngines()
+        {
+            if (_dbContext.Engines.Any())
+            {
+                return _dbContext.Engines.ToList();
+            }
+            else { return null; }
         }
 
         [HttpPost("command/{id}")]

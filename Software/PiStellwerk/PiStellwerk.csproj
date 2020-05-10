@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PIStellwerk.Model\PIStellwerk.Model.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
   </ItemGroup>
 
 

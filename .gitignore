@@ -369,3 +369,4 @@ Hardware/_autosave-PiStellwerk.sch
 Hardware/PiStellwerk.kicad_pcb-bak
 *.gbr
 *.drl
+Software/PiStellwerk/StwDatabase.db

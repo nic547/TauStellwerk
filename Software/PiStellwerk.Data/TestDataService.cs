@@ -1,4 +1,4 @@
-﻿using PiStellwerk.Models;
+﻿using PiStellwerk.Data;
 using System;
 using System.Collections.Generic;
 namespace PiStellwerk
@@ -12,7 +12,6 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Roco BR 193 493 (Hupac Vollblau)",
-                    Id = 96380450,
                     SpeedSteps = 128,
                     Address = 49,
                     TopSpeed = 200,
@@ -49,7 +48,7 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<string>()
+                    Tags = new List<Tag>()
                     {
                         "Vectron",
                         "Siemens",
@@ -60,7 +59,6 @@ namespace PiStellwerk
                  new Engine()
                 {
                     Name = "Roco BR 193 492 (Hupac Nightpiercer)",
-                    Id = 96380450,
                     SpeedSteps = 128,
                     Address = 49,
                     TopSpeed = 200,
@@ -97,27 +95,26 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<string>()
+                    Tags = new List<Tag>()
                     {
-                        "Vectron",
-                        "Siemens",
-                        "Dominic",
+                        new Tag("Vectron"),
+                        new Tag("Siemens"),
+                        new Tag("Dominic"),
                     }
                  },
 
                 new Engine ()
                 {
                     Name = "Roco BR 193 Gotthardo (SBB C Int)",
-                    Tags = new List<string>()
+                    Tags = new List<Tag>()
                     {
-                        "SBB Cargo",
-                        "Vectron",
-                        "Siemens",
-                        "Dominic",
-                        "Electric",
-                        "Multisystem"
+                        new Tag("SBB Cargo"),
+                        new Tag("Vectron"),
+                        new Tag("Siemens"),
+                        new Tag("Dominic"),
+                        new Tag("Electric"),
+                        new Tag("Multisystem")
                     },
-                    Id = 893047298,
                     SpeedSteps = 128,
                     TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.Percent,
@@ -158,7 +155,7 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Märklin Re 474 003",
-                    Tags = new List<string>()
+                    Tags = new List<Tag>()
                     {
                         "Siemens",
                         "ES 64 F4",
@@ -167,7 +164,6 @@ namespace PiStellwerk
                         "Electric",
                         "Multisystem"
                     },
-                    Id = 1512355,
                     SpeedSteps = 128,
                     TopSpeed = 140,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
