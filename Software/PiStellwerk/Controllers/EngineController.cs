@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using PiStellwerk.Data;
@@ -26,7 +27,7 @@ namespace PiStellwerk.Controllers
         {
             if (_dbContext.Engines.Any())
             {
-                return _dbContext.Engines.ToList();
+                return _dbContext.Engines.Include(e => e.Functions).ToList<Engine>();
             }
             else { return null; }
         }

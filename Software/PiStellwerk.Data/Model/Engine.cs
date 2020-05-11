@@ -32,7 +32,7 @@ namespace PiStellwerk.Data
         /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unkown. 
         /// </summary>
-        public List<Tag> Tags { get; set; }
+        public List<string> Tags { get; set; }
     }
 
     public class DccFunction
@@ -48,27 +48,6 @@ namespace PiStellwerk.Data
         public int Id { get; set; }
         public byte Number { get; set; }
         public string Name { get; set; }
-    }
-
-    public class Tag { 
-        public Tag()
-        {
-        }
-
-        public Tag(string tag)
-        {
-            Text = tag;
-        }
-        public string Text { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public int Id { get; set; }
-
-        public static implicit operator Tag(string tag)
-        {
-            return new Tag(tag);
-        }
     }
 
     public enum FunctionType : byte

@@ -48,11 +48,11 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<Tag>()
+                    Tags = new List<string>()
                     {
                         "Vectron",
                         "Siemens",
-                        "Dominic",
+                        "dri",
                     }
                 },
 
@@ -95,25 +95,25 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<Tag>()
+                    Tags = new List<string>()
                     {
-                        new Tag("Vectron"),
-                        new Tag("Siemens"),
-                        new Tag("Dominic"),
+                        "Vectron",
+                        "Siemens",
+                        "dri",
                     }
                  },
 
                 new Engine ()
                 {
                     Name = "Roco BR 193 Gotthardo (SBB C Int)",
-                    Tags = new List<Tag>()
+                    Tags = new List<string>()
                     {
-                        new Tag("SBB Cargo"),
-                        new Tag("Vectron"),
-                        new Tag("Siemens"),
-                        new Tag("Dominic"),
-                        new Tag("Electric"),
-                        new Tag("Multisystem")
+                        "SBB Cargo",
+                        "Vectron",
+                        "Siemens",
+                        "dri",
+                        "Electric",
+                        "Multisystem"
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
@@ -155,12 +155,12 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Märklin Re 474 003",
-                    Tags = new List<Tag>()
+                    Tags = new List<string>()
                     {
                         "Siemens",
                         "ES 64 F4",
                         "SBB Cargo",
-                        "Dominic",
+                        "dri",
                         "Electric",
                         "Multisystem"
                     },
