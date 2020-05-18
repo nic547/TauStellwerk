@@ -3,19 +3,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Logging;
 using PiStellwerk.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PiStellwerk.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
-    public class EngineController
+    public class EngineController: Controller
     {
         private StwDbContext _dbContext;
         public EngineController (StwDbContext dbContext)

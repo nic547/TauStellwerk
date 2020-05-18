@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.BackgroundServices;
-using PiStellwerk.Controllers;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Controllers
