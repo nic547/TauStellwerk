@@ -40,7 +40,6 @@ namespace PiStellwerk
 
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<BackgroundServices.HardwareStatusService>();
             services.AddHostedService<BackgroundServices.UserService>();
         }
 
