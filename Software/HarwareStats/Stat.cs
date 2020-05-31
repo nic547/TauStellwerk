@@ -11,6 +11,16 @@ namespace HardwareInfo
         public string Name { get; set; }
 
         public string Value { get; set; }
+
+        public Stat()
+        { }
+
+        public Stat(StatType type, string name, string value)
+        {
+            Type = type;
+            Name = name;
+            Value = value;
+        }
     }
 
 

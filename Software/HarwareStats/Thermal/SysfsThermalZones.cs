@@ -14,13 +14,7 @@ namespace HardwareInfo.Thermal
         {
             try
             {
-                using (var stream = new FileStream("/sys/class/thermal/thermal_zone0/temp", FileMode.Open, FileAccess.Read))
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        var line = long.Parse(reader.ReadLine());
-                    }
-                }
+                _ = GetStats();
                 Console.WriteLine("SysfsThermalZones is available on this device");
                 return true;
             }
