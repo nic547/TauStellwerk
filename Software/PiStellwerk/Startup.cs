@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using PiStellwerk.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
 
@@ -41,7 +40,6 @@ namespace PiStellwerk
 
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<BackgroundServices.HardwareStatusService>();
             services.AddHostedService<BackgroundServices.UserService>();
         }
 
@@ -60,7 +58,7 @@ namespace PiStellwerk
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
