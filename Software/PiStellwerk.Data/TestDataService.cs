@@ -52,6 +52,7 @@ namespace PiStellwerk
                         "Vectron",
                         "Siemens",
                         "dri",
+                        "freight"
                     }
                 },
 
@@ -112,7 +113,8 @@ namespace PiStellwerk
                         "Siemens",
                         "dri",
                         "Electric",
-                        "Multisystem"
+                        "Multisystem",
+                        "freight"
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
@@ -154,19 +156,20 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Märklin Re 474 003",
-                    Tags = new List<string>()
+                    Tags = new List<string>
                     {
                         "Siemens",
                         "ES 64 F4",
                         "SBB Cargo",
                         "dri",
                         "Electric",
-                        "Multisystem"
+                        "Multisystem",
+                        "freight"
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                    Functions = new List<DccFunction>()
+                    Functions = new List<DccFunction>
                     {
                         new DccFunction(0, "Headlights / Red marker light"),
                         new DccFunction(1, "HIgh beams"),
@@ -184,6 +187,52 @@ namespace PiStellwerk
                         new DccFunction(13, "Sanding"),
                         new DccFunction(14, "Coupling / uncoupling"),
                         new DccFunction(15, "Squealing brakes")
+                    }
+                },
+                new Engine()
+                {
+                    Name = "Märklin Re 460 Zirkus Knie",
+                    Tags = new List<string>
+                    {
+                        "SLM",
+                        "dri",
+                        "electric",
+                        "passenger"
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed =  200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                    Functions = new List<DccFunction>
+                    {
+                        new DccFunction(0, "Headlights with „Swiss headlight changeover“"),
+                        new DccFunction(1, "Switching marker lights(1 x white -> 1 x red)"),
+                        new DccFunction(2, "Operating sounds"),
+                        new DccFunction(3, "Sound effect: Horn"),
+                        new DccFunction(4, "Long distance headlights"),
+                        new DccFunction(5, "Engineer‘s cab lighting"),
+                        new DccFunction(6, "Headlights Engineer‘s Cab 2 off"),
+                        new DccFunction(7, "Sound effect: Short horn blast "),
+                        new DccFunction(8, "Headlights Engineer‘s Cab 1 off"),
+                        new DccFunction(9 ,"Sound effect: Squealing brakes off"),
+                        new DccFunction(10, "ABV, off"),
+                        new DccFunction(11, "Sound effect: Blower"),
+                        new DccFunction(12, "Sound effect: Conductor whistle"),
+                        new DccFunction(13, "Sound effect: Compressor"),
+                        new DccFunction(14, "Sound effect: Letting off air"),
+                        new DccFunction(15, "Sound effect: Squealing brakes on"),
+                        new DccFunction(16, "Marker lights (2 x red)"),
+                        new DccFunction(17, "Sound effect: Sanding"),
+                        new DccFunction(18, "Low speed switching range + switching lights"),
+                        new DccFunction(19, "Train announcement 1"),
+                        new DccFunction(20, "Warning signal (red)"),
+                        new DccFunction(21, "Sound effect: Doors being closed"),
+                        new DccFunction(22, "Wrong track running in Switzerland(1 x red, 2 x white)"),
+                        new DccFunction(23, "Station announcements 1"),
+                        new DccFunction(24, "Station announcements 2"),
+                        new DccFunction(25, "Station announcements 3"),
+                        new DccFunction(26, "Station announcements 1"),
+                        new DccFunction(27, "Train announcements 2"),
+                        new DccFunction(28, "Train announcements 3")
                     }
                 }
             };
