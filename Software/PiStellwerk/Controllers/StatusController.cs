@@ -9,7 +9,7 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class StatusController : Controller
     {
-        private static Status _status = new Status() { IsRunning = true, LastActionUsername = "SYSTEM" };
+        private static Status _status = new Status() { IsRunning = false, LastActionUsername = "SYSTEM" };
 
         [HttpPut]
         public Status Put([FromBody] User user)

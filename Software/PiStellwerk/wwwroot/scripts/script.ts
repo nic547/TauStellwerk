@@ -16,6 +16,12 @@ function handleStatusChange(isRunning: boolean, username: string) {
     let details = document.getElementById("CommandDetails");
 
     if (isRunning) {
+        div.classList.remove("StoppedButton");
+        div.classList.add("RunningButton");
+        title.innerHTML = "RUNNING";
+        details.innerHTML = `PiStellwerk started by ${username} `;
+    }
+    else {
         isBlocked = true;
         div.classList.remove("RunningButton");
         div.classList.add("StoppedBlockingButton");
@@ -28,12 +34,6 @@ function handleStatusChange(isRunning: boolean, username: string) {
             title.innerHTML = "STOPPED";
             div.classList.add("StoppedButton");
         }, 2500);
-    }
-    else {
-        div.classList.remove("StoppedButton");
-        div.classList.add("RunningButton");
-        title.innerHTML = "RUNNING";
-        details.innerHTML = `PiStellwerk started by ${username} `;
 
     }
 }

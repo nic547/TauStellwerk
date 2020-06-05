@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.init = exports.CommandButtonPressed = void 0;
 var username;
 var isRunning = false;
 var isBlocked;
@@ -18,6 +19,12 @@ function handleStatusChange(isRunning, username) {
     let title = document.getElementById("CommandTitle");
     let details = document.getElementById("CommandDetails");
     if (isRunning) {
+        div.classList.remove("StoppedButton");
+        div.classList.add("RunningButton");
+        title.innerHTML = "RUNNING";
+        details.innerHTML = `PiStellwerk started by ${username} `;
+    }
+    else {
         isBlocked = true;
         div.classList.remove("RunningButton");
         div.classList.add("StoppedBlockingButton");
@@ -29,12 +36,6 @@ function handleStatusChange(isRunning, username) {
             title.innerHTML = "STOPPED";
             div.classList.add("StoppedButton");
         }, 2500);
-    }
-    else {
-        div.classList.remove("StoppedButton");
-        div.classList.add("RunningButton");
-        title.innerHTML = "RUNNING";
-        details.innerHTML = `PiStellwerk started by ${username} `;
     }
 }
 async function postStatusChange(isRunning) {
