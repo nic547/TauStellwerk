@@ -1,17 +1,25 @@
-﻿using HardwareInfo;
+﻿// <copyright file="SysfsLoadAverage.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HardwareStats.CpuUsage
+namespace HardwareInfo.CpuUsage
 {
-    class SysfsLoadAverage : IStatProvider
+    /// <summary>
+    /// Reports the LoadAverage of a system fro /proc/loadavg.
+    /// </summary>
+    internal class SysfsLoadAverage : IInfoProvider
     {
+        /// <inheritdoc/>
         public bool CheckAvailability()
         {
             try
             {
-                _ = GetStats();
+                _ = GetInfoRecords();
 
                 Console.WriteLine("SysfsLoadAverage is available on this device");
                 return true;
@@ -23,14 +31,15 @@ namespace HardwareStats.CpuUsage
             }
         }
 
-        public IList<Stat> GetStats()
+        /// <inheritdoc/>
+        public IList<InfoRecord> GetInfoRecords()
         {
-            var result = new List<Stat>();
+            var result = new List<InfoRecord>();
             string value = File.ReadAllText("/proc/loadavg");
 
-            result.Add(new Stat()
+            result.Add(new InfoRecord()
             {
-                Type = StatType.CpuUsage,
+                Type = InfoType.CpuUsage,
                 Name = "loadavg",
                 Value = value,
             });

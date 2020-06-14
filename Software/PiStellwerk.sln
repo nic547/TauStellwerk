@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwareStats", "HarwareStats\HardwareStats.csproj", "{8424C18B-EB31-4ABB-99E3-A3E955FFF07F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwareInfo", "HarwareStats\HardwareInfo.csproj", "{8424C18B-EB31-4ABB-99E3-A3E955FFF07F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

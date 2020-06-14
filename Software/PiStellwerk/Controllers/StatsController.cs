@@ -9,7 +9,7 @@ namespace PiStellwerk.Controllers
     public class StatsController : Controller
     {
         [HttpGet]
-        public IReadOnlyList<Stat> Get()
+        public IReadOnlyList<InfoRecord> Get()
         {
             return HardwareInfoGatherer.Get();
         }

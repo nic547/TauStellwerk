@@ -1,16 +1,15 @@
-﻿using Microsoft.Extensions.Hosting;
-using PiStellwerk.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using PiStellwerk.Data;
 
 namespace PiStellwerk.BackgroundServices
 {
     public class UserService : BackgroundService
     {
-
         private static List<User> _users = new List<User>();
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

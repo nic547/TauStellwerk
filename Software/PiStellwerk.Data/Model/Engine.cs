@@ -6,7 +6,6 @@ namespace PiStellwerk.Data
 {
     public class Engine
     {
-
         public string Name { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
