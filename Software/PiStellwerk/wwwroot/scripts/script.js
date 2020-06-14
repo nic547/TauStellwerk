@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = exports.CommandButtonPressed = void 0;
+exports.init = exports.commandButtonPressed = void 0;
 var username;
 var isRunning = false;
 var isBlocked;
 var statusIntervalId;
-async function CommandButtonPressed() {
+async function commandButtonPressed() {
     if (isBlocked) {
         return;
     }
@@ -13,7 +13,7 @@ async function CommandButtonPressed() {
     handleStatusChange(!isRunning, `${username} (You)`);
     isRunning = (!isRunning);
 }
-exports.CommandButtonPressed = CommandButtonPressed;
+exports.commandButtonPressed = commandButtonPressed;
 function handleStatusChange(isRunning, username) {
     let div = document.getElementById("CommandButton");
     let title = document.getElementById("CommandTitle");
@@ -54,7 +54,7 @@ function init() {
     username = Math.floor(Math.random() * 10000000).toString();
     updateDisplayedUsername();
     statusIntervalId = setInterval(() => regularUpdate(), 500);
-    document.getElementById("CommandButton").addEventListener("click", CommandButtonPressed);
+    document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
     document.getElementById("username").addEventListener("click", promttForUsername);
 }
 exports.init = init;
@@ -62,7 +62,7 @@ function promttForUsername() {
     let newUsername;
     while (true) {
         newUsername = window.prompt("Enter your Username");
-        if (newUsername != "") {
+        if (newUsername !== "") {
             break;
         }
     }

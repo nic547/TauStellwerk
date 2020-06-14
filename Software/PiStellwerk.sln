@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{471EDB6C-5E63-4688-94B9-628F6A573083}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		customRules.ruleset = customRules.ruleset
+		StyleCop.json = StyleCop.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HardwareStats</name>
+    </assembly>
+    <members>
+        <member name="T:HardwareInfo.HardwareInfoGatherer">
+            <summary>
+            Provides Functionality related to things like memory usage, cpu usage, cpu temperature etc.
+            Results depend heavily on OS/device etc. !
+            </summary>
+        </member>
+    </members>
+</doc>
