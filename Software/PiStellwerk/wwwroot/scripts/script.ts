@@ -3,10 +3,10 @@ var isRunning: boolean = false;
 var isBlocked: boolean;
 var statusIntervalId: number; 
 
-export async function CommandButtonPressed() {
+export async function commandButtonPressed() {
     if (isBlocked) { return;}
     postStatusChange(!isRunning);
-    handleStatusChange(!isRunning, `${username} (You)`)
+    handleStatusChange(!isRunning, `${username} (You)`);
     isRunning = (!isRunning);
 }
 
@@ -57,15 +57,15 @@ export function init() {
     username = Math.floor(Math.random() * 10000000).toString();
     updateDisplayedUsername();
     statusIntervalId = setInterval(() => regularUpdate(), 500);
-    document.getElementById("CommandButton").addEventListener("click", CommandButtonPressed);
+    document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
     document.getElementById("username").addEventListener("click", promttForUsername);
 }
 
 function promttForUsername() {
     let newUsername;
     while (true) {
-        newUsername = window.prompt("Enter your Username")
-        if (newUsername != "") {
+        newUsername = window.prompt("Enter your Username");
+        if (newUsername !== "") {
             break;
         }
     }
