@@ -6,6 +6,10 @@
     <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\PiStellwerk.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="wwwroot\scripts\Engine.ts" />
   </ItemGroup>

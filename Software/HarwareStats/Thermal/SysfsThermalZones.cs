@@ -41,11 +41,11 @@ namespace HardwareInfo.Thermal
             var name = File.ReadLines("/sys/class/thermal/thermal_zone0/type").First();
 
             stats.Add(new InfoRecord
-                {
-                    Type = InfoType.Thermal,
-                    Name = name,
-                    Value = $"Temperature: {Math.Round(double.Parse(temp) / 1000d, 1)}°C",
-                });
+            {
+                Type = InfoType.Thermal,
+                Name = name,
+                Value = $"Temperature: {Math.Round(double.Parse(temp) / 1000d, 1)}°C",
+            });
             return stats;
         }
     }

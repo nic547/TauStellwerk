@@ -1,9 +1,22 @@
-﻿using System.Collections.Generic;
+﻿// <copyright file="TestDataService.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using PiStellwerk.Data;
+
 namespace PiStellwerk
 {
+    /// <summary>
+    /// Provides data for testing.
+    /// </summary>
     public static class TestDataService
     {
+        /// <summary>
+        /// Test function generating some data.
+        /// </summary>
+        /// <returns>List of <see cref="Engine"/>.</returns>
         public static IReadOnlyList<Engine> GetEngines()
         {
             return new List<Engine>()
@@ -52,11 +65,11 @@ namespace PiStellwerk
                         "Vectron",
                         "Siemens",
                         "dri",
-                        "freight"
-                    }
+                        "freight",
+                    },
                 },
 
-                 new Engine()
+                new Engine()
                 {
                     Name = "Roco BR 193 492 (Hupac Nightpiercer)",
                     SpeedSteps = 128,
@@ -100,10 +113,10 @@ namespace PiStellwerk
                         "Vectron",
                         "Siemens",
                         "dri",
-                    }
-                 },
+                    },
+                },
 
-                new Engine ()
+                new Engine()
                 {
                     Name = "Roco BR 193 Gotthardo (SBB C Int)",
                     Tags = new List<string>()
@@ -114,7 +127,7 @@ namespace PiStellwerk
                         "dri",
                         "Electric",
                         "Multisystem",
-                        "freight"
+                        "freight",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
@@ -150,7 +163,7 @@ namespace PiStellwerk
                         new DccFunction(26, "Brake squeal"),
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
-                    }
+                    },
                 },
 
                 new Engine()
@@ -164,7 +177,7 @@ namespace PiStellwerk
                         "dri",
                         "Electric",
                         "Multisystem",
-                        "freight"
+                        "freight",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
@@ -186,8 +199,8 @@ namespace PiStellwerk
                         new DccFunction(12, "Conductor whistle"),
                         new DccFunction(13, "Sanding"),
                         new DccFunction(14, "Coupling / uncoupling"),
-                        new DccFunction(15, "Squealing brakes")
-                    }
+                        new DccFunction(15, "Squealing brakes"),
+                    },
                 },
                 new Engine()
                 {
@@ -197,10 +210,10 @@ namespace PiStellwerk
                         "SLM",
                         "dri",
                         "electric",
-                        "passenger"
+                        "passenger",
                     },
                     SpeedSteps = 128,
-                    TopSpeed =  200,
+                    TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions = new List<DccFunction>
                     {
@@ -213,7 +226,7 @@ namespace PiStellwerk
                         new DccFunction(6, "Headlights Engineer‘s Cab 2 off"),
                         new DccFunction(7, "Sound effect: Short horn blast "),
                         new DccFunction(8, "Headlights Engineer‘s Cab 1 off"),
-                        new DccFunction(9 ,"Sound effect: Squealing brakes off"),
+                        new DccFunction(9, "Sound effect: Squealing brakes off"),
                         new DccFunction(10, "ABV, off"),
                         new DccFunction(11, "Sound effect: Blower"),
                         new DccFunction(12, "Sound effect: Conductor whistle"),
@@ -232,9 +245,9 @@ namespace PiStellwerk
                         new DccFunction(25, "Station announcements 3"),
                         new DccFunction(26, "Station announcements 1"),
                         new DccFunction(27, "Train announcements 2"),
-                        new DccFunction(28, "Train announcements 3")
-                    }
-                }
+                        new DccFunction(28, "Train announcements 3"),
+                    },
+                },
             };
         }
     }

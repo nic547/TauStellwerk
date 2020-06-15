@@ -21,9 +21,9 @@ namespace HardwareInfo
         /// <summary>
         /// Initializes a new instance of the <see cref="InfoRecord"/> class.
         /// </summary>
-        /// <param name="type"><see cref="InfoType"/></param>
-        /// <param name="name"><see cref="Name"/></param>
-        /// <param name="value"><see cref="Value"/></param>
+        /// <param name="type"><see cref="InfoType"/>.</param>
+        /// <param name="name"><see cref="Name"/>.</param>
+        /// <param name="value"><see cref="Value"/>.</param>
         public InfoRecord(InfoType type, string name, string value)
         {
             Type = type;

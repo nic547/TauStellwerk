@@ -1,24 +1,33 @@
-﻿#nullable enable
+﻿// <copyright file="EngineController.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+#nullable enable
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Controllers
 {
+    /// <summary>
+    /// Controller for everything related to engines.
+    /// </summary>
     [ApiController]
     [Route("[Controller]")]
-    public class EngineController: Controller
+    public class EngineController : Controller
     {
-        private StwDbContext _dbContext;
-        public EngineController (StwDbContext dbContext)
+        private readonly StwDbContext _dbContext;
+
+        public EngineController(StwDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
         [HttpGet("List")]
         public IReadOnlyList<Engine>? GetEngines()
         {
@@ -26,7 +35,10 @@ namespace PiStellwerk.Controllers
             {
                 return _dbContext.Engines.Include(e => e.Functions).ToList<Engine>();
             }
-            else { return null; }
+            else
+            {
+                return null;
+            }
         }
 
         [HttpPost("command/{id}")]

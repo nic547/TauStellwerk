@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiStellwerk</name>
+    </assembly>
+    <members>
+        <member name="T:PiStellwerk.BackgroundServices.UserService">
+            <summary>
+            Service that keeps track of users.
+            </summary>
+        </member>
+        <member name="T:PiStellwerk.Startup">
+            <summary>
+            Startup class of the WebAPI.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PiStellwerk.Startup"/> class.
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:PiStellwerk.Startup.Configuration">
+            <summary>
+            Gets some configuration.
+            TODO: Find out what exactly this configuration is, sounds pretty useful.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+        </member>
+    </members>
+</doc>

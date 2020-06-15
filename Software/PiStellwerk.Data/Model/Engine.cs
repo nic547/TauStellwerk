@@ -1,11 +1,22 @@
-﻿using System.Collections.Generic;
+﻿// <copyright file="Engine.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PiStellwerk.Data
 {
+    /// <summary>
+    /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
+    /// </summary>
     public class Engine
     {
+        /// <summary>
+        /// Gets or sets the name of the choo-choo.
+        /// </summary>
         public string Name { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,65 +24,34 @@ namespace PiStellwerk.Data
         public int Id { get; set; }
 
         /// <summary>
-        /// The DCC Address of an Engine. Is not necessarily unique.
+        /// Gets or sets the DCC Address of an Engine. Is not necessarily unique.
         /// </summary>
         public ushort Address { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount of speed steps the decoder supports.
+        /// </summary>
         public byte SpeedSteps { get; set; }
+
+        /// <summary>
+        /// Gets or sets the top speed of the real thing.
+        /// </summary>
         public int TopSpeed { get; set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="SpeedDisplayType"/>, indicating how the speed of the model should be displayed.
+        /// </summary>
         public SpeedDisplayType SpeedDisplayType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the functions a decoder offers.
+        /// </summary>
         public List<DccFunction> Functions { get; set; }
 
         /// <summary>
         /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
-        /// everything one might search for if the exact name is unkown. 
+        /// everything one might search for if the exact name is unknown.
         /// </summary>
         public List<string> Tags { get; set; }
-    }
-
-    public class DccFunction
-    {
-        public DccFunction() { }
-        public DccFunction(byte number, string name)
-        {
-            Number = number;
-            Name = name;
-        }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public byte Number { get; set; }
-        public string Name { get; set; }
-    }
-
-    public enum FunctionType : byte
-    {
-        Sound = 0,
-        Light = 1,
-        Physical = 2
-    }
-
-    public enum FunctionKind : byte
-    {
-        Momentary = 0,
-        Continus = 1,
-
-    }
-
-    public enum SpeedDisplayType : byte
-    {
-        /// <summary>
-        /// Speed is supposed to be displayed as percent, from 0% to 100%
-        /// </summary>
-        Percent,
-        /// <summary>
-        /// Speed is supposed to be displayed as the actual dcc speed steps
-        /// </summary>
-        SpeedSteps,
-        /// <summary>
-        /// Speed is supposed to be displayed as the appoximation of speed based on the top speed and speed steps.
-        /// </summary>
-        TopSpeed,
     }
 }

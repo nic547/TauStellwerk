@@ -12,6 +12,7 @@ namespace HardwareInfo.CpuUsage
     /// <summary>
     /// Reports the LoadAverage of a system fro /proc/loadavg.
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     internal class SysfsLoadAverage : IInfoProvider
     {
         /// <inheritdoc/>

@@ -1,18 +1,31 @@
-﻿using System;
+﻿// <copyright file="StwDbContext.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace PiStellwerk.Data
 {
-    public class StwDbContext: DbContext
+    /// <summary>
+    /// <inheritdoc cref="DbContext"/>
+    /// </summary>
+    public class StwDbContext : DbContext
     {
+        /// <summary>
+        /// Gets or sets the collection of engines in the database.
+        /// </summary>
+        public DbSet<Engine> Engines { get; set; }
+
+        /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Filename=StwDatabase.db");
         }
 
-        public DbSet<Engine> Engines { get; set; }
-
+        /// <inheritdoc/>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Engine>()
@@ -23,4 +36,3 @@ namespace PiStellwerk.Data
         }
     }
 }
- 

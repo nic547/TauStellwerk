@@ -5,6 +5,10 @@
     <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\PiStellwerk.Data.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
