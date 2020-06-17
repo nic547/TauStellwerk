@@ -9,6 +9,98 @@
             Service that keeps track of users.
             </summary>
         </member>
+        <member name="M:PiStellwerk.BackgroundServices.UserService.UpdateUser(PiStellwerk.Data.User)">
+            <summary>
+            Updates the last hearthbeat of a user, also adds new users to the user list.
+            </summary>
+            <param name="user">The user.</param>
+        </member>
+        <member name="M:PiStellwerk.BackgroundServices.UserService.RenameUser(PiStellwerk.Data.User,PiStellwerk.Data.User)">
+            <summary>
+            Handles a changed username.
+            </summary>
+            <param name="oldUser">The old username.</param>
+            <param name="newUser">The new username.</param>
+        </member>
+        <member name="M:PiStellwerk.BackgroundServices.UserService.GetUsers">
+            <summary>
+            Get a list of all active users.
+            </summary>
+            <returns>The list of active users.</returns>
+        </member>
+        <member name="M:PiStellwerk.BackgroundServices.UserService.ExecuteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:PiStellwerk.Controllers.EngineController">
+            <summary>
+            Controller for everything related to engines.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Controllers.EngineController.#ctor(PiStellwerk.Data.StwDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PiStellwerk.Controllers.EngineController"/> class.
+            </summary>
+            <param name="dbContext">The database context for the Controller.</param>
+        </member>
+        <member name="M:PiStellwerk.Controllers.EngineController.GetEngines">
+            <summary>
+            HTTP GET getting all engines.
+            </summary>
+            <returns>A list of engines.</returns>
+        </member>
+        <member name="M:PiStellwerk.Controllers.EngineController.EngineCommand(System.Int32)">
+            <summary>
+            HTTP POST for sending a command to an Engine.
+            Doesn't even work yet, just does a 1ms sleepy sleep.
+            </summary>
+            <param name="id">Id of the command, i think.</param>
+        </member>
+        <member name="T:PiStellwerk.Controllers.HardwareInfoController">
+            <summary>
+            HTTP Controller related to information related to the hardware. CPU temps/usage, memory usage etc.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Controllers.HardwareInfoController.Get">
+            <summary>
+            HTTP Get.
+            </summary>
+            <returns>A list of records about certain hardware stats.</returns>
+        </member>
+        <member name="T:PiStellwerk.Controllers.StatusController">
+            <summary>
+            Controller for the status of the physical dcc output to the track.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Controllers.StatusController.Put(PiStellwerk.Data.User)">
+            <summary>
+            HTTP PUT handling the heartbeat and sending the current status of the actual dcc-output.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>Current <see cref="T:PiStellwerk.Data.Status"/>.</returns>
+        </member>
+        <member name="M:PiStellwerk.Controllers.StatusController.Post(PiStellwerk.Data.Status)">
+            <summary>
+            Switch the decc-output on or off.
+            </summary>
+            <param name="status">The desired new status.</param>
+        </member>
+        <member name="T:PiStellwerk.Controllers.UserController">
+            <summary>
+            Controller handling user stuff.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Controllers.UserController.Get">
+            <summary>
+            HTTP GET.
+            </summary>
+            <returns>A list of active users.</returns>
+        </member>
+        <member name="M:PiStellwerk.Controllers.UserController.Put(PiStellwerk.Data.User[])">
+            <summary>
+            HTTP PUT for renaming a user.
+            </summary>
+            <param name="user">A array of users, 0 being the old user, 1 the new one.</param>
+        </member>
         <member name="T:PiStellwerk.Startup">
             <summary>
             Startup class of the WebAPI.
@@ -18,7 +110,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:PiStellwerk.Startup"/> class.
             </summary>
-            <param name="configuration"></param>
+            <param name="configuration"><see cref="P:PiStellwerk.Startup.Configuration"/>.</param>
         </member>
         <member name="P:PiStellwerk.Startup.Configuration">
             <summary>
@@ -30,11 +122,14 @@
             <summary>
             This method gets called by the runtime. Use this method to add services to the container.
             </summary>
+            <param name="services">IDK.</param>
         </member>
         <member name="M:PiStellwerk.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
+            <param name="app">IDK.</param>
+            <param name="env">IDK either.</param>
         </member>
     </members>
 </doc>

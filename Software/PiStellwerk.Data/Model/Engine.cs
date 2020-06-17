@@ -19,6 +19,9 @@ namespace PiStellwerk.Data
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Id of the Engine in the database system.
+        /// </summary>
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }

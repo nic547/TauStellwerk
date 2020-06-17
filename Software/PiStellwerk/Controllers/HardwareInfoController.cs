@@ -9,10 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PiStellwerk.Controllers
 {
+    /// <summary>
+    /// HTTP Controller related to information related to the hardware. CPU temps/usage, memory usage etc.
+    /// </summary>
     [ApiController]
     [Route("[Controller]")]
     public class HardwareInfoController : Controller
     {
+        /// <summary>
+        /// HTTP Get.
+        /// </summary>
+        /// <returns>A list of records about certain hardware stats.</returns>
         [HttpGet]
         public IReadOnlyList<InfoRecord> Get()
         {

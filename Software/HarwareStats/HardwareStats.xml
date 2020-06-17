@@ -59,9 +59,9 @@
             <summary>
             Initializes a new instance of the <see cref="T:HardwareInfo.InfoRecord"/> class.
             </summary>
-            <param name="type"><see cref="T:HardwareInfo.InfoType"/></param>
-            <param name="name"><see cref="P:HardwareInfo.InfoRecord.Name"/></param>
-            <param name="value"><see cref="P:HardwareInfo.InfoRecord.Value"/></param>
+            <param name="type"><see cref="T:HardwareInfo.InfoType"/>.</param>
+            <param name="name"><see cref="P:HardwareInfo.InfoRecord.Name"/>.</param>
+            <param name="value"><see cref="P:HardwareInfo.InfoRecord.Value"/>.</param>
         </member>
         <member name="P:HardwareInfo.InfoRecord.Type">
             <summary>

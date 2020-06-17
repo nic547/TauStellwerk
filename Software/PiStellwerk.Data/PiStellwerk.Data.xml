@@ -36,15 +36,50 @@
             Gets or sets the name that this function should have.
             </summary>
         </member>
+        <member name="T:PiStellwerk.Data.Engine">
+            <summary>
+            A choo-choo, in this context generally understood to be smaller than real-live-sized.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.Name">
+            <summary>
+            Gets or sets the name of the choo-choo.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.Id">
+            <summary>
+            Gets or sets the Id of the Engine in the database system.
+            </summary>
+        </member>
         <member name="P:PiStellwerk.Data.Engine.Address">
             <summary>
-            The DCC Address of an Engine. Is not necessarily unique.
+            Gets or sets the DCC Address of an Engine. Is not necessarily unique.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.SpeedSteps">
+            <summary>
+            Gets or sets the amount of speed steps the decoder supports.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.TopSpeed">
+            <summary>
+            Gets or sets the top speed of the real thing.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.SpeedDisplayType">
+            <summary>
+            Gets or sets the <see cref="P:PiStellwerk.Data.Engine.SpeedDisplayType"/>, indicating how the speed of the model should be displayed.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Engine.Functions">
+            <summary>
+            Gets or sets the functions a decoder offers.
             </summary>
         </member>
         <member name="P:PiStellwerk.Data.Engine.Tags">
             <summary>
             Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
-            everything one might search for if the exact name is unkown. 
+            everything one might search for if the exact name is unknown.
             </summary>
         </member>
         <member name="T:PiStellwerk.Data.SpeedDisplayType">
@@ -67,6 +102,42 @@
             Speed is supposed to be displayed as the approximation of speed based on the top speed and speed steps.
             </summary>
         </member>
+        <member name="T:PiStellwerk.Data.Status">
+            <summary>
+            Status of the dcc output.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Status.IsRunning">
+            <summary>
+            Gets or sets a value indicating whether the dcc output hardware is running.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.Status.LastActionUsername">
+            <summary>
+            Gets or sets the name of the Person who is responsible for the last status change.
+            SYSTEM is the software itself, for example because of the over current protection kicking in.
+            </summary>
+        </member>
+        <member name="T:PiStellwerk.Data.User">
+            <summary>
+            A user of the PiStellwerk software. Does not necessarily correspond to actual people.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.User.Name">
+            <summary>
+            Gets or sets the name of the user.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.User.UserAgent">
+            <summary>
+            Gets or sets the user-agent string of the client the user uses.
+            </summary>
+        </member>
+        <member name="P:PiStellwerk.Data.User.LastContact">
+            <summary>
+            Gets or sets the timestamp of the last heartbeat received by the application from the user.
+            </summary>
+        </member>
         <member name="T:PiStellwerk.Data.StwDbContext">
             <summary>
             <inheritdoc cref="T:Microsoft.EntityFrameworkCore.DbContext"/>
@@ -82,6 +153,17 @@
         </member>
         <member name="M:PiStellwerk.Data.StwDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc/>
+        </member>
+        <member name="T:PiStellwerk.TestDataService">
+            <summary>
+            Provides data for testing.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.TestDataService.GetEngines">
+            <summary>
+            Test function generating some data.
+            </summary>
+            <returns>List of <see cref="T:PiStellwerk.Data.Engine"/>.</returns>
         </member>
     </members>
 </doc>
