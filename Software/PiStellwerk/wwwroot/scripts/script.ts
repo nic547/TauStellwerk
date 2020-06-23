@@ -1,12 +1,16 @@
-﻿var username: string;
-var isRunning: boolean = false;
+﻿var isRunning: boolean = false;
 var isBlocked: boolean;
-var statusIntervalId: number; 
+var statusIntervalId: number;
+
+import * as User from "./user.js"
+
+
+document.addEventListener("DOMContentLoaded", globalInit);
 
 export async function commandButtonPressed() {
     if (isBlocked) { return;}
     postStatusChange(!isRunning);
-    handleStatusChange(!isRunning, `${username} (You)`);
+    handleStatusChange(!isRunning, `${User.getUsername()} (You)`);
     isRunning = (!isRunning);
 }
 
@@ -39,7 +43,7 @@ function handleStatusChange(isRunning: boolean, username: string) {
 }
 
 async function postStatusChange(isRunning: boolean) {
-    let bodyObject = { isRunning: isRunning, lastActionUsername: username }
+    let bodyObject = { isRunning: isRunning, lastActionUsername: User.getUsername() }
     let bodyContent = JSON.stringify(bodyObject);
     console.log(bodyContent);
     fetch("/status",
@@ -53,48 +57,16 @@ async function postStatusChange(isRunning: boolean) {
     );
 }
 
-export function init() {
-    username = Math.floor(Math.random() * 10000000).toString();
-    updateDisplayedUsername();
+export function globalInit(): void {
+    console.log("Global Initialization started");
     statusIntervalId = setInterval(() => regularUpdate(), 500);
     document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
-    document.getElementById("username").addEventListener("click", promttForUsername);
-}
-
-function promttForUsername() {
-    let newUsername;
-    while (true) {
-        newUsername = window.prompt("Enter your Username");
-        if (newUsername !== "") {
-            break;
-        }
-    }
-
-    clearInterval(statusIntervalId);
-
-    fetch("/user",
-        {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify([{ name: username, UserAgent: navigator.userAgent }, { name: newUsername, UserAgent: navigator.userAgent }])
-        }
-
-    ).then(() => {
-        username = newUsername;
-        updateDisplayedUsername();
-        statusIntervalId = setInterval(() => regularUpdate(), 500);
-    });
-}
-
-
-function updateDisplayedUsername() {
-    document.getElementById("username").innerHTML = `User: ${username}`;
+    User.init();
+    console.log("Global Initialisation was completed");
 }
 
 function regularUpdate() {
-    let bodyContent = JSON.stringify({ name: username, UserAgent: navigator.userAgent });
+    let bodyContent = JSON.stringify({ name: User.getUsername(), UserAgent: navigator.userAgent });
     fetch("/status",
         {
             method: "PUT",

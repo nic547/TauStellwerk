@@ -6,7 +6,7 @@
 	--background-secondary: #202020;
 	--background-highlight: #404040;
 	--textcolor-main: #FFFFFF;
-	--textcolor-secondary: #EE EE EE; 
+	--textcolor-secondary: #EEEEEE; 
 }
 
 html {
@@ -37,6 +37,7 @@ body {
 	text-align: center;
 	padding: 1em;
 	flex: 0, 0, auto;
+    z-index: 100; /* Should always be displayed on top, even on overlays*/
 }
 
 @media (min-width: 900px) {
@@ -101,6 +102,34 @@ body {
 
 .EngineControl > .EngineFunctions {
 	grid-area: functions;
+}
+
+
+.Overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+form {
+	display: block;
+	margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+form * {
+    display: block;
 }
 
 footer {

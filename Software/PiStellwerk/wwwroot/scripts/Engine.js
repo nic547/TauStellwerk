@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TESTLoadEngines = void 0;
 var DisplayTypeAttribute = "data-display-type";
 var EngineIDAttribute = "data-engine-id";
-function TESTLoadEngines() {
+export function TESTLoadEngines() {
     let Container = document.getElementById("EngineContainer");
     fetch("/engine/list", {
         method: "GET",
@@ -37,7 +34,6 @@ function TESTLoadEngines() {
         });
     });
 }
-exports.TESTLoadEngines = TESTLoadEngines;
 function HandleRangeValueChanged(event) {
     let targetElement = event.target;
     writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(DisplayTypeAttribute));
