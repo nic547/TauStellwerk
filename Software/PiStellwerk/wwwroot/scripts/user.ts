@@ -6,19 +6,19 @@ const usernameInputId = "UsernameInput";
 
 import * as Overlays from "./overlays.js"
 
+document.addEventListener("DOMContentLoaded",
+    () => {
+        console.log("User module initializing");
+        document.getElementById(usernameLabelId).addEventListener("click", () => { Overlays.toggleVisibility(overlayId) });
+        document.getElementById(usernameFormId).addEventListener("submit", () => handleSubmit(event));
+
+        setUsername(Math.floor(Math.random() * 10000000).toString());
+
+        console.log("User module finished initializing");
+    });
+
 export function getUsername(): string {
     return username;
-}
-
-export function init(): void {
-    console.log("User module initializing");
-    document.getElementById(usernameLabelId).addEventListener("click", () => { Overlays.toggleVisibility(overlayId) });
-
-    document.getElementById(usernameFormId).addEventListener("submit", () => handleSubmit(event));
-
-    setUsername(Math.floor(Math.random() * 10000000).toString());
-
-    console.log("User module finished initializing");
 }
 
 function handleSubmit(event: Event) {

@@ -5,7 +5,12 @@ var statusIntervalId: number;
 import * as User from "./user.js"
 
 
-document.addEventListener("DOMContentLoaded", globalInit);
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("script.js Initialization started");
+    statusIntervalId = setInterval(() => regularUpdate(), 500);
+    document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
+    console.log("script.js Initialization was completed");
+});
 
 export async function commandButtonPressed() {
     if (isBlocked) { return;}
@@ -55,14 +60,6 @@ async function postStatusChange(isRunning: boolean) {
             body: bodyContent
         }
     );
-}
-
-export function globalInit(): void {
-    console.log("Global Initialization started");
-    statusIntervalId = setInterval(() => regularUpdate(), 500);
-    document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
-    User.init();
-    console.log("Global Initialization was completed");
 }
 
 function regularUpdate() {

@@ -4,15 +4,15 @@ const usernameLabelId = "UsernameLabel";
 const usernameFormId = "UsernameForm";
 const usernameInputId = "UsernameInput";
 import * as Overlays from "./overlays.js";
-export function getUsername() {
-    return username;
-}
-export function init() {
+document.addEventListener("DOMContentLoaded", () => {
     console.log("User module initializing");
     document.getElementById(usernameLabelId).addEventListener("click", () => { Overlays.toggleVisibility(overlayId); });
     document.getElementById(usernameFormId).addEventListener("submit", () => handleSubmit(event));
     setUsername(Math.floor(Math.random() * 10000000).toString());
     console.log("User module finished initializing");
+});
+export function getUsername() {
+    return username;
 }
 function handleSubmit(event) {
     event.preventDefault();
