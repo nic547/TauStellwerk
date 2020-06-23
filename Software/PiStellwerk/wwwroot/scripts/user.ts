@@ -1,8 +1,8 @@
 ﻿var username: string;
-const overlayId: string = "UsernameOverlay";
-const usernameLabelId: string = "UsernameLabel";
-const usernameFormId: string = "UsernameForm";
-const usernameInputId: string = "UsernameInput";
+const overlayId = "UsernameOverlay";
+const usernameLabelId = "UsernameLabel";
+const usernameFormId = "UsernameForm";
+const usernameInputId = "UsernameInput";
 
 import * as Overlays from "./overlays.js"
 
@@ -23,8 +23,8 @@ export function init(): void {
 
 function handleSubmit(event: Event) {
     event.preventDefault();
-    let inputElement: HTMLInputElement = <HTMLInputElement>document.getElementById(usernameInputId);
-    let newUsername: string = inputElement.value;
+    let inputElement = document.getElementById(usernameInputId) as HTMLInputElement;
+    let newUsername = inputElement.value;
     inputElement.value = "";
 
     setUsername(newUsername);
@@ -43,7 +43,7 @@ function setUsername(newUsername: string): void {
             {
                 method: "PUT",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': "application/json"
                 },
                 body: JSON.stringify([
                     { name: oldUsername, UserAgent: navigator.userAgent },

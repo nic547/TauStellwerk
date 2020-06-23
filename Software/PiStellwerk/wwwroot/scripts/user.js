@@ -30,7 +30,7 @@ function setUsername(newUsername) {
         fetch("/user", {
             method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': "application/json"
             },
             body: JSON.stringify([
                 { name: oldUsername, UserAgent: navigator.userAgent },

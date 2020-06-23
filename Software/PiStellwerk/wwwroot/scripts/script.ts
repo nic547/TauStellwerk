@@ -62,7 +62,7 @@ export function globalInit(): void {
     statusIntervalId = setInterval(() => regularUpdate(), 500);
     document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
     User.init();
-    console.log("Global Initialisation was completed");
+    console.log("Global Initialization was completed");
 }
 
 function regularUpdate() {

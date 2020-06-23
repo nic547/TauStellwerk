@@ -1,5 +1,8 @@
 var DisplayTypeAttribute = "data-display-type";
 var EngineIDAttribute = "data-engine-id";
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("TestButton").addEventListener("click", TESTLoadEngines);
+});
 export function TESTLoadEngines() {
     let Container = document.getElementById("EngineContainer");
     fetch("/engine/list", {
