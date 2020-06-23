@@ -23,7 +23,7 @@ namespace PiStellwerk.BackgroundServices
         private static readonly List<User> _users = new List<User>();
 
         /// <summary>
-        /// Updates the last hearthbeat of a user, also adds new users to the user list.
+        /// Updates the last heartbeat of a user, also adds new users to the user list.
         /// </summary>
         /// <param name="user">The user.</param>
         public static void UpdateUser(User user)
@@ -48,7 +48,14 @@ namespace PiStellwerk.BackgroundServices
         /// <param name="newUser">The new username.</param>
         public static void RenameUser(User oldUser, User newUser)
         {
-            var userToRename = _users.Find(x => x.Name == oldUser.Name && x.UserAgent == oldUser.UserAgent);
+            var userToRename = _users.SingleOrDefault(x => x.Name == oldUser.Name && x.UserAgent == oldUser.UserAgent);
+
+            if (userToRename == null)
+            {
+                Console.WriteLine($"User {newUser.Name} tried to rename himself, but the prior username was not found");
+                UpdateUser(newUser);
+            }
+
             userToRename.Name = newUser.Name;
             Console.WriteLine($"User \"{oldUser.Name}\" has been renamed to \"{newUser.Name}\" ");
             userToRename.LastContact = DateTime.Now;

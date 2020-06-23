@@ -11,7 +11,7 @@
         </member>
         <member name="M:PiStellwerk.BackgroundServices.UserService.UpdateUser(PiStellwerk.Data.User)">
             <summary>
-            Updates the last hearthbeat of a user, also adds new users to the user list.
+            Updates the last heartbeat of a user, also adds new users to the user list.
             </summary>
             <param name="user">The user.</param>
         </member>
