@@ -1,22 +1,32 @@
 ﻿var isRunning: boolean = false;
 var isBlocked: boolean;
-var statusIntervalId: number;
+var statusIntervalHandle: number;
 
 import * as User from "./user.js"
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("script.js Initialization started");
-    statusIntervalId = setInterval(() => regularUpdate(), 500);
+    console.log("Status module initialization started");
     document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
-    console.log("script.js Initialization was completed");
+
+    startStatusUpdates();
+
+    console.log("Status module initialization was completed");
 });
 
-export async function commandButtonPressed() {
+async function commandButtonPressed() {
     if (isBlocked) { return;}
     postStatusChange(!isRunning);
     handleStatusChange(!isRunning, `${User.getUsername()} (You)`);
     isRunning = (!isRunning);
+}
+
+export function startStatusUpdates() {
+    statusIntervalHandle = setInterval(() => regularUpdate(), 500);
+}
+
+export function stopStatusUpdates() {
+    clearInterval(statusIntervalHandle);
 }
 
 function handleStatusChange(isRunning: boolean, username: string) {
