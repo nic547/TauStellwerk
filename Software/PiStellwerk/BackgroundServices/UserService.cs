@@ -55,10 +55,12 @@ namespace PiStellwerk.BackgroundServices
                 Console.WriteLine($"User {newUser.Name} tried to rename himself, but the prior username was not found");
                 UpdateUser(newUser);
             }
-
-            userToRename.Name = newUser.Name;
-            Console.WriteLine($"User \"{oldUser.Name}\" has been renamed to \"{newUser.Name}\" ");
-            userToRename.LastContact = DateTime.Now;
+            else
+            {
+                userToRename.Name = newUser.Name;
+                Console.WriteLine($"User \"{oldUser.Name}\" has been renamed to \"{newUser.Name}\" ");
+                userToRename.LastContact = DateTime.Now;
+            }
         }
 
         /// <summary>
