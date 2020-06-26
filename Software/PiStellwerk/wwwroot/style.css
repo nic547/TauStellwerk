@@ -127,9 +127,12 @@ form {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    padding: 5px;
+    background-color: var(--background-highlight);
 }
 form * {
     display: block;
+    margin: 2px;
 }
 
 footer {

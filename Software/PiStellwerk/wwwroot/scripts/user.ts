@@ -24,8 +24,9 @@ export function getUsername(): string {
 function handleSubmit(event: Event) {
     event.preventDefault();
     let inputElement = document.getElementById(usernameInputId) as HTMLInputElement;
+    let inputForm = document.getElementById(usernameFormId) as HTMLFormElement;
     let newUsername = inputElement.value;
-    inputElement.value = "";
+    inputForm.reset();
 
     setUsername(newUsername);
     Overlays.toggleVisibility(overlayId);
