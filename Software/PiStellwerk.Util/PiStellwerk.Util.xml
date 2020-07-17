@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiStellwerk.Util</name>
+    </assembly>
+    <members>
+        <member name="T:PiStellwerk.Util.DictionaryIncrementExtension">
+            <summary>
+            Extension methods for dictionaries with numeric values. The value is increased by 1, if no K/V Pair exists yet, a new one is created.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.Int64},``0)">
+            <summary>
+            Increases the value by one. If no key exists yet, a new one is added.
+            </summary>
+            <typeparam name="TKey">Type of the key.</typeparam>
+            <param name="dictionary">The dictionary this operation should be performed on.</param>
+            <param name="key">The Key whose value should be incremented.</param>
+        </member>
+        <member name="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.UInt64},``0)">
+            <inheritdoc cref="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.Int64},``0)"/>
+        </member>
+        <member name="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.Int32},``0)">
+            <inheritdoc cref="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.Int64},``0)"/>
+        </member>
+        <member name="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.UInt32},``0)">
+            <inheritdoc cref="M:PiStellwerk.Util.DictionaryIncrementExtension.IncrementValue``1(System.Collections.Generic.Dictionary{``0,System.Int64},``0)"/>
+        </member>
+    </members>
+</doc>

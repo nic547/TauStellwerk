@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiStellwerkLoadGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:PiStellwerkLoadGenerator.ClientActions.Heartbeat">
+            <summary>
+            The regular Heartbeat sent by a client to ensure a working connection to the server.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.ClientActions.Heartbeat.PerformRequest(PiStellwerkLoadGenerator.Options,PiStellwerk.Data.User,System.Net.Http.HttpClient)">
+            <summary>
+            Performs the request.
+            </summary>
+            <param name="options"><see cref="T:PiStellwerkLoadGenerator.Options"/>.</param>
+            <param name="user">The <see cref="T:PiStellwerk.Data.User"/> the request shall be made for.</param>
+            <param name="client"><see cref="T:System.Net.Http.HttpClient"/> with which the request shall be made.</param>
+            <returns>Measured latency in 1/10ms.</returns>
+        </member>
+        <member name="T:PiStellwerkLoadGenerator.ClientSimulator">
+            <summary>
+            Simulates a single client that makes it's HTTP Requests.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.#ctor(PiStellwerkLoadGenerator.Options)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PiStellwerkLoadGenerator.ClientSimulator"/> class.
+            </summary>
+            <param name="options"><see cref="T:PiStellwerkLoadGenerator.Options"/>.</param>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.Start">
+            <summary>
+            Starts the client simulation.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.Stop">
+            <summary>
+            Stops the ClientSimulation.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.GetStatistics">
+            <summary>
+            Get the latency results of this ClientSimulator.
+            </summary>
+            <returns>A dictonary, containing the latency in 1/10ms as Key and the number of occurrences as Value.</returns>
+        </member>
+        <member name="T:PiStellwerkLoadGenerator.Options">
+            <summary>
+            Class containing the options of the tool. Options come from arguments.
+            </summary>
+        </member>
+        <member name="P:PiStellwerkLoadGenerator.Options.Uri">
+            <summary>
+            Gets the url of the service to test.
+            </summary>
+        </member>
+        <member name="P:PiStellwerkLoadGenerator.Options.NoStats">
+            <summary>
+            Gets a value indicating whether the Tool should collect latency statistics, since they might be quite memory-heavy.
+            </summary>
+        </member>
+        <member name="P:PiStellwerkLoadGenerator.Options.Clients">
+            <summary>
+            Gets a value indicating how many clients should be simulated. Default Value: 1.
+            </summary>
+        </member>
+        <member name="P:PiStellwerkLoadGenerator.Options.Time">
+            <summary>
+            Gets a value indicating for how many seconds the tool should run. 0/Infinite not included.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.Options.GetOptionsFromArgs(System.String[])">
+            <summary>
+            Parses the command line arguments and turns them into a <see cref="T:PiStellwerkLoadGenerator.Options"/> object.
+            </summary>
+            <param name="args">string[] args (as received by a main function).</param>
+            <returns><see cref="T:PiStellwerkLoadGenerator.Options"/>with the parsed argument values. Otherwise default values are used.</returns>
+        </member>
+        <member name="T:PiStellwerkLoadGenerator.Program">
+            <summary>
+            A tool that tries to simulate a "realistic user" by making requests to the PiStellwerk-server.
+            </summary>
+        </member>
+        <member name="M:PiStellwerkLoadGenerator.Program.Main(System.String[])">
+            <summary>
+            Entry point for the console application.
+            </summary>
+            <param name="args">The command line arguments.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+    </members>
+</doc>

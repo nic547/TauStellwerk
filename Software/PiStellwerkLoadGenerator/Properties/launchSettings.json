@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PiStellwerkLoadGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-t 20"
+    }
+  }
+}
