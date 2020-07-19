@@ -16,7 +16,7 @@
             <param name="options"><see cref="T:PiStellwerkLoadGenerator.Options"/>.</param>
             <param name="user">The <see cref="T:PiStellwerk.Data.User"/> the request shall be made for.</param>
             <param name="client"><see cref="T:System.Net.Http.HttpClient"/> with which the request shall be made.</param>
-            <returns>Measured latency in 1/10ms.</returns>
+            <returns>Measured latency in ms.</returns>
         </member>
         <member name="T:PiStellwerkLoadGenerator.ClientSimulator">
             <summary>

@@ -48,7 +48,7 @@ namespace PiStellwerkLoadGenerator
 
             foreach (var (key, value) in results.ToImmutableSortedDictionary())
             {
-                Console.WriteLine($"{key / 10d}ms : {value} times");
+                Console.WriteLine($"{key}ms : {value} times");
             }
         }
     }

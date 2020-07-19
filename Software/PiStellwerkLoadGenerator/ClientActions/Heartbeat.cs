@@ -23,14 +23,14 @@ namespace PiStellwerkLoadGenerator.ClientActions
         /// <param name="options"><see cref="Options"/>.</param>
         /// <param name="user">The <see cref="User"/> the request shall be made for.</param>
         /// <param name="client"><see cref="HttpClient"/> with which the request shall be made.</param>
-        /// <returns>Measured latency in 1/10ms.</returns>
+        /// <returns>Measured latency in ms.</returns>
         public static async Task<int> PerformRequest(Options options, User user, HttpClient client)
         {
             var startTime = DateTime.Now;
             var content = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
             _ = await client.PutAsync(options.Uri + "status", content);
 
-            return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds * 10d);
+            return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }
 }
