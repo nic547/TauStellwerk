@@ -51,7 +51,7 @@ namespace PiStellwerkLoadGenerator
             // The first request seems to have a large overhead. Since it's IMHO not indicative of performance, I (nic547) decided to ignore the first request.
             _ = await Heartbeat.PerformRequest(_options, _user, _httpClient);
 
-            var heartbeatTimer = new Timer(2000);
+            var heartbeatTimer = new Timer(_random.Next(1900, 2100));
             heartbeatTimer.Elapsed += async (s, e) => { _results.Increment(await Heartbeat.PerformRequest(_options, _user, _httpClient)); };
             heartbeatTimer.Start();
             _timers.Add(heartbeatTimer);
