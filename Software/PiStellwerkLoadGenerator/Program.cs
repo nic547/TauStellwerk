@@ -4,8 +4,10 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using PiStellwerk.Util;
 
 namespace PiStellwerkLoadGenerator
 {
@@ -25,18 +27,28 @@ namespace PiStellwerkLoadGenerator
 
             var options = Options.GetOptionsFromArgs(args);
 
-            var clientSimulator = new ClientSimulator(options);
-            clientSimulator.Start();
+            var simulators = new List<ClientSimulator>();
+
+            for (var i = 0; i < options.Clients; i++)
+            {
+                var sim = new ClientSimulator(options);
+                sim.StartAsync();
+                simulators.Add(sim);
+            }
 
             await Task.Delay(options.Time * 1000);
 
-            clientSimulator.Stop();
+            var results = new CounterDictionary<int>();
 
-            var results = clientSimulator.GetStatistics();
-
-            foreach (var keyValuePair in results.ToImmutableSortedDictionary())
+            foreach (var sim in simulators)
             {
-                Console.WriteLine($"{keyValuePair.Key / 10d}ms : {keyValuePair.Value} times");
+                sim.Stop();
+                results.Combine(sim.GetStatistics());
+            }
+
+            foreach (var (key, value) in results.ToImmutableSortedDictionary())
+            {
+                Console.WriteLine($"{key / 10d}ms : {value} times");
             }
         }
     }

@@ -19,7 +19,7 @@ namespace PiStellwerkLoadGenerator
     public class ClientSimulator
     {
         private readonly Options _options;
-        private readonly Dictionary<int, ulong> _results = new Dictionary<int, ulong>();
+        private readonly CounterDictionary<int> _results = new CounterDictionary<int>();
 
         private readonly User _user;
 
@@ -46,10 +46,13 @@ namespace PiStellwerkLoadGenerator
         /// <summary>
         /// Starts the client simulation.
         /// </summary>
-        public void Start()
+        public async void StartAsync()
         {
+            // The first request seems to have a large overhead. Since it's IMHO not indicative of performance, I (nic547) decided to ignore the first request.
+            _ = await Heartbeat.PerformRequest(_options, _user, _httpClient);
+
             var heartbeatTimer = new Timer(2000);
-            heartbeatTimer.Elapsed += async (s, e) => { _results.IncrementValue(await Heartbeat.PerformRequest(_options, _user, _httpClient)); };
+            heartbeatTimer.Elapsed += async (s, e) => { _results.Increment(await Heartbeat.PerformRequest(_options, _user, _httpClient)); };
             heartbeatTimer.Start();
             _timers.Add(heartbeatTimer);
         }
@@ -70,7 +73,7 @@ namespace PiStellwerkLoadGenerator
         /// Get the latency results of this ClientSimulator.
         /// </summary>
         /// <returns>A dictonary, containing the latency in 1/10ms as Key and the number of occurrences as Value.</returns>
-        public IReadOnlyDictionary<int, ulong> GetStatistics()
+        public CounterDictionary<int> GetStatistics()
         {
             return _results;
         }

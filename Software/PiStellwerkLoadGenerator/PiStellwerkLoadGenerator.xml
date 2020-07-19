@@ -29,7 +29,7 @@
             </summary>
             <param name="options"><see cref="T:PiStellwerkLoadGenerator.Options"/>.</param>
         </member>
-        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.Start">
+        <member name="M:PiStellwerkLoadGenerator.ClientSimulator.StartAsync">
             <summary>
             Starts the client simulation.
             </summary>

@@ -4,6 +4,30 @@
         <name>PiStellwerk.Util</name>
     </assembly>
     <members>
+        <member name="T:PiStellwerk.Util.CounterDictionary`1">
+            <summary>
+            Dictionary for counting how often a key occured.
+            </summary>
+            <typeparam name="TKey">Type of Key.</typeparam>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary`1.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary`1.Combine(PiStellwerk.Util.CounterDictionary{`0})">
+            <summary>
+            Combine a CounterDictionary with this CounterDictionary.
+            </summary>
+            <param name="dict2">The other CounterDictionary.</param>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary`1.Increment(`0)">
+            <summary>
+            Increment the value of a key by one.
+            </summary>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc/>
+        </member>
         <member name="T:PiStellwerk.Util.DictionaryIncrementExtension">
             <summary>
             Extension methods for dictionaries with numeric values. The value is increased by 1, if no K/V Pair exists yet, a new one is created.

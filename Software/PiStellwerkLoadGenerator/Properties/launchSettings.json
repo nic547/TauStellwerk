@@ -2,7 +2,7 @@
   "profiles": {
     "PiStellwerkLoadGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "-t 20"
+      "commandLineArgs": "-t 20 -c 20"
     }
   }
 }
