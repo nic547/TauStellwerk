@@ -19,7 +19,7 @@ namespace PiStellwerkLoadGenerator
     public class ClientSimulator
     {
         private readonly Options _options;
-        private readonly CounterDictionary<int> _results = new CounterDictionary<int>();
+        private readonly CounterDictionary _results = new CounterDictionary();
 
         private readonly User _user;
 
@@ -72,8 +72,8 @@ namespace PiStellwerkLoadGenerator
         /// <summary>
         /// Get the latency results of this ClientSimulator.
         /// </summary>
-        /// <returns>A dictonary, containing the latency in 1/10ms as Key and the number of occurrences as Value.</returns>
-        public CounterDictionary<int> GetStatistics()
+        /// <returns>A dictionary, containing the latency in ms as Key and the number of occurrences as Value.</returns>
+        public CounterDictionary GetStatistics()
         {
             return _results;
         }

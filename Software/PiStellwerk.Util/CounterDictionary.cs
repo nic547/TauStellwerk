@@ -11,22 +11,35 @@ namespace PiStellwerk.Util
     /// <summary>
     /// Dictionary for counting how often a key occured.
     /// </summary>
-    /// <typeparam name="TKey">Type of Key.</typeparam>
-    public class CounterDictionary<TKey> : IEnumerable<KeyValuePair<TKey, ulong>>
+    public class CounterDictionary : IEnumerable<KeyValuePair<int, ulong>>
     {
-        private readonly Dictionary<TKey, ulong> _dictionary = new Dictionary<TKey, ulong>();
+        private readonly Dictionary<int, ulong> _dictionary = new Dictionary<int, ulong>();
 
         /// <inheritdoc/>
-        public IEnumerator<KeyValuePair<TKey, ulong>> GetEnumerator()
+        public IEnumerator<KeyValuePair<int, ulong>> GetEnumerator()
         {
-            return ((IEnumerable<KeyValuePair<TKey, ulong>>)_dictionary).GetEnumerator();
+            return ((IEnumerable<KeyValuePair<int, ulong>>)_dictionary).GetEnumerator();
+        }
+
+        public double Average()
+        {
+            var totalNumber = 0ul;
+            var movingAverage = 1d;
+            foreach (var kvp in _dictionary)
+            {
+                for (ulong u = 0; u < kvp.Value; u++) {
+                    movingAverage += ((double)kvp.Key - movingAverage) / ++totalNumber;
+                }
+            }
+
+            return movingAverage;
         }
 
         /// <summary>
         /// Combine a CounterDictionary with this CounterDictionary.
         /// </summary>
         /// <param name="dict2">The other CounterDictionary.</param>
-        public void Combine(CounterDictionary<TKey> dict2)
+        public void Combine(CounterDictionary dict2)
         {
             foreach (var kv in dict2)
             {
@@ -38,7 +51,7 @@ namespace PiStellwerk.Util
         /// Increment the value of a key by one.
         /// </summary>
         /// <param name="key">The key.</param>
-        public void Increment(TKey key)
+        public void Increment(int key)
         {
             Add(key, 1);
         }
@@ -49,7 +62,7 @@ namespace PiStellwerk.Util
             return ((IEnumerable)_dictionary).GetEnumerator();
         }
 
-        private void Add(TKey key, ulong value)
+        private void Add(int key, ulong value)
         {
             if (_dictionary.TryGetValue(key, out _))
             {

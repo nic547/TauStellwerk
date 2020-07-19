@@ -28,8 +28,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
         {
             var startTime = DateTime.Now;
             var content = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-            _ = await client.PutAsync(options.Uri + "status", content);
-
+            var result = await client.PutAsync(options.Uri + "status", content);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }

@@ -4,28 +4,27 @@
         <name>PiStellwerk.Util</name>
     </assembly>
     <members>
-        <member name="T:PiStellwerk.Util.CounterDictionary`1">
+        <member name="T:PiStellwerk.Util.CounterDictionary">
             <summary>
             Dictionary for counting how often a key occured.
             </summary>
-            <typeparam name="TKey">Type of Key.</typeparam>
         </member>
-        <member name="M:PiStellwerk.Util.CounterDictionary`1.GetEnumerator">
+        <member name="M:PiStellwerk.Util.CounterDictionary.GetEnumerator">
             <inheritdoc/>
         </member>
-        <member name="M:PiStellwerk.Util.CounterDictionary`1.Combine(PiStellwerk.Util.CounterDictionary{`0})">
+        <member name="M:PiStellwerk.Util.CounterDictionary.Combine(PiStellwerk.Util.CounterDictionary)">
             <summary>
             Combine a CounterDictionary with this CounterDictionary.
             </summary>
             <param name="dict2">The other CounterDictionary.</param>
         </member>
-        <member name="M:PiStellwerk.Util.CounterDictionary`1.Increment(`0)">
+        <member name="M:PiStellwerk.Util.CounterDictionary.Increment(System.Int32)">
             <summary>
             Increment the value of a key by one.
             </summary>
             <param name="key">The key.</param>
         </member>
-        <member name="M:PiStellwerk.Util.CounterDictionary`1.System#Collections#IEnumerable#GetEnumerator">
+        <member name="M:PiStellwerk.Util.CounterDictionary.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc/>
         </member>
     </members>

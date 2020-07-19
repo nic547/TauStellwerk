@@ -38,7 +38,7 @@ namespace PiStellwerkLoadGenerator
 
             await Task.Delay(options.Time * 1000);
 
-            var results = new CounterDictionary<int>();
+            var results = new CounterDictionary();
 
             foreach (var sim in simulators)
             {
@@ -50,6 +50,8 @@ namespace PiStellwerkLoadGenerator
             {
                 Console.WriteLine($"{key}ms : {value} times");
             }
+
+            Console.WriteLine($"Average: {results.Average()} ms");
         }
     }
 }

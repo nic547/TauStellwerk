@@ -43,7 +43,7 @@
             <summary>
             Get the latency results of this ClientSimulator.
             </summary>
-            <returns>A dictonary, containing the latency in 1/10ms as Key and the number of occurrences as Value.</returns>
+            <returns>A dictionary, containing the latency in ms as Key and the number of occurrences as Value.</returns>
         </member>
         <member name="T:PiStellwerkLoadGenerator.Options">
             <summary>
