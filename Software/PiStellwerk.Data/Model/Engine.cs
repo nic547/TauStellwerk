@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
 
 namespace PiStellwerk.Data
 {
@@ -14,10 +15,16 @@ namespace PiStellwerk.Data
     /// </summary>
     public class Engine
     {
+        private string _name;
+
         /// <summary>
         /// Gets or sets the name of the choo-choo.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => _name = HttpUtility.HtmlEncode(value);
+        }
 
         /// <summary>
         /// Gets or sets the Id of the Engine in the database system.
@@ -54,6 +61,7 @@ namespace PiStellwerk.Data
         /// <summary>
         /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
+        /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
         public List<string> Tags { get; set; }
     }
