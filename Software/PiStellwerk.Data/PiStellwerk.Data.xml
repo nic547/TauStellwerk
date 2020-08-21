@@ -80,6 +80,7 @@
             <summary>
             Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
             everything one might search for if the exact name is unknown.
+            TODO: HTMLEncode these before actually displaying them anywhere.
             </summary>
         </member>
         <member name="T:PiStellwerk.Data.SpeedDisplayType">
