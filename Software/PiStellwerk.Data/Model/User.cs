@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Web;
 
 namespace PiStellwerk.Data
 {
@@ -12,15 +13,26 @@ namespace PiStellwerk.Data
     /// </summary>
     public class User
     {
+        private string _name;
+        private string _userAgent;
+
         /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => _name = HttpUtility.HtmlEncode(value);
+        }
 
         /// <summary>
         /// Gets or sets the user-agent string of the client the user uses.
         /// </summary>
-        public string UserAgent { get; set; }
+        public string UserAgent
+        {
+            get => _userAgent;
+            set => _userAgent = HttpUtility.HtmlEncode(value);
+        }
 
         /// <summary>
         /// Gets or sets the timestamp of the last heartbeat received by the application from the user.
