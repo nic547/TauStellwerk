@@ -9,8 +9,8 @@ An WIP open-source DCC Command Station for the Raspberry Pi and similar single b
 Right now this is all very experimental. I will almost certainly make major changes as far as hardware is concerned and abbandon any older hardware revisions until I state the opposite.
 
 ## Important Notes
-- This is just a hobbyist's project. I guarantee absolutely nothing. 
-- Do not make the server accessible to a public network. Neither the Webserver (Kestrel) nor PiStellwerk itself is made with that in mind.
+- This is just a hobbyist's project. I guarantee absolutely nothing.
+- Restrict network access to the server. Do not use a public Wi-Fi and do not make the server accessible from the internet. The system isn't ready for the scale and sophistication of attacks any public system has to withstand.
 
 ## Planned Features
 - 2.5A nominal current per booster
