@@ -21,13 +21,18 @@ namespace PiStellwerk.Util
             return ((IEnumerable<KeyValuePair<int, ulong>>)_dictionary).GetEnumerator();
         }
 
+        /// <summary>
+        /// Calculate the average of all values with respect to how often it occured.
+        /// </summary>
+        /// <returns>The average of all values.</returns>
         public double Average()
         {
             var totalNumber = 0ul;
             var movingAverage = 1d;
             foreach (var kvp in _dictionary)
             {
-                for (ulong u = 0; u < kvp.Value; u++) {
+                for (ulong u = 0; u < kvp.Value; u++)
+                {
                     movingAverage += ((double)kvp.Key - movingAverage) / ++totalNumber;
                 }
             }
