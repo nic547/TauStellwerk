@@ -52,6 +52,9 @@ namespace PiStellwerkLoadGenerator
             }
 
             Console.WriteLine($"Average: {results.Average()} ms");
+            Console.WriteLine($"90th Percentile: {results.Get90ThPercentile()} ms");
+            Console.WriteLine($"95th Percentile: {results.Get95ThPercentile()} ms");
+            Console.WriteLine($"99th Percentile: {results.Get99ThPercentile()} ms");
         }
     }
 }
