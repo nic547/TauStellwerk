@@ -67,6 +67,21 @@ namespace PiStellwerk.Util
             return ((IEnumerable)_dictionary).GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns the total number of occurrences this CounterDictionary recorded.
+        /// </summary>
+        /// <returns>Total number of occurrences.</returns>
+        public ulong Total()
+        {
+            ulong result = 0;
+            foreach (var kv in _dictionary)
+            {
+                result += kv.Value;
+            }
+
+            return result;
+        }
+
         private void Add(int key, ulong value)
         {
             if (_dictionary.TryGetValue(key, out _))

@@ -20,7 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B5DA29DA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerkLoadGenerator", "PiStellwerkLoadGenerator\PiStellwerkLoadGenerator.csproj", "{3D0B789F-38DF-4FCC-B289-B9B83F99BF1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Util", "PiStellwerk.Util\PiStellwerk.Util.csproj", "{7EF9E786-6E11-44D4-9F60-524AEA0A8130}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Util", "PiStellwerk.Util\PiStellwerk.Util.csproj", "{7EF9E786-6E11-44D4-9F60-524AEA0A8130}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Util.Tests", "PiStellwerk.Util.Tests\PiStellwerk.Util.Tests.csproj", "{CDD2E8AD-F57C-4768-9812-0880BABF9437}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DEFECBB3-F873-4F04-99AB-842997EF9A42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,12 +52,17 @@ Global
 		{7EF9E786-6E11-44D4-9F60-524AEA0A8130}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EF9E786-6E11-44D4-9F60-524AEA0A8130}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EF9E786-6E11-44D4-9F60-524AEA0A8130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD2E8AD-F57C-4768-9812-0880BABF9437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD2E8AD-F57C-4768-9812-0880BABF9437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD2E8AD-F57C-4768-9812-0880BABF9437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD2E8AD-F57C-4768-9812-0880BABF9437}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D0B789F-38DF-4FCC-B289-B9B83F99BF1D} = {B5DA29DA-A821-4C48-8DC2-78DBE5BD0313}
+		{CDD2E8AD-F57C-4768-9812-0880BABF9437} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EFC0537-3BEE-4528-BBFD-FC8E6D95C0C1}

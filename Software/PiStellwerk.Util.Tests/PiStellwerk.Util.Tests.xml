@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiStellwerk.Util.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:PiStellwerk.Util.Tests.CounterDictionaryTests">
+            <summary>
+            Tests for <see cref="T:PiStellwerk.Util.CounterDictionary"/>.
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Util.Tests.CounterDictionaryTests.AverageTest">
+            <summary>
+            Just a simple test testing Average().
+            </summary>
+        </member>
+        <member name="M:PiStellwerk.Util.Tests.CounterDictionaryTests.TotalTest">
+            <summary>
+            Test that totals are calculated correctly.
+            </summary>
+        </member>
+    </members>
+</doc>

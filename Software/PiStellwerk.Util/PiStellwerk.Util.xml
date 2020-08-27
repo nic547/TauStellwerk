@@ -12,6 +12,12 @@
         <member name="M:PiStellwerk.Util.CounterDictionary.GetEnumerator">
             <inheritdoc/>
         </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary.Average">
+            <summary>
+            Calculate the average of all values with respect to how often it occured.
+            </summary>
+            <returns>The average of all values.</returns>
+        </member>
         <member name="M:PiStellwerk.Util.CounterDictionary.Combine(PiStellwerk.Util.CounterDictionary)">
             <summary>
             Combine a CounterDictionary with this CounterDictionary.
@@ -26,6 +32,12 @@
         </member>
         <member name="M:PiStellwerk.Util.CounterDictionary.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc/>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary.Total">
+            <summary>
+            Returns the total number of occurrences this CounterDictionary recorded.
+            </summary>
+            <returns>Total number of occurrences.</returns>
         </member>
     </members>
 </doc>
