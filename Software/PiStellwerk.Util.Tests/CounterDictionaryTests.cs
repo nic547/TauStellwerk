@@ -4,7 +4,6 @@
 // </copyright>
 
 using NUnit.Framework;
-using PiStellwerk.Util;
 
 namespace PiStellwerk.Util.Tests
 {
@@ -34,6 +33,23 @@ namespace PiStellwerk.Util.Tests
 
             var ctEmpty = new CounterDictionary();
             Assert.AreEqual(0, ctEmpty.Total());
+        }
+
+        /// <summary>
+        /// Test that percentiles are calculated correctly.
+        /// </summary>
+        [Test]
+        public void PercentileTest()
+        {
+            var ct = new CounterDictionary();
+            for (int i = 1; i <= 100_000; i++)
+            {
+                ct.Increment(i);
+            }
+
+            Assert.AreEqual(90_000, ct.Get90ThPercentile());
+            Assert.AreEqual(95_000, ct.Get95ThPercentile());
+            Assert.AreEqual(99_000, ct.Get99ThPercentile());
         }
 
         private static CounterDictionary SimpleTestCounterDictionary()

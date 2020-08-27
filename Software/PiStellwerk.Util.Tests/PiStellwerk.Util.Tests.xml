@@ -19,5 +19,10 @@
             Test that totals are calculated correctly.
             </summary>
         </member>
+        <member name="M:PiStellwerk.Util.Tests.CounterDictionaryTests.PercentileTest">
+            <summary>
+            Test that percentiles are calculated correctly.
+            </summary>
+        </member>
     </members>
 </doc>

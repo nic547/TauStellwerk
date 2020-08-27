@@ -24,6 +24,24 @@
             </summary>
             <param name="dict2">The other CounterDictionary.</param>
         </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary.Get90ThPercentile">
+            <summary>
+            Get the 90th Percentile.
+            </summary>
+            <returns>Value representing the 90th Percentile.</returns>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary.Get95ThPercentile">
+            <summary>
+            Get the 95th Percentile.
+            </summary>
+            <returns>Value representing the 95th Percentile.</returns>
+        </member>
+        <member name="M:PiStellwerk.Util.CounterDictionary.Get99ThPercentile">
+            <summary>
+            Get the 99th Percentile.
+            </summary>
+            <returns>Value representing the 99th Percentile.</returns>
+        </member>
         <member name="M:PiStellwerk.Util.CounterDictionary.Increment(System.Int32)">
             <summary>
             Increment the value of a key by one.

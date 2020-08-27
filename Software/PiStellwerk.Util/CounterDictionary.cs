@@ -3,8 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PiStellwerk.Util
 {
@@ -53,6 +55,33 @@ namespace PiStellwerk.Util
         }
 
         /// <summary>
+        /// Get the 90th Percentile.
+        /// </summary>
+        /// <returns>Value representing the 90th Percentile.</returns>
+        public int Get90ThPercentile()
+        {
+            return GetPercentile(0.9);
+        }
+
+        /// <summary>
+        /// Get the 95th Percentile.
+        /// </summary>
+        /// <returns>Value representing the 95th Percentile.</returns>
+        public int Get95ThPercentile()
+        {
+            return GetPercentile(0.95);
+        }
+
+        /// <summary>
+        /// Get the 99th Percentile.
+        /// </summary>
+        /// <returns>Value representing the 99th Percentile.</returns>
+        public int Get99ThPercentile()
+        {
+            return GetPercentile(0.99);
+        }
+
+        /// <summary>
         /// Increment the value of a key by one.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -92,6 +121,24 @@ namespace PiStellwerk.Util
             {
                 _dictionary.Add(key, value);
             }
+        }
+
+        private int GetPercentile(double k)
+        {
+            ulong index = (ulong)Math.Round(Total() * k);
+            foreach (var kvp in _dictionary.OrderBy(kvp => kvp.Key))
+            {
+                if (kvp.Value < index)
+                {
+                    index -= kvp.Value;
+                }
+                else
+                {
+                    return kvp.Key;
+                }
+            }
+
+            throw new Exception("Cannot calculate Percentile");
         }
     }
 }
