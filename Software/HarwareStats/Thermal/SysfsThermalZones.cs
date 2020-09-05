@@ -35,17 +35,37 @@ namespace HardwareInfo.Thermal
         /// <inheritdoc/>
         public IList<InfoRecord> GetInfoRecords()
         {
-            // TODO: Read all thermal zones. Not done yet b/c my RaspberryPi used for testing has only one.
+            var i = 0;
             var stats = new List<InfoRecord>();
-            var temp = File.ReadLines("/sys/class/thermal/thermal_zone0/temp").First();
-            var name = File.ReadLines("/sys/class/thermal/thermal_zone0/type").First();
 
-            stats.Add(new InfoRecord
+            while (true)
             {
-                Type = InfoType.Thermal,
-                Name = name,
-                Value = $"Temperature: {Math.Round(double.Parse(temp) / 1000d, 1)}°C",
-            });
+                string name;
+                string temp;
+                try
+                {
+                    temp = File.ReadLines($"/sys/class/thermal/thermal_zone{i}/temp").First();
+                    name = File.ReadLines($"/sys/class/thermal/thermal_zone{i}/type").First();
+                }
+                catch (IOException)
+                {
+                    if (i == 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+
+                    break;
+                }
+
+                stats.Add(new InfoRecord
+                {
+                    Type = InfoType.Thermal,
+                    Name = name,
+                    Value = $"Temperature: {Math.Round(double.Parse(temp) / 1000d, 1)}°C",
+                });
+                i++;
+            }
+
             return stats;
         }
     }
