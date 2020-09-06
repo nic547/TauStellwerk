@@ -369,4 +369,10 @@ Hardware/_autosave-PiStellwerk.sch
 Hardware/PiStellwerk.kicad_pcb-bak
 *.gbr
 *.drl
+
+# SQLite DB testfile
 Software/PiStellwerk/StwDatabase.db
+
+## Javascript Files, generated from typescript files.
+Software/PiStellwerk/wwwroot/scripts/*.js
+Software/PiStellwerk/wwwroot/scripts/*.js.map
