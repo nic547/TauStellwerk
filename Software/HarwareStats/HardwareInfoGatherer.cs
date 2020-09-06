@@ -29,7 +29,7 @@ namespace HardwareInfo
                 Init();
             }
 
-            List<InfoRecord> results = new List<InfoRecord>();
+            var results = new List<InfoRecord>();
 
             foreach (var provider in _availableProviders)
             {
