@@ -7,6 +7,10 @@
     <DocumentationFile>.\bin\PiStellwerk.Util.Tests.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
