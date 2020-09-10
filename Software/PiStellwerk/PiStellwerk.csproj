@@ -35,5 +35,11 @@
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="tsconfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
 </Project>
