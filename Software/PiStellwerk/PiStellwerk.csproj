@@ -4,10 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <StartupObject>PiStellwerk.Program</StartupObject>
     <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>.\PiStellwerk.xml</DocumentationFile>
+    <DocumentationFile>.\bin\PiStellwerk.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
