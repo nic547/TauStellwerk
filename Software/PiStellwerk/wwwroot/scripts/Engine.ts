@@ -40,8 +40,8 @@ function displayEngine(engine: any) {
 
     tempNode.querySelector("header").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id);
-    let tempInput = tempNode.querySelector("input") as HTMLInputElement;
-    tempInput.addEventListener("input", HandleRangeValueChanged);
+    const tempInput = tempNode.querySelector("input") as HTMLInputElement;
+    tempInput.addEventListener("input", handleRangeValueChanged);
     switch (engine.speedDisplayType) {
     case "Percent":
         tempNode.querySelector("output").innerHTML = `0%`;
@@ -61,9 +61,8 @@ function displayEngine(engine: any) {
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType)
     container.appendChild(tempNode);
 }
-
-function HandleRangeValueChanged(event) {
-    let targetElement = event.target as HTMLInputElement;
+function handleRangeValueChanged(event) {
+    const targetElement = event.target as HTMLInputElement;
     writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(displayTypeAttribute));
     
     fetch(`/engine/command/${targetElement.parentElement.getAttribute(engineIdAttribute)}`,

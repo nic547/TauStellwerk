@@ -33,7 +33,7 @@ body {
 #CommandButton {
 
 	width: 100%;
-	margin: 0px;
+	margin: 0;
 	text-align: center;
 	padding: 1em;
 	flex: 0 0 auto;
@@ -43,7 +43,7 @@ body {
 @media (min-width: 900px) {
 	#CommandButton {
 		width: 80%;
-		margin: 0px auto;
+		margin: 0 auto;
 	}
 }
 
@@ -153,5 +153,5 @@ form * {
 footer {
 	width: 100%;
 	background-color: var(--background-highlight);
-	flex: 0, 0, auto;
+	flex: 0 0 auto;
 }
