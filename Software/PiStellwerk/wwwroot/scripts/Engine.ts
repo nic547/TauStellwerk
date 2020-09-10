@@ -1,60 +1,76 @@
-﻿var DisplayTypeAttribute: string = "data-display-type";
-var EngineIDAttribute: string = "data-engine-id";
+﻿const displayTypeAttribute = "data-display-type";
+const engineIdAttribute = "data-engine-id";
+const engineControlTemplate = document.getElementById("EngineTemplate") as HTMLDivElement;
+
+// Element IDs
+
+const engineSelectionId = "EngineSelectionOverlay";
+
 
 document.addEventListener("DOMContentLoaded",
     () => {
         document.getElementById("TestButton").addEventListener("click", TESTLoadEngines);
     });
 
+
+import * as Overlays from "./overlays.js"
+
 export function TESTLoadEngines() {
-        let Container: HTMLDivElement = <HTMLDivElement>document.getElementById("EngineContainer")
+        
 
         fetch("/engine/list",
             {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
             }
 
         ).then((response) => {
             return response.json();
         }).then((data: Array<any>) => {
-            data.forEach(engine => {
-                var tempnode: HTMLDivElement = <HTMLDivElement>document.getElementById("EngineTemplate").cloneNode(true);
-                tempnode.querySelector("header").innerHTML = engine.name;
-                tempnode.setAttribute(EngineIDAttribute, engine.id)
-                let tempinput = tempnode.querySelector("input") as HTMLInputElement;
-                tempinput.addEventListener("input", HandleRangeValueChanged)
-                switch (engine.speedDisplayType) {
-                    case "Percent":
-                        tempnode.querySelector("output").innerHTML = `0%`;
-                        tempinput.max = "100";
-                        break;
-                    case "SpeedSteps":
-                        tempnode.querySelector("output").innerHTML = "0";
-                        tempinput.max = engine.speedSteps;
-                        break;
-                    case "TopSpeed":
-                        tempnode.querySelector("output").innerHTML = `0 km/h`;
-                        tempinput.max = engine.topSpeed;
-                }
-                tempinput.setAttribute(DisplayTypeAttribute, engine.speedDisplayType)
-                Container.appendChild(tempnode);
-            })
-            
+            data.forEach(engine => displayEngine(engine));
+
         });
+}
+
+function displayEngine(engine: any) {
+    const tempNode = engineControlTemplate.cloneNode(true) as HTMLDivElement;
+    const container = document.getElementById("EngineContainer") as HTMLDivElement;
+
+    tempNode.querySelector("header").innerHTML = engine.name;
+    tempNode.setAttribute(engineIdAttribute, engine.id);
+    let tempInput = tempNode.querySelector("input") as HTMLInputElement;
+    tempInput.addEventListener("input", HandleRangeValueChanged);
+    switch (engine.speedDisplayType) {
+    case "Percent":
+        tempNode.querySelector("output").innerHTML = `0%`;
+        tempInput.max = "100";
+        break;
+    case "SpeedSteps":
+        tempNode.querySelector("output").innerHTML = "0";
+        tempInput.max = engine.speedSteps;
+        break;
+    case "TopSpeed":
+        tempNode.querySelector("output").innerHTML = `0 km/h`;
+        tempInput.max = engine.topSpeed;
+    }
+
+    tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
+
+    tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType)
+    container.appendChild(tempNode);
 }
 
 function HandleRangeValueChanged(event) {
     let targetElement = event.target as HTMLInputElement;
-    writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(DisplayTypeAttribute));
+    writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(displayTypeAttribute));
     
-    fetch(`/engine/command/${targetElement.parentElement.getAttribute(EngineIDAttribute)}`,
+    fetch(`/engine/command/${targetElement.parentElement.getAttribute(engineIdAttribute)}`,
         {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
         }
 
@@ -72,4 +88,9 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
         case "TopSpeed":
             output.innerHTML = `${value} km/h`;
     }
+}
+
+function removeEngineFromControlPanel () {
+    const element = event.target as HTMLElement;
+    element.parentElement.parentElement.remove();
 }

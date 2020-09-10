@@ -36,7 +36,7 @@ body {
 	margin: 0px;
 	text-align: center;
 	padding: 1em;
-	flex: 0, 0, auto;
+	flex: 0 0 auto;
     z-index: 100; /* Should always be displayed on top, even on overlays*/
 }
 
@@ -88,8 +88,23 @@ body {
 }
 
 
-.EngineControl > header {
-	grid-area: header;
+.EngineControl > .EngineHeader {
+    grid-area: header;
+    display: flex;
+    height: 2em;
+    box-sizing: border-box;
+	width: 100%;
+}
+
+.EngineHeader > button {
+    width: 2em;
+    flex: 0 0 2em;
+    
+}
+
+.EngineHeader > header {
+	flex: 1 1 auto;
+    text-align: center;
 }
 
 .EngineControl > input {
