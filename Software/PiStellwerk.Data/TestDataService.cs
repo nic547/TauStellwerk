@@ -140,7 +140,7 @@ namespace PiStellwerk
                         new DccFunction(3, "Horn low - long"),
                         new DccFunction(4, "Compressor"),
                         new DccFunction(5, "Couple/decouple Sound"),
-                        new DccFunction(6, "Shunting Gear + Shungting Light"),
+                        new DccFunction(6, "Shunting Gear + Shunting Light"),
                         new DccFunction(7, "High Beams"),
                         new DccFunction(8, "Horn high - short"),
                         new DccFunction(9, "Horn low - short"),
@@ -162,7 +162,7 @@ namespace PiStellwerk
                         new DccFunction(25, "SIFA"),
                         new DccFunction(26, "Brake squeal"),
                         new DccFunction(27, "Decrease volume"),
-                        new DccFunction(28, "Inrcease volume"),
+                        new DccFunction(28, "Increase volume"),
                     },
                 },
 
@@ -177,7 +177,7 @@ namespace PiStellwerk
                         "dri",
                         "Electric",
                         "Multisystem",
-                        "freight",
+                        "Freight",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
@@ -247,6 +247,41 @@ namespace PiStellwerk
                         new DccFunction(27, "Train announcements 2"),
                         new DccFunction(28, "Train announcements 3"),
                     },
+                },
+                new Engine
+                {
+                    Name = "Märklin Re 620 X-Rail",
+                    Tags = new List<string>
+                    {
+                        "SLM",
+                        "Re 620 088-5",
+                        "Re 6/6 Linthal",
+                        "SBB Cargo",
+                        "37326",
+                        "Electric",
+                        "Freight",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "Märklin Re 620 058",
+                    Tags = new List<string>
+                    {
+                        "SLM",
+                        "Re 6/6 11658",
+                        "SBB Cargo",
+                        "37321",
+                        "Electric",
+                        "Auvernier",
+                        "Freight",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
             };
         }

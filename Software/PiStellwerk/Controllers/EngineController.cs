@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Controllers
@@ -21,6 +20,7 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class EngineController : Controller
     {
+        private const int _resultsPerPage = 20;
         private readonly StwDbContext _dbContext;
 
         /// <summary>
@@ -34,12 +34,17 @@ namespace PiStellwerk.Controllers
 
         /// <summary>
         /// HTTP GET getting all engines.
+        /// Results are paginated.
         /// </summary>
+        /// <param name="page">Page to load. Default and start is Zero.</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public IReadOnlyList<Engine>? GetEngines()
+        public IReadOnlyList<Engine>? GetEngines(int page = 0)
         {
-            return _dbContext.Engines.Any() ? _dbContext.Engines.Include(e => e.Functions).ToList<Engine>() : null;
+            return _dbContext.Engines
+                .Skip(page * _resultsPerPage)
+                .Take(_resultsPerPage)
+                .ToList();
         }
 
         /// <summary>
