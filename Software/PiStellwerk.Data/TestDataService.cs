@@ -113,6 +113,10 @@ namespace PiStellwerk
                         "Vectron",
                         "Siemens",
                         "dri",
+                        "Sound",
+                        "Electric",
+                        "Freight",
+                        "Multisystem",
                     },
                 },
 
@@ -128,6 +132,7 @@ namespace PiStellwerk
                         "Electric",
                         "Multisystem",
                         "freight",
+                        "Sound",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
@@ -178,6 +183,7 @@ namespace PiStellwerk
                         "Electric",
                         "Multisystem",
                         "Freight",
+                        "Sound",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
@@ -204,13 +210,14 @@ namespace PiStellwerk
                 },
                 new Engine()
                 {
-                    Name = "Märklin Re 460 Zirkus Knie",
+                    Name = "Märklin Re 460 Circus Knie",
                     Tags = new List<string>
                     {
                         "SLM",
                         "dri",
-                        "electric",
-                        "passenger",
+                        "Electric",
+                        "Passenger",
+                        "Sound",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
@@ -259,7 +266,8 @@ namespace PiStellwerk
                         "SBB Cargo",
                         "37326",
                         "Electric",
-                        "Freight",
+                        "Universal",
+                        "Sound",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
@@ -277,7 +285,82 @@ namespace PiStellwerk
                         "37321",
                         "Electric",
                         "Auvernier",
+                        "Universal",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+                new Engine
+                {
+                    Name = "Märklin Re 6/6 Balerna",
+                    Tags = new List<string>
+                    {
+                        "11672",
+                        "SLM",
+                        "SBB",
+                        "dri",
+                        "37325",
+                        "Electric",
+                        "Universal",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+                new Engine
+                {
+                    Name = "Märklin Re 420 Circus Knie",
+                    Tags = new List<string>
+                    {
+                        "26615",
+                        "SLM",
+                        "SBB Personenverkehr",
+                        "Re 420 294",
+                        "Re 4/4 II 11294",
+                        "dri",
+                        "Electric",
+                        "Universal",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+                new Engine
+                {
+                    Name = "Märklin Re 482 036 (SBB Cargo)",
+                    Tags = new List<string>
+                    {
+                        "37446",
+                        "Bombardier",
+                        "dri",
+                        "Electric",
                         "Freight",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+                new Engine
+                {
+                    Name = "ES 64 F4 - 063 (MRCE)",
+                    Tags = new List<string>
+                    {
+                        "39863",
+                        "Siemens",
+                        "dri",
+                        "BR 189",
+                        "Eurosprinter",
+                        "Electric",
+                        "Multisystem",
+                        "Freight",
+                        "Sound",
+                        "SBB Cargo International",
+                        "Mitsui Rail Capital Europe",
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
