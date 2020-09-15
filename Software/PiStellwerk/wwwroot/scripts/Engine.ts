@@ -1,19 +1,25 @@
-﻿const displayTypeAttribute = "data-display-type";
+﻿import * as Overlays from "./overlays.js"
+
+const displayTypeAttribute = "data-display-type";
 const engineIdAttribute = "data-engine-id";
+
+//Elements
+
 const engineControlTemplate = document.getElementById("EngineTemplate") as HTMLDivElement;
+const engineSelectionTemplate = document.getElementById("EngineSelectionTemplate") as HTMLElement;
 
-// Element IDs
+const engineSelectionButton = document.getElementById("SelectEngineButton") as HTMLDivElement;
+const engineSelectionOverlay = document.getElementById("EngineSelectionOverlay") as HTMLDivElement;
 
-const engineSelectionId = "EngineSelectionOverlay";
-
+const engineSelectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
 
 document.addEventListener("DOMContentLoaded",
     () => {
         document.getElementById("TestButton").addEventListener("click", TESTLoadEngines);
+        engineSelectionButton.addEventListener("click", openEngineSelection);
     });
 
 
-import * as Overlays from "./overlays.js"
 
 export function TESTLoadEngines() {
         
@@ -92,4 +98,40 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
 function removeEngineFromControlPanel () {
     const element = event.target as HTMLElement;
     element.parentElement.parentElement.remove();
+}
+
+function openEngineSelection() {
+    Overlays.toggleVisibility(engineSelectionOverlay);
+    fetch("/engine/list",
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }
+
+    ).then((response) => {
+        return response.json();
+    }).then((data: Array<any>) => {
+        data.forEach(engine => {
+            const tempNode = engineSelectionTemplate.cloneNode(true) as HTMLElement;
+            var titleElement = tempNode.children[0] as HTMLElement;
+            var tagsElement = tempNode.children[1] as HTMLElement;
+
+            titleElement.innerHTML = engine.name;
+            tagsElement.innerHTML = engine.tags.reduce((a, b) => { return a + " | " + b });
+
+            
+            tempNode.classList.remove("template");
+            engineSelectionContainer.appendChild(tempNode);
+        });
+
+    });
+}
+
+export function getEngineSelectionCapacity(): number {
+    const style = getComputedStyle(engineSelectionContainer);
+    const columns = style.gridTemplateColumns.split(" ").length;
+    const rows = style.gridTemplateRows.split(" ").length;
+    return rows * columns;
 }
