@@ -17,8 +17,8 @@
     </header>
 <div id="EngineContainer">
     <!-- Template -->
-    <div class="EngineControl" id="EngineTemplate">
-        <div class="EngineHeader">
+    <div class="EngineControl template" id="EngineTemplate">
+        <div class="HeaderWithButton">
             <header>Engine</header><button>&#xD7</button>
         </div>
         
@@ -28,12 +28,27 @@
 
         </div>
     </div>
+    <div id="SelectEngineButton" class="EngineControl">
+        <p>Select Engine</p>
+    </div>
 </div>
 <div id="EngineSelectionOverlay" class="Overlay">
-    
+    <div class="OverlayWindow">
+        <div class="HeaderWithButton">
+            <header></header>
+            <button id="EngineSelectionClose">&#xD7</button>
+        </div>
+        
+        <div id="EngineSelectionContainer">
+            <article class="EngineSelectionItem template" id="EngineSelectionTemplate">
+                <header></header>
+                <span></span>
+            </article>
+        </div>
+    </div>
 </div>
 <div id="UsernameOverlay" class="Overlay">
-    <form id="UsernameForm">
+    <form id="UsernameForm" class="OverlayWindow">
         <label>Please enter your username:</label>
         <input required="required" type="text" id="UsernameInput"/>
         <button>Submit</button>

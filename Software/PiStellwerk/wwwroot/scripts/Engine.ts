@@ -5,18 +5,21 @@ const engineIdAttribute = "data-engine-id";
 
 //Elements
 
-const engineControlTemplate = document.getElementById("EngineTemplate") as HTMLDivElement;
-const engineSelectionTemplate = document.getElementById("EngineSelectionTemplate") as HTMLElement;
+const controlTemplate = document.getElementById("EngineTemplate") as HTMLDivElement;
+const selectionTemplate = document.getElementById("EngineSelectionTemplate") as HTMLElement;
 
-const engineSelectionButton = document.getElementById("SelectEngineButton") as HTMLDivElement;
-const engineSelectionOverlay = document.getElementById("EngineSelectionOverlay") as HTMLDivElement;
+const selectionButton = document.getElementById("SelectEngineButton") as HTMLDivElement;
 
-const engineSelectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
+const selectionOverlay = document.getElementById("EngineSelectionOverlay") as HTMLDivElement;
+const selectionCloseButton = document.getElementById("EngineSelectionClose") as HTMLDivElement;
+const selectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
 
 document.addEventListener("DOMContentLoaded",
     () => {
         document.getElementById("TestButton").addEventListener("click", TESTLoadEngines);
-        engineSelectionButton.addEventListener("click", openEngineSelection);
+        selectionButton.addEventListener("click", openSelection);
+
+        selectionCloseButton.addEventListener("click", closeSelection);
     });
 
 
@@ -41,7 +44,7 @@ export function TESTLoadEngines() {
 }
 
 function displayEngine(engine: any) {
-    const tempNode = engineControlTemplate.cloneNode(true) as HTMLDivElement;
+    const tempNode = controlTemplate.cloneNode(true) as HTMLDivElement;
     const container = document.getElementById("EngineContainer") as HTMLDivElement;
 
     tempNode.querySelector("header").innerHTML = engine.name;
@@ -64,7 +67,7 @@ function displayEngine(engine: any) {
 
     tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
-    tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType)
+    tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
     container.appendChild(tempNode);
 }
 function handleRangeValueChanged(event) {
@@ -100,8 +103,8 @@ function removeEngineFromControlPanel () {
     element.parentElement.parentElement.remove();
 }
 
-function openEngineSelection() {
-    Overlays.toggleVisibility(engineSelectionOverlay);
+function openSelection() {
+    Overlays.toggleVisibility(selectionOverlay);
     fetch("/engine/list",
         {
             method: "GET",
@@ -114,7 +117,7 @@ function openEngineSelection() {
         return response.json();
     }).then((data: Array<any>) => {
         data.forEach(engine => {
-            const tempNode = engineSelectionTemplate.cloneNode(true) as HTMLElement;
+            const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
             var titleElement = tempNode.children[0] as HTMLElement;
             var tagsElement = tempNode.children[1] as HTMLElement;
 
@@ -123,14 +126,22 @@ function openEngineSelection() {
 
             
             tempNode.classList.remove("template");
-            engineSelectionContainer.appendChild(tempNode);
+            selectionContainer.appendChild(tempNode);
         });
 
     });
 }
 
+function closeSelection() {
+    Overlays.toggleVisibility(selectionOverlay);
+    const length = selectionContainer.children.length;
+    for (let i = length -1; i > 0; i--) { // Element 0 is ignored deliberately
+        selectionContainer.children[i].remove();
+    }
+}
+
 export function getEngineSelectionCapacity(): number {
-    const style = getComputedStyle(engineSelectionContainer);
+    const style = getComputedStyle(selectionContainer);
     const columns = style.gridTemplateColumns.split(" ").length;
     const rows = style.gridTemplateRows.split(" ").length;
     return rows * columns;
