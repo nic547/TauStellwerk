@@ -83,6 +83,10 @@ body {
 	flex: 0 0 25em;
 }
 
+.EngineControlHeader {
+    grid-area: header;
+}
+
 .template {
 	display: none;
 }

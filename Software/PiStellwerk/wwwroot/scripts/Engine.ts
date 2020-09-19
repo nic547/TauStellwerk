@@ -43,12 +43,32 @@ export function TESTLoadEngines() {
         });
 }
 
+function selectEngine() {
+    const element = this as HTMLElement;
+    const id = element.getAttribute(engineIdAttribute);
+    fetch(`/engine/${id}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }
+    ).then((response) => {
+        return response.json();
+    }).then((engine => displayEngine(engine)));
+
+closeSelection();
+}
+
 function displayEngine(engine: any) {
     const tempNode = controlTemplate.cloneNode(true) as HTMLDivElement;
     const container = document.getElementById("EngineContainer") as HTMLDivElement;
 
     tempNode.querySelector("header").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id);
+
+    tempNode.classList.remove("template");
+
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleRangeValueChanged);
     switch (engine.speedDisplayType) {
@@ -68,6 +88,9 @@ function displayEngine(engine: any) {
     tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
+
+   
+
     container.appendChild(tempNode);
 }
 function handleRangeValueChanged(event) {
@@ -124,8 +147,11 @@ function openSelection() {
             titleElement.innerHTML = engine.name;
             tagsElement.innerHTML = engine.tags.reduce((a, b) => { return a + " | " + b });
 
+            tempNode.addEventListener("click", selectEngine);
+            tempNode.setAttribute(engineIdAttribute, engine.id);
             
             tempNode.classList.remove("template");
+            tempNode.removeAttribute("id");
             selectionContainer.appendChild(tempNode);
         });
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Controllers
@@ -30,6 +31,17 @@ namespace PiStellwerk.Controllers
         public EngineController(StwDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        /// <summary>
+        /// Get a single engine by it's id.
+        /// </summary>
+        /// <param name="id">The id of the engine.</param>
+        /// <returns>The engine with the given id.</returns>
+        [HttpGet("{id}")]
+        public Engine GetEngine(int id)
+        {
+            return _dbContext.Engines.Include(x => x.Functions).Single(x => x.Id == id);
         }
 
         /// <summary>
