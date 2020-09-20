@@ -123,9 +123,11 @@ body {
 
 
 #EngineSelectionContainer {
+    flex: 0 1 auto;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr 1fr;
+    overflow-x: auto;
 }
 
 .EngineSelectionItem {
@@ -155,7 +157,11 @@ body {
 .OverlayWindow {
     margin: 100px;
     padding: 10px;
-	background-color: var(--background-secondary);
+    background-color: var(--background-secondary);
+
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 200px);
 }
 
 form * {
