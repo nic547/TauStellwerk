@@ -14,7 +14,8 @@ namespace PiStellwerk
     public static class TestDataService
     {
         /// <summary>
-        /// Test function generating some data.
+        /// Test function generating example data.
+        /// Just random items I think of, no need for a burglary :P .
         /// </summary>
         /// <returns>List of <see cref="Engine"/>.</returns>
         public static IReadOnlyList<Engine> GetEngines()
@@ -110,6 +111,7 @@ namespace PiStellwerk
                     },
                     Tags = new List<string>()
                     {
+                        "79117",
                         "Vectron",
                         "Siemens",
                         "dri",
@@ -350,7 +352,7 @@ namespace PiStellwerk
                     Name = "ES 64 F4 - 063 (MRCE)",
                     Tags = new List<string>
                     {
-                        "39863",
+                        "Märklin 39863",
                         "Siemens",
                         "dri",
                         "BR 189",
@@ -364,6 +366,212 @@ namespace PiStellwerk
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "Black Pearl",
+                    Tags = new List<string>
+                    {
+                        "Roco 79277",
+                        "SLM",
+                        "dri",
+                        "Re 465 016",
+                        "Electric",
+                        "Freight",
+                        "Sound",
+                        "BLS Cargo",
+                        "Railcare",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "Cat's Eye",
+                    Tags = new List<string>
+                    {
+                        "Roco 79643 ",
+                        "SLM",
+                        "dri",
+                        "Re 465 015",
+                        "Electric",
+                        "Freight",
+                        "Sound",
+                        "BLS Cargo",
+                        "Railcare",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "Re 475 BLS Alpinist",
+                    Tags = new List<string>
+                    {
+                        "Roco 79920",
+                        "Siemens",
+                        "dri",
+                        "91 85 4475 402-4 CH-BLS",
+                        "Electric",
+                        "Multisystem",
+                        "Freight",
+                        "Sound",
+                        "BLS Cargo",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BR 193 \"Das ist Grün\"",
+                    Tags = new List<string>
+                    {
+                        "Roco 79103",
+                        "91 80 6193 301-9 D-DB",
+                        "Siemens",
+                        "dri",
+                        "Electric",
+                        "Multisystem",
+                        "Freight",
+                        "Sound",
+                        "DB Cargo",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BR 193 (Railpool)",
+                    Tags = new List<string>
+                    {
+                        "Roco 79916",
+                        "91 80 6193 802-6 D-Rpool",
+                        "Siemens",
+                        "dri",
+                        "Electric",
+                        "Multisystem",
+                        "Freight",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BR 193 (MRCE)",
+                    Tags = new List<string>
+                    {
+                        "Roco 79926",
+                        "91 80 6193 873-7 D-DISPO",
+                        "X4 E - 873",
+                        "Siemens",
+                        "dri",
+                        "Electric",
+                        "Dualsystem",
+                        "Freight",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BR 193 (DB Cargo)",
+                    Tags = new List<string>
+                    {
+                        "Roco 79926",
+                        "91 80 6193 307-6 D-DB",
+                        "Siemens",
+                        "dri",
+                        "Electric",
+                        "Dualsystem",
+                        "Freight",
+                        "Sound",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BLS Re 4/4 185",
+                    Tags = new List<string>
+                    {
+                        "Roco 79781",
+                        "Lalden",
+                        "SLM",
+                        "dri",
+                        "Electric",
+                        "Freight",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BLS Re 4/4 174",
+                    Tags = new List<string>
+                    {
+                        "Roco 79819",
+                        "Frutigen",
+                        "SLM",
+                        "dri",
+                        "Electric",
+                        "Freight",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "BLS Re 4/4 194",
+                    Tags = new List<string>
+                    {
+                        "Roco 79783",
+                        "Thun",
+                        "SLM",
+                        "dri",
+                        "Electric",
+                        "Freight",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 140,
+                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                },
+
+                new Engine
+                {
+                    Name = "SBB Re 460 \"Munot\"",
+                    Tags = new List<string>
+                    {
+                        "Märklin 39461",
+                        "91 85 4 460 ",
+                        "SLM",
+                        "dri",
+                        "Electric",
+                        "Passenger",
+                    },
+                    SpeedSteps = 128,
+                    TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
             };
