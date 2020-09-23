@@ -1,17 +1,23 @@
 ﻿:root {
-    font-family: sans-serif;
-	user-select: none;
+font-family: sans-serif;
+user-select: none;
 
-	--background-main: #303030;
-	--background-secondary: #202020;
-	--background-highlight: #404040;
-	--textcolor-main: #FFFFFF;
-	--textcolor-secondary: #EEEEEE; 
+--background-main: #303030;
+--background-secondary: #202020;
+--background-highlight: #404040;
+--textcolor-main: #FFFFFF;
+--textcolor-secondary: #EEEEEE;
+--overlay-window-margin: 20px;
 }
 
-html {
+@media screen and (min-width: 900px) {
+	:root { --overlay-window-margin: 100px; }
+}
+
+	html {
 	height: 100%;
 }
+
 
 body {
 	background-color: var(--background-main);
@@ -123,17 +129,45 @@ body {
 
 
 #EngineSelectionContainer {
-    flex: 0 1 auto;
+	flex: 0 1 auto;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr 1fr;
-    overflow-x: auto;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	overflow-x: auto;
+}
+
+@media screen and (min-width: 768px) {
+	#EngineSelectionContainer {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+	}
+}
+
+@media screen and (min-width: 900px) {
+	#EngineSelectionContainer {
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+	}
+}
+
+@media screen and (min-width: 1600px) {
+	#EngineSelectionContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+	}
 }
 
 .EngineSelectionItem {
-    padding: 5px;
-    margin: 2px;
-    background-color: var(--background-highlight);
+	padding: 12px;
+	margin: 5px;
+	background-color: var(--background-highlight);
+}
+
+@media screen and (min-width: 900px) {
+	.EngineSelectionItem {
+		padding: 5px;
+		margin: 2px;
+	}
 }
 
 .Overlay {
@@ -147,7 +181,6 @@ body {
 	bottom: 0;
 	background-color: rgba(0,0,0,0.5); /* Black background with opacity */
 	z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-
 	/* Center window */
 	justify-content: center;
 	align-items: center;
@@ -155,18 +188,17 @@ body {
 
 
 .OverlayWindow {
-    margin: 100px;
-    padding: 10px;
-    background-color: var(--background-secondary);
-
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 200px);
+	margin: var(--overlay-window-margin);
+	padding: 10px;
+	background-color: var(--background-secondary);
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 200px);
 }
 
 form * {
-    display: block;
-    margin: 2px;
+	display: block;
+	margin: 2px;
 }
 
 footer {
