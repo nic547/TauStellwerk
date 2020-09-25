@@ -133,13 +133,16 @@ body {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    --capacity: 10; /* Should be columns * rows, used to know how many items are needed. */
 	overflow-x: auto;
+
 }
 
 @media screen and (min-width: 768px) {
 	#EngineSelectionContainer {
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        --capacity: 10;
 	}
 }
 
@@ -147,13 +150,15 @@ body {
 	#EngineSelectionContainer {
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        --capacity: 15;
 	}
 }
 
 @media screen and (min-width: 1600px) {
 	#EngineSelectionContainer {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr;
+        --capacity: 20;
 	}
 }
 
