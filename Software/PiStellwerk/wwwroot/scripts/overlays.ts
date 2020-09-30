@@ -1,8 +1,7 @@
-﻿export function toggleVisibility(overlayId: string): void {
-    let overlay = document.getElementById(overlayId);
-    if (overlay.style.display === "block") {
+﻿export function toggleVisibility(overlay: HTMLElement): void {
+    if (overlay.style.display === "flex") {
         overlay.style.display = "none";
     } else {
-        overlay.style.display = "block";
+        overlay.style.display = "flex";
     };
 }

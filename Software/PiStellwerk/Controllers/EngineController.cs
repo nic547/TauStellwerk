@@ -21,6 +21,7 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class EngineController : Controller
     {
+        private const int _resultsPerPage = 20;
         private readonly StwDbContext _dbContext;
 
         /// <summary>
@@ -33,13 +34,29 @@ namespace PiStellwerk.Controllers
         }
 
         /// <summary>
-        /// HTTP GET getting all engines.
+        /// Get a single engine by it's id.
         /// </summary>
+        /// <param name="id">The id of the engine.</param>
+        /// <returns>The engine with the given id.</returns>
+        [HttpGet("{id}")]
+        public Engine GetEngine(int id)
+        {
+            return _dbContext.Engines.Include(x => x.Functions).Single(x => x.Id == id);
+        }
+
+        /// <summary>
+        /// HTTP GET getting all engines.
+        /// Results are paginated.
+        /// </summary>
+        /// <param name="page">Page to load. Default and start is Zero.</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public IReadOnlyList<Engine>? GetEngines()
+        public IReadOnlyList<Engine>? GetEngines(int page = 0)
         {
-            return _dbContext.Engines.Any() ? _dbContext.Engines.Include(e => e.Functions).ToList<Engine>() : null;
+            return _dbContext.Engines
+                .Skip(page * _resultsPerPage)
+                .Take(_resultsPerPage)
+                .ToList();
         }
 
         /// <summary>

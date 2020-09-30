@@ -1,17 +1,23 @@
 ﻿:root {
-    font-family: sans-serif;
-	user-select: none;
+font-family: sans-serif;
+user-select: none;
 
-	--background-main: #303030;
-	--background-secondary: #202020;
-	--background-highlight: #404040;
-	--textcolor-main: #FFFFFF;
-	--textcolor-secondary: #EEEEEE; 
+--background-main: #303030;
+--background-secondary: #202020;
+--background-highlight: #404040;
+--textcolor-main: #FFFFFF;
+--textcolor-secondary: #EEEEEE;
+--overlay-window-margin: 20px;
 }
 
-html {
+@media screen and (min-width: 900px) {
+	:root { --overlay-window-margin: 100px; }
+}
+
+	html {
 	height: 100%;
 }
+
 
 body {
 	background-color: var(--background-main);
@@ -33,17 +39,17 @@ body {
 #CommandButton {
 
 	width: 100%;
-	margin: 0px;
+	margin: 0;
 	text-align: center;
 	padding: 1em;
-	flex: 0, 0, auto;
+	flex: 0 0 auto;
     z-index: 100; /* Should always be displayed on top, even on overlays*/
 }
 
 @media (min-width: 900px) {
 	#CommandButton {
 		width: 80%;
-		margin: 0px auto;
+		margin: 0 auto;
 	}
 }
 
@@ -83,13 +89,30 @@ body {
 	flex: 0 0 25em;
 }
 
-.EngineControl:first-child {
+.EngineControlHeader {
+    grid-area: header;
+}
+
+.template {
 	display: none;
 }
 
 
-.EngineControl > header {
-	grid-area: header;
+.HeaderWithButton {
+    display: flex;
+    height: 2em;
+    box-sizing: border-box;
+	width: 100%;
+}
+
+.HeaderWithButton > header  {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.HeaderWithButton > button {
+    width: 2em;
+    flex: 0 0 2em;
 }
 
 .EngineControl > input {
@@ -105,38 +128,86 @@ body {
 }
 
 
-.Overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
+#EngineSelectionContainer {
+	flex: 0 1 auto;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    --capacity: 10; /* Should be columns * rows, used to know how many items are needed. */
+	overflow-x: auto;
+
 }
 
-form {
-	display: block;
-	margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    padding: 5px;
-    background-color: var(--background-highlight);
+@media screen and (min-width: 768px) {
+	#EngineSelectionContainer {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        --capacity: 10;
+	}
 }
+
+@media screen and (min-width: 900px) {
+	#EngineSelectionContainer {
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        --capacity: 15;
+	}
+}
+
+@media screen and (min-width: 1600px) {
+	#EngineSelectionContainer {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr 1fr;
+        --capacity: 20;
+	}
+}
+
+.EngineSelectionItem {
+	padding: 12px;
+	margin: 5px;
+	background-color: var(--background-highlight);
+}
+
+@media screen and (min-width: 900px) {
+	.EngineSelectionItem {
+		padding: 5px;
+		margin: 2px;
+	}
+}
+
+.Overlay {
+	position: fixed; /* Sit on top of the page content */
+	display: none; /* Hidden by default */
+	width: 100%; /* Full width (cover the whole page) */
+	height: 100%; /* Full height (cover the whole page) */
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+	z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+	/* Center window */
+	justify-content: center;
+	align-items: center;
+}
+
+
+.OverlayWindow {
+	margin: var(--overlay-window-margin);
+	padding: 10px;
+	background-color: var(--background-secondary);
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 200px);
+}
+
 form * {
-    display: block;
-    margin: 2px;
+	display: block;
+	margin: 2px;
 }
 
 footer {
 	width: 100%;
 	background-color: var(--background-highlight);
-	flex: 0, 0, auto;
+	flex: 0 0 auto;
 }

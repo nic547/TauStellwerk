@@ -1,13 +1,17 @@
-﻿var isRunning: boolean = false;
-var isBlocked: boolean;
-var statusIntervalHandle: number;
+﻿import * as User from "./user.js"
 
-import * as User from "./user.js"
+let isRunning = false;
+let isBlocked: boolean;
+let statusIntervalHandle: number;
+
+const commandButton = document.getElementById("CommandButton") as HTMLDivElement;
+const commandTitle = document.getElementById("CommandTitle");
+const commandDetails = document.getElementById("CommandDetails");
 
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Status module initialization started");
-    document.getElementById("CommandButton").addEventListener("click", commandButtonPressed);
+    commandButton.addEventListener("click", commandButtonPressed);
 
     startStatusUpdates();
 
@@ -30,28 +34,25 @@ export function stopStatusUpdates() {
 }
 
 function handleStatusChange(isRunning: boolean, username: string) {
-    let div = document.getElementById("CommandButton");
-    let title = document.getElementById("CommandTitle");
-    let details = document.getElementById("CommandDetails");
 
     if (isRunning) {
-        div.classList.remove("StoppedButton");
-        div.classList.add("RunningButton");
-        title.innerHTML = "RUNNING";
-        details.innerHTML = `PiStellwerk started by ${username} `;
+        commandButton.classList.remove("StoppedButton");
+        commandButton.classList.add("RunningButton");
+        commandTitle.innerHTML = "RUNNING";
+        commandDetails.innerHTML = `PiStellwerk started by ${username} `;
     }
     else {
         isBlocked = true;
-        div.classList.remove("RunningButton");
-        div.classList.add("StoppedBlockingButton");
-        title.innerHTML = "STOPPED (LOCKED)";
-        details.innerHTML = `PiStellwerk stopped by ${username} `;
+        commandButton.classList.remove("RunningButton");
+        commandButton.classList.add("StoppedBlockingButton");
+        commandTitle.innerHTML = "STOPPED (LOCKED)";
+        commandDetails.innerHTML = `PiStellwerk stopped by ${username} `;
 
-        setTimeout(function () {
+        setTimeout(() => {
             isBlocked = false;
-            div.classList.remove("StoppedBlockingButton");
-            title.innerHTML = "STOPPED";
-            div.classList.add("StoppedButton");
+            commandButton.classList.remove("StoppedBlockingButton");
+            commandTitle.innerHTML = "STOPPED";
+            commandButton.classList.add("StoppedButton");
         }, 2500);
 
     }
