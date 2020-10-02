@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json;
 using System.Web;
 
@@ -56,16 +57,17 @@ namespace PiStellwerk.Data
         public SpeedDisplayType SpeedDisplayType { get; set; }
 
         /// <summary>
-        /// Gets a list of functions a decoder offers.
+        /// Gets or sets a list of functions a decoder offers.
         /// </summary>
-        public List<DccFunction> Functions { get; } = new List<DccFunction>();
+        // TODO (NET 5.0?): It seems that both lists need a public setter for them to be deserialized correctly. Maybe the upcoming init-only properties could help.
+        public List<DccFunction> Functions { get; set; } = new List<DccFunction>();
 
         /// <summary>
-        /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
+        /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
-        public List<string> Tags { get; } = new List<string>();
+        public List<string> Tags { get; set; } = new List<string>();
 
         /// <inheritdoc/>
         public bool Equals(Engine other)
@@ -82,8 +84,8 @@ namespace PiStellwerk.Data
                 SpeedSteps.Equals(other.SpeedSteps) &&
                 TopSpeed.Equals(other.TopSpeed) &&
                 SpeedDisplayType.Equals(other.SpeedDisplayType) &&
-                Functions.Equals(other.Functions) &&
-                Tags.Equals(other.Tags);
+                Functions.SequenceEqual(other.Functions) &&
+                Tags.SequenceEqual(other.Tags);
         }
 
         /// <summary>
