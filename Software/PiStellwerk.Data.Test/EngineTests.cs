@@ -44,6 +44,18 @@ namespace PiStellwerk.Data.Test
             Assert.False(ReferenceEquals(e1.Tags.Single(), e2.Tags.Single()));
         }
 
+        /// <summary>
+        /// Test that the dcc functions of cloned engine objects do not have reference equality.
+        /// </summary>
+        [Test]
+        public void ClonedFunctionsAreNotReferenceEqual()
+        {
+            var original = CreateTestEngine();
+            var clone = original.DeepClone();
+
+            Assert.False(ReferenceEquals(clone.Functions.First(), original.Functions.First()));
+        }
+
         private static Engine CreateTestEngine()
         {
             return new Engine()
@@ -54,6 +66,11 @@ namespace PiStellwerk.Data.Test
                 Address = 77,
                 SpeedSteps = 128,
                 SpeedDisplayType = SpeedDisplayType.TopSpeed,
+                Tags = { "testtag1", "testtag2" },
+                Functions =
+                {
+                    new DccFunction(0, "Lights"),
+                },
             };
         }
     }
