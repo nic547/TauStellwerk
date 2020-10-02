@@ -56,16 +56,16 @@ namespace PiStellwerk.Data
         public SpeedDisplayType SpeedDisplayType { get; set; }
 
         /// <summary>
-        /// Gets or sets the functions a decoder offers.
+        /// Gets a list of functions a decoder offers.
         /// </summary>
-        public List<DccFunction> Functions { get; set; }
+        public List<DccFunction> Functions { get; } = new List<DccFunction>();
 
         /// <summary>
-        /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
+        /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; } = new List<string>();
 
         /// <inheritdoc/>
         public bool Equals(Engine other)
