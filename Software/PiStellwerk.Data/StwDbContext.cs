@@ -14,6 +14,17 @@ namespace PiStellwerk.Data
     /// </summary>
     public class StwDbContext : DbContext
     {
+        private readonly string _connectionString;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StwDbContext"/> class.
+        /// </summary>
+        /// <param name="connectionString">The SQLite connection string to use. Default: "Filename=StwDatabase.db".</param>
+        public StwDbContext(string connectionString = "Filename=StwDatabase.db")
+        {
+            _connectionString = connectionString;
+        }
+
         /// <summary>
         /// Gets or sets the collection of engines in the database.
         /// </summary>
@@ -22,7 +33,7 @@ namespace PiStellwerk.Data
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=StwDatabase.db");
+            optionsBuilder.UseSqlite(_connectionString);
         }
 
         /// <inheritdoc/>
@@ -30,7 +41,7 @@ namespace PiStellwerk.Data
         {
             modelBuilder.Entity<Engine>()
             .Property(e => e.Tags)
-            .HasConversion(v => string.Join(";", v), v => v.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList());
+            .HasConversion(v => string.Join(";", v), v => v.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList());
 
             base.OnModelCreating(modelBuilder);
         }

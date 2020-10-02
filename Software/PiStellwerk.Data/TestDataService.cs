@@ -4,9 +4,8 @@
 // </copyright>
 
 using System.Collections.Generic;
-using PiStellwerk.Data;
 
-namespace PiStellwerk
+namespace PiStellwerk.Data
 {
     /// <summary>
     /// Provides data for testing.
@@ -29,7 +28,7 @@ namespace PiStellwerk
                     Address = 49,
                     TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                    Functions = new List<DccFunction>()
+                    Functions =
                     {
                         new DccFunction(0, "Headlights"),
                         new DccFunction(1, "Sound"),
@@ -61,7 +60,7 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<string>()
+                    Tags =
                     {
                         "Vectron",
                         "Siemens",
@@ -77,7 +76,7 @@ namespace PiStellwerk
                     Address = 49,
                     TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                    Functions = new List<DccFunction>()
+                    Functions =
                     {
                         new DccFunction(0, "Headlights"),
                         new DccFunction(1, "Sound"),
@@ -109,7 +108,7 @@ namespace PiStellwerk
                         new DccFunction(27, "Decrease volume"),
                         new DccFunction(28, "Inrcease volume"),
                     },
-                    Tags = new List<string>()
+                    Tags =
                     {
                         "79117",
                         "Vectron",
@@ -125,7 +124,7 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Roco BR 193 Gotthardo (SBB C Int)",
-                    Tags = new List<string>()
+                    Tags =
                     {
                         "SBB Cargo",
                         "Vectron",
@@ -139,7 +138,7 @@ namespace PiStellwerk
                     SpeedSteps = 128,
                     TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.Percent,
-                    Functions = new List<DccFunction>()
+                    Functions =
                     {
                         new DccFunction(0, "Headlights"),
                         new DccFunction(1, "Sound"),
@@ -176,7 +175,7 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Märklin Re 474 003",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Siemens",
                         "ES 64 F4",
@@ -190,7 +189,7 @@ namespace PiStellwerk
                     SpeedSteps = 128,
                     TopSpeed = 140,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                    Functions = new List<DccFunction>
+                    Functions =
                     {
                         new DccFunction(0, "Headlights / Red marker light"),
                         new DccFunction(1, "HIgh beams"),
@@ -213,7 +212,7 @@ namespace PiStellwerk
                 new Engine()
                 {
                     Name = "Märklin Re 460 Circus Knie",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "SLM",
                         "dri",
@@ -224,7 +223,7 @@ namespace PiStellwerk
                     SpeedSteps = 128,
                     TopSpeed = 200,
                     SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                    Functions = new List<DccFunction>
+                    Functions =
                     {
                         new DccFunction(0, "Headlights with „Swiss headlight changeover“"),
                         new DccFunction(1, "Switching marker lights(1 x white -> 1 x red)"),
@@ -260,7 +259,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Märklin Re 620 X-Rail",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "SLM",
                         "Re 620 088-5",
@@ -279,7 +278,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Märklin Re 620 058",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "SLM",
                         "Re 6/6 11658",
@@ -297,7 +296,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Märklin Re 6/6 Balerna",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "11672",
                         "SLM",
@@ -315,7 +314,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Märklin Re 420 Circus Knie",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "26615",
                         "SLM",
@@ -334,7 +333,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Märklin Re 482 036 (SBB Cargo)",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "37446",
                         "Bombardier",
@@ -350,7 +349,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "ES 64 F4 - 063 (MRCE)",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Märklin 39863",
                         "Siemens",
@@ -372,7 +371,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Black Pearl",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79277",
                         "SLM",
@@ -392,7 +391,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Cat's Eye",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79643 ",
                         "SLM",
@@ -412,7 +411,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "Re 475 BLS Alpinist",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79920",
                         "Siemens",
@@ -432,7 +431,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BR 193 \"Das ist Grün\"",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79103",
                         "91 80 6193 301-9 D-DB",
@@ -452,7 +451,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BR 193 (Railpool)",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79916",
                         "91 80 6193 802-6 D-Rpool",
@@ -471,7 +470,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BR 193 (MRCE)",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79926",
                         "91 80 6193 873-7 D-DISPO",
@@ -491,7 +490,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BR 193 (DB Cargo)",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79926",
                         "91 80 6193 307-6 D-DB",
@@ -510,7 +509,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BLS Re 4/4 185",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79781",
                         "Lalden",
@@ -527,7 +526,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BLS Re 4/4 174",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79819",
                         "Frutigen",
@@ -544,7 +543,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "BLS Re 4/4 194",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Roco 79783",
                         "Thun",
@@ -561,7 +560,7 @@ namespace PiStellwerk
                 new Engine
                 {
                     Name = "SBB Re 460 \"Munot\"",
-                    Tags = new List<string>
+                    Tags =
                     {
                         "Märklin 39461",
                         "91 85 4 460 ",
