@@ -15,7 +15,7 @@ namespace PiStellwerk.Data
     /// <summary>
     /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
     /// </summary>
-    public class Engine : IEquatable<Engine>, ICloneable
+    public class Engine : IEquatable<Engine>
     {
         private string _name;
 
@@ -86,8 +86,11 @@ namespace PiStellwerk.Data
                 Tags.Equals(other.Tags);
         }
 
-        /// <inheritdoc/>
-        public object Clone()
+        /// <summary>
+        /// Create a deep copy of this object.
+        /// </summary>
+        /// <returns>The copy.</returns>
+        public Engine DeepClone()
         {
             // Probably not the fastest way for a deep clone, but very simple.
             var json = JsonSerializer.Serialize(this);
