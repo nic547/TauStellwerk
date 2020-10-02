@@ -3,9 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 using System.Web;
 
 namespace PiStellwerk.Data
@@ -13,7 +15,7 @@ namespace PiStellwerk.Data
     /// <summary>
     /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
     /// </summary>
-    public class Engine
+    public class Engine : IEquatable<Engine>, ICloneable
     {
         private string _name;
 
@@ -64,5 +66,32 @@ namespace PiStellwerk.Data
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
         public List<string> Tags { get; set; }
+
+        /// <inheritdoc/>
+        public bool Equals(Engine other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return
+                Name.Equals(other.Name) &&
+                Id.Equals(other.Id) &&
+                Address.Equals(other.Address) &&
+                SpeedSteps.Equals(other.SpeedSteps) &&
+                TopSpeed.Equals(other.TopSpeed) &&
+                SpeedDisplayType.Equals(other.SpeedDisplayType) &&
+                Functions.Equals(other.Functions) &&
+                Tags.Equals(other.Tags);
+        }
+
+        /// <inheritdoc/>
+        public object Clone()
+        {
+            // Probably not the fastest way for a deep clone, but very simple.
+            var json = JsonSerializer.Serialize(this);
+            return JsonSerializer.Deserialize<Engine>(json);
+        }
     }
 }
