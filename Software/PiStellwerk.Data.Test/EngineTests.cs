@@ -20,7 +20,7 @@ namespace PiStellwerk.Data.Test
         [Test]
         public void EnginesMatchAfterJson()
         {
-            var expectedEngine = CreateTestEngine();
+            var expectedEngine = TestDataHelper.CreateTestEngine();
             var json = JsonSerializer.Serialize(expectedEngine);
             var resultEngine = JsonSerializer.Deserialize<Engine>(json);
 
@@ -50,28 +50,10 @@ namespace PiStellwerk.Data.Test
         [Test]
         public void ClonedFunctionsAreNotReferenceEqual()
         {
-            var original = CreateTestEngine();
+            var original = TestDataHelper.CreateTestEngine();
             var clone = original.DeepClone();
 
             Assert.False(ReferenceEquals(clone.Functions.First(), original.Functions.First()));
-        }
-
-        private static Engine CreateTestEngine()
-        {
-            return new Engine()
-            {
-                Name = "RE 777",
-                TopSpeed = 356,
-                Id = 7777,
-                Address = 77,
-                SpeedSteps = 128,
-                SpeedDisplayType = SpeedDisplayType.TopSpeed,
-                Tags = { "testtag1", "testtag2" },
-                Functions =
-                {
-                    new DccFunction(0, "Lights"),
-                },
-            };
         }
     }
 }
