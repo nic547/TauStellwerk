@@ -23,7 +23,11 @@ Right now this is all very experimental. I will almost certainly make major chan
 The Hardware is based around a 4-layer PCB, a STM32F103CxT MCU and a DRV8874 H-Bridge. 
 
 ### Webserver
-The Webserver is a basic C# ASP.Core WebAPI using Kestrel, currently using the preview .NET 5 version. Thanks to .NET Core, the Application should run on both Windows and Linux, on both ARM and x86 processors.
+The Webserver is a basic C# ASP.Core WebAPI using Kestrel, currently using .NET Core 3.1. Thanks to .NET Core, the Application should run on both Windows and Linux, on both ARM and x86 processors.
+A upgrade to NET 5.0 is intended shortly after Release of .NET 5.0.
 
 ### Webapp
-The Webapp is done with vanilla HTML/CSS and Typescript.
+The Webapp is done with vanilla HTML/CSS and Typescript. As it's a website, it should run on almost any device with a recent browser.
+
+## Licences
+- /Software is licensed under the GNU GPLv3, see [here](/Software/LICENSE) for more details.
