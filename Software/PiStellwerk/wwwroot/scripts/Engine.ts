@@ -80,7 +80,7 @@ function handleRangeValueChanged(event) {
     const targetElement = event.target as HTMLInputElement;
     writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(displayTypeAttribute));
     
-    fetch(`/engine/command/${targetElement.parentElement.getAttribute(engineIdAttribute)}`,
+    fetch(`/engine/${targetElement.parentElement.getAttribute(engineIdAttribute)}/command`,
         {
             method: "POST",
             headers: {

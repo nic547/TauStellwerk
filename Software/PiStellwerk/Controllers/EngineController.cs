@@ -63,8 +63,8 @@ namespace PiStellwerk.Controllers
         /// HTTP POST for sending a command to an Engine.
         /// Doesn't even work yet, just does a 1ms sleepy sleep.
         /// </summary>
-        /// <param name="id">Id of the command, i think.</param>
-        [HttpPost("command/{id}")]
+        /// <param name="id">Id of the engine.</param>
+        [HttpPost("{id}/command")]
         public void EngineCommand(int id)
         {
             // TODO: Remove testing sleep
