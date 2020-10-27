@@ -86,6 +86,7 @@ function handleRangeValueChanged(event) {
             headers: {
                 "Content-Type": "application/json"
             },
+            body: `{"Type": "Speed","Data": ${targetElement.value}}`
         }
 
     ).then((response) => { });

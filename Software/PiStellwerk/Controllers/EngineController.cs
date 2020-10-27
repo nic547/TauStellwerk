@@ -7,10 +7,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PiStellwerk.Commands;
 using PiStellwerk.Data;
+using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Controllers
 {
@@ -23,6 +24,7 @@ namespace PiStellwerk.Controllers
     {
         private const int _resultsPerPage = 20;
         private readonly StwDbContext _dbContext;
+        private readonly ICommandSystem _commandSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineController"/> class.
@@ -31,6 +33,7 @@ namespace PiStellwerk.Controllers
         public EngineController(StwDbContext dbContext)
         {
             _dbContext = dbContext;
+            _commandSystem = new ConsoleCommandSystem(); // TODO: DI this.
         }
 
         /// <summary>
@@ -64,11 +67,12 @@ namespace PiStellwerk.Controllers
         /// Doesn't even work yet, just does a 1ms sleepy sleep.
         /// </summary>
         /// <param name="id">Id of the engine.</param>
+        /// <param name="command"><see cref="JsonCommand"/>.</param>
         [HttpPost("{id}/command")]
-        public void EngineCommand(int id)
+        public void EngineCommand(int id, JsonCommand command)
         {
-            // TODO: Remove testing sleep
-            Thread.Sleep(1);
+            var engine = _dbContext.Engines.Single(e => e.Id == id);
+            _commandSystem.HandleCommand(command, engine);
         }
     }
 }
