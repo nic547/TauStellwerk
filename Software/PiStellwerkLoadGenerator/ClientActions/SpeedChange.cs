@@ -12,6 +12,9 @@ using PiStellwerk.Data.Commands;
 
 namespace PiStellwerkLoadGenerator.ClientActions
 {
+    /// <summary>
+    /// Simulates sending a new Speed for an engine.
+    /// </summary>
     public class SpeedChange : ClientActionBase
     {
         /// <inheritdoc/>
@@ -33,7 +36,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
             };
             var content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json");
             var startTime = DateTime.Now;
-            
+
             _ = await Client.PostAsync(Options.Uri + "engine/1/command/", content);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }

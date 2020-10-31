@@ -20,7 +20,7 @@ namespace PiStellwerk.Data
         /// Initializes a new instance of the <see cref="StwDbContext"/> class.
         /// </summary>
         /// <param name="connectionString">The SQLite connection string to use. Default: "Filename=StwDatabase.db".</param>
-        public StwDbContext(string connectionString = "Filename=StwDatabase.db")
+        public StwDbContext(string connectionString = "Filename=StwDatabase.db;cache=shared")
         {
             _connectionString = connectionString;
         }
