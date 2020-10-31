@@ -53,9 +53,10 @@ namespace PiStellwerkLoadGenerator
                 results.Combine(sim.GetStatistics());
             }
 
-            foreach (var (key, value) in results.ToImmutableSortedDictionary())
+            var max = results.Max(kv => kv.Key);
+            foreach (var ms in Enumerable.Range(1, max))
             {
-                Console.WriteLine($"{key}ms : {value} times");
+                Console.WriteLine($"{ms}ms : {results.GetByKey(ms)}");
             }
 
             Console.WriteLine($"Average: {results.Average()} ms");

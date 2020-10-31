@@ -38,8 +38,15 @@ namespace PiStellwerkLoadGenerator
         /// <returns>A <see cref="Task"/> containing the new instance.</returns>
         public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options)
         {
+            var handler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) => true,
+            };
+
             var random = new Random();
-            var client = new HttpClient();
+            var client = new HttpClient(handler);
 
             var instancedActions = new List<ClientActionBase>();
 
