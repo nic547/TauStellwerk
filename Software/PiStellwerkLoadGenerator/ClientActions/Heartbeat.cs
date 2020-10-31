@@ -17,27 +17,21 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// </summary>
     public class Heartbeat : ClientActionBase
     {
-        private Random _random;
-
-        private HttpClient _client;
-        private Options _options;
         private User _user;
 
         /// <inheritdoc/>
-        public override int Interval => _random.Next(1900, 2100);
+        public override int Interval => Random.Next(1900, 2100);
 
         /// <inheritdoc />
-        public override void Initialize(HttpClient client, Options options, Random random)
+        public override Task Initialize(HttpClient client, Options options, Random random)
         {
-            _client = client;
-            _options = options;
-            _random = random;
-
             _user = new User()
             {
-                Name = _random.Next(1, 999999999).ToString(),
+                Name = random.Next(1, 999999999).ToString(),
                 UserAgent = "PiStellwerk ",
             };
+
+            return base.Initialize(client, options, random);
         }
 
         /// <inheritdoc/>
@@ -45,7 +39,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
         {
             var startTime = DateTime.Now;
             var content = new StringContent(JsonSerializer.Serialize(_user), Encoding.UTF8, "application/json");
-            _ = await _client.PutAsync(_options.Uri + "status", content);
+            _ = await Client.PutAsync(Options.Uri + "status", content);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }

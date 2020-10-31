@@ -52,7 +52,7 @@ namespace PiStellwerkLoadGenerator
                     throw new ArgumentException($"{actionType} could not be cast to ClientActionBase");
                 }
 
-                action.Initialize(client, options, random);
+                await action.Initialize(client, options, random);
                 _ = await action.PerformRequest(); // Perform a first request so that overhead of it doesn't factor into the measurement.
                 instancedActions.Add(action);
             }
