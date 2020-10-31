@@ -15,20 +15,37 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// <summary>
     /// The regular Heartbeat sent by a client to ensure a working connection to the server.
     /// </summary>
-    public static class Heartbeat
+    public class Heartbeat : IClientAction
     {
-        /// <summary>
-        /// Performs the request.
-        /// </summary>
-        /// <param name="options"><see cref="Options"/>.</param>
-        /// <param name="user">The <see cref="User"/> the request shall be made for.</param>
-        /// <param name="client"><see cref="HttpClient"/> with which the request shall be made.</param>
-        /// <returns>Measured latency in ms.</returns>
-        public static async Task<int> PerformRequest(Options options, User user, HttpClient client)
+        private Random _random;
+
+        private HttpClient _client;
+        private Options _options;
+        private User _user;
+
+        /// <inheritdoc/>
+        public int Interval => _random.Next(1900, 2100);
+
+        /// <inheritdoc />
+        public void Initialize(HttpClient client, Options options, Random random)
+        {
+            _client = client;
+            _options = options;
+            _random = random;
+
+            _user = new User()
+            {
+                Name = _random.Next(1, 999999999).ToString(),
+                UserAgent = "PiStellwerk ",
+            };
+        }
+
+        /// <inheritdoc/>
+        public async Task<int> PerformRequest()
         {
             var startTime = DateTime.Now;
-            var content = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-            var result = await client.PutAsync(options.Uri + "status", content);
+            var content = new StringContent(JsonSerializer.Serialize(_user), Encoding.UTF8, "application/json");
+            _ = await _client.PutAsync(_options.Uri + "status", content);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }

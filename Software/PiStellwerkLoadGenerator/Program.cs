@@ -6,8 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
+using PiStellwerkLoadGenerator.ClientActions;
 
 namespace PiStellwerkLoadGenerator
 {
@@ -29,10 +31,15 @@ namespace PiStellwerkLoadGenerator
 
             var simulators = new List<ClientSimulator>();
 
+            var actions = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IClientAction).IsAssignableFrom(p) && !p.IsInterface)
+                .ToImmutableList();
+
             for (var i = 0; i < options.Clients; i++)
             {
-                var sim = new ClientSimulator(options);
-                sim.StartAsync();
+                var sim = await ClientSimulator.Create(actions, options);
+                sim.Start();
                 simulators.Add(sim);
             }
 
