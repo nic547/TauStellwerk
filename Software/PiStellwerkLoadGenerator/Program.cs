@@ -33,7 +33,7 @@ namespace PiStellwerkLoadGenerator
 
             var actions = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IClientAction).IsAssignableFrom(p) && !p.IsInterface)
+                .Where(p => typeof(ClientActionBase).IsAssignableFrom(p) && !p.IsAbstract)
                 .ToImmutableList();
 
             for (var i = 0; i < options.Clients; i++)

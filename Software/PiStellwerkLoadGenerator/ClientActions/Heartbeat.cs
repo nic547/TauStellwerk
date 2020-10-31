@@ -15,7 +15,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// <summary>
     /// The regular Heartbeat sent by a client to ensure a working connection to the server.
     /// </summary>
-    public class Heartbeat : IClientAction
+    public class Heartbeat : ClientActionBase
     {
         private Random _random;
 
@@ -24,10 +24,10 @@ namespace PiStellwerkLoadGenerator.ClientActions
         private User _user;
 
         /// <inheritdoc/>
-        public int Interval => _random.Next(1900, 2100);
+        public override int Interval => _random.Next(1900, 2100);
 
         /// <inheritdoc />
-        public void Initialize(HttpClient client, Options options, Random random)
+        public override void Initialize(HttpClient client, Options options, Random random)
         {
             _client = client;
             _options = options;
@@ -41,7 +41,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
         }
 
         /// <inheritdoc/>
-        public async Task<int> PerformRequest()
+        public override async Task<int> PerformRequest()
         {
             var startTime = DateTime.Now;
             var content = new StringContent(JsonSerializer.Serialize(_user), Encoding.UTF8, "application/json");

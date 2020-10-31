@@ -23,9 +23,9 @@ namespace PiStellwerkLoadGenerator
 
         private readonly List<Timer> _timers = new List<Timer>();
 
-        private readonly ImmutableList<IClientAction> _actions;
+        private readonly ImmutableList<ClientActionBase> _actions;
 
-        private ClientSimulator(ImmutableList<IClientAction> actions)
+        private ClientSimulator(ImmutableList<ClientActionBase> actions)
         {
             _actions = actions;
         }
@@ -33,7 +33,7 @@ namespace PiStellwerkLoadGenerator
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientSimulator"/> class.
         /// </summary>
-        /// <param name="actionTypes">Types that are assignable from IClientAction.</param>
+        /// <param name="actionTypes">Types that are assignable from ClientActionBase.</param>
         /// <param name="options"><see cref="Options"/>.</param>
         /// <returns>A <see cref="Task"/> containing the new instance.</returns>
         public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options)
@@ -41,15 +41,15 @@ namespace PiStellwerkLoadGenerator
             var random = new Random();
             var client = new HttpClient();
 
-            var instancedActions = new List<IClientAction>();
+            var instancedActions = new List<ClientActionBase>();
 
             foreach (var actionType in actionTypes)
             {
-                var action = (IClientAction)Activator.CreateInstance(actionType);
+                var action = (ClientActionBase)Activator.CreateInstance(actionType);
 
                 if (action == null)
                 {
-                    throw new ArgumentException($"{actionType} could not be cast to IClientAction");
+                    throw new ArgumentException($"{actionType} could not be cast to ClientActionBase");
                 }
 
                 action.Initialize(client, options, random);
