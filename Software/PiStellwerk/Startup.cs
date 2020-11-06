@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PiStellwerk.Commands;
 using PiStellwerk.Data;
 
 namespace PiStellwerk
@@ -60,6 +60,8 @@ namespace PiStellwerk
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
             services.AddHostedService<BackgroundServices.UserService>();
+
+            services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
         }
 
         /// <summary>

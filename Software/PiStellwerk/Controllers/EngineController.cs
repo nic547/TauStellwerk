@@ -30,10 +30,11 @@ namespace PiStellwerk.Controllers
         /// Initializes a new instance of the <see cref="EngineController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context for the Controller.</param>
-        public EngineController(StwDbContext dbContext)
+        /// <param name="commandSystem"><see cref="ICommandSystem"/>to use.</param>
+        public EngineController(StwDbContext dbContext, ICommandSystem commandSystem)
         {
             _dbContext = dbContext;
-            _commandSystem = new ConsoleCommandSystem(); // TODO: DI this.
+            _commandSystem = commandSystem;
         }
 
         /// <summary>
