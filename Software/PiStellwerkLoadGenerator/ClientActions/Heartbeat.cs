@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PiStellwerk.Data;
 
 namespace PiStellwerkLoadGenerator.ClientActions
@@ -15,20 +16,32 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// <summary>
     /// The regular Heartbeat sent by a client to ensure a working connection to the server.
     /// </summary>
-    public static class Heartbeat
+    [UsedImplicitly]
+    public class Heartbeat : ClientActionBase
     {
-        /// <summary>
-        /// Performs the request.
-        /// </summary>
-        /// <param name="options"><see cref="Options"/>.</param>
-        /// <param name="user">The <see cref="User"/> the request shall be made for.</param>
-        /// <param name="client"><see cref="HttpClient"/> with which the request shall be made.</param>
-        /// <returns>Measured latency in ms.</returns>
-        public static async Task<int> PerformRequest(Options options, User user, HttpClient client)
+        private User _user;
+
+        /// <inheritdoc/>
+        public override int Interval => Random.Next(1900, 2100);
+
+        /// <inheritdoc />
+        public override Task Initialize(HttpClient client, Options options, Random random)
+        {
+            _user = new User()
+            {
+                Name = random.Next(1, 999999999).ToString(),
+                UserAgent = "PiStellwerk ",
+            };
+
+            return base.Initialize(client, options, random);
+        }
+
+        /// <inheritdoc/>
+        public override async Task<int> PerformRequest()
         {
             var startTime = DateTime.Now;
-            var content = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-            var result = await client.PutAsync(options.Uri + "status", content);
+            var content = new StringContent(JsonSerializer.Serialize(_user), Encoding.UTF8, "application/json");
+            _ = await Client.PutAsync(Options.Uri + "status", content);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }

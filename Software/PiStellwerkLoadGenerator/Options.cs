@@ -45,7 +45,7 @@ namespace PiStellwerkLoadGenerator
         /// <returns><see cref="Options"/>with the parsed argument values. Otherwise default values are used.</returns>
         public static Options GetOptionsFromArgs(string[] args)
         {
-            Uri uri = new Uri("http://localhost:8080/");
+            var uri = new Uri("http://localhost:8080/");
             var noStats = false;
             var clients = 1;
             var time = 60;

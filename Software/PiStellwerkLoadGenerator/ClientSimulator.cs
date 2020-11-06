@@ -5,9 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Timers;
-using PiStellwerk.Data;
 using PiStellwerk.Util;
 using PiStellwerkLoadGenerator.ClientActions;
 
@@ -18,43 +19,66 @@ namespace PiStellwerkLoadGenerator
     /// </summary>
     public class ClientSimulator
     {
-        private readonly Options _options;
         private readonly CounterDictionary _results = new CounterDictionary();
-
-        private readonly User _user;
 
         private readonly List<Timer> _timers = new List<Timer>();
 
-        private readonly Random _random = new Random();
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly ImmutableList<ClientActionBase> _actions;
+
+        private ClientSimulator(ImmutableList<ClientActionBase> actions)
+        {
+            _actions = actions;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientSimulator"/> class.
         /// </summary>
+        /// <param name="actionTypes">Types that are assignable from ClientActionBase.</param>
         /// <param name="options"><see cref="Options"/>.</param>
-        public ClientSimulator(Options options)
+        /// <returns>A <see cref="Task"/> containing the new instance.</returns>
+        public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options)
         {
-            _options = options;
-
-            _user = new User()
+            var handler = new HttpClientHandler
             {
-                Name = _random.Next(1, 999999999).ToString(),
-                UserAgent = "PiStellwerk ",
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) => true,
             };
+
+            var random = new Random();
+            var client = new HttpClient(handler);
+
+            var instancedActions = new List<ClientActionBase>();
+
+            foreach (var actionType in actionTypes)
+            {
+                var action = (ClientActionBase)Activator.CreateInstance(actionType);
+
+                if (action == null)
+                {
+                    throw new ArgumentException($"{actionType} could not be cast to ClientActionBase");
+                }
+
+                await action.Initialize(client, options, random);
+                _ = await action.PerformRequest(); // Perform a first request so that overhead of it doesn't factor into the measurement.
+                instancedActions.Add(action);
+            }
+
+            return new ClientSimulator(instancedActions.ToImmutableList());
         }
 
         /// <summary>
         /// Starts the client simulation.
         /// </summary>
-        public async void StartAsync()
+        public void Start()
         {
-            // The first request seems to have a large overhead. Since it's IMHO not indicative of performance, I (nic547) decided to ignore the first request.
-            _ = await Heartbeat.PerformRequest(_options, _user, _httpClient);
-
-            var heartbeatTimer = new Timer(_random.Next(1900, 2100));
-            heartbeatTimer.Elapsed += async (s, e) => { _results.Increment(await Heartbeat.PerformRequest(_options, _user, _httpClient)); };
-            heartbeatTimer.Start();
-            _timers.Add(heartbeatTimer);
+            foreach (var action in _actions)
+            {
+                var timer = new Timer(action.Interval);
+                timer.Elapsed += async (s, e) => { _results.Increment(await action.PerformRequest()); };
+                timer.Start();
+                _timers.Add(timer);
+            }
         }
 
         /// <summary>

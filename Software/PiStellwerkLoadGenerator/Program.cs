@@ -6,8 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
+using PiStellwerkLoadGenerator.ClientActions;
 
 namespace PiStellwerkLoadGenerator
 {
@@ -29,10 +31,15 @@ namespace PiStellwerkLoadGenerator
 
             var simulators = new List<ClientSimulator>();
 
+            var actions = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(ClientActionBase).IsAssignableFrom(p) && !p.IsAbstract)
+                .ToImmutableList();
+
             for (var i = 0; i < options.Clients; i++)
             {
-                var sim = new ClientSimulator(options);
-                sim.StartAsync();
+                var sim = await ClientSimulator.Create(actions, options);
+                sim.Start();
                 simulators.Add(sim);
             }
 
@@ -46,9 +53,10 @@ namespace PiStellwerkLoadGenerator
                 results.Combine(sim.GetStatistics());
             }
 
-            foreach (var (key, value) in results.ToImmutableSortedDictionary())
+            var max = results.Max(kv => kv.Key);
+            foreach (var ms in Enumerable.Range(1, max))
             {
-                Console.WriteLine($"{key}ms : {value} times");
+                Console.WriteLine($"{ms}ms : {results.GetByKey(ms)}");
             }
 
             Console.WriteLine($"Average: {results.Average()} ms");

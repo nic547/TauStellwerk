@@ -97,6 +97,17 @@ namespace PiStellwerk.Util
         }
 
         /// <summary>
+        /// Get a value by it's key. If key doesn't exist, 0 is returned instead.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>The value.</returns>
+        public ulong GetByKey(int key)
+        {
+            _dictionary.TryGetValue(key, out ulong value);
+            return value;
+        }
+
+        /// <summary>
         /// Returns the total number of occurrences this CounterDictionary recorded.
         /// </summary>
         /// <returns>Total number of occurrences.</returns>

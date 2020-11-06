@@ -7,10 +7,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PiStellwerk.Commands;
 using PiStellwerk.Data;
+using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Controllers
 {
@@ -23,14 +24,17 @@ namespace PiStellwerk.Controllers
     {
         private const int _resultsPerPage = 20;
         private readonly StwDbContext _dbContext;
+        private readonly ICommandSystem _commandSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context for the Controller.</param>
-        public EngineController(StwDbContext dbContext)
+        /// <param name="commandSystem"><see cref="ICommandSystem"/>to use.</param>
+        public EngineController(StwDbContext dbContext, ICommandSystem commandSystem)
         {
             _dbContext = dbContext;
+            _commandSystem = commandSystem;
         }
 
         /// <summary>
@@ -63,12 +67,13 @@ namespace PiStellwerk.Controllers
         /// HTTP POST for sending a command to an Engine.
         /// Doesn't even work yet, just does a 1ms sleepy sleep.
         /// </summary>
-        /// <param name="id">Id of the command, i think.</param>
-        [HttpPost("command/{id}")]
-        public void EngineCommand(int id)
+        /// <param name="id">Id of the engine.</param>
+        /// <param name="command"><see cref="JsonCommand"/>.</param>
+        [HttpPost("{id}/command")]
+        public void EngineCommand(int id, JsonCommand command)
         {
-            // TODO: Remove testing sleep
-            Thread.Sleep(1);
+            var engine = _dbContext.Engines.Single(e => e.Id == id);
+            _commandSystem.HandleCommand(command, engine);
         }
     }
 }
