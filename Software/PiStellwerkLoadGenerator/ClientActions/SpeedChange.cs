@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PiStellwerk.Data.Commands;
 
 namespace PiStellwerkLoadGenerator.ClientActions
@@ -15,6 +16,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// <summary>
     /// Simulates sending a new Speed for an engine.
     /// </summary>
+    [UsedImplicitly]
     public class SpeedChange : ClientActionBase
     {
         /// <inheritdoc/>

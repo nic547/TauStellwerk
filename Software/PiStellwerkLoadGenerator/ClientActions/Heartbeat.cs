@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PiStellwerk.Data;
 
 namespace PiStellwerkLoadGenerator.ClientActions
@@ -15,6 +16,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// <summary>
     /// The regular Heartbeat sent by a client to ensure a working connection to the server.
     /// </summary>
+    [UsedImplicitly]
     public class Heartbeat : ClientActionBase
     {
         private User _user;
