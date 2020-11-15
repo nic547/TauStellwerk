@@ -8,12 +8,12 @@ namespace PiStellwerk.Data.Commands
     /// <summary>
     /// Abstract base class for commands.
     /// </summary>
-    public abstract class CommandBase
+    public abstract record CommandBase
     {
         /// <summary>
-        /// Gets or sets the type of this command.
+        /// Gets the type of this command.
         /// </summary>
-        public CommandType Type { get; set; }
+        public CommandType Type { get; init; }
 
         /// <summary>
         /// Gets or sets data of this command. Depending on the type of command, this might be the "number" of function or a speed.

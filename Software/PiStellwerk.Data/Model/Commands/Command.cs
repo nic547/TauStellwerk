@@ -9,7 +9,7 @@ namespace PiStellwerk.Data.Commands
     /// Represents a command. Mostly for the server to keep track of commands.
     /// Use <see cref="JsonCommand"/> for sending stuff to the WebAPI.
     /// </summary>
-    public class Command : CommandBase
+    public record Command : CommandBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Command"/> class.
@@ -29,7 +29,7 @@ namespace PiStellwerk.Data.Commands
         /// <summary>
         /// Gets the DCC address of the engine this command is meant for.
         /// </summary>
-        public ushort Address { get; }
+        public ushort Address { get; init; }
 
         /// <summary>
         /// Gets how many speedSteps the decoder of the engine supports.
