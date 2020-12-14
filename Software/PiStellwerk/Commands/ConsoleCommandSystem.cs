@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.ComponentModel;
 using System.Web;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
@@ -29,7 +30,7 @@ namespace PiStellwerk.Commands
                     Console.WriteLine($"{HttpUtility.HtmlDecode(engine.Name)} got a function-related command.");
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException(command.ToString());
             }
         }
     }

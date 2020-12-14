@@ -19,9 +19,9 @@ namespace PiStellwerkLoadGenerator
     /// </summary>
     public class ClientSimulator
     {
-        private readonly CounterDictionary _results = new CounterDictionary();
+        private readonly CounterDictionary _results = new();
 
-        private readonly List<Timer> _timers = new List<Timer>();
+        private readonly List<Timer> _timers = new();
 
         private readonly ImmutableList<ClientActionBase> _actions;
 

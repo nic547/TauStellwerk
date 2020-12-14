@@ -17,7 +17,7 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class StatusController : Controller
     {
-        private static Status _status = new Status() { IsRunning = false, LastActionUsername = "SYSTEM" };
+        private static Status _status = new() { IsRunning = false, LastActionUsername = "SYSTEM" };
 
         /// <summary>
         /// HTTP PUT handling the heartbeat and sending the current status of the actual dcc-output.
