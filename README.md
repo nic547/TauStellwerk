@@ -6,7 +6,7 @@ An WIP open-source DCC Command Station for the Raspberry Pi and similar single b
 - /Software - Server and Webapp
 
 ## Current State
-Right now this is all very experimental. I will almost certainly make major changes as far as hardware is concerned and abbandon any older hardware revisions until I state the opposite.
+Right now this is all very experimental. I will almost certainly make major changes as far as hardware is concerned and abbandon any older hardware revisions until I state the opposite. Same goes for Software.
 
 ## Important Notes
 - This is just a hobbyist's project. I guarantee absolutely nothing.
@@ -23,8 +23,7 @@ Right now this is all very experimental. I will almost certainly make major chan
 The Hardware is based around a 4-layer PCB, a STM32F103CxT MCU and a DRV8874 H-Bridge. 
 
 ### Webserver
-The Webserver is a basic C# ASP.Core WebAPI using Kestrel, currently using .NET Core 3.1. Thanks to .NET Core, the Application should run on both Windows and Linux, on both ARM and x86 processors.
-A upgrade to NET 5.0 is intended shortly after Release of .NET 5.0.
+The Webserver is a basic C# ASP.Core WebAPI using Kestrel, currently using .NET 5. Thanks to .NET Core, the Application should run on both Windows and Linux, on both ARM and x86 processors.
 
 ### Webapp
 The Webapp is done with vanilla HTML/CSS and Typescript. As it's a website, it should run on almost any device with a recent browser.
