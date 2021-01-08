@@ -35,5 +35,57 @@ namespace PiStellwerk.Data.Commands
         /// Gets how many speedSteps the decoder of the engine supports.
         /// </summary>
         public byte SpeedSteps { get; }
+
+        /// <summary>
+        /// Gets a command that ends up as a DCC Idle Packet.
+        /// </summary>
+        public static Command IdleCommand { get; } = new(0, 128, byte.MaxValue, CommandType.Speed);
+
+        /// <summary>
+        /// Check if this command can replaced by a given command.
+        /// Example: A command telling a train to drive 81 is replaced by a subsequent command telling the train to drive 82.
+        /// </summary>
+        /// <param name="command2">The given command.</param>
+        /// <returns>Bool indicating if this command can be replaced by the given command.</returns>
+        public bool IsReplaceableBy(Command command2)
+        {
+            if (Address != command2.Address)
+            {
+                return false;
+            }
+
+            switch (Type, command2.Type)
+            {
+                case (CommandType.Speed, CommandType.Speed):
+                    return SpeedSteps == command2.SpeedSteps;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if a command negates another command.
+        /// Example: Turning on headlights and turning them off again.
+        /// </summary>
+        /// <param name="command2">The command to check against.</param>
+        /// <returns>Bool indicating whether this command is negated by the supplied command.</returns>
+        public bool IsNegatedBy(Command command2)
+        {
+            if (Address != command2.Address)
+            {
+                return false;
+            }
+
+            switch (Type, command2.Type)
+            {
+                case (CommandType.FunctionToggleOff, CommandType.FunctionToggleOn):
+                case (CommandType.FunctionToggleOn, CommandType.FunctionToggleOff):
+                    return Data == command2.Data;
+
+                default:
+                    return false;
+            }
+        }
     }
 }

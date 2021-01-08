@@ -66,5 +66,31 @@ namespace PiStellwerk.Data.Test.Commands
 
             Assert.AreNotEqual(command, command2);
         }
+
+        /// <summary>
+        /// Test that a speed command "IsReplaceableBy" a second speed command for the same address.
+        /// </summary>
+        [Test]
+        public void SecondSpeedReplacesFirst()
+        {
+            var command = new Command(1337, 128, 100, CommandType.Speed);
+            var command2 = new Command(1337, 128, 120, CommandType.Speed);
+
+            Assert.AreNotEqual(command, command2);
+            Assert.True(command.IsReplaceableBy(command2));
+        }
+
+        /// <summary>
+        /// Test that two different SpeedCommands for different Addresses are not replaceable by each-other.
+        /// </summary>
+        [Test]
+        public void SpeedCommandDifferentAddressNotReplaceable()
+        {
+            var command = new Command(1337, 128, 100, CommandType.Speed);
+            var command2 = new Command(420, 128, 120, CommandType.Speed);
+
+            Assert.False(command.IsReplaceableBy(command2));
+            Assert.False(command2.IsReplaceableBy(command));
+        }
     }
 }
