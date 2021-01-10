@@ -20,7 +20,7 @@ namespace PiStellwerk.BackgroundServices
     {
         private const int _timeoutWarning = 10;
         private const int _timeoutRemoval = 30;
-        private static readonly List<User> _users = new List<User>();
+        private static readonly List<User> _users = new();
 
         /// <summary>
         /// Updates the last heartbeat of a user, also adds new users to the user list.

@@ -15,7 +15,7 @@ namespace HardwareInfo
     /// </summary>
     public class HardwareInfoGatherer
     {
-        private static readonly List<IInfoProvider> _availableProviders = new List<IInfoProvider>();
+        private static readonly List<IInfoProvider> _availableProviders = new();
         private static bool _hasBeenInitialized = false;
 
         /// <summary>

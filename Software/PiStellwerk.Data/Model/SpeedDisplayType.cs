@@ -11,12 +11,12 @@ namespace PiStellwerk.Data
     public enum SpeedDisplayType : byte
     {
         /// <summary>
-        /// Speed is supposed to be displayed as percent, from 0% to 100%
+        /// Speed is supposed to be displayed as percent, from 0% to 100%.
         /// </summary>
         Percent,
 
         /// <summary>
-        /// Speed is supposed to be displayed as the actual dcc speed steps
+        /// Speed is supposed to be displayed as the actual dcc speed steps.
         /// </summary>
         SpeedSteps,
 

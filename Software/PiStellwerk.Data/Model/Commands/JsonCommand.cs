@@ -9,7 +9,7 @@ namespace PiStellwerk.Data.Commands
     /// A command for an engine, meant for JSON and communication between server/clients.
     /// These commands do not know about dcc addresses or ids of engines.
     /// </summary>
-    public class JsonCommand : CommandBase
+    public record JsonCommand : CommandBase
     {
         /// <summary>
         /// Turn the JSONCommand into a Command by adding address and speedSteps of the engine.

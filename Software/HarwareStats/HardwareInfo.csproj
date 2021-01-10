@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

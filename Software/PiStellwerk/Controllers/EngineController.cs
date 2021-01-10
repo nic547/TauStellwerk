@@ -5,8 +5,10 @@
 
 #nullable enable
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Commands;
@@ -23,6 +25,9 @@ namespace PiStellwerk.Controllers
     public class EngineController : Controller
     {
         private const int _resultsPerPage = 20;
+
+        private static readonly ConcurrentDictionary<int, Engine> _activeEngines = new();
+
         private readonly StwDbContext _dbContext;
         private readonly ICommandSystem _commandSystem;
 
@@ -69,11 +74,69 @@ namespace PiStellwerk.Controllers
         /// </summary>
         /// <param name="id">Id of the engine.</param>
         /// <param name="command"><see cref="JsonCommand"/>.</param>
+        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
         [HttpPost("{id}/command")]
-        public void EngineCommand(int id, JsonCommand command)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult EngineCommand(int id, JsonCommand command)
         {
-            var engine = _dbContext.Engines.Single(e => e.Id == id);
+            var success = _activeEngines.TryGetValue(id, out var engine);
+
+            if (!success)
+            {
+                return NotFound("Engine doesn't exists or is not acquired.");
+            }
+
             _commandSystem.HandleCommand(command, engine);
+            return Ok();
+        }
+
+        /// <summary>
+        /// HTTP Post to acquire an engine. Needed to send commands to an engine.
+        /// Only one client can have an engine acquired at a time.
+        /// </summary>
+        /// <param name="id">Engine to acquire.</param>
+        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
+        [HttpPost("{id}/acquire")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status423Locked)]
+        public ActionResult AcquireEngine(int id)
+        {
+            var test = _dbContext.Engines.ToList();
+
+            var engine = _dbContext.Engines.SingleOrDefault(e => e.Id == id);
+
+            if (engine == null)
+            {
+                return NotFound("Engine not found");
+            }
+
+            if (!_activeEngines.TryAdd(engine.Id, engine))
+            {
+                return StatusCode(StatusCodes.Status423Locked, "Engine already acquired");
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// HTTP POST to release an acquired engine.
+        /// </summary>
+        /// <param name="id">The engine to release.</param>
+        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
+        [HttpPost("{id}/release")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult ReleaseEngine(int id)
+        {
+            var removalSuccess = _activeEngines.TryRemove(id, out _);
+            if (!removalSuccess)
+            {
+                return NotFound("Engine doesn't exists or is not acquired");
+            }
+
+            return Ok("Engine released successfully");
         }
     }
 }

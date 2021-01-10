@@ -15,7 +15,7 @@ namespace PiStellwerk.Util
     /// </summary>
     public class CounterDictionary : IEnumerable<KeyValuePair<int, ulong>>
     {
-        private readonly Dictionary<int, ulong> _dictionary = new Dictionary<int, ulong>();
+        private readonly Dictionary<int, ulong> _dictionary = new();
 
         /// <inheritdoc/>
         public IEnumerator<KeyValuePair<int, ulong>> GetEnumerator()

@@ -38,19 +38,15 @@ namespace HardwareInfo.MemoryUsage
         /// <inheritdoc />
         public IList<InfoRecord> GetInfoRecords()
         {
-            using (var stream = new FileStream("/proc/meminfo", FileMode.Open, FileAccess.Read))
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    var results = new List<InfoRecord>
+            using var stream = new FileStream("/proc/meminfo", FileMode.Open, FileAccess.Read);
+            using var reader = new StreamReader(stream);
+            var results = new List<InfoRecord>
                     {
-                        new InfoRecord(InfoType.MemoryUsage, "MemTotal", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
-                        new InfoRecord(InfoType.MemoryUsage, "MemFree", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
-                        new InfoRecord(InfoType.MemoryUsage, "MemAvailable", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
+                        new(InfoType.MemoryUsage, "MemTotal", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
+                        new(InfoType.MemoryUsage, "MemFree", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
+                        new(InfoType.MemoryUsage, "MemAvailable", reader.ReadLine()?.Split(_space, _splitOptions).Skip(1).First()),
                     };
-                    return results;
-                }
-            }
+            return results;
         }
     }
 }

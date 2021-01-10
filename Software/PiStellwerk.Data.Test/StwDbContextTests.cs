@@ -75,7 +75,7 @@ namespace PiStellwerk.Data.Test
             var testContext = new StwDbContext(_connectionString);
             var loadedEngines = testContext.Engines;
 
-            Assert.AreEqual(testData.Count(), loadedEngines.Count());
+            Assert.AreEqual(testData.Count, loadedEngines.Count());
         }
 
         /// <summary>
