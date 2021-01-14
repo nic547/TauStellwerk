@@ -112,6 +112,11 @@ namespace PiStellwerk.Controllers
                 return NotFound("Engine not found");
             }
 
+            if (!_commandSystem.TryAcquireEngine(engine))
+            {
+                return StatusCode(StatusCodes.Status423Locked, "Could not acquire Engine in CommandSystem");
+            }
+
             if (!_activeEngines.TryAdd(engine.Id, engine))
             {
                 return StatusCode(StatusCodes.Status423Locked, "Engine already acquired");
