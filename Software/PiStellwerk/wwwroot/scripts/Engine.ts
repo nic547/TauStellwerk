@@ -26,9 +26,27 @@ document.addEventListener("DOMContentLoaded",
         selectionCloseButton.addEventListener("click", closeSelection);
     });
 
-function selectEngine() {
+async function selectEngine() {
     const element = this as HTMLElement;
     const id = element.getAttribute(engineIdAttribute);
+
+    var acquireResult = await fetch(`/engine/${id}/acquire`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+    if (acquireResult.status === 423) {
+        alert("Cannot acquire engine, already in use!");
+        return;
+    }
+
+    if (!acquireResult.ok) {
+        alert("Error while trying to acquire engine.");
+        return;
+    }
     fetch(`/engine/${id}`,
         {
             method: "GET",
@@ -105,8 +123,19 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
     }
 }
 
-function removeEngineFromControlPanel () {
+async function removeEngineFromControlPanel () {
     const element = event.target as HTMLElement;
+
+    const engineId = element.parentElement.parentElement.getAttribute(engineIdAttribute);
+
+    await fetch(`/engine/${engineId}/release`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
     element.parentElement.parentElement.remove();
 }
 
