@@ -135,7 +135,7 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReleaseEngine(int id)
         {
-            var removalSuccess = _activeEngines.TryRemove(id, out _);
+            var removalSuccess = _activeEngines.TryRemove(id, out var engine) && _commandSystem.TryReleaseEngine(engine);
             if (!removalSuccess)
             {
                 return NotFound("Engine doesn't exists or is not acquired");
