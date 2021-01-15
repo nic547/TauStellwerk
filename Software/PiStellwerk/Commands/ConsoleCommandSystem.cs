@@ -17,7 +17,7 @@ namespace PiStellwerk.Commands
     public class ConsoleCommandSystem : ICommandSystem
     {
         /// <inheritdoc/>
-        public void HandleCommand(JsonCommand command, Engine engine)
+        public void HandleEngineCommand(JsonCommand command, Engine engine)
         {
             switch (command.Type)
             {

@@ -3,6 +3,8 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+#nullable enable
+
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
 
@@ -18,7 +20,24 @@ namespace PiStellwerk.Commands
         /// </summary>
         /// <param name="command">The command.</param>
         /// <param name="engine">The Engine this command was sent for.</param>
-        public void HandleCommand(JsonCommand command, Engine engine);
+        public void HandleEngineCommand(JsonCommand command, Engine engine);
+
+        /// <summary>
+        /// Handle a Command that relates to the status of the commandSystem (running or not).
+        /// </summary>
+        /// <param name="shouldBeRunning">A value indicating whether the system should be started or stopped.</param>
+        public virtual void HandleStatusCommand(bool shouldBeRunning)
+        {
+        }
+
+        /// <summary>
+        /// Check if the CommandSystem is in a running state.
+        /// </summary>
+        /// <returns>A bool indicating whether the commandSystem is in a running state.</returns>
+        public virtual bool? CheckStatus()
+        {
+            return null;
+        }
 
         /// <summary>
         /// "Acquire" an engine - Some command system may require explicitly taking control of a engine before sending commands.

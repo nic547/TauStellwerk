@@ -40,7 +40,7 @@ namespace PiStellwerk.Test
             var engine = GetTestEngine1();
             var command = jsonCommand.ToCommand(engine.Address, engine.SpeedSteps);
 
-            _commandSystem.HandleCommand(jsonCommand, engine);
+            _commandSystem.HandleEngineCommand(jsonCommand, engine);
             Assert.AreEqual(command, _commandSystem.GetNextCommand());
         }
 
@@ -66,8 +66,8 @@ namespace PiStellwerk.Test
 
             var command2 = jsonCommand2.ToCommand(engine.Address, engine.SpeedSteps);
 
-            _commandSystem.HandleCommand(jsonCommand1, engine);
-            _commandSystem.HandleCommand(jsonCommand2, engine);
+            _commandSystem.HandleEngineCommand(jsonCommand1, engine);
+            _commandSystem.HandleEngineCommand(jsonCommand2, engine);
 
             Assert.AreEqual(command2, _commandSystem.GetNextCommand());
             Assert.Null(_commandSystem.GetNextCommand());

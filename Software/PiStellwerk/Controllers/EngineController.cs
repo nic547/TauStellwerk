@@ -80,14 +80,14 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult EngineCommand(int id, JsonCommand command)
         {
-            var success = _activeEngines.TryGetValue(id, out var engine);
+            _activeEngines.TryGetValue(id, out var engine);
 
-            if (!success)
+            if (engine is null)
             {
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
 
-            _commandSystem.HandleCommand(command, engine);
+            _commandSystem.HandleEngineCommand(command, engine);
             return Ok();
         }
 
