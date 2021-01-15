@@ -103,8 +103,6 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status423Locked)]
         public ActionResult AcquireEngine(int id)
         {
-            var test = _dbContext.Engines.ToList();
-
             var engine = _dbContext.Engines.SingleOrDefault(e => e.Id == id);
 
             if (engine == null)
