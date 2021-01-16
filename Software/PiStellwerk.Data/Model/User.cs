@@ -17,6 +17,17 @@ namespace PiStellwerk.Data
         private string _userAgent;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="User"/> class.
+        /// </summary>
+        /// <param name="name">Username.</param>
+        /// <param name="userAgent">User-Agent of the user.</param>
+        public User(string name, string userAgent)
+        {
+            Name = name;
+            UserAgent = userAgent;
+        }
+
+        /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
         public string Name

@@ -1,4 +1,5 @@
 ﻿import * as User from "./user.js"
+import * as Util from "./util.js"
 
 let isRunning = false;
 let isBlocked: boolean;
@@ -61,32 +62,15 @@ function handleStatusChange(isRunning: boolean, username: string) {
 async function postStatusChange(isRunning: boolean) {
     let bodyObject = { isRunning: isRunning, lastActionUsername: User.getUsername() }
     let bodyContent = JSON.stringify(bodyObject);
-    console.log(bodyContent);
-    fetch("/status",
-        {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: bodyContent
-        }
-    );
+    fetch("/status", Util.getRequestInit("POST", bodyContent));
 }
 
 function regularUpdate() {
     let bodyContent = JSON.stringify({ name: User.getUsername(), UserAgent: navigator.userAgent });
-    fetch("/status",
-        {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: bodyContent
-        }
-            
-    ).then((response) => {
+    fetch("/status", Util.getRequestInit("PUT", bodyContent))
+        .then((response) => {
         return response.json();
-    }).then((data) => {
+        }).then((data) => {
         if (data.isRunning != isRunning) {
             isRunning = data.isRunning;
             handleStatusChange(isRunning, data.lastActionUsername);

@@ -28,13 +28,15 @@ namespace PiStellwerk.Controllers
         }
 
         /// <summary>
-        /// HTTP PUT for renaming a user.
+        /// HTTP PUT for changing one's username.
         /// </summary>
-        /// <param name="user">A array of users, 0 being the old user, 1 the new one.</param>
+        /// <param name="newUsername">New username.</param>
+        /// <param name="username">Current Username from the HTTP-Header.</param>
+        /// <param name="userAgent">User-Agent from the HTTP-Header.</param>
         [HttpPut]
-        public void Put([FromBody] User[] user)
+        public void Put([FromBody] string newUsername, [FromHeader] string username, [FromHeader(Name = "User-Agent")] string userAgent)
         {
-            UserService.RenameUser(user[0], user[1]);
+            UserService.RenameUser(new User(username, userAgent), newUsername);
         }
     }
 }

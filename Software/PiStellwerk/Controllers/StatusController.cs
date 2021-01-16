@@ -37,12 +37,13 @@ namespace PiStellwerk.Controllers
         /// <summary>
         /// HTTP PUT handling the heartbeat and sending the current status of the actual dcc-output.
         /// </summary>
-        /// <param name="user">The user.</param>
+        /// <param name="username">Name of the user.</param>
+        /// <param name="useragent">User-Agent in the HTTP-Header.</param>
         /// <returns>Current <see cref="Status"/>.</returns>
         [HttpPut]
-        public Status Put([FromBody] User user)
+        public Status Put([FromHeader] string username, [FromHeader(Name="User-Agent")] string useragent)
         {
-            UserService.UpdateUser(user);
+            UserService.UpdateUser(new(username, useragent));
             var systemStatus = _commandSystem.CheckStatus();
             if (systemStatus is not null && systemStatus != _status.IsRunning)
             {

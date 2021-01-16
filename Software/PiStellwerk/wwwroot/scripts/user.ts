@@ -6,6 +6,7 @@ const usernameForm = document.getElementById("UsernameForm") as HTMLFormElement;
 const usernameInput = document.getElementById("UsernameInput") as HTMLInputElement;
 
 import * as Overlays from "./overlays.js"
+import * as Util from "./util.js"
 
 document.addEventListener("DOMContentLoaded",
     () => {
@@ -33,23 +34,11 @@ function handleSubmit(event: Event) {
 
 
 function setUsername(newUsername: string): void {
-    let oldUsername = username;
-
+    if (username != undefined) {
+        fetch("/user", Util.getRequestInit("PUT", JSON.stringify(newUsername)));
+    }
     username = newUsername;
     usernameLabel.innerHTML = `User: ${username}`;
 
-    if (oldUsername != undefined) {
-        fetch("/user",
-            {
-                method: "PUT",
-                headers: {
-                    'Content-Type': "application/json"
-                },
-                body: JSON.stringify([
-                    { name: oldUsername, UserAgent: navigator.userAgent },
-                    { name: newUsername, UserAgent: navigator.userAgent }
-                ])
-            }
-        );
-    }
+    
 }
