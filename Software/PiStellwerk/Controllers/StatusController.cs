@@ -6,6 +6,7 @@
 #nullable enable
 
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.BackgroundServices;
 using PiStellwerk.Commands;
@@ -41,10 +42,10 @@ namespace PiStellwerk.Controllers
         /// <param name="useragent">User-Agent in the HTTP-Header.</param>
         /// <returns>Current <see cref="Status"/>.</returns>
         [HttpPut]
-        public Status Put([FromHeader] string username, [FromHeader(Name="User-Agent")] string useragent)
+        public async Task<Status> PutAsync([FromHeader] string username, [FromHeader(Name="User-Agent")] string useragent)
         {
             UserService.UpdateUser(new(username, useragent));
-            var systemStatus = _commandSystem.CheckStatus();
+            var systemStatus = await _commandSystem.CheckStatusAsync();
             if (systemStatus is not null && systemStatus != _status.IsRunning)
             {
                 _status = new Status

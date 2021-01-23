@@ -5,6 +5,7 @@
 
 #nullable enable
 
+using System.Threading.Tasks;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
 
@@ -34,9 +35,18 @@ namespace PiStellwerk.Commands
         /// Check if the CommandSystem is in a running state.
         /// </summary>
         /// <returns>A bool indicating whether the commandSystem is in a running state.</returns>
-        public virtual bool? CheckStatus()
+        public virtual Task<bool?> CheckStatusAsync()
         {
-            return null;
+            return Task.FromResult<bool?>(null);
+        }
+
+        /// <summary>
+        /// Set if the CommandSystem should run.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public virtual Task SetStatusAsync()
+        {
+            return Task.CompletedTask;
         }
 
         /// <summary>
