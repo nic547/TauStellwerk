@@ -45,7 +45,7 @@ namespace PiStellwerk.Util.Tests
         }
 
         /// <summary>
-        /// Check that GetAllValues actually gets all values.
+        /// Check that TryGetAllValues actually gets all values.
         /// </summary>
         [Test]
         public void TestMultiDictGetsAllValues()
@@ -57,7 +57,7 @@ namespace PiStellwerk.Util.Tests
             mdict.Add(2, "Deux");
             mdict.Add(2, "Zwo");
 
-            _ = mdict.GetAllValues(1, out var immutableList);
+            _ = mdict.TryGetAllValues(1, out var immutableList);
             var list = immutableList.ToList();
 
             Assert.AreEqual(3, list.Count);
@@ -73,7 +73,7 @@ namespace PiStellwerk.Util.Tests
         public void TestGettingNonexistentKey()
         {
             var mdict = new MultiDictionary<int, object>();
-            var success = mdict.GetAllValues(482001, out var list);
+            var success = mdict.TryGetAllValues(482001, out var list);
 
             Assert.False(success);
             Assert.IsNull(list);

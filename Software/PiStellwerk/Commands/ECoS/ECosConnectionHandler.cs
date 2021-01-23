@@ -6,7 +6,6 @@
 #nullable enable
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +14,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Commands.ECoS
 {
@@ -23,14 +23,12 @@ namespace PiStellwerk.Commands.ECoS
     /// </summary>
     public class ECosConnectionHandler
     {
-        private readonly Dictionary<string, Action<string>> _events = new();
-        private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _sentCommands = new();
+        private readonly MultiDictionary<string, Action<string>> _events = new();
+        private readonly MultiDictionary<string, TaskCompletionSource<string>> _sentCommands = new();
 
         private readonly TcpClient _client = new();
 
-        private readonly Regex _regex =
-            new(
-                "<(?<Type>EVENT|REPLY) (?<Command>.*)>(?<Message>[\\s\\S]*?)<END (?<ErrorCode>\\d*) \\((?<ErrorMessage>.*)\\)>\\r?\\n", RegexOptions.Compiled);
+        private readonly Regex _regex = new("<(?<Type>EVENT|REPLY) (?<Command>.*)>(?<Message>[\\s\\S]*?)<END (?<ErrorCode>\\d*) \\((?<ErrorMessage>.*)\\)>\\r?\\n", RegexOptions.Compiled);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ECosConnectionHandler"/> class.
@@ -52,7 +50,7 @@ namespace PiStellwerk.Commands.ECoS
         {
             await _client.GetStream().WriteAsync(Encoding.UTF8.GetBytes(command));
             var tcs = new TaskCompletionSource<string>();
-            _sentCommands.TryAdd(command, tcs);
+            _sentCommands.Add(command, tcs);
 
             return await tcs.Task;
         }
@@ -113,12 +111,20 @@ namespace PiStellwerk.Commands.ECoS
             switch (type)
             {
                 case "EVENT":
-                    _events.TryGetValue(command, out var action);
-                    action?.Invoke(message);
+                    _events.TryGetAllValues(command, out var actions);
+
+                    if (actions != null)
+                    {
+                        foreach (var action in actions)
+                        {
+                            action.Invoke(message);
+                        }
+                    }
+
                     break;
 
                 case "REPLY":
-                    _sentCommands.TryRemove(command, out var tcs);
+                    _sentCommands.TryRemoveFirst(command, out var tcs);
                     if (tcs == null)
                     {
                         Console.WriteLine($"Received reply for {command}, but command was not located. Message:{message}");

@@ -80,7 +80,7 @@ namespace PiStellwerk.Util
         /// <param name="key">The key to look for.</param>
         /// <param name="list">List of found values, null if none were found.</param>
         /// <returns>True if there were values associated with the specific key, false if not.</returns>
-        public bool GetAllValues(TKey key, out IImmutableList<TValue>? list)
+        public bool TryGetAllValues(TKey key, out IImmutableList<TValue>? list)
         {
             lock (_dict)
             {
