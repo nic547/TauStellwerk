@@ -50,6 +50,16 @@ namespace PiStellwerk.Commands
         }
 
         /// <summary>
+        /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
+        /// </summary>
+        /// <param name="context"><see cref="StwDbContext"/> to compare/insert engines.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public virtual Task LoadEnginesFromSystem(StwDbContext context)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// "Acquire" an engine - Some command system may require explicitly taking control of a engine before sending commands.
         /// <see cref="TryReleaseEngine"/> to "release" an engine again.
         /// </summary>

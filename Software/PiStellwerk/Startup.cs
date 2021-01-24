@@ -36,8 +36,9 @@ namespace PiStellwerk
                 return;
             }
 
-            client.Engines.AddRange(TestDataService.GetEngines());
-            client.SaveChanges();
+            // UNCOMMENT TO ADD TEST DATA.
+            // client.Engines.AddRange(TestDataService.GetEngines());
+            // client.SaveChanges();
         }
 
         /// <summary>
@@ -61,7 +62,10 @@ namespace PiStellwerk
 
             services.AddHostedService<BackgroundServices.UserService>();
 
-            services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
+            var commandSystem = CommandSystemFactory.FromConfig(Configuration);
+            _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
+
+            services.AddSingleton(commandSystem);
         }
 
         /// <summary>

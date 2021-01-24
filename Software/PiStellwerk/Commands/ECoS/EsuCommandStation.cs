@@ -3,7 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
@@ -30,6 +32,40 @@ namespace PiStellwerk.Commands.ECoS
              _connectionHandler = new ECosConnectionHandler(IPAddress.Parse("192.168.1.153"), 15471);
 
              _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
+        }
+
+        /// <inheritdoc/>
+        public async Task LoadEnginesFromSystem(StwDbContext context)
+        {
+            var result = await _connectionHandler.SendCommandAsync("queryObjects(10, name, protocol)");
+            Regex enginesRegex = new("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]");
+            var matches = enginesRegex.Matches(result);
+
+            foreach (Match match in matches)
+            {
+                var id = int.Parse(match.Groups["Id"].Value);
+                var name = match.Groups["Name"].Value;
+                var protocol = match.Groups["Protocol"].Value;
+
+                var engineAlreadyExists = context.Engines.Any(e => e.ECoSEngineData != null && e.ECoSEngineData.Id == id);
+
+                // No support for consists yet, so ignore all engines with Protocol "MULTI".
+                if (!engineAlreadyExists && protocol != "MULTI")
+                {
+                    var newEngine = new Engine
+                    {
+                        Name = name,
+                        ECoSEngineData = new ECoSEngineData
+                        {
+                            Id = id,
+                            Name = name,
+                        },
+                    };
+
+                    await context.Engines.AddAsync(newEngine);
+                    await context.SaveChangesAsync();
+                }
+            }
         }
 
         /// <inheritdoc/>
