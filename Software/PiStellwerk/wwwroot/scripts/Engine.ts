@@ -155,7 +155,7 @@ function addEngineToSelection(engine) {
     var tagsElement = tempNode.children[1] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    tagsElement.innerHTML = engine.tags.reduce((a, b) => { return a + " | " + b }, "");
+    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded is-dark">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", selectEngine);
     tempNode.setAttribute(engineIdAttribute, engine.id);
