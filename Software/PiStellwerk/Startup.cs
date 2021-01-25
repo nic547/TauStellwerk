@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,12 +28,7 @@ namespace PiStellwerk
             Configuration = configuration;
 
             using var client = new StwDbContext();
-            client.Database.EnsureDeleted();
             client.Database.EnsureCreated();
-            if (client.Engines.Any())
-            {
-                return;
-            }
 
             // UNCOMMENT TO ADD TEST DATA.
             // client.Engines.AddRange(TestDataService.GetEngines());
@@ -64,7 +58,6 @@ namespace PiStellwerk
 
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
-
             services.AddSingleton(commandSystem);
         }
 
