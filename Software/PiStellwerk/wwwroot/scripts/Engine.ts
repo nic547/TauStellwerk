@@ -65,10 +65,11 @@ function displayEngine(engine: any) {
     const tempNode = controlTemplate.cloneNode(true) as HTMLDivElement;
     const container = document.getElementById("EngineContainer") as HTMLDivElement;
 
-    tempNode.querySelector("header").innerHTML = engine.name;
+    tempNode.querySelector("span").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id);
 
     tempNode.classList.remove("template");
+    tempNode.removeAttribute("id");
 
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleRangeValueChanged);
@@ -86,7 +87,7 @@ function displayEngine(engine: any) {
         tempInput.max = engine.topSpeed;
     }
 
-    tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
+    tempNode.getElementsByClassName("close")[0].addEventListener("click", removeEngineFromControlPanel);
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 

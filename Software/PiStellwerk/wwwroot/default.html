@@ -1,10 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="lib/css/bulma.min.css"/>
-    <link rel="stylesheet" href="normalize.css" type="text/css"/>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="lib/css/bulma.min.css" />
+    <link rel="stylesheet" href="normalize.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
     <script type="module" src="scripts/status.js"></script>
     <script type="module" src="scripts/user.js"></script>
     <script type="module" src="scripts/Engine.js"></script>
@@ -20,7 +21,7 @@
     <!-- Template -->
     <div class="EngineControl template" id="EngineTemplate">
         <div class="HeaderWithButton EngineControlHeader">
-            <header>Engine</header><button>&#xD7</button>
+            <span class="is-pulled-left">Engine</span><span class="close is-dark delete is-pulled-right"></span>
         </div>
         
         <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
@@ -29,7 +30,7 @@
 
         </div>
     </div>
-    <div id="SelectEngineButton" class="EngineControl">
+    <div id="SelectEngineButton" class="EngineControl is-clickable">
         <p>Select Engine</p>
     </div>
 </div>
@@ -41,7 +42,7 @@
         </div>
         
         <div id="EngineSelectionContainer">
-            <article class="EngineSelectionItem template" id="EngineSelectionTemplate">
+            <article class="EngineSelectionItem template is-clickable" id="EngineSelectionTemplate">
                 <header></header>
                 <span class="tags"></span>
             </article>
@@ -60,8 +61,8 @@
     </form>
 </div>
 <footer>
-    <p id="UsernameLabel">User: Username</p>
-    <button id="TestButton">TEST</button>
-    </footer>
+    <span class="button is-pulled-left is-clickable is-dark" id="UsernameLabel">User: Username</span>
+    <span class="button is-clickable is-pulled-right is-dark">🔧</span>
+</footer>
 </body>
 </html>

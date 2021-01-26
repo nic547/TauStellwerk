@@ -31,7 +31,7 @@ namespace PiStellwerk.Commands
             {
                 if (setting == system.Name)
                 {
-                    return (ICommandSystem)Activator.CreateInstance(system);
+                     return (ICommandSystem)Activator.CreateInstance(system);
                 }
             }
 
