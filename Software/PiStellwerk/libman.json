@@ -8,6 +8,18 @@
       "files": [
         "css/bulma.min.css"
       ]
+    },
+    {
+      "library": "font-awesome@5.15.2",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "css/solid.min.css",
+        "webfonts/fa-solid-900.ttf",
+        "webfonts/fa-solid-900.woff2",
+        "webfonts/fa-solid-900.svg",
+        "webfonts/fa-solid-900.woff",
+        "webfonts/fa-solid-900.eot"
+      ]
     }
   ]
 }
