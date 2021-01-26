@@ -20,7 +20,7 @@ namespace PiStellwerk
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:8080", "https://*:443");
+                    webBuilder.UseUrls("http://*:80", "https://*:443");
                 });
     }
 }
