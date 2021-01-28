@@ -377,3 +377,6 @@ Software/PiStellwerk/StwDatabase.db
 Software/PiStellwerk/wwwroot/scripts/*.js
 Software/PiStellwerk/wwwroot/scripts/*.js.map
 Software/PiStellwerk/wwwroot/lib/*
+
+#Place for user-created images
+Software/PiStellwerk/userImages/*

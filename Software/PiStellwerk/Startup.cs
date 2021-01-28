@@ -3,11 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.IO;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
@@ -75,7 +77,15 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new CompositeFileProvider(
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, "userImages")),
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, "wwwroot"))
+                ),
+            });
 
             app.UseRouting();
 

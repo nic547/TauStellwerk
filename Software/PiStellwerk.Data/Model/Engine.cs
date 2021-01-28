@@ -75,6 +75,9 @@ namespace PiStellwerk.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData ECoSEngineData { get; init; }
 
+        [CanBeNull]
+        public string ImageFileName { get; set; }
+
         /// <inheritdoc/>
         public bool Equals(Engine other)
         {

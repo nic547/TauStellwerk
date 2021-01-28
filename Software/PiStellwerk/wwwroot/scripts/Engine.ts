@@ -153,9 +153,11 @@ function openSelection() {
 function addEngineToSelection(engine) {
     const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
     var titleElement = tempNode.children[0] as HTMLElement;
-    var tagsElement = tempNode.children[1] as HTMLElement;
+    var imageElement = tempNode.children[1].children[0] as HTMLImageElement;
+    var tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
+    imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webP");
     tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded is-dark">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", selectEngine);
