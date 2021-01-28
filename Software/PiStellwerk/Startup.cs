@@ -83,8 +83,7 @@ namespace PiStellwerk
                     new PhysicalFileProvider(
                         Path.Combine(env.ContentRootPath, "userImages")),
                     new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, "wwwroot"))
-                ),
+                        Path.Combine(env.ContentRootPath, "wwwroot"))),
             });
 
             app.UseRouting();
