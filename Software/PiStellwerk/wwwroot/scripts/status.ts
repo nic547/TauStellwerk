@@ -37,23 +37,23 @@ export function stopStatusUpdates() {
 function handleStatusChange(isRunning: boolean, username: string) {
 
     if (isRunning) {
-        commandButton.classList.remove("StoppedButton");
-        commandButton.classList.add("RunningButton");
+        commandButton.classList.remove("has-background-danger");
+        commandButton.classList.add("has-background-primary");
         commandTitle.innerHTML = "RUNNING";
         commandDetails.innerHTML = `PiStellwerk started by ${username} `;
     }
     else {
         isBlocked = true;
-        commandButton.classList.remove("RunningButton");
-        commandButton.classList.add("StoppedBlockingButton");
+        commandButton.classList.remove("has-background-primary");
+        commandButton.classList.add("has-background-danger-light");
         commandTitle.innerHTML = "STOPPED (LOCKED)";
         commandDetails.innerHTML = `PiStellwerk stopped by ${username} `;
 
         setTimeout(() => {
             isBlocked = false;
-            commandButton.classList.remove("StoppedBlockingButton");
+            commandButton.classList.remove("has-background-danger-light");
             commandTitle.innerHTML = "STOPPED";
-            commandButton.classList.add("StoppedButton");
+            commandButton.classList.add("has-background-danger");
         }, 2500);
 
     }

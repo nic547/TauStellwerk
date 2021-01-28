@@ -158,7 +158,7 @@ function addEngineToSelection(engine) {
 
     titleElement.innerHTML = engine.name;
     imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webP");
-    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded is-dark">${tag}</span>`).join("");
+    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", selectEngine);
     tempNode.setAttribute(engineIdAttribute, engine.id);

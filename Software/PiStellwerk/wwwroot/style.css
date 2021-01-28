@@ -2,11 +2,6 @@
 font-family: sans-serif;
 user-select: none;
 
---background-main: #303030;
---background-secondary: #202020;
---background-highlight: #404040;
---textcolor-main: #FFFFFF;
---textcolor-secondary: #EEEEEE;
 --overlay-window-margin: 20px;
 }
 
@@ -20,20 +15,15 @@ user-select: none;
 
 
 body {
-	background-color: var(--background-main);
-	color: var(--textcolor-main);
 	display:flex;
 	height: 100%;
 	flex-direction:column;
 	align-items: stretch;
 }
 
+
 .title {
 	font-size: 1.5em
-}
-
-.secondary {
-	color: var(--textcolor-secondary);
 }
 
 #CommandButton {
@@ -53,31 +43,17 @@ body {
 	}
 }
 
-.StoppedButton {
-	background-color: #B00020;
-}
-
-.StoppedBlockingButton {
-	background-color: #CF6679;
-}
-
-.RunningButton {
-	background-color: Highlight;
-	color: black;
-}
-
 #EngineContainer {
-	display: flex;
-	flex: 1 0 auto;
-	flex-direction: row;
 	overflow-x: scroll;
 	overflow-y: hidden;
 	}
 
-.EngineControl {
-	background-color: var(--background-secondary);
-	padding: 2px;
-	margin: 3px;
+
+.has-100percent-height {
+	height: 100%;
+}
+
+.uses-ec-grid {
 	height: 100%;
 	display: grid;
 	grid-template-areas: "header header"
@@ -85,30 +61,34 @@ body {
 						 "speed functions";
 	grid-template-columns: 5em auto;
 	grid-template-rows: 2.5em auto 2.5em;
-	justify-items: center;
-	flex: 0 0 25em;
+	align-items: center;
 }
 
 .EngineControlHeader {
     grid-area: header;
 }
 
-.template {
-	display: none;
-}
 
-.EngineControl > input {
+.uses-ec-grid > input {
 	grid-area: slider;
 }
 
-.EngineControl > output {
+.uses-ec-grid > output {
 	grid-area: speed;
 }
 
-.EngineControl > .EngineFunctions {
+.uses-ec-grid > .EngineFunctions {
 	grid-area: functions;
 }
 
+.uses-ec-grid > .uses-complete-ec-grid {
+	grid-area: 1 / 1 / span 3 / span 2;
+}
+
+
+.template {
+	display: none;
+}
 
 #EngineSelectionContainer {
 	flex: 0 1 auto;
@@ -147,7 +127,6 @@ body {
 .EngineSelectionItem {
 	padding: 12px;
 	margin: 5px;
-	background-color: var(--background-highlight);
 }
 
 @media screen and (min-width: 900px) {
@@ -177,7 +156,6 @@ body {
 .OverlayWindow {
 	margin: var(--overlay-window-margin);
 	padding: 10px;
-	background-color: var(--background-secondary);
 	display: flex;
 	flex-direction: column;
 	max-height: calc(100vh - 200px);
@@ -190,6 +168,5 @@ form * {
 
 footer {
 	width: 100%;
-	background-color: var(--background-highlight);
 	flex: 0 0 auto;
 }

@@ -13,28 +13,32 @@
     <title>PiStellwerk</title>
 </head>
 <body>
-    <header id="CommandButton" class="StoppedBlockingButton">
-        <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
-        <br/>
-        <span id="CommandDetails">stopped by: SYSTEM</span>
-    </header>
-<div id="EngineContainer">
-    <!-- Template -->
-    <div class="EngineControl template" id="EngineTemplate">
+<header id="CommandButton" class="has-background-danger">
+    <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
+    <br/>
+    <span id="CommandDetails">stopped by: SYSTEM</span>
+</header>
+
+
+<div id="EngineContainer" class="columns is-mobile has-100percent-height m-0 pb-3">
+    <!-- Template for each control block -->
+    <div class="box uses-ec-grid column template is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2" id="EngineTemplate">
         <div class="EngineControlHeader">
-            <span class="is-pulled-left">Engine</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
+            <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
         </div>
-        
         <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
         <output>0</output>
         <div class="EngineFunctions">
-
         </div>
     </div>
-    <div id="SelectEngineButton" class="EngineControl is-clickable">
-        <p>Select Engine</p>
+    <!-- "Emtpy" control panel with Button to open the engine selection dialog. -->
+    <div class="box has-text-centered uses-ec-grid column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2">
+        <span id="SelectEngineButton" class="button is-primary uses-complete-ec-grid mx-3">Select Engine</span>
     </div>
 </div>
+
+<!-- Engine selection overlay-->
+
 <div id="EngineSelectionOverlay" class="Overlay">
     <div class="OverlayWindow">
         <div class="HeaderWithButton">
@@ -55,6 +59,8 @@
         </div>
     </div>
 </div>
+
+<!-- Username overlay -->
 <div id="UsernameOverlay" class="Overlay">
     <form id="UsernameForm" class="OverlayWindow">
         <label>Please enter your username:</label>
@@ -63,8 +69,8 @@
     </form>
 </div>
 <footer>
-    <span class="button is-pulled-left is-clickable is-dark" id="UsernameLabel">User: Username</span>
-    <span class="button is-clickable is-pulled-right is-dark"><span><i class="fas fa-tools"></i></span></span>
+    <span class="button is-pulled-left is-clickable" id="UsernameLabel">User: Username</span>
+    <span class="button is-clickable is-pulled-right"><span><i class="fas fa-tools"></i></span></span>
 </footer>
 </body>
 </html>
