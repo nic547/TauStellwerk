@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="lib/css/bulma.min.css" />
-    <link rel="stylesheet" href="lib/font-awesome/css/solid.min.css" type="text/css" />
+    <link rel="stylesheet" href="lib/bulma/css/bulma.min.css"/>
+    <link href="lib/font-awesome/css/solid.min.css" rel="stylesheet">
+    <link href="lib/font-awesome/css/fontawesome.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css" type="text/css" />
     <script type="module" src="scripts/status.js"></script>
     <script type="module" src="scripts/user.js"></script>
@@ -20,8 +21,8 @@
 <div id="EngineContainer">
     <!-- Template -->
     <div class="EngineControl template" id="EngineTemplate">
-        <div class="HeaderWithButton EngineControlHeader">
-            <span class="is-pulled-left">Engine</span><span class="close is-dark delete is-pulled-right"></span>
+        <div class="EngineControlHeader">
+            <span class="is-pulled-left">Engine</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
         </div>
         
         <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
@@ -44,6 +45,7 @@
         <div id="EngineSelectionContainer">
             <article class="EngineSelectionItem template is-clickable" id="EngineSelectionTemplate">
                 <header></header>
+                <figure class="image is-2by1"><img/></figure>
                 <span class="tags"></span>
             </article>
         </div>
@@ -62,7 +64,7 @@
 </div>
 <footer>
     <span class="button is-pulled-left is-clickable is-dark" id="UsernameLabel">User: Username</span>
-    <span class="button is-clickable is-pulled-right is-dark">🔧</span>
+    <span class="button is-clickable is-pulled-right is-dark"><span><i class="fas fa-tools"></i></span></span>
 </footer>
 </body>
 </html>

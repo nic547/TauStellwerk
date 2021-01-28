@@ -87,7 +87,7 @@ function displayEngine(engine: any) {
         tempInput.max = engine.topSpeed;
     }
 
-    tempNode.getElementsByClassName("close")[0].addEventListener("click", removeEngineFromControlPanel);
+    tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 
@@ -125,7 +125,7 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
 }
 
 async function removeEngineFromControlPanel () {
-    const element = event.target as HTMLElement;
+    const element = this as HTMLElement;
 
     const engineId = element.parentElement.parentElement.getAttribute(engineIdAttribute);
 

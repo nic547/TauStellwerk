@@ -4,7 +4,7 @@
   "libraries": [
     {
       "library": "bulma@0.9.1",
-      "destination": "wwwroot/lib/",
+      "destination": "wwwroot/lib/bulma/",
       "files": [
         "css/bulma.min.css"
       ]
@@ -13,12 +13,13 @@
       "library": "font-awesome@5.15.2",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
+        "css/fontawesome.min.css",
         "css/solid.min.css",
-        "webfonts/fa-solid-900.ttf",
-        "webfonts/fa-solid-900.woff2",
+        "webfonts/fa-solid-900.eot",
         "webfonts/fa-solid-900.svg",
+        "webfonts/fa-solid-900.ttf",
         "webfonts/fa-solid-900.woff",
-        "webfonts/fa-solid-900.eot"
+        "webfonts/fa-solid-900.woff2"
       ]
     }
   ]
