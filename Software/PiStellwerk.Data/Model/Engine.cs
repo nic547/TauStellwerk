@@ -9,7 +9,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
+using JetBrains.Annotations;
 
 namespace PiStellwerk.Data
 {
@@ -68,6 +70,13 @@ namespace PiStellwerk.Data
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
         public List<string> Tags { get; set; } = new List<string>();
+
+        [CanBeNull]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ECoSEngineData ECoSEngineData { get; init; }
+
+        [CanBeNull]
+        public string ImageFileName { get; set; }
 
         /// <inheritdoc/>
         public bool Equals(Engine other)

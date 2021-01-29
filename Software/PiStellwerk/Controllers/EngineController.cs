@@ -80,14 +80,14 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult EngineCommand(int id, JsonCommand command)
         {
-            var success = _activeEngines.TryGetValue(id, out var engine);
+            _activeEngines.TryGetValue(id, out var engine);
 
-            if (!success)
+            if (engine is null)
             {
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
 
-            _commandSystem.HandleCommand(command, engine);
+            _commandSystem.HandleEngineCommand(command, engine);
             return Ok();
         }
 
@@ -103,13 +103,16 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status423Locked)]
         public ActionResult AcquireEngine(int id)
         {
-            var test = _dbContext.Engines.ToList();
-
             var engine = _dbContext.Engines.SingleOrDefault(e => e.Id == id);
 
             if (engine == null)
             {
                 return NotFound("Engine not found");
+            }
+
+            if (!_commandSystem.TryAcquireEngine(engine))
+            {
+                return StatusCode(StatusCodes.Status423Locked, "Could not acquire Engine in CommandSystem");
             }
 
             if (!_activeEngines.TryAdd(engine.Id, engine))
@@ -130,7 +133,7 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReleaseEngine(int id)
         {
-            var removalSuccess = _activeEngines.TryRemove(id, out _);
+            var removalSuccess = _activeEngines.TryRemove(id, out var engine) && _commandSystem.TryReleaseEngine(engine);
             if (!removalSuccess)
             {
                 return NotFound("Engine doesn't exists or is not acquired");

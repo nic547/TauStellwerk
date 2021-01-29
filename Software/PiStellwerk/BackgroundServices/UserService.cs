@@ -44,21 +44,20 @@ namespace PiStellwerk.BackgroundServices
         /// <summary>
         /// Handles a changed username.
         /// </summary>
-        /// <param name="oldUser">The old username.</param>
-        /// <param name="newUser">The new username.</param>
-        public static void RenameUser(User oldUser, User newUser)
+        /// <param name="user">The old username.</param>
+        /// <param name="newUsername">The new username.</param>
+        public static void RenameUser(User user, string newUsername)
         {
-            var userToRename = _users.SingleOrDefault(x => x.Name == oldUser.Name && x.UserAgent == oldUser.UserAgent);
+            var userToRename = _users.SingleOrDefault(x => x.Name == user.Name && x.UserAgent == user.UserAgent);
 
             if (userToRename == null)
             {
-                Console.WriteLine($"User {newUser.Name} tried to rename himself, but the prior username was not found");
-                UpdateUser(newUser);
+                Console.WriteLine($"User {newUsername} tried to rename himself, but the prior username was not found");
             }
             else
             {
-                userToRename.Name = newUser.Name;
-                Console.WriteLine($"User \"{oldUser.Name}\" has been renamed to \"{newUser.Name}\" ");
+                userToRename.Name = newUsername;
+                Console.WriteLine($"User \"{user.Name}\" has been renamed to \"{newUsername}\" ");
                 userToRename.LastContact = DateTime.Now;
             }
         }

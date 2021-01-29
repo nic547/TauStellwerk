@@ -1,4 +1,5 @@
 ﻿import * as User from "./user.js"
+import * as Util from "./util.js"
 
 let isRunning = false;
 let isBlocked: boolean;
@@ -36,23 +37,23 @@ export function stopStatusUpdates() {
 function handleStatusChange(isRunning: boolean, username: string) {
 
     if (isRunning) {
-        commandButton.classList.remove("StoppedButton");
-        commandButton.classList.add("RunningButton");
+        commandButton.classList.remove("has-background-danger");
+        commandButton.classList.add("has-background-primary");
         commandTitle.innerHTML = "RUNNING";
         commandDetails.innerHTML = `PiStellwerk started by ${username} `;
     }
     else {
         isBlocked = true;
-        commandButton.classList.remove("RunningButton");
-        commandButton.classList.add("StoppedBlockingButton");
+        commandButton.classList.remove("has-background-primary");
+        commandButton.classList.add("has-background-danger-light");
         commandTitle.innerHTML = "STOPPED (LOCKED)";
         commandDetails.innerHTML = `PiStellwerk stopped by ${username} `;
 
         setTimeout(() => {
             isBlocked = false;
-            commandButton.classList.remove("StoppedBlockingButton");
+            commandButton.classList.remove("has-background-danger-light");
             commandTitle.innerHTML = "STOPPED";
-            commandButton.classList.add("StoppedButton");
+            commandButton.classList.add("has-background-danger");
         }, 2500);
 
     }
@@ -61,32 +62,15 @@ function handleStatusChange(isRunning: boolean, username: string) {
 async function postStatusChange(isRunning: boolean) {
     let bodyObject = { isRunning: isRunning, lastActionUsername: User.getUsername() }
     let bodyContent = JSON.stringify(bodyObject);
-    console.log(bodyContent);
-    fetch("/status",
-        {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: bodyContent
-        }
-    );
+    fetch("/status", Util.getRequestInit("POST", bodyContent));
 }
 
 function regularUpdate() {
     let bodyContent = JSON.stringify({ name: User.getUsername(), UserAgent: navigator.userAgent });
-    fetch("/status",
-        {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: bodyContent
-        }
-            
-    ).then((response) => {
+    fetch("/status", Util.getRequestInit("PUT", bodyContent))
+        .then((response) => {
         return response.json();
-    }).then((data) => {
+        }).then((data) => {
         if (data.isRunning != isRunning) {
             isRunning = data.isRunning;
             handleStatusChange(isRunning, data.lastActionUsername);

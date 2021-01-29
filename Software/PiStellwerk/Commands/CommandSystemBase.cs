@@ -39,7 +39,7 @@ namespace PiStellwerk.Commands
         }
 
         /// <inheritdoc/>
-        public void HandleCommand(JsonCommand command, Engine engine)
+        public void HandleEngineCommand(JsonCommand command, Engine engine)
         {
             AddCommand(command.ToCommand(engine.Address, engine.SpeedSteps));
         }

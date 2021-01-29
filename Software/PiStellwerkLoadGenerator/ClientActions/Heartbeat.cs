@@ -27,11 +27,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
         /// <inheritdoc />
         public override Task Initialize(HttpClient client, Options options, Random random)
         {
-            _user = new User()
-            {
-                Name = random.Next(1, 999999999).ToString(),
-                UserAgent = "PiStellwerk ",
-            };
+            _user = new User(random.Next(1, 999999999).ToString(), "PiStellwerk ");
 
             return base.Initialize(client, options, random);
         }

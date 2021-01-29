@@ -1,66 +1,86 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="normalize.css" type="text/css"/>
-    <link rel="stylesheet" href="style.css"  type="text/css"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="lib/bulma/css/bulma.min.css"/>
+    <link href="lib/font-awesome/css/solid.min.css" rel="stylesheet">
+    <link href="lib/font-awesome/css/fontawesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css" type="text/css" />
     <script type="module" src="scripts/status.js"></script>
     <script type="module" src="scripts/user.js"></script>
     <script type="module" src="scripts/Engine.js"></script>
-    <meta charset="utf-8" />
     <title>PiStellwerk</title>
 </head>
 <body>
-    <header id="CommandButton" class="StoppedBlockingButton">
-        <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
-        <br/>
-        <span id="CommandDetails">stopped by: SYSTEM</span>
-    </header>
-<div id="EngineContainer">
-    <!-- Template -->
-    <div class="EngineControl template" id="EngineTemplate">
-        <div class="HeaderWithButton EngineControlHeader">
-            <header>Engine</header><button>&#xD7</button>
+<header id="CommandButton" class="has-background-danger">
+    <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
+    <br/>
+    <span id="CommandDetails">stopped by: SYSTEM</span>
+</header>
+
+
+<div id="EngineContainer" class="columns is-mobile has-100percent-height m-0 pb-3">
+    <!-- Template for each control block -->
+    <div class="box uses-ec-grid column template is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2" id="EngineTemplate">
+        <div class="EngineControlHeader">
+            <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
         </div>
-        
         <input type="range" orient="vertical" min="0" max="1" value="0"/><!-- orient="vertical" is for firefox -->
         <output>0</output>
         <div class="EngineFunctions">
-
         </div>
     </div>
-    <div id="SelectEngineButton" class="EngineControl">
-        <p>Select Engine</p>
+    <!-- "Emtpy" control panel with Button to open the engine selection dialog. -->
+    <div class="box has-text-centered uses-ec-grid column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2">
+        <span id="SelectEngineButton" class="button is-primary uses-complete-ec-grid mx-3">Select Engine</span>
     </div>
 </div>
-<div id="EngineSelectionOverlay" class="Overlay">
-    <div class="OverlayWindow">
-        <div class="HeaderWithButton">
+
+<!-- Engine selection overlay-->
+
+<div id="EngineSelectionModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card has-background-white has-80percent-width p-3">
+        <div class="HeaderWithButton modal-card-head p-2">
             <header></header>
-            <button id="EngineSelectionClose">&#xD7</button>
+            <button id="EngineSelectionClose" class="button is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></button>
         </div>
-        
-        <div id="EngineSelectionContainer">
-            <article class="EngineSelectionItem template" id="EngineSelectionTemplate">
-                <header></header>
-                <span></span>
+        <div id="EngineSelectionContainer" class="selection-grid modal-card-body">
+            <!-- Template for each engine-->
+            <article class="template is-clickable card" id="EngineSelectionTemplate">
+                <header class="card-header"></header>
+                <figure class="card-image is-2by1"><img alt="Image of the Engine"/></figure>
+                <span class="tags card-content p-2"></span>
             </article>
         </div>
-        <div>
-            <button id="EngineSelectionBackwards" disabled="disabled">◀</button>
-            <button id="EngineSelectionForward">▶</button>
+        <div class="modal-card-foot p-2">
+            <button id="EngineSelectionBackwards" class="button is-small" disabled="disabled">
+                <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
+            </button>
+            <button id="EngineSelectionForward" class="button is-small">
+                <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+            </button>
         </div>
     </div>
 </div>
-<div id="UsernameOverlay" class="Overlay">
-    <form id="UsernameForm" class="OverlayWindow">
-        <label>Please enter your username:</label>
-        <input required="required" type="text" id="UsernameInput"/>
-        <button>Submit</button>
-    </form>
+
+<!-- Username overlay -->
+<div id="UsernameOverlay" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card has-background-white p-3">
+        <form id="UsernameForm">
+            <div class="field">
+                <label class="label">Please enter your username:</label>
+                <input class="input" required="required" type="text" id="UsernameInput" />
+            </div>
+            <button class="button">Submit</button>
+        </form>
+    </div>
 </div>
 <footer>
-    <p id="UsernameLabel">User: Username</p>
-    <button id="TestButton">TEST</button>
-    </footer>
+    <span class="button is-pulled-left is-clickable" id="UsernameLabel">User: Username</span>
+    <span class="button is-clickable is-pulled-right"><span><i class="fas fa-tools"></i></span></span>
+</footer>
 </body>
 </html>

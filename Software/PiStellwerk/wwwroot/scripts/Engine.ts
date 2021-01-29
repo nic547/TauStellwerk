@@ -10,14 +10,11 @@ const selectionTemplate = document.getElementById("EngineSelectionTemplate") as 
 
 const selectionButton = document.getElementById("SelectEngineButton") as HTMLDivElement;
 
-const selectionOverlay = document.getElementById("EngineSelectionOverlay") as HTMLDivElement;
+const selectionOverlay = document.getElementById("EngineSelectionModal") as HTMLDivElement;
 const selectionCloseButton = document.getElementById("EngineSelectionClose") as HTMLDivElement;
 const selectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
 
-var startNumber;
-var endNumber;
-var currentCapacity: number;
-const itemsPerPage = 20;
+var currentPage = 0;
 
 document.addEventListener("DOMContentLoaded",
     () => {
@@ -26,9 +23,27 @@ document.addEventListener("DOMContentLoaded",
         selectionCloseButton.addEventListener("click", closeSelection);
     });
 
-function selectEngine() {
+async function selectEngine() {
     const element = this as HTMLElement;
     const id = element.getAttribute(engineIdAttribute);
+
+    var acquireResult = await fetch(`/engine/${id}/acquire`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+    if (acquireResult.status === 423) {
+        alert("Cannot acquire engine, already in use!");
+        return;
+    }
+
+    if (!acquireResult.ok) {
+        alert("Error while trying to acquire engine.");
+        return;
+    }
     fetch(`/engine/${id}`,
         {
             method: "GET",
@@ -47,10 +62,11 @@ function displayEngine(engine: any) {
     const tempNode = controlTemplate.cloneNode(true) as HTMLDivElement;
     const container = document.getElementById("EngineContainer") as HTMLDivElement;
 
-    tempNode.querySelector("header").innerHTML = engine.name;
+    tempNode.querySelector("span").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id);
 
     tempNode.classList.remove("template");
+    tempNode.removeAttribute("id");
 
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleRangeValueChanged);
@@ -68,7 +84,7 @@ function displayEngine(engine: any) {
         tempInput.max = engine.topSpeed;
     }
 
-    tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
+    tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 
@@ -105,17 +121,26 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
     }
 }
 
-function removeEngineFromControlPanel () {
-    const element = event.target as HTMLElement;
+async function removeEngineFromControlPanel () {
+    const element = this as HTMLElement;
+
+    const engineId = element.parentElement.parentElement.getAttribute(engineIdAttribute);
+
+    await fetch(`/engine/${engineId}/release`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
     element.parentElement.parentElement.remove();
 }
 
 function openSelection() {
     Overlays.toggleVisibility(selectionOverlay);
 
-    window.addEventListener("resize", handleSelectionResize);
-
-    startNumber = 0;
+    currentPage = 0;
     refreshContent();
 
 };
@@ -123,10 +148,12 @@ function openSelection() {
 function addEngineToSelection(engine) {
     const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
     var titleElement = tempNode.children[0] as HTMLElement;
-    var tagsElement = tempNode.children[1] as HTMLElement;
+    var imageElement = tempNode.children[1].children[0] as HTMLImageElement;
+    var tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    tagsElement.innerHTML = engine.tags.reduce((a, b) => { return a + " | " + b });
+    imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webP");
+    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", selectEngine);
     tempNode.setAttribute(engineIdAttribute, engine.id);
@@ -161,48 +188,16 @@ async function loadList(page: Number): Promise<object[]> {
 function closeSelection() {
     Overlays.toggleVisibility(selectionOverlay);
 
-    window.removeEventListener("resize", handleSelectionResize);
-
     clearSelection();
 }
 
-function handleSelectionResize() {
-    const newCapacity = getEngineSelectionCapacity();
-
-    if (newCapacity !== currentCapacity) {
-        refreshContent();
-        currentCapacity = newCapacity;
-    }
-}
 
 async function refreshContent() {
-    let capacity = getEngineSelectionCapacity();
-
-    let pages = Math.ceil(capacity / itemsPerPage);
-    if (startNumber % itemsPerPage !== 0) {
-        pages += 1;
-    }
-    let startPage = Math.floor(startNumber / itemsPerPage);
-    let promises = new Array<Promise<any[]>>();
-
-    for (let i = startPage; i < (startPage + pages); i++) {
-        promises.push(loadList(i));
-    }
-
-    var items = await Promise.all(promises);
+    var items = await loadList(currentPage);
 
     clearSelection();
-    items.forEach(page =>
-        page.forEach(engine => {
-            if (startNumber <= engine.id && engine.id <= startNumber + capacity) {
-                addEngineToSelection(engine);
-            }
-        })
-    );
+    items.forEach(engine => {
+        addEngineToSelection(engine);
+    });
 
-}
-
-function getEngineSelectionCapacity(): number {
-    const style = getComputedStyle(selectionContainer);
-    return parseInt(style.getPropertyValue("--capacity"));
 }

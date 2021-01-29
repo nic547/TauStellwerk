@@ -1,4 +1,9 @@
-﻿using System;
+﻿// <copyright file="EngineControllerTests.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -10,16 +15,21 @@ using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Test
 {
-    class EngineControllerTests
+    /// <summary>
+    /// Tests related to <see cref="EngineController"/>.
+    /// </summary>
+    public class EngineControllerTests
     {
         private const int _engineId = 1;
-        
+
         private EngineController _controller;
         private SqliteConnection _connection;
         private StwDbContext _context;
         private ICommandSystem _commandSystem;
-        
 
+        /// <summary>
+        /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -57,7 +67,9 @@ namespace PiStellwerk.Test
             _connection.Close();
         }
 
-
+        /// <summary>
+        /// Ensure that an engine can receive commands after being acquired.
+        /// </summary>
         [Test]
         public void AcquiredEngineAcceptsCommand()
         {
@@ -71,7 +83,10 @@ namespace PiStellwerk.Test
 
             Assert.IsInstanceOf(typeof(OkResult), result);
         }
-        
+
+        /// <summary>
+        /// Ensure that an engine cannot receive commands when not acquired.
+        /// </summary>
         [Test]
         public void CannotCommandUnacquiredEngine()
         {
@@ -86,6 +101,9 @@ namespace PiStellwerk.Test
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
+        /// <summary>
+        /// Ensure that an engine cannot receive commands after being released.
+        /// </summary>
         [Test]
         public void CannotCommandReleasedEngine()
         {
@@ -94,16 +112,19 @@ namespace PiStellwerk.Test
                 Type = CommandType.Speed,
                 Data = 100,
             };
-            
+
             _controller.AcquireEngine(_engineId);
             _controller.ReleaseEngine(_engineId);
 
             var result = _controller.EngineCommand(_engineId, jsonCommand) as ObjectResult;
-            
+
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
         }
 
+        /// <summary>
+        /// Ensure an engine cannot be acquired twice.
+        /// </summary>
         [Test]
         public void EngineCannotBeAcquiredTwice()
         {
@@ -113,6 +134,9 @@ namespace PiStellwerk.Test
             Assert.AreEqual(StatusCodes.Status423Locked, result.StatusCode);
         }
 
+        /// <summary>
+        /// Ensure trying to acquire a non-existent engine does return a 404.
+        /// </summary>
         [Test]
         public void NotExistingEngineCannotBeAcquired()
         {

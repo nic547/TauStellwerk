@@ -3,12 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Linq;
+using System.IO;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
@@ -29,15 +30,11 @@ namespace PiStellwerk
             Configuration = configuration;
 
             using var client = new StwDbContext();
-            client.Database.EnsureDeleted();
             client.Database.EnsureCreated();
-            if (client.Engines.Any())
-            {
-                return;
-            }
 
-            client.Engines.AddRange(TestDataService.GetEngines());
-            client.SaveChanges();
+            // UNCOMMENT TO ADD TEST DATA.
+            // client.Engines.AddRange(TestDataService.GetEngines());
+            // client.SaveChanges();
         }
 
         /// <summary>
@@ -61,7 +58,9 @@ namespace PiStellwerk
 
             services.AddHostedService<BackgroundServices.UserService>();
 
-            services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
+            var commandSystem = CommandSystemFactory.FromConfig(Configuration);
+            _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
+            services.AddSingleton(commandSystem);
         }
 
         /// <summary>
@@ -78,7 +77,14 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new CompositeFileProvider(
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, "userImages")),
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, "wwwroot"))),
+            });
 
             app.UseRouting();
 
