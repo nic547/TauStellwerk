@@ -10,14 +10,11 @@ const selectionTemplate = document.getElementById("EngineSelectionTemplate") as 
 
 const selectionButton = document.getElementById("SelectEngineButton") as HTMLDivElement;
 
-const selectionOverlay = document.getElementById("EngineSelectionOverlay") as HTMLDivElement;
+const selectionOverlay = document.getElementById("EngineSelectionModal") as HTMLDivElement;
 const selectionCloseButton = document.getElementById("EngineSelectionClose") as HTMLDivElement;
 const selectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
 
-var startNumber;
-var endNumber;
-var currentCapacity: number;
-const itemsPerPage = 20;
+var currentPage = 0;
 
 document.addEventListener("DOMContentLoaded",
     () => {
@@ -143,9 +140,7 @@ async function removeEngineFromControlPanel () {
 function openSelection() {
     Overlays.toggleVisibility(selectionOverlay);
 
-    window.addEventListener("resize", handleSelectionResize);
-
-    startNumber = 0;
+    currentPage = 0;
     refreshContent();
 
 };
@@ -158,7 +153,7 @@ function addEngineToSelection(engine) {
 
     titleElement.innerHTML = engine.name;
     imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webP");
-    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded">${tag}</span>`).join("");
+    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", selectEngine);
     tempNode.setAttribute(engineIdAttribute, engine.id);
@@ -193,48 +188,16 @@ async function loadList(page: Number): Promise<object[]> {
 function closeSelection() {
     Overlays.toggleVisibility(selectionOverlay);
 
-    window.removeEventListener("resize", handleSelectionResize);
-
     clearSelection();
 }
 
-function handleSelectionResize() {
-    const newCapacity = getEngineSelectionCapacity();
-
-    if (newCapacity !== currentCapacity) {
-        refreshContent();
-        currentCapacity = newCapacity;
-    }
-}
 
 async function refreshContent() {
-    let capacity = getEngineSelectionCapacity();
-
-    let pages = Math.ceil(capacity / itemsPerPage);
-    if (startNumber % itemsPerPage !== 0) {
-        pages += 1;
-    }
-    let startPage = Math.floor(startNumber / itemsPerPage);
-    let promises = new Array<Promise<any[]>>();
-
-    for (let i = startPage; i < (startPage + pages); i++) {
-        promises.push(loadList(i));
-    }
-
-    var items = await Promise.all(promises);
+    var items = await loadList(currentPage);
 
     clearSelection();
-    items.forEach(page =>
-        page.forEach(engine => {
-            if (startNumber <= engine.id && engine.id <= startNumber + capacity) {
-                addEngineToSelection(engine);
-            }
-        })
-    );
+    items.forEach(engine => {
+        addEngineToSelection(engine);
+    });
 
-}
-
-function getEngineSelectionCapacity(): number {
-    const style = getComputedStyle(selectionContainer);
-    return parseInt(style.getPropertyValue("--capacity"));
 }

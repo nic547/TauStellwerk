@@ -1,7 +1,7 @@
-﻿export function toggleVisibility(overlay: HTMLElement): void {
-    if (overlay.style.display === "flex") {
-        overlay.style.display = "none";
+﻿export function toggleVisibility(modalElement: HTMLElement): void {
+    if (modalElement.classList.contains("is-active")) {
+        modalElement.classList.remove("is-active");
     } else {
-        overlay.style.display = "flex";
+        modalElement.classList.add("is-active");
     };
 }
