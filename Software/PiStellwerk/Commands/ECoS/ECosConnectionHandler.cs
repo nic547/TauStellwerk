@@ -85,7 +85,6 @@ namespace PiStellwerk.Commands.ECoS
                 {
                     receivedString += Encoding.UTF8.GetString(receivedBytes.ToArray());
                     receivedBytes.Clear();
-                    Console.WriteLine(receivedString);
                     receivedString = HandleReceivedString(receivedString);
                 }
                 catch (ArgumentException)
@@ -97,57 +96,61 @@ namespace PiStellwerk.Commands.ECoS
 
         private string HandleReceivedString(string input)
         {
-            var match = _regex.Match(input);
-            var type = match.Groups["Type"].Value;
-            var command = match.Groups["Command"].Value;
-            var message = match.Groups["Message"].Value;
-            _ = int.TryParse(match.Groups["ErrorCode"].Value, out var errorCode);
-
-            if (!match.Success)
+            var matches = _regex.Matches(input);
+            foreach (var match in matches.OrderByDescending(m => m.Index))
             {
-                return input;
-            }
+                var type = match.Groups["Type"].Value;
+                var command = match.Groups["Command"].Value;
+                var message = match.Groups["Message"].Value;
+                _ = int.TryParse(match.Groups["ErrorCode"].Value, out var errorCode);
 
-            switch (type)
-            {
-                case "EVENT":
-                    _events.TryGetAllValues(command, out var actions);
+                if (!match.Success)
+                {
+                    return input;
+                }
 
-                    if (actions != null)
-                    {
-                        foreach (var action in actions)
+                switch (type)
+                {
+                    case "EVENT":
+                        _events.TryGetAllValues(command, out var actions);
+                        if (actions != null)
                         {
-                            action.Invoke(message);
+                            foreach (var action in actions)
+                            {
+                                action.Invoke(message);
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case "REPLY":
-                    _sentCommands.TryRemoveFirst(command, out var tcs);
-                    if (tcs == null)
-                    {
-                        Console.WriteLine($"Received reply for {command}, but command was not located. Message:{message}");
-                    }
-                    else
-                    {
-                        if (errorCode == 0)
+                    case "REPLY":
+                        _sentCommands.TryRemoveFirst(command, out var tcs);
+                        if (tcs == null)
                         {
-                            tcs.SetResult(message);
+                            Console.WriteLine($"Received reply for {command}, but command was not located. Message:{message}");
                         }
                         else
                         {
-                            // TODO: Handle error responses.
+                            if (errorCode == 0)
+                            {
+                                tcs.SetResult(message);
+                            }
+                            else
+                            {
+                                // TODO: Handle error responses.
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                default:
-                    throw new InvalidDataException($"ECoS Response has unknown type \"{type}\"");
+                    default:
+                        throw new InvalidDataException($"ECoS Response has unknown type \"{type}\"");
+                }
+
+                input = input.Remove(match.Index, match.Length);
             }
 
-            return input.Remove(match.Index, match.Length);
+            return input;
         }
     }
 }
