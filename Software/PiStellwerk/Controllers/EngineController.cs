@@ -91,6 +91,19 @@ namespace PiStellwerk.Controllers
             return Ok();
         }
 
+        [HttpPost("{id}/function/{functionNumber}/{state}")]
+
+        public ActionResult EngineFunction(int id, byte functionNumber, string state)
+        {
+            _activeEngines.TryGetValue(id, out var engine);
+            if (engine is null)
+            {
+                return NotFound("Engine doesn't exists or is not acquired.");
+            }
+            _commandSystem.HandleEngineFunction(engine, functionNumber, state=="on");
+            return Ok();
+        }
+
         /// <summary>
         /// HTTP Post to acquire an engine. Needed to send commands to an engine.
         /// Only one client can have an engine acquired at a time.
@@ -103,7 +116,10 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status423Locked)]
         public ActionResult AcquireEngine(int id)
         {
-            var engine = _dbContext.Engines.SingleOrDefault(e => e.Id == id);
+            var engine = _dbContext.Engines
+                .Include(e => e.Functions)
+                .Include(e => e.ECoSEngineData)
+                .SingleOrDefault(e => e.Id == id);
 
             if (engine == null)
             {

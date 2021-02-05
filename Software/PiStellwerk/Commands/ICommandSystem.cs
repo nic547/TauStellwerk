@@ -5,6 +5,7 @@
 
 #nullable enable
 
+using System;
 using System.Threading.Tasks;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
@@ -29,6 +30,11 @@ namespace PiStellwerk.Commands
         /// <param name="shouldBeRunning">A value indicating whether the system should be started or stopped.</param>
         public virtual void HandleStatusCommand(bool shouldBeRunning)
         {
+        }
+
+        public virtual Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

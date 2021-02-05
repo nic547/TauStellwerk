@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -94,6 +93,13 @@ namespace PiStellwerk.Commands.ECoS
         }
 
         /// <inheritdoc/>
+        public async Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        {
+            var engineData = CheckForEcosData(engine);
+            await _connectionHandler.SendCommandAsync($"set({engineData.Id},func[{functionNumber},{(on ? "1" : "0")}])");
+        }
+
+        /// <inheritdoc/>
         public Task<bool?> CheckStatusAsync()
         {
             return Task.FromResult<bool?>(_systemStatus);
@@ -116,14 +122,21 @@ namespace PiStellwerk.Commands.ECoS
             _systemStatus = message.Contains("status[GO]");
         }
 
-        private async Task<IList<DccFunction>> GetEngineFunctionsFromECoS(Engine engine)
+        private ECoSEngineData CheckForEcosData(Engine engine)
         {
             if (engine.ECoSEngineData == null)
             {
-                throw new ArgumentException("Cannot load data from ECoS for engine without ECoS data.");
+                throw new ArgumentException("ECoS-ICommandStation cannot handle engines without ECoS-Data");
             }
 
-            var response = await _connectionHandler.SendCommandAsync($"get({engine.ECoSEngineData.Id},funcdesc)");
+            return engine.ECoSEngineData;
+        }
+
+        private async Task<IList<DccFunction>> GetEngineFunctionsFromECoS(Engine engine)
+        {
+            var ecosData = CheckForEcosData(engine);
+
+            var response = await _connectionHandler.SendCommandAsync($"get({ecosData.Id},funcdesc)");
             var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response);
 
             var dccFunctions = new List<DccFunction>();

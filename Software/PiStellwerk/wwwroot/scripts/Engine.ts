@@ -1,7 +1,9 @@
 ﻿import * as Overlays from "./overlays.js"
+import * as Util from "./util.js"
 
 const displayTypeAttribute = "data-display-type";
 const engineIdAttribute = "data-engine-id";
+const functionNumberAttribute = "data-function-number";
 
 //Elements
 
@@ -88,8 +90,16 @@ function displayEngine(engine: any) {
 
     let functionContainer = tempNode.getElementsByClassName("EngineFunctions")[0] as HTMLDivElement;
 
-    engine.functions.sort((a, b) => a.number - b.number).forEach(func =>
-        functionContainer.insertAdjacentHTML("beforeend", `<button class="button is-fullwidth has-text-left">F${func.number} - ${func.name !== "" ? func.name : "<span class=\"is-italic\">unnamed</span>"}</button>`));
+    engine.functions.sort((a, b) => a.number - b.number).forEach(func => {
+        let button = document.createElement("button");
+        button.classList.add("button", "is-fullwidth", "has-left-text");
+        button.setAttribute(functionNumberAttribute, func.number);
+        button.innerHTML = `F${func.number} - ${func.name !== "" ? func.name : "<span class=\"is-italic\">unnamed</span>"}`;
+
+        button.addEventListener("click",handleFunctionButton);
+
+        functionContainer.insertAdjacentElement("beforeend", button);
+    });
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 
@@ -111,6 +121,23 @@ function handleRangeValueChanged(event) {
         }
 
     ).then((response) => { });
+}
+
+async function handleFunctionButton(event) {
+    const targetElement = this;
+    const number = targetElement.getAttribute(functionNumberAttribute);
+    const id = targetElement.parentElement.parentElement.getAttribute(engineIdAttribute);
+    let state: string;
+
+    if (targetElement.classList.contains("has-background-primary-light")) {
+        state = "off";
+        targetElement.classList.remove("has-background-primary-light");
+    } else {
+        state = "on";
+        targetElement.classList.add("has-background-primary-light");
+    }
+
+    await fetch(`/engine/${id}/function/${number}/${state}`, Util.getRequestInit("POST"));
 }
 
 function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
