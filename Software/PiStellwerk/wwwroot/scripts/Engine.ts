@@ -86,6 +86,11 @@ function displayEngine(engine: any) {
 
     tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
+    let functionContainer = tempNode.getElementsByClassName("EngineFunctions")[0] as HTMLDivElement;
+
+    engine.functions.sort((a, b) => a.number - b.number).forEach(func =>
+        functionContainer.insertAdjacentHTML("beforeend", `<button class="button is-fullwidth has-text-left">F${func.number} - ${func.name !== "" ? func.name : "<span class=\"is-italic\">unnamed</span>"}</button>`));
+
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 
    

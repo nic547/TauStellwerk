@@ -3,10 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
 
@@ -37,34 +40,50 @@ namespace PiStellwerk.Commands.ECoS
         /// <inheritdoc/>
         public async Task LoadEnginesFromSystem(StwDbContext context)
         {
-            var result = await _connectionHandler.SendCommandAsync("queryObjects(10, name, protocol)");
-            Regex enginesRegex = new("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]");
-            var matches = enginesRegex.Matches(result);
-
-            foreach (Match match in matches)
+            try
             {
-                var id = int.Parse(match.Groups["Id"].Value);
-                var name = match.Groups["Name"].Value;
-                var protocol = match.Groups["Protocol"].Value;
+                var result = await _connectionHandler.SendCommandAsync("queryObjects(10, name, protocol)");
+                var ecosEngines = ECoSMessageDecoder.DecodeEngineListMessage(result);
 
-                var engineAlreadyExists = context.Engines.Any(e => e.ECoSEngineData != null && e.ECoSEngineData.Id == id);
-
-                // No support for consists yet, so ignore all engines with Protocol "MULTI".
-                if (!engineAlreadyExists && protocol != "MULTI")
+                foreach (var (id, name, protocol) in ecosEngines)
                 {
-                    var newEngine = new Engine
-                    {
-                        Name = name,
-                        ECoSEngineData = new ECoSEngineData
-                        {
-                            Id = id,
-                            Name = name,
-                        },
-                    };
+                    Engine? engine = context.Engines.Include(e => e.ECoSEngineData)
+                        .Include(e => e.Functions)
+                        .SingleOrDefault(e => e.ECoSEngineData != null && e.ECoSEngineData.Id == id);
 
-                    await context.Engines.AddAsync(newEngine);
+                    // No support for consists yet, so ignore all engines with Protocol "MULTI".
+                    if (protocol == "MULTI")
+                    {
+                        continue;
+                    }
+
+                    if (engine == null)
+                    {
+                        engine = new Engine
+                        {
+                            Name = name,
+                            ECoSEngineData = new ECoSEngineData
+                            {
+                                Id = id,
+                                Name = name,
+                            },
+                        };
+
+                        await context.Engines.AddAsync(engine);
+                    }
+
+                    var loadedFunctions = (await GetEngineFunctionsFromECoS(engine!)).ToList();
+
+                    engine.Functions.AddRange(loadedFunctions.Where(fl =>
+                        !engine.Functions.Exists(f =>
+                            f.Number == fl.Number)));
+
                     await context.SaveChangesAsync();
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -95,6 +114,29 @@ namespace PiStellwerk.Commands.ECoS
         private void HandleStatusEvent(string message)
         {
             _systemStatus = message.Contains("status[GO]");
+        }
+
+        private async Task<IList<DccFunction>> GetEngineFunctionsFromECoS(Engine engine)
+        {
+            if (engine.ECoSEngineData == null)
+            {
+                throw new ArgumentException("Cannot load data from ECoS for engine without ECoS data.");
+            }
+
+            var response = await _connectionHandler.SendCommandAsync($"get({engine.ECoSEngineData.Id},funcdesc)");
+            var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response);
+
+            var dccFunctions = new List<DccFunction>();
+
+            foreach (var (number, type, isMomentary) in functions)
+            {
+                if (type != 0)
+                {
+                    dccFunctions.Add(new DccFunction(number, string.Empty));
+                }
+            }
+
+            return dccFunctions;
         }
     }
 }

@@ -47,6 +47,10 @@ body {
 	height: 100%;
 }
 
+.has-100percent-maxheight {
+	max-height: 100%;
+}
+
 .uses-ec-grid {
 	height: 100%;
 	display: grid;
@@ -82,7 +86,6 @@ body {
 .has-80percent-width {
 	        width: 80%;
 }
-
 
 .template {
 	display: none;
@@ -127,4 +130,10 @@ footer {
 	.selection-grid {
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
+}
+
+
+/* Allows the has-text-left class from bulma to effect buttons. */
+.button.has-text-left {
+	justify-content: flex-start;
 }
