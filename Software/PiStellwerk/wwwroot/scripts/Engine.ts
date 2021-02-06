@@ -111,7 +111,7 @@ function handleRangeValueChanged(event) {
     const targetElement = event.target as HTMLInputElement;
     writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(displayTypeAttribute));
     
-    fetch(`/engine/${targetElement.parentElement.getAttribute(engineIdAttribute)}/command`,
+    fetch(`/engine/${getEngineId(targetElement)}/command`,
         {
             method: "POST",
             headers: {
@@ -156,7 +156,7 @@ function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
 async function removeEngineFromControlPanel () {
     const element = this as HTMLElement;
 
-    const engineId = element.parentElement.parentElement.getAttribute(engineIdAttribute);
+    const engineId = getEngineId(element);
 
     await fetch(`/engine/${engineId}/release`,
         {
@@ -232,4 +232,21 @@ async function refreshContent() {
         addEngineToSelection(engine);
     });
 
+}
+
+
+/**
+ * Try and get the engineIdAttribute from an element or it's parent elements.
+ * Should be more "solid" than just chaining the correct amount of parentElement.
+ * @param element
+ */
+function getEngineId(element: HTMLElement): number {
+    while (!element.hasAttribute(engineIdAttribute)) {
+        if (element.parentElement !== undefined) {
+            element = element.parentElement;
+        } else {
+            return null;
+        }
+    }
+    return parseInt(element.getAttribute(engineIdAttribute));
 }
