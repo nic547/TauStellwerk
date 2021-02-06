@@ -100,7 +100,8 @@ namespace PiStellwerk.Controllers
             {
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
-            _commandSystem.HandleEngineFunction(engine, functionNumber, state=="on");
+
+            _commandSystem.HandleEngineFunction(engine, functionNumber, state == "on");
             return Ok();
         }
 
