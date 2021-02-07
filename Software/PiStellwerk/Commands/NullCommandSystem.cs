@@ -6,7 +6,6 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Commands
 {
@@ -16,12 +15,6 @@ namespace PiStellwerk.Commands
     [UsedImplicitly]
     public class NullCommandSystem : ICommandSystem
     {
-        /// <inheritdoc/>
-        public void HandleEngineCommand(JsonCommand command, Engine engine)
-        {
-            // Do Nothing
-        }
-
         /// <inheritdoc/>
         public Task HandleEngineEStop(Engine engine)
         {

@@ -5,26 +5,16 @@
 
 #nullable enable
 
-using System;
 using System.Threading.Tasks;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Commands
 {
     /// <summary>
-    /// Anything that takes <see cref="JsonCommand"/>s, turns them into another representation and outputs it via SPI/USB/Console etc.
+    /// Interface for implementing communication with a specific command system.
     /// </summary>
     public interface ICommandSystem
     {
-        /// <summary>
-        /// Handle a command.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="engine">The Engine this command was sent for.</param>
-        [Obsolete("Shitty abstraction that is probably too dcc specific.")]
-        public void HandleEngineCommand(JsonCommand command, Engine engine);
-
         /// <summary>
         /// Handle a Command that relates to the status of the commandSystem (running or not).
         /// </summary>

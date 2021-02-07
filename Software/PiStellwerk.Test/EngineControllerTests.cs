@@ -12,7 +12,6 @@ using NUnit.Framework;
 using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Test
 {
@@ -88,11 +87,6 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfUnacquiredEngine()
         {
-            JsonCommand jsonCommand = new()
-            {
-                Type = CommandType.Speed,
-                Data = 100,
-            };
             var result = await _controller.SetEngineSpeed(_engineId, 23, true) as ObjectResult;
 
             Assert.IsNotNull(result);
@@ -106,12 +100,6 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfReleasedEngine()
         {
-            JsonCommand jsonCommand = new()
-            {
-                Type = CommandType.Speed,
-                Data = 100,
-            };
-
             _controller.AcquireEngine(_engineId);
             _controller.ReleaseEngine(_engineId);
 

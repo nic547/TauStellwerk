@@ -10,7 +10,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 #nullable enable
 
@@ -86,12 +85,6 @@ namespace PiStellwerk.Commands.ECoS
             }
         }
 
-        /// <inheritdoc/>
-        public void HandleEngineCommand(JsonCommand command, Engine engine)
-        {
-             // DO nothing
-        }
-
         public async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             var ecosData = CheckForEcosData(engine);
@@ -165,7 +158,7 @@ namespace PiStellwerk.Commands.ECoS
 
             var dccFunctions = new List<DccFunction>();
 
-            foreach (var (number, type, isMomentary) in functions)
+            foreach (var (number, type, _) in functions)
             {
                 if (type != 0)
                 {

@@ -4,11 +4,8 @@
 // </copyright>
 
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Web;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Commands
 {
@@ -17,24 +14,6 @@ namespace PiStellwerk.Commands
     /// </summary>
     public class ConsoleCommandSystem : ICommandSystem
     {
-        /// <inheritdoc/>
-        public void HandleEngineCommand(JsonCommand command, Engine engine)
-        {
-            switch (command.Type)
-            {
-                case CommandType.Speed:
-                    Console.WriteLine($"New speed for engine \"{HttpUtility.HtmlDecode(engine.Name)}\": {command.Data}");
-                    break;
-                case CommandType.FunctionToggleOn:
-                case CommandType.FunctionToggleOff:
-                case CommandType.FunctionOn:
-                    Console.WriteLine($"{HttpUtility.HtmlDecode(engine.Name)} got a function-related command.");
-                    break;
-                default:
-                    throw new InvalidEnumArgumentException(command.ToString());
-            }
-        }
-
         public Task HandleEngineEStop(Engine engine)
         {
             throw new NotImplementedException();
