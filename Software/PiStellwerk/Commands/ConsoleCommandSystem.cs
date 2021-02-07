@@ -5,6 +5,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Web;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
@@ -32,6 +33,21 @@ namespace PiStellwerk.Commands
                 default:
                     throw new InvalidEnumArgumentException(command.ToString());
             }
+        }
+
+        public Task HandleEngineEStop(Engine engine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        {
+            throw new NotImplementedException();
         }
     }
 }

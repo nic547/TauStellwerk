@@ -5,6 +5,7 @@
 
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Commands;
@@ -14,7 +15,7 @@ namespace PiStellwerk.Commands
     /// <summary>
     /// A generic CommandSystem. Queue and dequeue commands.
     /// </summary>
-    public class CommandSystemBase : ICommandSystem
+    public class CommandSystemBase :  ICommandSystem
     {
         /*  TODO: Don't use ConcurrentQueue to be able to remove commands.
             A command can be negated by another command, for example when toggling a function on and off quickly.
@@ -42,6 +43,21 @@ namespace PiStellwerk.Commands
         public void HandleEngineCommand(JsonCommand command, Engine engine)
         {
             AddCommand(command.ToCommand(engine.Address, engine.SpeedSteps));
+        }
+
+        public Task HandleEngineEStop(Engine engine)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

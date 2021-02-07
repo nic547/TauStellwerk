@@ -72,19 +72,6 @@ function displayEngine(engine: any) {
 
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleRangeValueChanged);
-    switch (engine.speedDisplayType) {
-    case "Percent":
-        tempNode.querySelector("output").innerHTML = `0%`;
-        tempInput.max = "100";
-        break;
-    case "SpeedSteps":
-        tempNode.querySelector("output").innerHTML = "0";
-        tempInput.max = engine.speedSteps;
-        break;
-    case "TopSpeed":
-        tempNode.querySelector("output").innerHTML = `0 km/h`;
-        tempInput.max = engine.topSpeed;
-    }
 
     tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
@@ -107,20 +94,15 @@ function displayEngine(engine: any) {
 
     container.appendChild(tempNode);
 }
-function handleRangeValueChanged(event) {
+async function handleRangeValueChanged(event) {
     const targetElement = event.target as HTMLInputElement;
-    writeSpeed(targetElement.parentElement.querySelector("output"), targetElement.value, targetElement.getAttribute(displayTypeAttribute));
-    
-    fetch(`/engine/${getEngineId(targetElement)}/command`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: `{"Type": "Speed","Data": ${targetElement.value}}`
-        }
 
-    ).then((response) => { });
+    const speedStep = targetElement.value;
+    const engineId = getEngineId(targetElement);
+
+    targetElement.parentElement.querySelector("output").innerHTML = speedStep;
+
+    await fetch(`/engine/${engineId}/speed/${speedStep}`, Util.getRequestInit("POST"));
 }
 
 async function handleFunctionButton(event) {
@@ -138,19 +120,6 @@ async function handleFunctionButton(event) {
     }
 
     await fetch(`/engine/${id}/function/${number}/${state}`, Util.getRequestInit("POST"));
-}
-
-function writeSpeed(output: HTMLOutputElement, value, displayType: string) {
-    switch (displayType) {
-        case "Percent":
-            output.innerHTML = `${value}%`;
-            break;
-        case "SpeedSteps":
-            output.innerHTML = value;
-            break;
-        case "TopSpeed":
-            output.innerHTML = `${value} km/h`;
-    }
 }
 
 async function removeEngineFromControlPanel () {
@@ -202,7 +171,7 @@ function clearSelection() {
     }
 }
 
-async function loadList(page: Number): Promise<object[]> {
+async function loadList(page: number): Promise<object[]> {
 
 
     var response = await fetch(`/engine/list?page=${page}`,

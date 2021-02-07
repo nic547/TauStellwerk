@@ -92,6 +92,30 @@ namespace PiStellwerk.Commands.ECoS
              // DO nothing
         }
 
+        public async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        {
+            var ecosData = CheckForEcosData(engine);
+            Task directionTask;
+            if (forward != null)
+            {
+                directionTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{((bool)forward ? "0" : "1")}])");
+            }
+            else
+            {
+                directionTask = Task.CompletedTask;
+            }
+
+            var speedTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},speed[{speed}])");
+
+            await directionTask;
+            await speedTask;
+        }
+
+        public Task HandleEngineEStop(Engine engine)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <inheritdoc/>
         public async Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {

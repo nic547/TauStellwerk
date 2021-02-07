@@ -8,12 +8,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Controllers
 {
@@ -68,17 +68,10 @@ namespace PiStellwerk.Controllers
                 .ToList();
         }
 
-        /// <summary>
-        /// HTTP POST for sending a command to an Engine.
-        /// Doesn't even work yet, just does a 1ms sleepy sleep.
-        /// </summary>
-        /// <param name="id">Id of the engine.</param>
-        /// <param name="command"><see cref="JsonCommand"/>.</param>
-        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
-        [HttpPost("{id}/command")]
+        [HttpPost("{id}/speed/{speed}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult EngineCommand(int id, JsonCommand command)
+        public async Task<ActionResult> SetEngineSpeed(int id, short speed, bool? forward)
         {
             _activeEngines.TryGetValue(id, out var engine);
 
@@ -87,7 +80,7 @@ namespace PiStellwerk.Controllers
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
 
-            _commandSystem.HandleEngineCommand(command, engine);
+            await _commandSystem.HandleEngineSpeed(engine, speed, forward);
             return Ok();
         }
 

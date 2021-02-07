@@ -22,20 +22,22 @@ namespace PiStellwerk.Commands
         /// </summary>
         /// <param name="command">The command.</param>
         /// <param name="engine">The Engine this command was sent for.</param>
+        [Obsolete("Shitty abstraction that is probably too dcc specific.")]
         public void HandleEngineCommand(JsonCommand command, Engine engine);
 
         /// <summary>
         /// Handle a Command that relates to the status of the commandSystem (running or not).
         /// </summary>
         /// <param name="shouldBeRunning">A value indicating whether the system should be started or stopped.</param>
-        public virtual void HandleStatusCommand(bool shouldBeRunning)
+        public void HandleSystemStatus(bool shouldBeRunning)
         {
         }
 
-        public virtual Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
-        {
-            throw new NotImplementedException();
-        }
+        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
+
+        public Task HandleEngineEStop(Engine engine);
+
+        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
 
         /// <summary>
         /// Check if the CommandSystem is in a running state.
@@ -44,15 +46,6 @@ namespace PiStellwerk.Commands
         public virtual Task<bool?> CheckStatusAsync()
         {
             return Task.FromResult<bool?>(null);
-        }
-
-        /// <summary>
-        /// Set if the CommandSystem should run.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public virtual Task SetStatusAsync()
-        {
-            return Task.CompletedTask;
         }
 
         /// <summary>
