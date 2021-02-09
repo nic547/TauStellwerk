@@ -5,6 +5,7 @@
     <StartupObject>PiStellwerk.Program</StartupObject>
     <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerk.xml</DocumentationFile>
+    <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -12,12 +13,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="libman.json" />
     <Content Remove="tsconfig.json" />
+    <Content Remove="wwwroot\scripts\Engine.js.map" />
     <Content Remove="wwwroot\scripts\Engine.ts" />
+    <Content Remove="wwwroot\scripts\overlays.js.map" />
+    <Content Remove="wwwroot\scripts\status.js.map" />
+    <Content Remove="wwwroot\scripts\user.js.map" />
+    <Content Remove="wwwroot\scripts\util.js.map" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="libman.json" />
+    <None Include="wwwroot\scripts\Engine.js.map" />
+    <None Include="wwwroot\scripts\overlays.js.map" />
+    <None Include="wwwroot\scripts\status.js.map" />
+    <None Include="wwwroot\scripts\user.js.map" />
+    <None Include="wwwroot\scripts\util.js.map" />
   </ItemGroup>
 
   <ItemGroup>
