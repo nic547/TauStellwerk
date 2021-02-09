@@ -67,6 +67,8 @@ function displayEngine(engine: any) {
     tempNode.querySelector("span").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id);
 
+    (tempNode.querySelector("img") as HTMLImageElement).src = engine.imageFileName ?? "/img/noImageImage.webP";
+
     tempNode.classList.remove("template");
     tempNode.removeAttribute("id");
 
@@ -75,7 +77,7 @@ function displayEngine(engine: any) {
 
     tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
-    let functionContainer = tempNode.getElementsByClassName("EngineFunctions")[0] as HTMLDivElement;
+    let functionContainer = tempNode.getElementsByClassName("ec-grid-functions")[0] as HTMLDivElement;
 
     engine.functions.sort((a, b) => a.number - b.number).forEach(func => {
         let button = document.createElement("button");
@@ -90,6 +92,10 @@ function displayEngine(engine: any) {
 
     tempInput.setAttribute(displayTypeAttribute, engine.speedDisplayType);
 
+    const directionButtons = tempNode.querySelector(".ec-grid-direction").children;
+    for (let button of directionButtons) {
+        button.addEventListener("click", handleEngineDirectionChange);
+    }
    
 
     container.appendChild(tempNode);
@@ -103,6 +109,27 @@ async function handleRangeValueChanged(event) {
     targetElement.parentElement.querySelector("output").innerHTML = speedStep;
 
     await fetch(`/engine/${engineId}/speed/${speedStep}`, Util.getRequestInit("POST"));
+}
+
+async function handleEngineDirectionChange() {
+    const parent = this.parentElement as HTMLDivElement;
+    const targetButton = this as HTMLButtonElement;
+    const id = getEngineId(parent);
+    let forward: boolean;
+    let otherButton: HTMLButtonElement;
+
+
+    if (parent.children[0] === this) {
+        forward = false;
+        otherButton = parent.children[1] as HTMLButtonElement;
+    } else {
+        forward = true;
+        otherButton = parent.children[0] as HTMLButtonElement;
+    }
+
+    targetButton.disabled = true;
+    otherButton.disabled = false;
+    await fetch(`/engine/${id}/speed/0?forward=${forward}`, Util.getRequestInit("POST"));
 }
 
 async function handleFunctionButton(event) {

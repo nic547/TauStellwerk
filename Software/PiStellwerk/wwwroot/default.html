@@ -24,17 +24,27 @@
 <div id="EngineContainer" class="columns is-mobile has-100percent-height m-0 pb-3">
     <!-- Template for each control block -->
     <div class="box uses-ec-grid column template is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2" id="EngineTemplate">
-        <div class="EngineControlHeader">
+        <div class="ec-grid-header">
             <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
         </div>
-        <input type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
-        <output>0</output>
-        <div class="EngineFunctions buttons are-small can-scroll-y has-100percent-maxheight">
+        <img src="img/noImageImage.webp" alt="Engine Image" class="ec-grid-image is-2by1"/>
+        <input class="ec-grid-slider" type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
+        <div class="ec-grid-direction">
+            <button class="button is-small" disabled="disabled">
+                <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
+            </button>
+            <button class="button is-small">
+                <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+            </button>
+            
+        </div>
+        <output class="ec-grid-speed">0</output>
+        <div class="ec-grid-functions buttons are-small can-scroll-y has-100percent-maxheight">
         </div>
     </div>
     <!-- "Emtpy" control panel with Button to open the engine selection dialog. -->
     <div class="box has-text-centered uses-ec-grid column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2">
-        <span id="SelectEngineButton" class="button is-primary uses-complete-ec-grid mx-3">Select Engine</span>
+        <span id="SelectEngineButton" class="button is-primary convers-full-ec-grid mx-3">Select Engine</span>
     </div>
 </div>
 
