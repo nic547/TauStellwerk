@@ -81,7 +81,7 @@ function addEngineToControlPanel(engine: Engine) {
     }
    
 
-    container.appendChild(tempNode);
+    container.insertBefore(tempNode,container.lastElementChild);
 }
 async function handleEngineThrottleChange(event): Promise<void> {
     const targetElement = event.target as HTMLInputElement;
