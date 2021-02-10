@@ -47,42 +47,54 @@ body {
 	height: 100%;
 }
 
+.has-100percent-maxheight {
+	max-height: 100%;
+}
+
 .uses-ec-grid {
 	height: 100%;
 	display: grid;
 	grid-template-areas: "header header"
-						 "slider functions"
-						 "speed functions";
+	                     "image image"
+	                     "slider functions"
+	                     "direction functions"
+	                     "speed functions";
 	grid-template-columns: 5em auto;
-	grid-template-rows: 2.5em auto 2.5em;
+	grid-template-rows: 2.5em auto auto 2.5em 2.5em;
 	align-items: center;
 }
 
-.EngineControlHeader {
+.ec-grid-header {
     grid-area: header;
 }
 
+.ec-grid-image {
+	grid-area: image;
+}
 
-.uses-ec-grid > input {
+.ec-grid-slider {
 	grid-area: slider;
 }
 
-.uses-ec-grid > output {
+.ec-grid-direction {
+	grid-area: direction;
+}
+
+.ec-grid-speed {
 	grid-area: speed;
 }
 
-.uses-ec-grid > .EngineFunctions {
+.ec-grid-functions {
 	grid-area: functions;
 }
 
-.uses-ec-grid > .uses-complete-ec-grid {
-	grid-area: 1 / 1 / span 3 / span 2;
+.uses-ec-grid > .convers-full-ec-grid {
+	grid-area: 1 / 1 / span 5 / span 2;
 }
 
 .has-80percent-width {
 	        width: 80%;
 }
-
 
 .template {
 	display: none;
@@ -127,4 +139,10 @@ footer {
 	.selection-grid {
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
+}
+
+
+/* Allows the has-text-left class from bulma to effect buttons. */
+.button.has-text-left {
+	justify-content: flex-start;
 }

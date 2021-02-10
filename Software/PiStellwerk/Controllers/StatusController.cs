@@ -66,7 +66,7 @@ namespace PiStellwerk.Controllers
         public void Post([FromBody] Status status)
         {
             _status = status;
-            _commandSystem.HandleStatusCommand(status.IsRunning);
+            _commandSystem.HandleSystemStatus(status.IsRunning);
             Console.WriteLine($"{DateTime.Now} {status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the PiStellwerk");
         }
     }

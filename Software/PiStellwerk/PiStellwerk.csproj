@@ -5,6 +5,7 @@
     <StartupObject>PiStellwerk.Program</StartupObject>
     <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerk.xml</DocumentationFile>
+    <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -12,12 +13,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="libman.json" />
     <Content Remove="tsconfig.json" />
+    <Content Remove="wwwroot\scripts\Engine.js.map" />
     <Content Remove="wwwroot\scripts\Engine.ts" />
+    <Content Remove="wwwroot\scripts\overlays.js.map" />
+    <Content Remove="wwwroot\scripts\status.js.map" />
+    <Content Remove="wwwroot\scripts\user.js.map" />
+    <Content Remove="wwwroot\scripts\util.js.map" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="libman.json" />
+    <None Include="wwwroot\scripts\Engine.js.map" />
+    <None Include="wwwroot\scripts\overlays.js.map" />
+    <None Include="wwwroot\scripts\status.js.map" />
+    <None Include="wwwroot\scripts\user.js.map" />
+    <None Include="wwwroot\scripts\util.js.map" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +58,36 @@
     <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\img\noImageImage.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\bulma\css\bulma.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\css\fontawesome.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\css\solid.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 

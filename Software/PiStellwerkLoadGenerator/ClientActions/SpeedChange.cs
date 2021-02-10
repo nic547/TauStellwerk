@@ -6,10 +6,8 @@
 using System;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerkLoadGenerator.ClientActions
 {
@@ -31,12 +29,8 @@ namespace PiStellwerkLoadGenerator.ClientActions
         /// <inheritdoc/>
         public override async Task<int> PerformRequest()
         {
-            var command = new JsonCommand
-            {
-                Data = (byte)Random.Next(byte.MinValue, byte.MaxValue),
-                Type = CommandType.Speed,
-            };
-            var content = new StringContent(JsonSerializer.Serialize(command), Encoding.UTF8, "application/json");
+            // TODO: Adopt new EngineSetSpeed functionality.
+            var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             var startTime = DateTime.Now;
 
             _ = await Client.PostAsync(Options.Uri + "engine/1/command/", content);

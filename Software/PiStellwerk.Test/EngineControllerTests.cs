@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -11,7 +12,6 @@ using NUnit.Framework;
 using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Commands;
 
 namespace PiStellwerk.Test
 {
@@ -70,16 +70,12 @@ namespace PiStellwerk.Test
         /// <summary>
         /// Ensure that an engine can receive commands after being acquired.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void AcquiredEngineAcceptsCommand()
+        public async Task CanSetSpeedOfAcquiredEngine()
         {
             _controller.AcquireEngine(_engineId);
-            JsonCommand jsonCommand = new()
-            {
-                Type = CommandType.Speed,
-                Data = 100,
-            };
-            var result = _controller.EngineCommand(_engineId, jsonCommand);
+            var result = await _controller.SetEngineSpeed(_engineId, 100, null);
 
             Assert.IsInstanceOf(typeof(OkResult), result);
         }
@@ -87,15 +83,11 @@ namespace PiStellwerk.Test
         /// <summary>
         /// Ensure that an engine cannot receive commands when not acquired.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void CannotCommandUnacquiredEngine()
+        public async Task CannotSetSpeedOfUnacquiredEngine()
         {
-            JsonCommand jsonCommand = new()
-            {
-                Type = CommandType.Speed,
-                Data = 100,
-            };
-            var result = _controller.EngineCommand(_engineId, jsonCommand) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_engineId, 23, true) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
@@ -104,19 +96,14 @@ namespace PiStellwerk.Test
         /// <summary>
         /// Ensure that an engine cannot receive commands after being released.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void CannotCommandReleasedEngine()
+        public async Task CannotSetSpeedOfReleasedEngine()
         {
-            JsonCommand jsonCommand = new()
-            {
-                Type = CommandType.Speed,
-                Data = 100,
-            };
-
             _controller.AcquireEngine(_engineId);
             _controller.ReleaseEngine(_engineId);
 
-            var result = _controller.EngineCommand(_engineId, jsonCommand) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_engineId, 124, null) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
