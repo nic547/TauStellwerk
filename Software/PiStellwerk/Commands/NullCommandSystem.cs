@@ -28,6 +28,12 @@ namespace PiStellwerk.Commands
         }
 
         /// <inheritdoc/>
+        public Task HandleSystemStatus(bool shouldBeRunning)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
         public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             return Task.CompletedTask;

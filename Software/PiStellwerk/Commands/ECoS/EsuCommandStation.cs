@@ -22,7 +22,7 @@ namespace PiStellwerk.Commands.ECoS
     {
         private readonly ECosConnectionHandler _connectionHandler;
 
-        private bool _systemStatus;
+        private bool _isSystemRunning;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EsuCommandStation"/> class.
@@ -85,6 +85,12 @@ namespace PiStellwerk.Commands.ECoS
             }
         }
 
+        public async Task HandleSystemStatus(bool shouldBeRunning)
+        {
+            await _connectionHandler.SendCommandAsync($"set(1,{(shouldBeRunning ? "go" : "stop")})");
+            _isSystemRunning = shouldBeRunning;
+        }
+
         public async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             var ecosData = CheckForEcosData(engine);
@@ -119,7 +125,7 @@ namespace PiStellwerk.Commands.ECoS
         /// <inheritdoc/>
         public Task<bool?> CheckStatusAsync()
         {
-            return Task.FromResult<bool?>(_systemStatus);
+            return Task.FromResult<bool?>(_isSystemRunning);
         }
 
         /// <inheritdoc/>
@@ -136,7 +142,7 @@ namespace PiStellwerk.Commands.ECoS
 
         private void HandleStatusEvent(string message)
         {
-            _systemStatus = message.Contains("status[GO]");
+            _isSystemRunning = message.Contains("status[GO]");
         }
 
         private async Task Initialize()

@@ -19,9 +19,8 @@ namespace PiStellwerk.Commands
         /// Handle a Command that relates to the status of the commandSystem (running or not).
         /// </summary>
         /// <param name="shouldBeRunning">A value indicating whether the system should be started or stopped.</param>
-        public void HandleSystemStatus(bool shouldBeRunning)
-        {
-        }
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public Task HandleSystemStatus(bool shouldBeRunning);
 
         public Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
 

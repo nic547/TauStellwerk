@@ -28,5 +28,10 @@ namespace PiStellwerk.Commands
         {
             throw new NotImplementedException();
         }
+
+        public Task HandleSystemStatus(bool shouldBeRunning)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
