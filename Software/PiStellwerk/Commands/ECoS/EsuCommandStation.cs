@@ -32,7 +32,7 @@ namespace PiStellwerk.Commands.ECoS
             // TODO: Remove hardcoded IP and Address
              _connectionHandler = new ECosConnectionHandler(IPAddress.Parse("192.168.1.153"), 15471);
 
-             _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
+             _ = Initialize();
         }
 
         /// <inheritdoc/>
@@ -137,6 +137,15 @@ namespace PiStellwerk.Commands.ECoS
         private void HandleStatusEvent(string message)
         {
             _systemStatus = message.Contains("status[GO]");
+        }
+
+        private async Task Initialize()
+        {
+            _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
+
+            // Get the initial state.
+            var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");
+            HandleStatusEvent(statusMessage);
         }
 
         private ECoSEngineData CheckForEcosData(Engine engine)
