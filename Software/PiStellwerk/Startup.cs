@@ -54,9 +54,17 @@ namespace PiStellwerk
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.Cookie.HttpOnly = true;
+            });
+
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<BackgroundServices.UserService>();
+            services.AddHostedService<BackgroundServices.SessionService>();
 
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
@@ -89,6 +97,8 @@ namespace PiStellwerk
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

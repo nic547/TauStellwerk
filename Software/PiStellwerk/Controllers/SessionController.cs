@@ -1,4 +1,4 @@
-﻿// <copyright file="UserController.cs" company="Dominic Ritz">
+﻿// <copyright file="SessionController.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -15,28 +15,35 @@ namespace PiStellwerk.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
-    public class UserController
+    public class SessionController : Controller
     {
         /// <summary>
         /// HTTP GET.
         /// </summary>
         /// <returns>A list of active users.</returns>
         [HttpGet]
-        public IReadOnlyList<User> Get()
+        public IReadOnlyList<Session> Get()
         {
-            return UserService.GetUsers();
+            return SessionService.GetSessions();
+        }
+
+        [HttpPost]
+        public ActionResult CreateSession([FromBody] string username, [FromHeader(Name = "User-Agent")] string userAgent)
+        {
+            var sessionId = HttpContext.Session.Id;
+            HttpContext.Session.Set("is-set", new byte[1]); // just needed to "get the session to stick"
+            SessionService.CreateSession(username, userAgent, sessionId);
+            return Ok();
         }
 
         /// <summary>
         /// HTTP PUT for changing one's username.
         /// </summary>
         /// <param name="newUsername">New username.</param>
-        /// <param name="username">Current Username from the HTTP-Header.</param>
-        /// <param name="userAgent">User-Agent from the HTTP-Header.</param>
         [HttpPut]
-        public void Put([FromBody] string newUsername, [FromHeader] string username, [FromHeader(Name = "User-Agent")] string userAgent)
+        public void Put([FromBody] string newUsername)
         {
-            UserService.RenameUser(new User(username, userAgent), newUsername);
+            SessionService.RenameSessionUser(HttpContext.Session.Id, newUsername);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿var username: string;
+var sessionId = "";
 
 const overlay = document.getElementById("UsernameOverlay");
 const usernameLabel = document.getElementById("UsernameLabel") as HTMLLabelElement;
@@ -15,6 +16,8 @@ document.addEventListener("DOMContentLoaded",
         usernameForm.addEventListener("submit", () => handleSubmit(event));
 
         setUsername(Math.floor(Math.random() * 10000000).toString());
+
+        fetch("/session", Util.getRequestInit("POST", `"${username}"`));
 
         console.log("User module finished initializing");
     });

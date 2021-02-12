@@ -15,8 +15,8 @@ namespace PiStellwerk.Commands.ECoS
     /// </summary>
     public static class ECoSMessageDecoder
     {
-        private static readonly Regex _funcDescRegex = new Regex("(?:\\d+) funcdesc\\[(?<functionId>\\d+),(?<functionDesc>\\d+),?(?<momentary>.*)\\]", RegexOptions.Compiled);
-        private static readonly Regex _engineListRegex = new Regex("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]", RegexOptions.Compiled);
+        private static readonly Regex _funcDescRegex = new("(?:\\d+) funcdesc\\[(?<functionId>\\d+),(?<functionDesc>\\d+),?(?<momentary>.*)\\]", RegexOptions.Compiled);
+        private static readonly Regex _engineListRegex = new("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]", RegexOptions.Compiled);
 
         public static IEnumerable<(byte Number, short Type, bool IsMomentary)> DecodeFuncdescMessage(string message)
         {
