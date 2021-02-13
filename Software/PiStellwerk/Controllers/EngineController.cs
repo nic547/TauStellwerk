@@ -5,6 +5,7 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PiStellwerk.BackgroundServices;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
 
@@ -26,7 +28,7 @@ namespace PiStellwerk.Controllers
     {
         private const int _resultsPerPage = 20;
 
-        private static readonly ConcurrentDictionary<int, Engine> _activeEngines = new();
+        private static readonly ConcurrentDictionary<int, ActiveEngine> _activeEngines = new();
 
         private readonly StwDbContext _dbContext;
         private readonly ICommandSystem _commandSystem;
@@ -40,6 +42,8 @@ namespace PiStellwerk.Controllers
         {
             _dbContext = dbContext;
             _commandSystem = commandSystem;
+
+            SessionService.SessionTimeout += HandleSessionTimeout;
         }
 
         /// <summary>
@@ -73,14 +77,14 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> SetEngineSpeed(int id, short speed, bool? forward)
         {
-            _activeEngines.TryGetValue(id, out var engine);
+            _activeEngines.TryGetValue(id, out var activeEngine);
 
-            if (engine is null)
+            if (activeEngine is null)
             {
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
 
-            await _commandSystem.HandleEngineSpeed(engine, speed, forward);
+            await _commandSystem.HandleEngineSpeed(activeEngine.Engine, speed, forward);
             return Ok();
         }
 
@@ -88,27 +92,21 @@ namespace PiStellwerk.Controllers
 
         public ActionResult EngineFunction(int id, byte functionNumber, string state)
         {
-            _activeEngines.TryGetValue(id, out var engine);
-            if (engine is null)
+            _activeEngines.TryGetValue(id, out var activeEngine);
+            if (activeEngine is null)
             {
                 return NotFound("Engine doesn't exists or is not acquired.");
             }
 
-            _commandSystem.HandleEngineFunction(engine, functionNumber, state == "on");
+            _commandSystem.HandleEngineFunction(activeEngine.Engine, functionNumber, state == "on");
             return Ok();
         }
 
-        /// <summary>
-        /// HTTP Post to acquire an engine. Needed to send commands to an engine.
-        /// Only one client can have an engine acquired at a time.
-        /// </summary>
-        /// <param name="id">Engine to acquire.</param>
-        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
         [HttpPost("{id}/acquire")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status423Locked)]
-        public ActionResult AcquireEngine(int id)
+        public ActionResult AcquireEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
             var engine = _dbContext.Engines
                 .Include(e => e.Functions)
@@ -125,31 +123,62 @@ namespace PiStellwerk.Controllers
                 return StatusCode(StatusCodes.Status423Locked, "Could not acquire Engine in CommandSystem");
             }
 
-            if (!_activeEngines.TryAdd(engine.Id, engine))
+            var session = SessionService.TryGetSession(sessionId);
+
+            if (session == null)
+            {
+                return Unauthorized("No session found");
+            }
+
+            var activeEngine = new ActiveEngine(session, engine);
+
+            if (!_activeEngines.TryAdd(engine.Id, activeEngine))
             {
                 return StatusCode(StatusCodes.Status423Locked, "Engine already acquired");
             }
 
+            Console.WriteLine($"Engine {engine.Name} acquired by {session.UserName}");
+
             return Ok();
         }
 
-        /// <summary>
-        /// HTTP POST to release an acquired engine.
-        /// </summary>
-        /// <param name="id">The engine to release.</param>
-        /// <returns><see cref="ActionResult"/> indicating the success of the operation.</returns>
         [HttpPost("{id}/release")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReleaseEngine(int id)
         {
-            var removalSuccess = _activeEngines.TryRemove(id, out var engine) && _commandSystem.TryReleaseEngine(engine);
+            var removalSuccess = _activeEngines.TryRemove(id, out var activeEngine) && _commandSystem.TryReleaseEngine(activeEngine.Engine);
             if (!removalSuccess)
             {
                 return NotFound("Engine doesn't exists or is not acquired");
             }
 
             return Ok("Engine released successfully");
+        }
+
+        private static void HandleSessionTimeout(Session session)
+        {
+            foreach (var active in _activeEngines.Values)
+            {
+                if (active.Session == session)
+                {
+                    _activeEngines.TryRemove(active.Engine.Id, out var _);
+                    Console.WriteLine($"Released {active.Engine.Name} because {session.UserName} timed out!");
+                }
+            }
+        }
+
+        private class ActiveEngine
+        {
+            public ActiveEngine(Session session, Engine engine)
+            {
+                Session = session;
+                Engine = engine;
+            }
+
+            public Session Session { get; }
+
+            public Engine Engine { get; }
         }
     }
 }

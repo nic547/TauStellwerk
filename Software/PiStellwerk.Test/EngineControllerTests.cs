@@ -25,6 +25,7 @@ namespace PiStellwerk.Test
         private EngineController _controller;
         private SqliteConnection _connection;
         private StwDbContext _context;
+        private string _sessionId;
         private ICommandSystem _commandSystem;
 
         /// <summary>
@@ -56,6 +57,12 @@ namespace PiStellwerk.Test
             _commandSystem = new NullCommandSystem();
 
             _controller = new EngineController(_context, _commandSystem);
+
+            var sessionController = new SessionController();
+            if (sessionController.CreateSession("testuser", "none") is ObjectResult sessionResult)
+            {
+                _sessionId = sessionResult.Value.ToString();
+            }
         }
 
         /// <summary>
@@ -74,7 +81,7 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CanSetSpeedOfAcquiredEngine()
         {
-            _controller.AcquireEngine(_engineId);
+            _controller.AcquireEngine(_engineId, _sessionId);
             var result = await _controller.SetEngineSpeed(_engineId, 100, null);
 
             Assert.IsInstanceOf(typeof(OkResult), result);
@@ -100,7 +107,7 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfReleasedEngine()
         {
-            _controller.AcquireEngine(_engineId);
+            _controller.AcquireEngine(_engineId, _sessionId);
             _controller.ReleaseEngine(_engineId);
 
             var result = await _controller.SetEngineSpeed(_engineId, 124, null) as ObjectResult;
@@ -115,8 +122,8 @@ namespace PiStellwerk.Test
         [Test]
         public void EngineCannotBeAcquiredTwice()
         {
-            _controller.AcquireEngine(_engineId);
-            var result = _controller.AcquireEngine(_engineId) as ObjectResult;
+            _controller.AcquireEngine(_engineId, _sessionId);
+            var result = _controller.AcquireEngine(_engineId, _sessionId) as ObjectResult;
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status423Locked, result.StatusCode);
         }
@@ -127,9 +134,20 @@ namespace PiStellwerk.Test
         [Test]
         public void NotExistingEngineCannotBeAcquired()
         {
-            var result = _controller.AcquireEngine(_engineId + 1337) as ObjectResult;
+            var result = _controller.AcquireEngine(_engineId + 1337, _sessionId) as ObjectResult;
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+        }
+
+        /// <summary>
+        /// Ensure an invalid sessionId cannot be used to acquire an engine.
+        /// </summary>
+        [Test]
+        public void InvalidSessionIdCannotAcquire()
+        {
+            var result = _controller.AcquireEngine(_engineId, "invalidId") as ObjectResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(StatusCodes.Status401Unauthorized, result.StatusCode);
         }
     }
 }

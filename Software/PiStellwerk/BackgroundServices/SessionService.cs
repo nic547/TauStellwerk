@@ -25,6 +25,10 @@ namespace PiStellwerk.BackgroundServices
         private const int _timeoutRemoval = 30;
         private static readonly ConcurrentDictionary<string, Session> _sessions = new();
 
+        public delegate void SessionTimeoutHandler(Session session);
+
+        public static event SessionTimeoutHandler? SessionTimeout;
+
         public static Session CreateSession(string username, string userAgent)
         {
             var session = new Session
@@ -95,6 +99,7 @@ namespace PiStellwerk.BackgroundServices
                     if (idle > _timeoutRemoval)
                     {
                         _sessions.TryRemove(session.SessionId, out _);
+                        SessionTimeout?.Invoke(session);
                         Console.WriteLine($"Session {session.UserName} has been removed from the active session list");
                     }
                 }
