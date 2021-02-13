@@ -10,20 +10,25 @@ import * as Overlays from "./overlays.js"
 import * as Util from "./util.js"
 
 document.addEventListener("DOMContentLoaded",
-    () => {
+    async () => {
         console.log("User module initializing");
         usernameLabel.addEventListener("click", () => { Overlays.toggleVisibility(overlay) });
         usernameForm.addEventListener("submit", () => handleSubmit(event));
 
         setUsername(Math.floor(Math.random() * 10000000).toString());
 
-        fetch("/session", Util.getRequestInit("POST", `"${username}"`));
+        var result = await fetch("/session", Util.getRequestInit("POST", `"${username}"`));
+        sessionId = await result.text();
 
         console.log("User module finished initializing");
     });
 
 export function getUsername(): string {
     return username;
+}
+
+export function getSessionId(): string {
+    return sessionId;
 }
 
 function handleSubmit(event: Event) {

@@ -6,6 +6,7 @@
 #nullable enable
 
 using System;
+using System.Security.Cryptography;
 using System.Web;
 
 namespace PiStellwerk.Data
@@ -15,9 +16,19 @@ namespace PiStellwerk.Data
     /// </summary>
     public class Session
     {
+        private const int _sessionBytes = 32;
+
         private readonly string? _userAgent;
         private readonly string? _sessionId;
         private string? _userName;
+
+        public Session()
+        {
+            var rng = RandomNumberGenerator.Create();
+            var bytes = new byte[_sessionBytes];
+            rng.GetBytes(bytes);
+            _sessionId = Convert.ToBase64String(bytes);
+        }
 
         public string UserName
         {
@@ -36,7 +47,6 @@ namespace PiStellwerk.Data
         public string SessionId
         {
             get => _sessionId ?? string.Empty;
-            init => _sessionId = value;
         }
     }
 }

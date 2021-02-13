@@ -25,16 +25,15 @@ namespace PiStellwerk.BackgroundServices
         private const int _timeoutRemoval = 30;
         private static readonly ConcurrentDictionary<string, Session> _sessions = new();
 
-        public static Session CreateSession(string username, string userAgent, string sessionId)
+        public static Session CreateSession(string username, string userAgent)
         {
             var session = new Session
             {
                 UserAgent = userAgent,
                 UserName = username,
                 LastContact = DateTime.Now,
-                SessionId = sessionId,
             };
-            _sessions.TryAdd(sessionId, session);
+            _sessions.TryAdd(session.SessionId, session);
             return session;
         }
 

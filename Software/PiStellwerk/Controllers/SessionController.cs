@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.BackgroundServices;
@@ -30,20 +31,15 @@ namespace PiStellwerk.Controllers
         [HttpPost]
         public ActionResult CreateSession([FromBody] string username, [FromHeader(Name = "User-Agent")] string userAgent)
         {
-            var sessionId = HttpContext.Session.Id;
-            HttpContext.Session.Set("is-set", new byte[1]); // just needed to "get the session to stick"
-            SessionService.CreateSession(username, userAgent, sessionId);
-            return Ok();
+            var session = SessionService.CreateSession(username, userAgent);
+            Console.WriteLine($"New Session created by {session.UserName}");
+            return Ok(session.SessionId);
         }
 
-        /// <summary>
-        /// HTTP PUT for changing one's username.
-        /// </summary>
-        /// <param name="newUsername">New username.</param>
         [HttpPut]
-        public void Put([FromBody] string newUsername)
+        public void Put([FromBody] string newUsername, [FromHeader(Name = "Session-Id")] string sessionId)
         {
-            SessionService.RenameSessionUser(HttpContext.Session.Id, newUsername);
+            SessionService.RenameSessionUser(sessionId, newUsername);
         }
     }
 }

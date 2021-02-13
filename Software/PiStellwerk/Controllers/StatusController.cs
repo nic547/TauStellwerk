@@ -35,14 +35,10 @@ namespace PiStellwerk.Controllers
             _commandSystem = commandSystem;
         }
 
-        /// <summary>
-        /// HTTP PUT handling the heartbeat and sending the current status of the actual dcc-output.
-        /// </summary>
-        /// <returns>Current <see cref="Status"/>.</returns>
         [HttpPut]
-        public async Task<Status> PutAsync()
+        public async Task<Status> PutAsync([FromHeader(Name = "Session-Id")] string sessionId)
         {
-            SessionService.UpdateSessionLastContact(HttpContext.Session.Id);
+            SessionService.UpdateSessionLastContact(sessionId);
             var systemStatus = await _commandSystem.CheckStatusAsync();
             if (systemStatus is not null && systemStatus != _status.IsRunning)
             {
