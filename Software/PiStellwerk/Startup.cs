@@ -57,7 +57,7 @@ namespace PiStellwerk
 
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<BackgroundServices.SessionService>();
+            services.AddHostedService<SessionService>();
 
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());

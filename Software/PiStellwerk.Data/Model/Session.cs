@@ -6,6 +6,7 @@
 #nullable enable
 
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
@@ -48,5 +49,9 @@ namespace PiStellwerk.Data
         {
             get => _sessionId ?? string.Empty;
         }
+
+        public string ShortSessionId => new string(_sessionId?.Take(8).ToArray());
+
+        public bool IsActive { get; set; } = true;
     }
 }

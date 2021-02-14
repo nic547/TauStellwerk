@@ -11,18 +11,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Data;
 
-namespace PiStellwerk.BackgroundServices
+namespace PiStellwerk.Services
 {
     /// <summary>
     /// Service that keeps track of users.
     /// </summary>
     public class SessionService : BackgroundService
     {
-        private const int _timeoutWarning = 10;
-        private const int _timeoutRemoval = 30;
+        private const int _timeoutWarning = 15;
+        private const int _timeoutInactive = 60;
+        private const int _timeoutDeletion = 3600;
+
         private static readonly ConcurrentDictionary<string, Session> _sessions = new();
 
         public delegate void SessionTimeoutHandler(Session session);
@@ -60,7 +63,7 @@ namespace PiStellwerk.BackgroundServices
                 throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
             }
 
-            Console.WriteLine($"Renaming {session.UserName} to {newUsername}");
+            Console.WriteLine($"Renaming {HttpUtility.HtmlDecode(session.UserName)} to {newUsername}");
             session.UserName = newUsername;
         }
 
@@ -91,20 +94,24 @@ namespace PiStellwerk.BackgroundServices
                 foreach (var session in _sessions.Values)
                 {
                     var idle = (DateTime.Now - session.LastContact).TotalSeconds;
-                    if (idle < _timeoutRemoval && idle > _timeoutWarning)
+                    switch (idle)
                     {
-                        Console.WriteLine($"Session {session.UserName} has been inactive for {Math.Round(idle)} seconds");
-                    }
-
-                    if (idle > _timeoutRemoval)
-                    {
-                        _sessions.TryRemove(session.SessionId, out _);
-                        SessionTimeout?.Invoke(session);
-                        Console.WriteLine($"Session {session.UserName} has been removed from the active session list");
+                        case < _timeoutInactive and > _timeoutWarning:
+                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been inactive for {Math.Round(idle)} seconds");
+                            break;
+                        case > _timeoutInactive when session.IsActive:
+                            session.IsActive = false;
+                            SessionTimeout?.Invoke(session);
+                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been marked as inactive.");
+                            break;
+                        case > _timeoutDeletion:
+                            _sessions.TryRemove(session.SessionId, out _);
+                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been deleted after {Math.Round(idle)} seconds");
+                            break;
                     }
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
 
             Console.WriteLine("SessionService background task is stopping.");

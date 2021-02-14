@@ -12,12 +12,12 @@ namespace PiStellwerk.Services
 {
     public class StatusService
     {
-        private ICommandSystem _system;
+        private readonly ICommandSystem _system;
+
+        private readonly List<TaskCompletionSource<Status>> _statusAwaiters = new();
 
         private bool _isRunning;
         private string _lastActionUsername;
-
-        private List<TaskCompletionSource<Status>> _statusAwaiters = new();
 
         public StatusService(ICommandSystem system)
         {
