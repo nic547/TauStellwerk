@@ -9,8 +9,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.BackgroundServices;
-using PiStellwerk.Commands;
 using PiStellwerk.Data;
+using PiStellwerk.Services;
 
 namespace PiStellwerk.Controllers
 {
@@ -21,46 +21,39 @@ namespace PiStellwerk.Controllers
     [Route("[Controller]")]
     public class StatusController : Controller
     {
-        private const string _systemUsername = "SYSTEM";
-        private static Status _status = new() { IsRunning = false, LastActionUsername = _systemUsername };
+        private readonly StatusService _statusService;
 
-        private readonly ICommandSystem _commandSystem;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusController"/> class.
-        /// </summary>
-        /// <param name="commandSystem"><see cref="ICommandSystem"/> to use.</param>
-        public StatusController(ICommandSystem commandSystem)
+        public StatusController(StatusService statusService)
         {
-            _commandSystem = commandSystem;
+            _statusService = statusService;
         }
 
         [HttpPut]
-        public async Task<Status> PutAsync([FromHeader(Name = "Session-Id")] string sessionId)
+        public Status Put([FromHeader(Name = "Session-Id")] string sessionId)
         {
             SessionService.UpdateSessionLastContact(sessionId);
-            var systemStatus = await _commandSystem.CheckStatusAsync();
-            if (systemStatus is not null && systemStatus != _status.IsRunning)
-            {
-                _status = new Status
-                {
-                    IsRunning = (bool)systemStatus,
-                    LastActionUsername = _systemUsername,
-                };
-            }
-
-            return _status;
+            return _statusService.CheckStatus();
         }
 
-        /// <summary>
-        /// Switch the dcc-output on or off.
-        /// </summary>
-        /// <param name="status">The desired new status.</param>
-        [HttpPost]
-        public void Post([FromBody] Status status)
+        public async Task<Status> GetChange([FromQuery]bool lastKnownStatus)
         {
-            _status = status;
-            _commandSystem.HandleSystemStatus(status.IsRunning);
+            var longTask = _statusService.WaitForStatusChangeAsync();
+
+            // Ensure that the state didn't change between requests
+            var currentStatus = _statusService.CheckStatus();
+            if (lastKnownStatus != currentStatus.IsRunning)
+            {
+                return currentStatus;
+            }
+
+            return await longTask;
+        }
+
+        [HttpPost]
+        public async Task Post([FromBody] Status status)
+        {
+            // TODO: Take username from Session instead.
+            await _statusService.HandleStatusCommand(status.IsRunning, status.LastActionUsername);
             Console.WriteLine($"{DateTime.Now} {status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the PiStellwerk");
         }
     }

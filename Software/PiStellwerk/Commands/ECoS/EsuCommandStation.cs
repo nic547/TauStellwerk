@@ -22,18 +22,18 @@ namespace PiStellwerk.Commands.ECoS
     {
         private readonly ECosConnectionHandler _connectionHandler;
 
-        private bool _isSystemRunning;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EsuCommandStation"/> class.
         /// </summary>
         public EsuCommandStation()
         {
             // TODO: Remove hardcoded IP and Address
-             _connectionHandler = new ECosConnectionHandler(IPAddress.Parse("192.168.1.153"), 15471);
+            _connectionHandler = new ECosConnectionHandler(IPAddress.Parse("192.168.1.153"), 15471);
 
-             _ = Initialize();
+            _ = Initialize();
         }
+
+        public event ICommandSystem.StatusChangeHandler? StatusChanged;
 
         /// <inheritdoc/>
         public async Task LoadEnginesFromSystem(StwDbContext context)
@@ -88,21 +88,12 @@ namespace PiStellwerk.Commands.ECoS
         public async Task HandleSystemStatus(bool shouldBeRunning)
         {
             await _connectionHandler.SendCommandAsync($"set(1,{(shouldBeRunning ? "go" : "stop")})");
-            _isSystemRunning = shouldBeRunning;
         }
 
         public async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             var ecosData = CheckForEcosData(engine);
-            Task directionTask;
-            if (forward != null)
-            {
-                directionTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{((bool)forward ? "0" : "1")}])");
-            }
-            else
-            {
-                directionTask = Task.CompletedTask;
-            }
+            Task directionTask = forward != null ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{((bool)forward ? "0" : "1")}])") : Task.CompletedTask;
 
             var speedTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},speed[{speed}])");
 
@@ -123,12 +114,6 @@ namespace PiStellwerk.Commands.ECoS
         }
 
         /// <inheritdoc/>
-        public Task<bool?> CheckStatusAsync()
-        {
-            return Task.FromResult<bool?>(_isSystemRunning);
-        }
-
-        /// <inheritdoc/>
         public bool TryAcquireEngine(Engine engine)
         {
             return true;
@@ -142,7 +127,7 @@ namespace PiStellwerk.Commands.ECoS
 
         private void HandleStatusEvent(string message)
         {
-            _isSystemRunning = message.Contains("status[GO]");
+            StatusChanged?.Invoke(message.Contains("status[GO]"));
         }
 
         private async Task Initialize()

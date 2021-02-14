@@ -13,6 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
+using PiStellwerk.Services;
 
 namespace PiStellwerk
 {
@@ -61,6 +62,8 @@ namespace PiStellwerk
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
             services.AddSingleton(commandSystem);
+
+            services.AddSingleton(new StatusService(commandSystem));
         }
 
         /// <summary>

@@ -14,6 +14,12 @@ namespace PiStellwerk.Commands
     /// </summary>
     public class ConsoleCommandSystem : ICommandSystem
     {
+        public event ICommandSystem.StatusChangeHandler StatusChanged
+        {
+            add { }
+            remove { }
+        }
+
         public Task HandleEngineEStop(Engine engine)
         {
             throw new NotImplementedException();

@@ -15,11 +15,10 @@ namespace PiStellwerk.Commands
     /// </summary>
     public interface ICommandSystem
     {
-        /// <summary>
-        /// Handle a Command that relates to the status of the commandSystem (running or not).
-        /// </summary>
-        /// <param name="shouldBeRunning">A value indicating whether the system should be started or stopped.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public delegate void StatusChangeHandler(bool isRunning);
+
+        public event StatusChangeHandler StatusChanged;
+
         public Task HandleSystemStatus(bool shouldBeRunning);
 
         public Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
@@ -27,15 +26,6 @@ namespace PiStellwerk.Commands
         public Task HandleEngineEStop(Engine engine);
 
         public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
-
-        /// <summary>
-        /// Check if the CommandSystem is in a running state.
-        /// </summary>
-        /// <returns>A bool indicating whether the commandSystem is in a running state.</returns>
-        public virtual Task<bool?> CheckStatusAsync()
-        {
-            return Task.FromResult<bool?>(null);
-        }
 
         /// <summary>
         /// Load engines from the command system. Will do nothing if the system doesn't know about engines.

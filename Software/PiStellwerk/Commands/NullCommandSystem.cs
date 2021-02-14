@@ -15,6 +15,12 @@ namespace PiStellwerk.Commands
     [UsedImplicitly]
     public class NullCommandSystem : ICommandSystem
     {
+        public event ICommandSystem.StatusChangeHandler StatusChanged
+        {
+            add { }
+            remove { }
+        }
+
         /// <inheritdoc/>
         public Task HandleEngineEStop(Engine engine)
         {

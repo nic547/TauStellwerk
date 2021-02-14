@@ -10,32 +10,42 @@ const commandTitle = document.getElementById("CommandTitle");
 const commandDetails = document.getElementById("CommandDetails");
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     console.log("Status module initialization started");
     commandButton.addEventListener("click", commandButtonPressed);
 
     startStatusUpdates();
 
     console.log("Status module initialization was completed");
+
+    while (true) {
+        const result = await fetch(`/status?lastknownstatus=${isRunning.toString()}`, Util.getRequestInit("GET"));
+        if (result.ok) {
+            const json = await result.json();
+            isRunning = json.isRunning;
+            handleStatusChange(json.lastActionUsername);
+        }
+
+    }
 });
 
 async function commandButtonPressed() {
     if (isBlocked) { return;}
     postStatusChange(!isRunning);
-    handleStatusChange(!isRunning, `${User.getUsername()} (You)`);
     isRunning = (!isRunning);
+    handleStatusChange(`${User.getUsername()} (You)`);
+    
 }
 
 export function startStatusUpdates() {
-    statusIntervalHandle = setInterval(() => regularUpdate(), 500);
+    statusIntervalHandle = setInterval(() => regularUpdate(), 5000);
 }
 
 export function stopStatusUpdates() {
     clearInterval(statusIntervalHandle);
 }
 
-function handleStatusChange(isRunning: boolean, username: string) {
-
+function handleStatusChange( username: string) {
     if (isRunning) {
         commandButton.classList.remove("has-background-danger");
         commandButton.classList.add("has-background-primary");
@@ -67,14 +77,6 @@ async function postStatusChange(isRunning: boolean) {
 
 function regularUpdate() {
     let bodyContent = JSON.stringify({ name: User.getUsername(), UserAgent: navigator.userAgent });
-    fetch("/status", Util.getRequestInit("PUT", bodyContent))
-        .then((response) => {
-        return response.json();
-        }).then((data) => {
-        if (data.isRunning != isRunning) {
-            isRunning = data.isRunning;
-            handleStatusChange(isRunning, data.lastActionUsername);
-        }
-        });
+    fetch("/status", Util.getRequestInit("PUT", bodyContent));
     
 }

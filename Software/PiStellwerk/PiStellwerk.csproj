@@ -14,13 +14,7 @@
 
   <ItemGroup>
     <Content Remove="libman.json" />
-    <Content Remove="tsconfig.json" />
-    <Content Remove="wwwroot\scripts\Engine.js.map" />
     <Content Remove="wwwroot\scripts\Engine.ts" />
-    <Content Remove="wwwroot\scripts\overlays.js.map" />
-    <Content Remove="wwwroot\scripts\status.js.map" />
-    <Content Remove="wwwroot\scripts\user.js.map" />
-    <Content Remove="wwwroot\scripts\util.js.map" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,12 +28,6 @@
     <None Include="wwwroot\scripts\status.js.map" />
     <None Include="wwwroot\scripts\user.js.map" />
     <None Include="wwwroot\scripts\util.js.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="tsconfig.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </TypeScriptCompile>
   </ItemGroup>
 
   <ItemGroup>
@@ -87,6 +75,9 @@
     </Content>
     <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="tsconfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
