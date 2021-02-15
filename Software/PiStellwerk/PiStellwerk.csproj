@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
