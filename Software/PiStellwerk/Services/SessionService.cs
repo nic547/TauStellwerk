@@ -44,15 +44,17 @@ namespace PiStellwerk.Services
             return session;
         }
 
-        public static void UpdateSessionLastContact(string sessionId)
+        public static bool TryUpdateSessionLastContact(string sessionId)
         {
             var session = TryGetSession(sessionId);
             if (session == null)
             {
-                throw new ArgumentException($"Reported contact with sessionId {sessionId}, but no such session was found.");
+                Console.WriteLine($"Update for non-existant session:{sessionId}");
+                return false;
             }
 
             session.LastContact = DateTime.Now;
+            return true;
         }
 
         public static void RenameSessionUser(string sessionId, string newUsername)

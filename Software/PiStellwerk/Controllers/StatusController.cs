@@ -30,7 +30,7 @@ namespace PiStellwerk.Controllers
         [HttpPut]
         public Status Put([FromHeader(Name = "Session-Id")] string sessionId)
         {
-            SessionService.UpdateSessionLastContact(sessionId);
+            SessionService.TryUpdateSessionLastContact(sessionId);
             return _statusService.CheckStatus();
         }
 
