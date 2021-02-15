@@ -41,15 +41,14 @@ namespace HardwareInfo
 
         private static void Init()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
+            var types = typeof(HardwareInfoGatherer).Assembly.GetTypes()
                 .Where(p => typeof(IInfoProvider).IsAssignableFrom(p) && !p.IsInterface);
 
             foreach (var type in types)
             {
                 var provider = (IInfoProvider)Activator.CreateInstance(type);
 
-                if (provider.CheckAvailability())
+                if (provider != null && provider.CheckAvailability())
                 {
                     _availableProviders.Add(provider);
                 }
