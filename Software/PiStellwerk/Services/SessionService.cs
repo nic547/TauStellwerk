@@ -11,9 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Data;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Services
 {
@@ -22,7 +22,6 @@ namespace PiStellwerk.Services
     /// </summary>
     public class SessionService : BackgroundService
     {
-        private const int _timeoutWarning = 15;
         private const int _timeoutInactive = 60;
         private const int _timeoutDeletion = 3600;
 
@@ -41,6 +40,7 @@ namespace PiStellwerk.Services
                 LastContact = DateTime.Now,
             };
             _sessions.TryAdd(session.SessionId, session);
+            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} created new session");
             return session;
         }
 
@@ -65,7 +65,7 @@ namespace PiStellwerk.Services
                 throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
             }
 
-            Console.WriteLine($"Renaming {HttpUtility.HtmlDecode(session.UserName)} to {newUsername}");
+            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} renamed to {newUsername}");
             session.UserName = newUsername;
         }
 
@@ -98,17 +98,14 @@ namespace PiStellwerk.Services
                     var idle = (DateTime.Now - session.LastContact).TotalSeconds;
                     switch (idle)
                     {
-                        case < _timeoutInactive and > _timeoutWarning:
-                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been inactive for {Math.Round(idle)} seconds");
-                            break;
                         case > _timeoutInactive when session.IsActive:
                             session.IsActive = false;
                             SessionTimeout?.Invoke(session);
-                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been marked as inactive.");
+                            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} has been marked as inactive.");
                             break;
                         case > _timeoutDeletion:
                             _sessions.TryRemove(session.SessionId, out _);
-                            Console.WriteLine($"{session.ShortSessionId}:{HttpUtility.HtmlDecode(session.UserName)} has been deleted after {Math.Round(idle)} seconds");
+                            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} has been deleted after {Math.Round(idle)} seconds");
                             break;
                     }
                 }

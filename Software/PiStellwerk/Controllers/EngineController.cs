@@ -5,7 +5,6 @@
 
 #nullable enable
 
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
 using PiStellwerk.Services;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Controllers
 {
@@ -137,7 +137,7 @@ namespace PiStellwerk.Controllers
                 return StatusCode(StatusCodes.Status423Locked, "Engine already acquired");
             }
 
-            Console.WriteLine($"Engine {engine.Name} acquired by {session.UserName}");
+            ConsoleService.PrintMessage($"Engine {engine.Name} acquired by {session.UserName}");
 
             return Ok();
         }
@@ -163,7 +163,7 @@ namespace PiStellwerk.Controllers
                 if (active.Session == session)
                 {
                     _activeEngines.TryRemove(active.Engine.Id, out var _);
-                    Console.WriteLine($"Released {active.Engine.Name} because {session.UserName} timed out!");
+                    ConsoleService.PrintWarning($"Released {active.Engine.Name} because {session.UserName} timed out!");
                 }
             }
         }

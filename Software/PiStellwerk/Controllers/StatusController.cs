@@ -5,11 +5,11 @@
 
 #nullable enable
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.Data;
 using PiStellwerk.Services;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Controllers
 {
@@ -53,7 +53,7 @@ namespace PiStellwerk.Controllers
         {
             // TODO: Take username from Session instead.
             await _statusService.HandleStatusCommand(status.IsRunning, status.LastActionUsername);
-            Console.WriteLine($"{DateTime.Now} {status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the PiStellwerk");
+            ConsoleService.PrintMessage($"{status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the PiStellwerk");
         }
     }
 }

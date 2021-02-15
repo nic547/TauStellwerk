@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PiStellwerk.Data;
@@ -32,7 +31,6 @@ namespace PiStellwerk.Controllers
         public ActionResult CreateSession([FromBody] string username, [FromHeader(Name = "User-Agent")] string userAgent)
         {
             var session = SessionService.CreateSession(username, userAgent);
-            Console.WriteLine($"New Session created by {session.UserName}");
             return Ok(session.SessionId);
         }
 
