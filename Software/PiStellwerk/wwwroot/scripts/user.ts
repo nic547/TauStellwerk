@@ -46,7 +46,7 @@ function setUsername(newUsername: string): void {
         fetch("/session", Util.getRequestInit("PUT", JSON.stringify(newUsername)));
     }
     username = newUsername;
-    usernameLabel.innerHTML = `User: ${username}`;
+    usernameLabel.textContent = `User: ${username}`;
 
     
 }
