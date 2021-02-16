@@ -5,6 +5,7 @@
 
 #nullable enable
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,7 @@ namespace PiStellwerk.Controllers
         public IReadOnlyList<Engine>? GetEngines(int page = 0)
         {
             return _dbContext.Engines
+                .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
                 .ToList();
@@ -136,6 +138,9 @@ namespace PiStellwerk.Controllers
             {
                 return StatusCode(StatusCodes.Status423Locked, "Engine already acquired");
             }
+
+            engine.LastUsed = DateTime.Now;
+            _dbContext.SaveChanges();
 
             ConsoleService.PrintMessage($"Engine {engine.Name} acquired by {session.UserName}");
 
