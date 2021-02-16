@@ -78,6 +78,8 @@ namespace PiStellwerk.Data
         [CanBeNull]
         public string ImageFileName { get; set; }
 
+        public DateTime LastUsed { get; set; }
+
         /// <inheritdoc/>
         public bool Equals(Engine other)
         {

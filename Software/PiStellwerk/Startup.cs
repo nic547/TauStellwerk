@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -31,7 +32,7 @@ namespace PiStellwerk
             Configuration = configuration;
 
             using var client = new StwDbContext();
-            client.Database.EnsureCreated();
+            client.Database.Migrate();
 
             // UNCOMMENT TO ADD TEST DATA.
             // client.Engines.AddRange(TestDataService.GetEngines());
