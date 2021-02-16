@@ -31,5 +31,12 @@ namespace PiStellwerk.Util
             Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(error)}");
             Console.ResetColor();
         }
+
+        public static void PrintHighlightedMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(message)}");
+            Console.ResetColor();
+        }
     }
 }

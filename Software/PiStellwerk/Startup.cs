@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.IO;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
 using PiStellwerk.Services;
+using PiStellwerk.Util;
 
 namespace PiStellwerk
 {
@@ -32,7 +34,16 @@ namespace PiStellwerk
             Configuration = configuration;
 
             using var client = new StwDbContext();
-            client.Database.Migrate();
+            if (client.Database.GetPendingMigrations().Any())
+            {
+                ConsoleService.PrintHighlightedMessage("Applying database migrations.");
+                client.Database.Migrate();
+                ConsoleService.PrintHighlightedMessage("Database migrations applied.");
+            }
+            else
+            {
+                ConsoleService.PrintMessage("No database migrations necessary.");
+            }
 
             // UNCOMMENT TO ADD TEST DATA.
             // client.Engines.AddRange(TestDataService.GetEngines());
