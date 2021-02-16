@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
+  </ItemGroup>
+
 </Project>
