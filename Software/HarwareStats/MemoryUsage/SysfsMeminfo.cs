@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using PiStellwerk.Util;
 
 namespace HardwareInfo.MemoryUsage
 {
@@ -25,12 +26,12 @@ namespace HardwareInfo.MemoryUsage
             try
             {
                 GetInfoRecords();
-                Console.WriteLine("SysfsMeminfo is available on this device");
+                ConsoleService.PrintMessage("SysfsMeminfo is available on this device");
                 return true;
             }
             catch (Exception)
             {
-                Console.WriteLine("SysfsMeminfo is NOT available on this device");
+                ConsoleService.PrintMessage("SysfsMeminfo is NOT available on this device");
                 return false;
             }
         }

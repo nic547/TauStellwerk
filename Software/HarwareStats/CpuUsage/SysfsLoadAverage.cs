@@ -3,9 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.IO;
+using PiStellwerk.Util;
 
 namespace HardwareInfo.CpuUsage
 {
@@ -22,12 +22,12 @@ namespace HardwareInfo.CpuUsage
             {
                 _ = GetInfoRecords();
 
-                Console.WriteLine("SysfsLoadAverage is available on this device");
+                ConsoleService.PrintMessage("SysfsLoadAverage is available on this device");
                 return true;
             }
             catch
             {
-                Console.WriteLine("SysfsLoadAverage is NOT available on this device");
+                ConsoleService.PrintMessage("SysfsLoadAverage is NOT available on this device");
                 return false;
             }
         }

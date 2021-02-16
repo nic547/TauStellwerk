@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using PiStellwerk.Util;
 
 namespace HardwareInfo.Thermal
 {
@@ -22,12 +23,12 @@ namespace HardwareInfo.Thermal
             try
             {
                 _ = GetInfoRecords();
-                Console.WriteLine("SysfsThermalZones is available on this device");
+                ConsoleService.PrintMessage("SysfsThermalZones is available on this device");
                 return true;
             }
             catch
             {
-                Console.WriteLine("SysfsThermalZones is NOT available on this device");
+                ConsoleService.PrintMessage("SysfsThermalZones is NOT available on this device");
                 return false;
             }
         }
