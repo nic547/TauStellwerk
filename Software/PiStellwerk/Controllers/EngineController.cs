@@ -47,6 +47,12 @@ namespace PiStellwerk.Controllers
             SessionService.SessionTimeout += HandleSessionTimeout;
         }
 
+        public static void ClearActiveEngines()
+        {
+            // Separate into non-static EngineService
+            _activeEngines.Clear();
+        }
+
         /// <summary>
         /// Get a single engine by it's id.
         /// </summary>
@@ -65,7 +71,7 @@ namespace PiStellwerk.Controllers
         /// <param name="page">Page to load. Default and start is Zero.</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public IReadOnlyList<Engine>? GetEngines(int page = 0)
+        public IReadOnlyList<Engine> GetEngines(int page = 0)
         {
             return _dbContext.Engines
                 .OrderByDescending(e => e.LastUsed)
@@ -77,30 +83,29 @@ namespace PiStellwerk.Controllers
         [HttpPost("{id}/speed/{speed}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> SetEngineSpeed(int id, short speed, bool? forward)
+        public async Task<ActionResult> SetEngineSpeed([FromHeader(Name = "Session-Id")] string sessionId, int id, short speed, bool? forward)
         {
-            _activeEngines.TryGetValue(id, out var activeEngine);
-
-            if (activeEngine is null)
+            var result = GetActiveEngine(sessionId, id);
+            if (result.Result is not OkObjectResult)
             {
-                return NotFound("Engine doesn't exists or is not acquired.");
+                return result.Result;
             }
 
-            await _commandSystem.HandleEngineSpeed(activeEngine.Engine, speed, forward);
+            await _commandSystem.HandleEngineSpeed(result.Value, speed, forward);
             return Ok();
         }
 
         [HttpPost("{id}/function/{functionNumber}/{state}")]
 
-        public ActionResult EngineFunction(int id, byte functionNumber, string state)
+        public ActionResult EngineFunction([FromHeader(Name = "Session-Id")] string sessionId, int id, byte functionNumber, string state)
         {
-            _activeEngines.TryGetValue(id, out var activeEngine);
-            if (activeEngine is null)
+            var result = GetActiveEngine(sessionId, id);
+            if (result.Result != Ok())
             {
-                return NotFound("Engine doesn't exists or is not acquired.");
+                return result.Result;
             }
 
-            _commandSystem.HandleEngineFunction(activeEngine.Engine, functionNumber, state == "on");
+            _commandSystem.HandleEngineFunction(result.Value, functionNumber, state == "on");
             return Ok();
         }
 
@@ -150,8 +155,15 @@ namespace PiStellwerk.Controllers
         [HttpPost("{id}/release")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult ReleaseEngine(int id)
+        public ActionResult ReleaseEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
+            var result = GetActiveEngine(sessionId, id);
+
+            if (result.Result is not OkObjectResult)
+            {
+                return result.Result;
+            }
+
             var removalSuccess = _activeEngines.TryRemove(id, out var activeEngine) && _commandSystem.TryReleaseEngine(activeEngine.Engine);
             if (!removalSuccess)
             {
@@ -171,6 +183,32 @@ namespace PiStellwerk.Controllers
                     ConsoleService.PrintWarning($"Released {active.Engine.Name} because {session.UserName} timed out!");
                 }
             }
+        }
+
+        private ActionResult<Engine> GetActiveEngine(string sessionId, int id)
+        {
+            _ = _activeEngines.TryGetValue(id, out var activeEngine);
+            var session = SessionService.TryGetSession(sessionId);
+
+            if (session is null)
+            {
+                ConsoleService.PrintWarning($"Invalid session tried to interact with engine id {id}, SessionId {sessionId}");
+                return Unauthorized(null);
+            }
+
+            if (activeEngine is null)
+            {
+                ConsoleService.PrintWarning($"{session.ShortSessionId}:{session.UserName} tried to interact with engine id {id}, but no such engine is active");
+                return NotFound(null);
+            }
+
+            if (activeEngine.Session.SessionId != sessionId)
+            {
+                ConsoleService.PrintWarning($"{session.ShortSessionId}:{session.UserName} tried to interact with {activeEngine.Engine.Name}, but has the wrong session.");
+                return Unauthorized(null);
+            }
+
+            return Ok(activeEngine.Engine);
         }
 
         private class ActiveEngine

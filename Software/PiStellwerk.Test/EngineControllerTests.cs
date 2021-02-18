@@ -12,6 +12,7 @@ using NUnit.Framework;
 using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
+using PiStellwerk.Services;
 
 namespace PiStellwerk.Test
 {
@@ -72,6 +73,8 @@ namespace PiStellwerk.Test
         public void TearDown()
         {
             _connection.Close();
+            SessionService.CleanSessions();
+            EngineController.ClearActiveEngines();
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace PiStellwerk.Test
         public async Task CanSetSpeedOfAcquiredEngine()
         {
             _controller.AcquireEngine(_engineId, _sessionId);
-            var result = await _controller.SetEngineSpeed(_engineId, 100, null);
+            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 100, null);
 
             Assert.IsInstanceOf(typeof(OkResult), result);
         }
@@ -94,7 +97,7 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfUnacquiredEngine()
         {
-            var result = await _controller.SetEngineSpeed(_engineId, 23, true) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 23, true) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
@@ -108,12 +111,23 @@ namespace PiStellwerk.Test
         public async Task CannotSetSpeedOfReleasedEngine()
         {
             _controller.AcquireEngine(_engineId, _sessionId);
-            _controller.ReleaseEngine(_engineId);
+            _controller.ReleaseEngine(_engineId, _sessionId);
 
-            var result = await _controller.SetEngineSpeed(_engineId, 124, null) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 124, null) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+        }
+
+        [Test]
+        public async Task CannotSetSpeedWithWrongSession()
+        {
+            _controller.AcquireEngine(_engineId, _sessionId);
+
+            var result = await _controller.SetEngineSpeed(_sessionId + "wrong", _engineId, 124, null) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(StatusCodes.Status401Unauthorized, result.StatusCode);
         }
 
         /// <summary>

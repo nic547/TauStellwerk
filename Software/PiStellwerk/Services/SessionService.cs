@@ -84,6 +84,12 @@ namespace PiStellwerk.Services
             return _sessions.Values.ToList();
         }
 
+        public static void CleanSessions()
+        {
+            // TODO: Turn into non-static class
+            _sessions.Clear();
+        }
+
         /// <inheritdoc/>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
