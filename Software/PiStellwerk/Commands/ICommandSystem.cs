@@ -43,9 +43,9 @@ namespace PiStellwerk.Commands
         /// </summary>
         /// <param name="engine">The engine to acquire.</param>
         /// <returns>A bool indicating whether the operation was successful.</returns>
-        public virtual bool TryAcquireEngine(Engine engine)
+        public virtual Task<bool> TryAcquireEngine(Engine engine)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace PiStellwerk.Commands
         /// </summary>
         /// <param name="engine">The engine to release.</param>
         /// <returns>A bool indicating whether the operation was successful.</returns>
-        public virtual bool TryReleaseEngine(Engine engine)
+        public virtual Task<bool> TryReleaseEngine(Engine engine)
         {
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace PiStellwerk.Test
 
             _commandSystem = new NullCommandSystem();
 
-            _controller = new EngineController(_context, _commandSystem);
+            _controller = new EngineController(_context, new EngineService(new NullCommandSystem()));
 
             var sessionController = new SessionController();
             if (sessionController.CreateSession("testuser", "none") is ObjectResult sessionResult)
@@ -74,7 +74,6 @@ namespace PiStellwerk.Test
         {
             _connection.Close();
             SessionService.CleanSessions();
-            EngineController.ClearActiveEngines();
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CanSetSpeedOfAcquiredEngine()
         {
-            _controller.AcquireEngine(_engineId, _sessionId);
+            await _controller.AcquireEngine(_engineId, _sessionId);
             var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 100, null);
 
             Assert.IsInstanceOf(typeof(OkResult), result);
@@ -97,10 +96,9 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfUnacquiredEngine()
         {
-            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 23, true) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 23, true);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.IsInstanceOf<BadRequestResult>(result);
         }
 
         /// <summary>
@@ -110,34 +108,34 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotSetSpeedOfReleasedEngine()
         {
-            _controller.AcquireEngine(_engineId, _sessionId);
-            _controller.ReleaseEngine(_engineId, _sessionId);
+            await _controller.AcquireEngine(_engineId, _sessionId);
+            await _controller.ReleaseEngine(_engineId, _sessionId);
 
-            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 124, null) as ObjectResult;
+            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 124, null);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.IsInstanceOf<BadRequestResult>(result);
         }
 
         [Test]
         public async Task CannotSetSpeedWithWrongSession()
         {
-            _controller.AcquireEngine(_engineId, _sessionId);
+            await _controller.AcquireEngine(_engineId, _sessionId);
 
             var result = await _controller.SetEngineSpeed(_sessionId + "wrong", _engineId, 124, null) as ObjectResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status401Unauthorized, result.StatusCode);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
         }
 
         /// <summary>
         /// Ensure an engine cannot be acquired twice.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void EngineCannotBeAcquiredTwice()
+        public async Task EngineCannotBeAcquiredTwiceAsync()
         {
-            _controller.AcquireEngine(_engineId, _sessionId);
-            var result = _controller.AcquireEngine(_engineId, _sessionId) as ObjectResult;
+            await _controller.AcquireEngine(_engineId, _sessionId);
+            var result = await _controller.AcquireEngine(_engineId, _sessionId) as StatusCodeResult;
             Assert.IsNotNull(result);
             Assert.AreEqual(StatusCodes.Status423Locked, result.StatusCode);
         }
@@ -145,23 +143,25 @@ namespace PiStellwerk.Test
         /// <summary>
         /// Ensure trying to acquire a non-existent engine does return a 404.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void NotExistingEngineCannotBeAcquired()
+        public async Task NotExistingEngineCannotBeAcquiredAsync()
         {
-            var result = _controller.AcquireEngine(_engineId + 1337, _sessionId) as ObjectResult;
+            var result = await _controller.AcquireEngine(_engineId + 1337, _sessionId) as ObjectResult;
             Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
         }
 
         /// <summary>
         /// Ensure an invalid sessionId cannot be used to acquire an engine.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public void InvalidSessionIdCannotAcquire()
+        public async Task InvalidSessionIdCannotAcquireAsync()
         {
-            var result = _controller.AcquireEngine(_engineId, "invalidId") as ObjectResult;
+            var result = await _controller.AcquireEngine(_engineId, "invalidId") as ObjectResult;
             Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status401Unauthorized, result.StatusCode);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
         }
     }
 }

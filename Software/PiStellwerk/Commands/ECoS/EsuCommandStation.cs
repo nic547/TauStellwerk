@@ -114,15 +114,15 @@ namespace PiStellwerk.Commands.ECoS
         }
 
         /// <inheritdoc/>
-        public bool TryAcquireEngine(Engine engine)
+        public Task<bool> TryAcquireEngine(Engine engine)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         /// <inheritdoc/>
-        public bool TryReleaseEngine(Engine engine)
+        public Task<bool> TryReleaseEngine(Engine engine)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         private void HandleStatusEvent(string message)
