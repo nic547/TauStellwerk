@@ -27,7 +27,6 @@ namespace PiStellwerk.Test
         private SqliteConnection _connection;
         private StwDbContext _context;
         private string _sessionId;
-        private ICommandSystem _commandSystem;
 
         /// <summary>
         /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
@@ -54,8 +53,6 @@ namespace PiStellwerk.Test
             });
 
             _context.SaveChanges();
-
-            _commandSystem = new NullCommandSystem();
 
             _controller = new EngineController(_context, new EngineService(new NullCommandSystem()));
 
