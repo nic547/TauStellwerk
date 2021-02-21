@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PiStellwerk.Commands;
 using PiStellwerk.Data;
 using PiStellwerk.Services;
 using PiStellwerk.Util;
@@ -48,9 +47,9 @@ namespace PiStellwerk.Controllers
         /// <param name="id">The id of the engine.</param>
         /// <returns>The engine with the given id.</returns>
         [HttpGet("{id}")]
-        public Engine GetEngine(int id)
+        public async Task<Engine> GetEngine(int id)
         {
-            return _dbContext.Engines.Include(x => x.Functions).Single(x => x.Id == id);
+            return await _dbContext.Engines.Include(x => x.Functions).SingleAsync(x => x.Id == id);
         }
 
         /// <summary>
@@ -60,13 +59,13 @@ namespace PiStellwerk.Controllers
         /// <param name="page">Page to load. Default and start is Zero.</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public IReadOnlyList<Engine> GetEngines(int page = 0)
+        public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
         {
-            return _dbContext.Engines
+            return await _dbContext.Engines
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
-                .ToList();
+                .ToListAsync();
         }
 
         [HttpPost("{id}/speed/{speed}")]
@@ -110,10 +109,10 @@ namespace PiStellwerk.Controllers
         [HttpPost("{id}/acquire")]
         public async Task<ActionResult> AcquireEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
-            var engine = _dbContext.Engines
+            var engine = await _dbContext.Engines
                 .Include(e => e.Functions)
                 .Include(e => e.ECoSEngineData)
-                .SingleOrDefault(e => e.Id == id);
+                .SingleOrDefaultAsync(e => e.Id == id);
 
             if (engine == null)
             {
@@ -135,7 +134,7 @@ namespace PiStellwerk.Controllers
             }
 
             engine.LastUsed = DateTime.Now;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} acquired {engine.Name}");
 
