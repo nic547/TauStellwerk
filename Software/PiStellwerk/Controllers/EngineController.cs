@@ -136,8 +136,6 @@ namespace PiStellwerk.Controllers
             engine.LastUsed = DateTime.Now;
             await _dbContext.SaveChangesAsync();
 
-            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} acquired {engine.Name}");
-
             return Ok();
         }
 
@@ -150,12 +148,12 @@ namespace PiStellwerk.Controllers
                 return BadRequest("Invalid SessionId provided.");
             }
 
-            if (await _engineService.ReleaseEngine(session, id))
+            if (!await _engineService.ReleaseEngine(session, id))
             {
-                return Ok();
+                return BadRequest();
             }
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

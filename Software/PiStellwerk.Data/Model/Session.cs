@@ -50,8 +50,12 @@ namespace PiStellwerk.Data
             get => _sessionId ?? string.Empty;
         }
 
-        public string ShortSessionId => new string(_sessionId?.Take(8).ToArray());
-
         public bool IsActive { get; set; } = true;
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{new string(_sessionId?.Take(8).ToArray())}:{_userName}";
+        }
     }
 }

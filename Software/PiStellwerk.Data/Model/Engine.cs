@@ -109,5 +109,10 @@ namespace PiStellwerk.Data
             var json = JsonSerializer.Serialize(this);
             return JsonSerializer.Deserialize<Engine>(json);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
