@@ -52,7 +52,8 @@ function addEngineToControlPanel(engine: Engine) {
     tempNode.querySelector("span").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());
 
-    (tempNode.querySelector("img") as HTMLImageElement).src = engine.imageFileName ?? "/img/noImageImage.webp";
+    var picture = (tempNode.querySelector("picture") as HTMLPictureElement);
+    picture.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.imageFileName}">`);
 
     tempNode.classList.remove("template");
     tempNode.removeAttribute("id");
@@ -153,11 +154,11 @@ function openEngineSelectionModal() {
 function addEngineToEngineSelection(engine: Engine) {
     const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
     const titleElement = tempNode.children[0] as HTMLElement;
-    const imageElement = tempNode.children[1].children[0] as HTMLImageElement;
+    const imageElement = tempNode.querySelector("picture") as HTMLPictureElement;
     const tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webp");
+    imageElement.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.imageFileName}">`);
     tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", choseEngineFromSelection);

@@ -25,6 +25,11 @@ namespace PiStellwerk
     /// </summary>
     public class Startup
     {
+        // TODO: Setting-ify
+        private const string _userContentDirectory = "userContent";
+        private const string _generatedContentDirectory = "generatedContent";
+        private const string _engineImageDirectory = "engineimages";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -93,11 +98,15 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
+            EnsureContentDirectoriesExist(env);
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new CompositeFileProvider(
                     new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, "userImages")),
+                        Path.Combine(env.ContentRootPath, _userContentDirectory)),
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
                     new PhysicalFileProvider(
                         Path.Combine(env.ContentRootPath, "wwwroot"))),
             });
@@ -110,6 +119,12 @@ namespace PiStellwerk
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void EnsureContentDirectoriesExist(IWebHostEnvironment env)
+        {
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
         }
     }
 }

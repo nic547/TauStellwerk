@@ -27,7 +27,9 @@
         <div class="ec-grid-header">
             <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
         </div>
-        <img src="img/noImageImage.webp" alt="Engine Image" class="ec-grid-image is-2by1"/>
+        <picture class="ec-grid-image is-2by1">
+            <img src="img/noImageImage.png" alt="Engine image"/>
+        </picture>
         <input class="ec-grid-slider has-100percent-height" type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
         <div class="ec-grid-direction">
             <button class="button is-small" disabled="disabled">
@@ -61,7 +63,7 @@
             <!-- Template for each engine-->
             <article class="template is-clickable card" id="EngineSelectionTemplate">
                 <header class="card-header"></header>
-                <figure class="card-image is-2by1"><img alt="Image of the Engine"/></figure>
+                <figure class="card-image is-2by1"><picture><img src="img/noImageImage.png" alt="Engine image"/></picture></figure>
                 <span class="tags card-content p-2"></span>
             </article>
         </div>
