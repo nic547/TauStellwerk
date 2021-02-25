@@ -45,6 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Images\PiStellwerk.Images.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
   </ItemGroup>
 

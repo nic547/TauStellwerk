@@ -6,6 +6,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -100,6 +101,8 @@ namespace PiStellwerk
 
             EnsureContentDirectoriesExist(env);
 
+            CheckForNewImages(env);
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new CompositeFileProvider(
@@ -125,6 +128,12 @@ namespace PiStellwerk
         {
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+        }
+
+        private async void CheckForNewImages(IWebHostEnvironment env)
+        {
+            var analyzer = new Images.ImageDirectoryAnalyzer(new StwDbContext(), Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
+            await Task.Run(analyzer.CheckForNewFiles);
         }
     }
 }

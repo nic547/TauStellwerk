@@ -53,7 +53,7 @@ function addEngineToControlPanel(engine: Engine) {
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());
 
     var picture = (tempNode.querySelector("picture") as HTMLPictureElement);
-    picture.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.imageFileName}">`);
+    picture.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
 
     tempNode.classList.remove("template");
     tempNode.removeAttribute("id");
@@ -158,7 +158,7 @@ function addEngineToEngineSelection(engine: Engine) {
     const tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    imageElement.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.imageFileName}">`);
+    imageElement.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
     tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", choseEngineFromSelection);
@@ -203,7 +203,7 @@ async function refreshContent() {
 class Engine {
     name: string;
     id: number;
-    imageFileName: string;
+    image: EngineImage[];
     tags: string[];
     functions: DccFunction[];
 }
@@ -212,6 +212,12 @@ class DccFunction {
     name: string;
     number: number;
     id: number;
+}
+
+class EngineImage {
+    filename: string;
+    type: string;
+    importance: number;
 }
 
 

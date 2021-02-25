@@ -67,6 +67,7 @@ namespace PiStellwerk.Controllers
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
+                .Include(e => e.Image)
                 .ToListAsync();
             return test;
         }
