@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using PiStellwerk.Data.Model;
 
 namespace PiStellwerk.Data
 {
@@ -29,6 +30,8 @@ namespace PiStellwerk.Data
         /// Gets or sets the collection of engines in the database.
         /// </summary>
         public DbSet<Engine> Engines { get; set; }
+
+        public DbSet<EngineImage> Engineimages { get; set; }
 
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

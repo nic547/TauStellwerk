@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Data.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    partial class StwDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210225193922_MutliImageSupport")]
+    partial class MutliImageSupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

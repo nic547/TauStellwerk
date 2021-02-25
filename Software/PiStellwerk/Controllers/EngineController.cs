@@ -48,7 +48,10 @@ namespace PiStellwerk.Controllers
         [HttpGet("{id}")]
         public async Task<Engine> GetEngine(int id)
         {
-            return await _dbContext.Engines.Include(x => x.Functions).SingleAsync(x => x.Id == id);
+            return await _dbContext.Engines
+                .Include(x => x.Functions)
+                .Include(x => x.Image)
+                .SingleAsync(x => x.Id == id);
         }
 
         /// <summary>
@@ -60,11 +63,12 @@ namespace PiStellwerk.Controllers
         [HttpGet("List")]
         public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
         {
-            return await _dbContext.Engines
+            var test = await _dbContext.Engines
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
                 .ToListAsync();
+            return test;
         }
 
         [HttpPost("{id}/speed/{speed}")]

@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
 using JetBrains.Annotations;
+using PiStellwerk.Data.Model;
 
 namespace PiStellwerk.Data
 {
@@ -75,8 +76,7 @@ namespace PiStellwerk.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData ECoSEngineData { get; init; }
 
-        [CanBeNull]
-        public string ImageFileName { get; set; }
+        public List<EngineImage> Image { get; } = new();
 
         public DateTime LastUsed { get; set; }
 
