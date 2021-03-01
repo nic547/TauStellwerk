@@ -3,8 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-#nullable enable
-
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

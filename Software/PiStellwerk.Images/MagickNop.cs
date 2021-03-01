@@ -5,8 +5,6 @@
 
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace PiStellwerk.Images
 {
     /// <summary>
