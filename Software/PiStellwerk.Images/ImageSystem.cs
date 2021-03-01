@@ -1,31 +1,37 @@
-﻿// <copyright file="ImageDirectoryAnalyzer.cs" company="Dominic Ritz">
+﻿// <copyright file="ImageSystem.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
 #nullable enable
 
-using System;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Model;
 
 namespace PiStellwerk.Images
 {
-    public class ImageDirectoryAnalyzer
+    public class ImageSystem
     {
-        private StwDbContext _context;
-        private string _userPath;
+        private readonly StwDbContext _context;
+        private readonly string _userPath;
 
-        public ImageDirectoryAnalyzer(StwDbContext context, string userPath)
+        public ImageSystem(StwDbContext context, string userPath)
         {
             _userPath = userPath;
             _context = context;
         }
 
-        public async void CheckAndGenerateImages()
+        public async void RunImageSetup()
+        {
+            await CheckForLostUserFiles();
+
+            _ = await MagickFactory.Create();
+        }
+
+        private async Task CheckForLostUserFiles()
         {
             var files = Directory.GetFiles(_userPath);
             foreach (string file in files)

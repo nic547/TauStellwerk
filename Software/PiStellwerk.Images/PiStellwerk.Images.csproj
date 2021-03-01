@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
   </ItemGroup>
 
 </Project>

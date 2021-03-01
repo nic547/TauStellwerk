@@ -101,7 +101,7 @@ namespace PiStellwerk
 
             EnsureContentDirectoriesExist(env);
 
-            CheckForNewImages(env);
+            RunImageSetup(env);
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -130,10 +130,10 @@ namespace PiStellwerk
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
         }
 
-        private async void CheckForNewImages(IWebHostEnvironment env)
+        private async void RunImageSetup(IWebHostEnvironment env)
         {
-            var analyzer = new Images.ImageDirectoryAnalyzer(new StwDbContext(), Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
-            await Task.Run(analyzer.CheckForNewFiles);
+            var system = new Images.ImageSystem(new StwDbContext(), Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
+            await Task.Run(system.RunImageSetup);
         }
     }
 }
