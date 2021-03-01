@@ -13,6 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="userContent\**" />
+    <Content Remove="userContent\**" />
+    <EmbeddedResource Remove="userContent\**" />
+    <None Remove="userContent\**" />
+    <TypeScriptCompile Remove="userContent\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="libman.json" />
     <Content Remove="wwwroot\scripts\Engine.ts" />
   </ItemGroup>

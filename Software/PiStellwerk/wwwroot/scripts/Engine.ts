@@ -53,7 +53,7 @@ function addEngineToControlPanel(engine: Engine) {
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());
 
     var picture = (tempNode.querySelector("picture") as HTMLPictureElement);
-    picture.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
+    addEngineImagesToPicture(picture, engine);
 
     tempNode.classList.remove("template");
     tempNode.removeAttribute("id");
@@ -158,7 +158,7 @@ function addEngineToEngineSelection(engine: Engine) {
     const tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    imageElement.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
+    addEngineImagesToPicture(imageElement, engine);
     tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
 
     tempNode.addEventListener("click", choseEngineFromSelection);
@@ -235,4 +235,11 @@ function getEngineId(element: HTMLElement): number {
         }
     }
     return parseInt(element.getAttribute(engineIdAttribute));
+}
+
+function addEngineImagesToPicture(element: HTMLPictureElement, engine: Engine): void {
+    if (engine.image.length === 0) {
+        return;
+    }
+    element.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
 }
