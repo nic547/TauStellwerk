@@ -132,7 +132,10 @@ namespace PiStellwerk
 
         private async void RunImageSetup(IWebHostEnvironment env)
         {
-            var system = new Images.ImageSystem(new StwDbContext(), Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
+            var system = new Images.ImageSystem(
+                new StwDbContext(),
+                Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory),
+                Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
             await Task.Run(system.RunImageSetup);
         }
     }

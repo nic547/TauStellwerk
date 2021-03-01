@@ -6,10 +6,12 @@
 #nullable enable
 
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 using PiStellwerk.Data.Model;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Images
 {
@@ -17,18 +19,35 @@ namespace PiStellwerk.Images
     {
         private readonly StwDbContext _context;
         private readonly string _userPath;
+        private readonly string _generatedPath;
 
-        public ImageSystem(StwDbContext context, string userPath)
+        public ImageSystem(StwDbContext context, string userPath, string generatedPath)
         {
             _userPath = userPath;
+            _generatedPath = generatedPath;
             _context = context;
         }
 
         public async void RunImageSetup()
         {
-            await CheckForLostUserFiles();
+            if (!await HasMagickAvailable())
+            {
+                return;
+            }
 
-            _ = await MagickFactory.Create();
+            await CheckForLostUserFiles();
+            await CheckForMissingImageWidth();
+        }
+
+        public async Task<bool> HasMagickAvailable()
+        {
+            var magick = await MagickBase.GetInstance();
+            if (magick.GetType() == typeof(MagickNop))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private async Task CheckForLostUserFiles()
@@ -52,14 +71,35 @@ namespace PiStellwerk.Images
 
                 var engine = await _context.Engines.SingleOrDefaultAsync(e => e.Id == idCandidate);
 
-                engine?.Image.Add(new EngineImage()
+                engine?.Image.Add(new EngineImage(Path.GetFileName(file))
                 {
-                    Filename = Path.GetFileName(file),
                     IsGenerated = false,
                 });
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private async Task CheckForMissingImageWidth()
+        {
+            var magick = await MagickBase.GetInstance();
+            var imagesMissingWidth = await _context.Engineimages.Where(i => i.Width == 0).ToListAsync();
+
+            foreach (var image in imagesMissingWidth)
+            {
+                string path = image.IsGenerated ? _generatedPath : _userPath;
+                var width = await magick.GetImageWidth(Path.Combine(path, image.Filename));
+                if (width != 0)
+                {
+                    image.Width = width;
+                }
+                else
+                {
+                    ConsoleService.PrintWarning($"Image {image.Filename} has no width and width couldn't be determined.");
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

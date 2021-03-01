@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
 
@@ -16,20 +15,8 @@ namespace PiStellwerk.Images
         {
             try
             {
-                var p = new Process
-                {
-                    StartInfo =
-                    {
-                        FileName = "identify",
-                        Arguments = "-version",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        RedirectStandardInput = true,
-                    },
-                };
-                p.Start();
-                await p.WaitForExitAsync();
-                if (p.ExitCode == 0)
+                var result = await RunCommand("identify", "-version");
+                if (result.ExitCode == 0)
                 {
                     ConsoleService.PrintMessage("ImageMagick v2 seems to be available on this device.");
                     return true;
@@ -45,9 +32,11 @@ namespace PiStellwerk.Images
             }
         }
 
-        public override Task<int> GetImageWidth(string path)
+        public override async Task<int> GetImageWidth(string path)
         {
-            throw new NotImplementedException();
+            var (_, output) = await RunCommand("identify", $"-ping {path}");
+            var match = SizeRegex.Match(output);
+            return int.Parse(match.Groups["width"].Value);
         }
     }
 }
