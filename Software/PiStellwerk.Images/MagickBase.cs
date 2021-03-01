@@ -46,7 +46,7 @@ namespace PiStellwerk.Images
 
         public abstract Task<int> GetImageWidth(string path);
 
-        internal async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
+        internal static async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
         {
             var p = new Process
             {

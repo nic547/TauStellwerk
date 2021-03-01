@@ -124,13 +124,13 @@ namespace PiStellwerk
             });
         }
 
-        private void EnsureContentDirectoriesExist(IWebHostEnvironment env)
+        private static void EnsureContentDirectoriesExist(IHostEnvironment env)
         {
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
         }
 
-        private async void RunImageSetup(IWebHostEnvironment env)
+        private static async void RunImageSetup(IHostEnvironment env)
         {
             var system = new Images.ImageSystem(
                 new StwDbContext(),

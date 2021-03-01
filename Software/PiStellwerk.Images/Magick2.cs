@@ -15,8 +15,8 @@ namespace PiStellwerk.Images
         {
             try
             {
-                var result = await RunCommand("identify", "-version");
-                if (result.ExitCode == 0)
+                var (exitCode, _) = await RunCommand("identify", "-version");
+                if (exitCode == 0)
                 {
                     ConsoleService.PrintMessage("ImageMagick v2 seems to be available on this device.");
                     return true;

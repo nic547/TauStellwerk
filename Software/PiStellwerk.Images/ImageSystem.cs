@@ -26,6 +26,17 @@ namespace PiStellwerk.Images
             _context = context;
         }
 
+        public static async Task<bool> HasMagickAvailable()
+        {
+            var magick = await MagickBase.GetInstance();
+            if (magick.GetType() == typeof(MagickNop))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async void RunImageSetup()
         {
             if (!await HasMagickAvailable())
@@ -35,17 +46,6 @@ namespace PiStellwerk.Images
 
             await CheckForLostUserFiles();
             await CheckForMissingImageWidth();
-        }
-
-        public async Task<bool> HasMagickAvailable()
-        {
-            var magick = await MagickBase.GetInstance();
-            if (magick.GetType() == typeof(MagickNop))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         private async Task CheckForLostUserFiles()
