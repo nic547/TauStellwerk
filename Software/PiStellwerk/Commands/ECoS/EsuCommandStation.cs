@@ -127,7 +127,16 @@ namespace PiStellwerk.Commands.ECoS
 
         private void HandleStatusEvent(string message)
         {
-            StatusChanged?.Invoke(message.Contains("status[GO]"));
+            if (message.Contains("status[GO]"))
+            {
+                StatusChanged?.Invoke(true);
+                return;
+            }
+
+            if (message.Contains("status[STOP]"))
+            {
+                StatusChanged?.Invoke(false);
+            }
         }
 
         private async Task Initialize()
