@@ -218,6 +218,17 @@ class EngineImage {
     filename: string;
     type: string;
     importance: number;
+    width: number;
+}
+
+class GroupedImage {
+    type: string;
+    images: EngineImage[];
+
+    constructor(type: string) {
+        this.type = type;
+        this.images = new Array<EngineImage>();
+    }
 }
 
 
@@ -241,5 +252,27 @@ function addEngineImagesToPicture(element: HTMLPictureElement, engine: Engine): 
     if (engine.image.length === 0) {
         return;
     }
-    element.insertAdjacentHTML("afterbegin", `<source srcset="/engineimages/${engine.image[0]?.filename}">`);
+
+    var groups = groupImages(engine.image);
+
+    for (const group of groups) {
+        const srcsetElement = group.images.map(i => `engineImages/${i.filename} ${i.width}w`);
+        const srcset = srcsetElement.join(",");
+        element.insertAdjacentHTML("afterbegin", `<source srcset="${srcset}" type="${group.type}">`);
+    }
+}
+
+function groupImages(images: EngineImage[]): GroupedImage[] {
+    const result = new Array<GroupedImage>();
+
+    for (let image of images) {
+        let group = result.find(g => g.type === image.type);
+
+        if (group == null) {
+            group = new GroupedImage(image.type);
+            result.push(group);
+        }
+        group.images.push(image);
+    }
+    return result;
 }

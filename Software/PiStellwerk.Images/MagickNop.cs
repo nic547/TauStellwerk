@@ -17,6 +17,11 @@ namespace PiStellwerk.Images
             return Task.FromResult(0);
         }
 
+        public override Task<bool> Resize(string input, string output, int outputScale)
+        {
+            return Task.FromResult(false);
+        }
+
         public override Task<bool> IsAvailable()
         {
             return Task.FromResult(true);

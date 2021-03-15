@@ -15,6 +15,8 @@ namespace PiStellwerk.Images
 {
     public class ImageSystem
     {
+        private readonly (string Prefix, int Size)[] _downScaleValues = new[] { ("half_", 50), ("quarter_", 25) };
+
         private readonly StwDbContext _context;
         private readonly string _userPath;
         private readonly string _generatedPath;
@@ -46,6 +48,7 @@ namespace PiStellwerk.Images
 
             await CheckForLostUserFiles();
             await CheckForMissingImageWidth();
+            await CreateDownScaledImages();
         }
 
         private async Task CheckForLostUserFiles()
@@ -98,6 +101,60 @@ namespace PiStellwerk.Images
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task CreateDownScaledImages()
+        {
+            foreach (var engine in _context.Engines.Include(e => e.Image))
+            {
+                if (!engine.Image.Any() || engine.Image.Count == _downScaleValues.Length + 1)
+                {
+                    continue;
+                }
+
+                var originalImage = engine.Image.SingleOrDefault(i => !i.IsGenerated);
+                if (originalImage == null)
+                {
+                    continue;
+                }
+
+                foreach (var (prefix, size) in _downScaleValues)
+                {
+                    var newImage = await DownscaleImage(Path.Combine(_userPath, originalImage.Filename), prefix, size);
+                    if (newImage != null)
+                    {
+                        engine.Image.Add(
+                            new EngineImage(newImage.Value.Filename)
+                            {
+                                IsGenerated = true,
+                                Width = newImage.Value.Width,
+                            });
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
+        private async Task<(string Filename, int Width)?> DownscaleImage(string inputFilePath, string prefix, int size)
+        {
+            var newFileName = prefix + Path.GetFileName(inputFilePath);
+            var newFilePath = Path.Combine(_generatedPath, newFileName);
+            var magick = await MagickBase.GetInstance();
+
+            var success = await magick.Resize(inputFilePath, newFilePath, size);
+            if (!success)
+            {
+                ConsoleService.PrintError($"Failed to downscale {Path.GetFileName(inputFilePath)}");
+                return null;
+            }
+
+            var width = await magick.GetImageWidth(newFilePath);
+            if (width == 0)
+            {
+                ConsoleService.PrintError($"{newFileName}'s size could not be determined.");
+            }
+
+            return (newFileName, width);
         }
     }
 }

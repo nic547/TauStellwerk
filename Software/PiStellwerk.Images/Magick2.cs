@@ -38,5 +38,11 @@ namespace PiStellwerk.Images
             var match = SizeRegex.Match(output);
             return int.Parse(match.Groups["width"].Value);
         }
+
+        public override async Task<bool> Resize(string input, string output, int outputScale)
+        {
+            var (returnCode, _) = await RunCommand("magick", $"{input} -resize {outputScale}% {output}");
+            return returnCode == 0;
+        }
     }
 }

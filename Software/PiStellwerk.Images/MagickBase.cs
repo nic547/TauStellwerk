@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace PiStellwerk.Images
     {
         private static MagickBase? _instance;
 
-        internal Regex SizeRegex { get; } = new Regex(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
+        protected internal Regex SizeRegex { get; } = new Regex(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
 
         public static async Task<MagickBase> GetInstance()
         {
@@ -45,6 +46,8 @@ namespace PiStellwerk.Images
         public abstract Task<bool> IsAvailable();
 
         public abstract Task<int> GetImageWidth(string path);
+
+        public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale);
 
         internal static async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
         {
