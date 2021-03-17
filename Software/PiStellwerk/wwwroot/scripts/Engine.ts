@@ -256,7 +256,7 @@ function addEngineImagesToPicture(element: HTMLPictureElement, engine: Engine): 
     var groups = groupImages(engine.image);
 
     for (const group of groups) {
-        const srcsetElement = group.images.map(i => `engineImages/${i.filename} ${i.width}w`);
+        const srcsetElement = group.images.map(i => `engineimages/${i.filename} ${i.width}w`);
         const srcset = srcsetElement.join(",");
         element.insertAdjacentHTML("afterbegin", `<source srcset="${srcset}" type="${group.type}">`);
     }
