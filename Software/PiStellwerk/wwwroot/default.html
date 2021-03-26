@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
     <link rel="stylesheet" href="lib/bulma/css/bulma.min.css">
-    <link href="lib/font-awesome/css/solid.min.css" rel="stylesheet">
-    <link href="lib/font-awesome/css/fontawesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="module" src="scripts/status.js"></script>
     <script type="module" src="scripts/user.js"></script>
@@ -25,20 +23,15 @@
     <!-- Template for each control block -->
     <div class="box uses-ec-grid column template is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2" id="EngineTemplate">
         <div class="ec-grid-header">
-            <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></span>
+            <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small">✖</span>
         </div>
         <picture class="ec-grid-image is-2by1">
             <img src="img/noImageImage.png" alt="Engine image"/>
         </picture>
         <input class="ec-grid-slider has-100percent-height" type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
         <div class="ec-grid-direction">
-            <button class="button is-small" disabled="disabled">
-                <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
-            </button>
-            <button class="button is-small">
-                <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
-            </button>
-            
+            <button class="button is-small" disabled="disabled"><span class="icon">🡰</span></button>
+            <button class="button is-small"><span class="icon">🡲</span></button>
         </div>
         <output class="ec-grid-speed">0</output>
         <div class="ec-grid-functions buttons are-small can-scroll-y has-100percent-maxheight">
@@ -57,7 +50,7 @@
     <div class="modal-card has-background-white has-80percent-width p-3">
         <div class="HeaderWithButton modal-card-head p-2">
             <header></header>
-            <button id="EngineSelectionClose" class="button is-small"><span class="icon is-small"><i class="fas fa-times"></i></span></button>
+            <button id="EngineSelectionClose" class="button is-small">✖</button>
         </div>
         <div id="EngineSelectionContainer" class="selection-grid modal-card-body">
             <!-- Template for each engine-->
@@ -68,12 +61,8 @@
             </article>
         </div>
         <div class="modal-card-foot p-2">
-            <button id="EngineSelectionBackwards" class="button is-small" disabled="disabled">
-                <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
-            </button>
-            <button id="EngineSelectionForward" class="button is-small">
-                <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
-            </button>
+            <button id="EngineSelectionBackwards" class="button is-small" disabled="disabled">🡰</button>
+            <button id="EngineSelectionForward" class="button is-small">🡲</button>
         </div>
     </div>
 </div>
@@ -93,7 +82,7 @@
 </div>
 <footer>
     <span class="button is-pulled-left is-clickable" id="UsernameLabel">User: Username</span>
-    <span class="button is-clickable is-pulled-right"><span><i class="fas fa-tools"></i></span></span>
+    <span class="button is-clickable is-pulled-right">Settings</span>
 </footer>
 </body>
 </html>
