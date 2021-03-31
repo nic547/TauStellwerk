@@ -1,0 +1,54 @@
+﻿/* 
+    generic.css
+    
+    Contains styles that are not specific to a single element.
+    Essentitialy a "Mini"-Framework
+*/
+
+.has-background-primary {
+    background-color: var(--primary-color);
+}
+
+.has-background-primary-light {
+    background-color: var(--primary-color-light);
+}
+
+.has-background-danger {
+    background-color: var(--danger-color);
+}
+
+.has-background-danger-light {
+    background-color: var(--danger-color-light);
+}
+
+.has-background {
+    background-color: var(--background-color);
+}
+
+.is-clickable {
+    cursor: pointer;
+}
+
+.is-flex-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+}
+
+.active-modal {
+    display: block;
+}
+
+.modal-content {
+    background-color: var(--background-color);
+}

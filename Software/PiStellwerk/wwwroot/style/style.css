@@ -1,18 +1,33 @@
 ﻿:root {
-	font-family: sans-serif;
-	user-select: none;
+	--engine-controller-width: calc((100vw - 2 * 16px) / 1); /* In the engine controller margins get collapsed */
+	--engine-selection-width: calc((100vw - 2 * 8px) / 1 - 1 * 16px); /* But that doesn't happen in the engine selection */
 }
 
-html {
-	height: 100%;
+@media (min-width: 769px) {
+	:root {
+		--engine-controller-width: calc((100vw - 3 * 16px) / 2);
+		--engine-selection-width: calc((100vw - 2 * 8px) / 2 - 2 * 16px);
+	}
 }
 
+@media (min-width: 1024px) {
+	:root {
+		--engine-controller-width: calc((100vw - 4 * 16px) / 3);
+	}
+}
 
-body {
-	display:flex;
-	height: 100%;
-	flex-direction:column;
-	align-items: stretch;
+@media (min-width: 1216px) {
+	:root {
+		--engine-controller-width: calc((100vw - 5 * 16px) / 4);
+		--engine-selection-width: calc((100vw - 2 * 8px) / 4 - 4 * 16px);
+	}
+}
+
+@media (min-width: 1408px) {
+	:root {
+		--engine-controller-width: calc((100vw - 6 * 16px) / 5);
+		--engine-selection-width: calc((100vw - 2 * 8px) / 5 - 5 * 16px);
+	}
 }
 
 
@@ -38,8 +53,9 @@ body {
 }
 
 #EngineContainer {
-	overflow-x: scroll;
+	overflow-x: hidden;
 	overflow-y: hidden;
+	padding-bottom: 24px; /* Ensure that there is enough space for a bit of shadow on the bottom, esp. with the scrollbar visible*/
 	}
 
 
@@ -51,16 +67,26 @@ body {
 	max-height: 100%;
 }
 
-.uses-ec-grid {
+.is-engine-controller {
 	height: 100%;
+	width: calc(var(--engine-controller-width) + 8px);
+
+	border-width: 0;
+	border-radius: 5px;
+
+	margin: 4px;
+	padding: 4px;
+	box-shadow: 0 0 8px gray;
+
+	/* Grid for Child Items*/
 	display: grid;
 	grid-template-areas: "header header"
-	                     "image image"
-	                     "slider functions"
-	                     "direction functions"
-	                     "speed functions";
+		"image image"
+		"slider functions"
+		"direction functions"
+		"speed functions";
 	grid-template-columns: 5em auto;
-	grid-template-rows: 2.5em auto auto 2.5em 2.5em;
+	grid-template-rows: 2.5em calc(var(--engine-controller-width) / 2 ) auto 2.5em 2.5em;
 	align-items: center;
 }
 
@@ -70,7 +96,14 @@ body {
 
 .ec-grid-image {
 	grid-area: image;
+	width: var(--engine-controller-width);
+	height: calc(var(--engine-controller-width) / 2);
 }
+
+	.ec-grid-image > img {
+		width: var(--engine-controller-width);
+		height: calc(var(--engine-controller-width) / 2);
+	}
 
 .ec-grid-slider {
 	grid-area: slider;
@@ -142,8 +175,7 @@ footer {
 	}
 }
 
-
-/* Allows the has-text-left class from bulma to effect buttons. */
-.button.has-text-left {
-	justify-content: flex-start;
+.card-image > picture > img {
+    width: var(--engine-selection-width);
+    height: calc(var(--engine-selection-width) / 2);
 }

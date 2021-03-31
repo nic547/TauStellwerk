@@ -4,53 +4,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
-    <link rel="stylesheet" href="lib/bulma/css/bulma.min.css">
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="style/generic.css" type="text/css">
+    <link rel="stylesheet" href="style/base.css" type="text/css">
+    <link rel="stylesheet" href="style/style.css" type="text/css">
+    <link rel="stylesheet" href="style/theme_light.css" type="text/css">
     <script type="module" src="scripts/status.js"></script>
     <script type="module" src="scripts/user.js"></script>
     <script type="module" src="scripts/Engine.js"></script>
     <title>PiStellwerk</title>
 </head>
 <body>
-<header id="CommandButton" class="has-background-danger">
+<header id="CommandButton" class="has-background-danger is-clickable">
     <span class="title" id="CommandTitle">STOPPED (LOCKED)</span>
     <br/>
     <span id="CommandDetails">stopped by: SYSTEM</span>
 </header>
 
 
-<div id="EngineContainer" class="columns is-mobile has-100percent-height m-0 pb-3">
+<div id="EngineContainer" class="is-flex-horizontal has-100percent-height">
     <!-- Template for each control block -->
-    <div class="box uses-ec-grid column template is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2" id="EngineTemplate">
+    <div class="box is-engine-controller column template" id="EngineTemplate">
         <div class="ec-grid-header">
             <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small">✖</span>
         </div>
-        <picture class="ec-grid-image is-2by1">
+        <picture class="ec-grid-image">
             <img src="img/noImageImage.png" alt="Engine image"/>
         </picture>
         <input class="ec-grid-slider has-100percent-height" type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
         <div class="ec-grid-direction">
-            <button class="button is-small" disabled="disabled"><span class="icon">🡰</span></button>
-            <button class="button is-small"><span class="icon">🡲</span></button>
+            <button disabled="disabled">🡰</button>
+            <button>🡲</button>
         </div>
         <output class="ec-grid-speed">0</output>
         <div class="ec-grid-functions buttons are-small can-scroll-y has-100percent-maxheight">
         </div>
     </div>
     <!-- "Emtpy" control panel with Button to open the engine selection dialog. -->
-    <div class="box has-text-centered uses-ec-grid column is-full-mobile is-half-tablet is-one-third-desktop is-one-quarter-widescreen is-one-fifth-fullhd m-2">
-        <span id="SelectEngineButton" class="button is-primary convers-full-ec-grid mx-3">Select Engine</span>
+    <div class="is-engine-controller uses-ec-grid">
+        <button id="SelectEngineButton" class="has-background-primary convers-full-ec-grid">Select Engine</button>
     </div>
 </div>
 
 <!-- Engine selection overlay-->
 
 <div id="EngineSelectionModal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card has-background-white has-80percent-width p-3">
+    <div class="modal-content">
         <div class="HeaderWithButton modal-card-head p-2">
             <header></header>
-            <button id="EngineSelectionClose" class="button is-small">✖</button>
+            <button id="EngineSelectionClose">✖</button>
         </div>
         <div id="EngineSelectionContainer" class="selection-grid modal-card-body">
             <!-- Template for each engine-->
@@ -69,8 +70,7 @@
 
 <!-- Username overlay -->
 <div id="UsernameOverlay" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card has-background-white p-3">
+    <div class="modal-card has-background">
         <form id="UsernameForm">
             <div class="field">
                 <label class="label">Please enter your username:</label>

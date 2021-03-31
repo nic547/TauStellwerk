@@ -1,0 +1,30 @@
+﻿/* 
+    base.css
+    
+    Basic styles that apply to all elmenents of a type.
+*/
+
+:root {
+    font-family: sans-serif;
+    user-select: none;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0 8px 8px 8px;
+    height: calc(100% - 8px);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+button {
+    border-radius: 5px;
+    border-width: 0;
+    padding: 5px;
+    font-size: 1em
+}
