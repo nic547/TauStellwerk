@@ -38,7 +38,7 @@ async function commandButtonPressed() {
 }
 
 export function startStatusUpdates() {
-    statusIntervalHandle = setInterval(() => regularUpdate(), 5000);
+    statusIntervalHandle = window.setInterval(() => regularUpdate(), 5000);
 }
 
 export function stopStatusUpdates() {

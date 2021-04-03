@@ -25,6 +25,22 @@ body {
 button {
     border-radius: 5px;
     border-width: 0;
-    padding: 5px;
-    font-size: 1em
+    padding: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+output, input, label {
+    font-size: 1.2em;
+}
+
+@media (min-width: 1024px) {
+    button, output, input, label {
+        font-size: 1em;
+    }
+}
+
+form > * {
+    margin: 5px;
+    display: block;
 }

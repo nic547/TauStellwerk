@@ -61,7 +61,7 @@ function addEngineToControlPanel(engine: Engine) {
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleEngineThrottleChange);
 
-    tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
+    tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
     const functionContainer = tempNode.getElementsByClassName("ec-grid-functions")[0] as HTMLDivElement;
 
@@ -159,7 +159,7 @@ function addEngineToEngineSelection(engine: Engine) {
 
     titleElement.innerHTML = engine.name;
     addEngineImagesToPicture(imageElement, engine);
-    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
+    tagsElement.innerHTML = engine.tags.map(tag => `<span>${tag}</span>`).join("");
 
     tempNode.addEventListener("click", choseEngineFromSelection);
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());

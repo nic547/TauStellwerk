@@ -1,12 +1,12 @@
 ﻿:root {
 	--engine-controller-width: calc((100vw - 2 * 16px) / 1); /* In the engine controller margins get collapsed */
-	--engine-selection-width: calc((100vw - 2 * 8px) / 1 - 1 * 16px); /* But that doesn't happen in the engine selection */
+	--engine-selection-width: calc((100vw - 60px - 1 * 16px) / 1); /* But that doesn't happen in the engine selection */
 }
 
 @media (min-width: 769px) {
 	:root {
 		--engine-controller-width: calc((100vw - 3 * 16px) / 2);
-		--engine-selection-width: calc((100vw - 2 * 8px) / 2 - 2 * 16px);
+		--engine-selection-width: calc((100vw - 60px - 2 * 16px) / 2);
 	}
 }
 
@@ -19,14 +19,14 @@
 @media (min-width: 1216px) {
 	:root {
 		--engine-controller-width: calc((100vw - 5 * 16px) / 4);
-		--engine-selection-width: calc((100vw - 2 * 8px) / 4 - 4 * 16px);
+		--engine-selection-width: calc((100vw - 60px - 4 * 16px) / 4);
 	}
 }
 
 @media (min-width: 1408px) {
 	:root {
 		--engine-controller-width: calc((100vw - 6 * 16px) / 5);
-		--engine-selection-width: calc((100vw - 2 * 8px) / 5 - 5 * 16px);
+		--engine-selection-width: calc((100vw - 60px - 5 * 16px) / 5);
 	}
 }
 
@@ -36,9 +36,7 @@
 }
 
 #CommandButton {
-
-	width: 100%;
-	margin: 0;
+	margin: 0 -8px;
 	text-align: center;
 	padding: 1em;
 	flex: 0 0 auto;
@@ -56,15 +54,6 @@
 	overflow-x: hidden;
 	overflow-y: hidden;
 	padding-bottom: 24px; /* Ensure that there is enough space for a bit of shadow on the bottom, esp. with the scrollbar visible*/
-	}
-
-
-.has-100percent-height {
-	height: 100%;
-}
-
-.has-100percent-maxheight {
-	max-height: 100%;
 }
 
 .is-engine-controller {
@@ -76,7 +65,6 @@
 
 	margin: 4px;
 	padding: 4px;
-	box-shadow: 0 0 8px gray;
 
 	/* Grid for Child Items*/
 	display: grid;
@@ -126,23 +114,8 @@
 	grid-area: 1 / 1 / span 5 / span 2;
 }
 
-.has-80percent-width {
-	        width: 80%;
-}
-
 .template {
 	display: none;
-}
-
-.can-scroll-y {
-	overflow-y: scroll;
-
-}
-
-.modal-content, .modal-card {
-	/* Ensure the e-stop button cannot cover the content of a modal*/
-	margin-top: 90px;
-
 }
 
 footer {
@@ -152,9 +125,13 @@ footer {
 
 .selection-grid {
 	display: grid;
-	grid-template-columns: 1fr;
-	grid-auto-rows: minmax(min-content, 1fr);
-	grid-gap: 0.5rem;
+	grid-gap: 0;
+}
+
+.selection-grid > article {
+	margin: 4px;
+	padding: 4px;
+	width: var(--engine-selection-width);
 }
 
 @media (min-width: 769px) {
@@ -175,7 +152,7 @@ footer {
 	}
 }
 
-.card-image > picture > img {
+.selection-image > img {
     width: var(--engine-selection-width);
     height: calc(var(--engine-selection-width) / 2);
 }

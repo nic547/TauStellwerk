@@ -2,7 +2,7 @@
 var sessionId = "";
 
 const overlay = document.getElementById("UsernameOverlay");
-const usernameLabel = document.getElementById("UsernameLabel") as HTMLLabelElement;
+const usernameLabel = document.getElementById("UsernameLabel") as HTMLButtonElement;
 const usernameForm = document.getElementById("UsernameForm") as HTMLFormElement;
 const usernameInput = document.getElementById("UsernameInput") as HTMLInputElement;
 

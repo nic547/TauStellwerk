@@ -23,9 +23,9 @@
 
 <div id="EngineContainer" class="is-flex-horizontal has-100percent-height">
     <!-- Template for each control block -->
-    <div class="box is-engine-controller column template" id="EngineTemplate">
+    <div class="box is-engine-controller template has-shadow" id="EngineTemplate">
         <div class="ec-grid-header">
-            <span class="is-pulled-left">Engine name</span><span class="button is-pulled-right is-small">✖</span>
+            <span class="is-pulled-left">Engine name</span><button class="is-pulled-right">✖</button>
         </div>
         <picture class="ec-grid-image">
             <img src="img/noImageImage.png" alt="Engine image"/>
@@ -36,11 +36,11 @@
             <button>🡲</button>
         </div>
         <output class="ec-grid-speed">0</output>
-        <div class="ec-grid-functions buttons are-small can-scroll-y has-100percent-maxheight">
+        <div class="ec-grid-functions can-scroll-y has-100percent-maxheight">
         </div>
     </div>
-    <!-- "Emtpy" control panel with Button to open the engine selection dialog. -->
-    <div class="is-engine-controller uses-ec-grid">
+    <!-- "Empty" control panel with Button to open the engine selection dialog. -->
+    <div class="is-engine-controller uses-ec-grid has-shadow">
         <button id="SelectEngineButton" class="has-background-primary convers-full-ec-grid">Select Engine</button>
     </div>
 </div>
@@ -48,41 +48,41 @@
 <!-- Engine selection overlay-->
 
 <div id="EngineSelectionModal" class="modal">
-    <div class="modal-content">
-        <div class="HeaderWithButton modal-card-head p-2">
+    <div class="modal-content-fullwidth">
+        <div class="modal-header">
             <header></header>
             <button id="EngineSelectionClose">✖</button>
         </div>
-        <div id="EngineSelectionContainer" class="selection-grid modal-card-body">
+        <div class="can-scroll-y modal-body">
+            <div id="EngineSelectionContainer" class="selection-grid">
             <!-- Template for each engine-->
-            <article class="template is-clickable card" id="EngineSelectionTemplate">
-                <header class="card-header"></header>
-                <figure class="card-image is-2by1"><picture><img src="img/noImageImage.png" alt="Engine image"/></picture></figure>
-                <span class="tags card-content p-2"></span>
+            <article class="template is-clickable has-shadow" id="EngineSelectionTemplate">
+                <header></header>
+                <picture class="selection-image"><img src="img/noImageImage.png" alt="Engine image"/></picture>
+                <span class="tags"></span>
             </article>
+            </div>
         </div>
-        <div class="modal-card-foot p-2">
-            <button id="EngineSelectionBackwards" class="button is-small" disabled="disabled">🡰</button>
-            <button id="EngineSelectionForward" class="button is-small">🡲</button>
+        <div class="modal-footer">
+            <button id="EngineSelectionBackwards" disabled="disabled">🡰</button>
+            <button id="EngineSelectionForward">🡲</button>
         </div>
     </div>
 </div>
 
 <!-- Username overlay -->
 <div id="UsernameOverlay" class="modal">
-    <div class="modal-card has-background">
+    <div class="modal-content">
         <form id="UsernameForm">
-            <div class="field">
-                <label class="label">Please enter your username:</label>
-                <input class="input" required="required" type="text" id="UsernameInput" />
-            </div>
-            <button class="button">Submit</button>
+            <label>Please enter your username:</label>
+            <input required="required" type="text" id="UsernameInput" />
+            <button>Submit</button>
         </form>
     </div>
 </div>
 <footer>
-    <span class="button is-pulled-left is-clickable" id="UsernameLabel">User: Username</span>
-    <span class="button is-clickable is-pulled-right">Settings</span>
+    <button class="is-pulled-left" id="UsernameLabel">User: Username</button>
+    <button class="is-pulled-right">Settings</button>
 </footer>
 </body>
 </html>
