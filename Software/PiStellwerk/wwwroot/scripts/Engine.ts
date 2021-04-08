@@ -256,9 +256,10 @@ function addEngineImagesToPicture(element: HTMLPictureElement, engine: Engine): 
     var groups = groupImages(engine.image);
 
     for (const group of groups) {
+        const sizes = 'sizes="(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw"';
         const srcsetElement = group.images.map(i => `engineimages/${i.filename} ${i.width}w`);
         const srcset = srcsetElement.join(",");
-        element.insertAdjacentHTML("afterbegin", `<source srcset="${srcset}" type="${group.type}">`);
+        element.insertAdjacentHTML("afterbegin", `<source ${sizes} srcset="${srcset}" type="${group.type}">`);
     }
 }
 
