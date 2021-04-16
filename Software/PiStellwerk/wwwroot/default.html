@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,23 +25,25 @@
     <!-- Template for each control block -->
     <div class="box is-engine-controller template has-shadow" id="EngineTemplate">
         <div class="ec-grid-header">
-            <span class="is-pulled-left">Engine name</span><button class="is-pulled-right">✖</button>
+            <span class="is-pulled-left">Engine name</span><button class="is-pulled-right bold">X</button>
         </div>
         <picture class="ec-grid-image">
             <img src="img/noImageImage.png" alt="Engine image"/>
         </picture>
-        <input class="ec-grid-slider has-100percent-height" type="range" orient="vertical" min="0" max="127" value="0"/><!-- orient="vertical" is for firefox -->
+        <label class="ec-grid-slider has-100percent-height">
+            <input class="has-100percent-height" type="range" orient="vertical" min="0" max="127" value="0"/>
+        </label><!-- orient="vertical" is for firefox -->
         <div class="ec-grid-direction">
-            <button disabled="disabled">🡰</button>
-            <button>🡲</button>
+            <button class="bold" disabled="disabled">&lt;</button>
+            <button class="bold">&gt;</button>
         </div>
         <output class="ec-grid-speed">0</output>
-        <div class="ec-grid-functions can-scroll-y has-100percent-maxheight">
+        <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
         </div>
     </div>
     <!-- "Empty" control panel with Button to open the engine selection dialog. -->
     <div class="is-engine-controller uses-ec-grid has-shadow">
-        <button id="SelectEngineButton" class="has-background-primary convers-full-ec-grid">Select Engine</button>
+        <button id="SelectEngineButton" class="has-background-primary covers-full-ec-grid">Select Engine</button>
     </div>
 </div>
 
@@ -51,7 +53,7 @@
     <div class="modal-content-fullwidth">
         <div class="modal-header">
             <header></header>
-            <button id="EngineSelectionClose">✖</button>
+            <button class="bold" id="EngineSelectionClose">X</button>
         </div>
         <div class="can-scroll-y modal-body">
             <div id="EngineSelectionContainer" class="selection-grid">
@@ -64,8 +66,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button id="EngineSelectionBackwards" disabled="disabled">&lt;</button>
-            <button id="EngineSelectionForward">&gt;</button>
+            <button class="bold" id="EngineSelectionBackwards" disabled="disabled">&lt;</button>
+            <button class="bold" id="EngineSelectionForward">&gt;</button>
         </div>
     </div>
 </div>
@@ -74,7 +76,7 @@
 <div id="UsernameOverlay" class="modal">
     <div class="modal-content">
         <form id="UsernameForm">
-            <label>Please enter your username:</label>
+            <label for="UsernameInput">Please enter your username:</label>
             <input required="required" type="text" id="UsernameInput" />
             <button>Submit</button>
         </form>

@@ -90,7 +90,7 @@ async function handleEngineThrottleChange(event): Promise<void> {
     const speedStep = targetElement.value;
     const engineId = getEngineId(targetElement);
 
-    targetElement.parentElement.querySelector("output").innerHTML = speedStep;
+    targetElement.parentElement.parentElement.querySelector("output").innerHTML = speedStep;
 
     await fetch(`/engine/${engineId}/speed/${speedStep}`, Util.getRequestInit("POST"));
 }

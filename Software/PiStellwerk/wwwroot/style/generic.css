@@ -2,8 +2,12 @@
     generic.css
     
     Contains styles that are not specific to a single element.
-    Essentitialy a "Mini"-Framework
+    Essentially a "Mini"-Framework
 */
+
+.bold {
+    font-weight: bold;
+}
 
 .has-background-primary {
     background-color: var(--primary-color);
@@ -69,7 +73,7 @@
     height: 100%;
 }
 
-.has-100percent-maxheight {
+.has-100percent-max-height {
     max-height: 100%;
 }
 
@@ -95,7 +99,7 @@
     flex-direction: column;
     max-height: calc(100vh - 110px);
 }
-.modal-header, modal-footer {
+.modal-header, .modal-footer {
     flex-grow: 0;
     flex-shrink: 0;
 }

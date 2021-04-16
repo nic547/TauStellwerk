@@ -110,7 +110,7 @@
 	grid-area: functions;
 }
 
-.uses-ec-grid > .convers-full-ec-grid {
+.uses-ec-grid > .covers-full-ec-grid {
 	grid-area: 1 / 1 / span 5 / span 2;
 }
 
