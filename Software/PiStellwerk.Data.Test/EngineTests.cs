@@ -5,6 +5,7 @@
 
 using System.Linq;
 using System.Text.Json;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace PiStellwerk.Data.Test
@@ -24,7 +25,7 @@ namespace PiStellwerk.Data.Test
             var json = JsonSerializer.Serialize(expectedEngine);
             var resultEngine = JsonSerializer.Deserialize<Engine>(json);
 
-            Assert.That(resultEngine.Equals(expectedEngine));
+            resultEngine.Should().BeEquivalentTo(expectedEngine);
         }
 
         /// <summary>

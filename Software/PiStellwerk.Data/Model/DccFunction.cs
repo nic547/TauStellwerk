@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PiStellwerk.Data
@@ -11,7 +10,7 @@ namespace PiStellwerk.Data
     /// <summary>
     /// A Function as programmed on the physical dcc decoder in a model engine.
     /// </summary>
-    public class DccFunction : IEquatable<DccFunction>
+    public class DccFunction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DccFunction"/> class.
@@ -46,19 +45,5 @@ namespace PiStellwerk.Data
         /// Gets or sets the name that this function should have.
         /// </summary>
         public string Name { get; set; }
-
-        /// <inheritdoc/>
-        public bool Equals(DccFunction other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return
-                Name == other.Name &&
-                Number == other.Number &&
-                Id == other.Id;
-        }
     }
 }
