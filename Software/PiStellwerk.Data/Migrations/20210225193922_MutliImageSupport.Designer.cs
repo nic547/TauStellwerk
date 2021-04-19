@@ -113,7 +113,7 @@ namespace PiStellwerk.Data.Migrations
 
                     b.HasIndex("EngineId");
 
-                    b.ToTable("Engineimages");
+                    b.ToTable("EngineImages");
                 });
 
             modelBuilder.Entity("PiStellwerk.Data.DccFunction", b =>

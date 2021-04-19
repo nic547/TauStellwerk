@@ -12,7 +12,7 @@ namespace PiStellwerk.Data.Migrations
                 table: "Engines");
 
             migrationBuilder.CreateTable(
-                name: "Engineimages",
+                name: "EngineImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -35,14 +35,14 @@ namespace PiStellwerk.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Engineimages_EngineId",
-                table: "Engineimages",
+                table: "EngineImages",
                 column: "EngineId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Engineimages");
+                name: "EngineImages");
 
             migrationBuilder.AddColumn<string>(
                 name: "ImageFileName",

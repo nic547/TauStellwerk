@@ -56,7 +56,7 @@ namespace PiStellwerk.Images
             var files = Directory.GetFiles(_userPath);
             foreach (string file in files)
             {
-                var existingEntry = await _context.Engineimages.SingleOrDefaultAsync(x => x.Filename == Path.GetFileName(file));
+                var existingEntry = await _context.EngineImages.SingleOrDefaultAsync(x => x.Filename == Path.GetFileName(file));
 
                 if (existingEntry != null)
                 {
@@ -84,7 +84,7 @@ namespace PiStellwerk.Images
         private async Task CheckForMissingImageWidth()
         {
             var magick = await MagickBase.GetInstance();
-            var imagesMissingWidth = await _context.Engineimages.Where(i => i.Width == 0).ToListAsync();
+            var imagesMissingWidth = await _context.EngineImages.Where(i => i.Width == 0).ToListAsync();
 
             foreach (var image in imagesMissingWidth)
             {
