@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace PiStellwerk.Images
 {
@@ -12,6 +13,11 @@ namespace PiStellwerk.Images
     /// </summary>
     public class MagickNop : MagickBase
     {
+        public MagickNop(ICommandRunner runner)
+            : base(runner)
+        {
+        }
+
         public override Task<int> GetImageWidth(string path)
         {
             return Task.FromResult(0);

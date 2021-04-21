@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
-using PiStellwerk.Data.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Images

@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
@@ -15,23 +14,35 @@ namespace PiStellwerk.Images
     {
         private static MagickBase? _instance;
 
-        protected internal Regex SizeRegex { get; } = new Regex(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
+        protected MagickBase(ICommandRunner runner)
+        {
+            Runner = runner;
+        }
+
+        internal ICommandRunner Runner { get; }
+
+        protected Regex SizeRegex { get; } = new Regex(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
 
         public static async Task<MagickBase> GetInstance()
+        {
+            return await GetInstance(new CommandRunner());
+        }
+
+        public static async Task<MagickBase> GetInstance(ICommandRunner runner)
         {
             if (_instance != null)
             {
                 return _instance;
             }
 
-            var m3 = new Magick3();
+            var m3 = new Magick3(runner);
             if (await m3.IsAvailable())
             {
                 _instance = m3;
                 return _instance;
             }
 
-            var m2 = new Magick2();
+            var m2 = new Magick2(runner);
             if (await m2.IsAvailable())
             {
                 _instance = m2;
@@ -39,7 +50,7 @@ namespace PiStellwerk.Images
             }
 
             ConsoleService.PrintWarning("No ImageMagick found on this system. Image related functionality won't be available!");
-            _instance = new MagickNop();
+            _instance = new MagickNop(runner);
             return _instance;
         }
 
@@ -48,30 +59,5 @@ namespace PiStellwerk.Images
         public abstract Task<int> GetImageWidth(string path);
 
         public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale);
-
-        internal static async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
-        {
-            var p = new Process
-            {
-                StartInfo =
-                {
-                    FileName = command,
-                    Arguments = arguments,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    RedirectStandardInput = true,
-                },
-            };
-            p.Start();
-            await p.WaitForExitAsync();
-            var output = await p.StandardOutput.ReadToEndAsync();
-
-            if (p.ExitCode != 0)
-            {
-                ConsoleService.PrintError("ImageMagick failed with \"" + await p.StandardError.ReadToEndAsync() + "\"");
-            }
-
-            return (p.ExitCode, output);
-        }
     }
 }

@@ -5,17 +5,23 @@
 
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Images
 {
     public class Magick2 : MagickBase
     {
+        public Magick2(ICommandRunner runner)
+            : base(runner)
+        {
+        }
+
         public override async Task<bool> IsAvailable()
         {
             try
             {
-                var (exitCode, _) = await RunCommand("identify", "-version");
+                var (exitCode, _) = await Runner.RunCommand("identify", "-version");
                 if (exitCode == 0)
                 {
                     ConsoleService.PrintMessage("ImageMagick v2 seems to be available on this device.");
@@ -34,14 +40,14 @@ namespace PiStellwerk.Images
 
         public override async Task<int> GetImageWidth(string path)
         {
-            var (_, output) = await RunCommand("identify", $"-ping {path}");
+            var (_, output) = await Runner.RunCommand("identify", $"-ping {path}");
             var match = SizeRegex.Match(output);
             return int.Parse(match.Groups["width"].Value);
         }
 
         public override async Task<bool> Resize(string input, string output, int outputScale)
         {
-            var (returnCode, _) = await RunCommand("magick", $"{input} -resize {outputScale}% {output}");
+            var (returnCode, _) = await Runner.RunCommand("magick", $"{input} -resize {outputScale}% {output}");
             return returnCode == 0;
         }
     }
