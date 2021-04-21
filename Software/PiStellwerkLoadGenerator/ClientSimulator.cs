@@ -42,7 +42,7 @@ namespace PiStellwerkLoadGenerator
             {
                 ClientCertificateOptions = ClientCertificateOption.Manual,
                 ServerCertificateCustomValidationCallback =
-                (httpRequestMessage, cert, cetChain, policyErrors) => true,
+                (_, _, _, _) => true, // Override the ssl cert check because the self-signed certs aren't valid.
             };
 
             var random = new Random();
@@ -75,7 +75,7 @@ namespace PiStellwerkLoadGenerator
             foreach (var action in _actions)
             {
                 var timer = new Timer(action.Interval);
-                timer.Elapsed += async (s, e) => { _results.Increment(await action.PerformRequest()); };
+                timer.Elapsed += async (_, _) => { _results.Increment(await action.PerformRequest()); };
                 timer.Start();
                 _timers.Add(timer);
             }

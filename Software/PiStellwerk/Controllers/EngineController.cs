@@ -45,7 +45,7 @@ namespace PiStellwerk.Controllers
         /// </summary>
         /// <param name="id">The id of the engine.</param>
         /// <returns>The engine with the given id.</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<Engine> GetEngine(int id)
         {
             return await _dbContext.Engines
@@ -72,7 +72,7 @@ namespace PiStellwerk.Controllers
             return test;
         }
 
-        [HttpPost("{id}/speed/{speed}")]
+        [HttpPost("{id:int}/speed/{speed}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> SetEngineSpeed([FromHeader(Name = "Session-Id")] string sessionId, int id, short speed, bool? forward)
@@ -91,7 +91,7 @@ namespace PiStellwerk.Controllers
             return BadRequest();
         }
 
-        [HttpPost("{id}/function/{functionNumber}/{state}")]
+        [HttpPost("{id:int}/function/{functionNumber}/{state}")]
 
         public async Task<ActionResult> EngineFunction([FromHeader(Name = "Session-Id")] string sessionId, int id, byte functionNumber, string state)
         {
@@ -110,7 +110,7 @@ namespace PiStellwerk.Controllers
             return BadRequest();
         }
 
-        [HttpPost("{id}/acquire")]
+        [HttpPost("{id:int}/acquire")]
         public async Task<ActionResult> AcquireEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
             var engine = await _dbContext.Engines
@@ -143,7 +143,7 @@ namespace PiStellwerk.Controllers
             return Ok();
         }
 
-        [HttpPost("{id}/release")]
+        [HttpPost("{id:int}/release")]
         public async Task<ActionResult> ReleaseEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
             var session = SessionService.TryGetSession(sessionId);

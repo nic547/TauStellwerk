@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace PiStellwerk.Data.Model
+namespace PiStellwerk.Data
 {
     public class EngineImage
     {
@@ -33,11 +33,9 @@ namespace PiStellwerk.Data.Model
 
         public int Importance => GetFileType().Importance;
 
-        public Engine? Engine { get; }
-
         private (string Type, int Importance) GetFileType()
         {
-            return Filename?.Split('.').Last() switch
+            return Filename.Split('.').Last() switch
             {
                 null => (string.Empty, int.MaxValue),
                 "jpg" or "jpeg" => ("image/jpeg", 4),

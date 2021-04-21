@@ -11,7 +11,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
 using JetBrains.Annotations;
-using PiStellwerk.Data.Model;
 
 namespace PiStellwerk.Data
 {

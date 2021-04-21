@@ -16,7 +16,7 @@ namespace HardwareInfo
     public class HardwareInfoGatherer
     {
         private static readonly List<IInfoProvider> _availableProviders = new();
-        private static bool _hasBeenInitialized = false;
+        private static bool _hasBeenInitialized;
 
         /// <summary>
         /// Gets a list of all Hardware related statistics available on the system.
