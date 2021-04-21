@@ -1,4 +1,4 @@
-﻿// <copyright file="Magick3.cs" company="Dominic Ritz">
+﻿// <copyright file="Magick7.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,9 +11,9 @@ using PiStellwerk.Util;
 
 namespace PiStellwerk.Images
 {
-    public class Magick3 : MagickBase
+    public class Magick7 : MagickBase
     {
-        public Magick3([NotNull] ICommandRunner runner)
+        public Magick7([NotNull] ICommandRunner runner)
             : base(runner)
         {
         }

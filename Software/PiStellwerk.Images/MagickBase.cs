@@ -35,17 +35,17 @@ namespace PiStellwerk.Images
                 return _instance;
             }
 
-            var m3 = new Magick3(runner);
-            if (await m3.IsAvailable())
+            var m7 = new Magick7(runner);
+            if (await m7.IsAvailable())
             {
-                _instance = m3;
+                _instance = m7;
                 return _instance;
             }
 
-            var m2 = new Magick2(runner);
-            if (await m2.IsAvailable())
+            var m6 = new Magick6(runner);
+            if (await m6.IsAvailable())
             {
-                _instance = m2;
+                _instance = m6;
                 return _instance;
             }
 
