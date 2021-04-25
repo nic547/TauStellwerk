@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
@@ -29,6 +30,17 @@ namespace PiStellwerk.Images.Tests
             var magick = new Magick6(runnerMock.Object);
 
             Assert.True(await magick.IsAvailable());
+        }
+
+        [Test]
+        public async Task CanParseWidthCorrectly()
+        {
+            var runnerMock = new Mock<ICommandRunner>();
+            runnerMock.Setup(m => m.RunCommand("identify", It.IsAny<string>())).ReturnsAsync((0, "image.webp WEBP 1920x960 1920x960+0+0 8-bit sRGB 98858B 0.016u 0:00.014"));
+            var magick = new Magick6(runnerMock.Object);
+
+            var result = await magick.GetImageWidth("image.webp");
+            result.Should().Be(1920);
         }
     }
 }

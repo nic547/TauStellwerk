@@ -54,6 +54,14 @@ namespace PiStellwerk.Images
             return _instance;
         }
 
+        /// <summary>
+        /// Clear the instance returned. Subsequent request will return a different instance.
+        /// </summary>
+        public static void ClearInstance()
+        {
+            _instance = null;
+        }
+
         public abstract Task<bool> IsAvailable();
 
         public abstract Task<int> GetImageWidth(string path);
