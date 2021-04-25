@@ -46,7 +46,7 @@ namespace PiStellwerk.Images
 
         public override async Task<bool> Resize(string input, string output, int outputScale)
         {
-            var (returnCode, _) = await Runner.RunCommand("magick", $"{input} -resize {outputScale}% {output}");
+            var (returnCode, _) = await Runner.RunCommand("convert", $"{input} -resize {outputScale}% {output}");
             return returnCode == 0;
         }
     }
