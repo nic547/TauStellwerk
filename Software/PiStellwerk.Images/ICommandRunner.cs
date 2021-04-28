@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
@@ -29,9 +30,18 @@ namespace PiStellwerk.Images
                     RedirectStandardInput = true,
                 },
             };
-            p.Start();
-            await p.WaitForExitAsync();
-            var output = await p.StandardOutput.ReadToEndAsync();
+            string output = string.Empty;
+
+            try
+            {
+                p.Start();
+                output = await p.StandardOutput.ReadToEndAsync();
+                await p.WaitForExitAsync();
+            }
+            catch (Exception e)
+            {
+                ConsoleService.PrintError($"CommandRunner failed with {e.Message}");
+            }
 
             if (p.ExitCode != 0)
             {

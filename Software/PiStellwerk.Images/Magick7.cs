@@ -5,6 +5,8 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PiStellwerk.Util;
@@ -27,6 +29,12 @@ namespace PiStellwerk.Images
 
         public override async Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale)
         {
+            var fileFormat = Path.GetExtension(output).Remove(0, 1);
+            if (!SupportedFormats.Contains(fileFormat.ToUpperInvariant()))
+            {
+                return false;
+            }
+
             var (returnCode, _) = await Runner.RunCommand("magick", $"{input} -resize {outputScale}% {output}");
             return returnCode == 0;
         }
@@ -35,10 +43,16 @@ namespace PiStellwerk.Images
         {
             try
             {
-                var (exitCode, _) = await Runner.RunCommand("magick", "identify -version");
+                var (exitCode, output) = await Runner.RunCommand("magick", "identify -list format");
                 if (exitCode == 0)
                 {
                     ConsoleService.PrintMessage("ImageMagick v3 seems to be available on this device.");
+
+                    SupportedFormats.AddRange(
+                        FormatRegex.Matches(output)
+                            .Select(m => m.Groups["format"].Value)
+                            .ToArray());
+
                     return true;
                 }
 

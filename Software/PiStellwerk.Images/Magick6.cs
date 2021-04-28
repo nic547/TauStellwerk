@@ -4,6 +4,8 @@
 // </copyright>
 
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using PiStellwerk.Util;
 
@@ -20,10 +22,16 @@ namespace PiStellwerk.Images
         {
             try
             {
-                var (exitCode, _) = await Runner.RunCommand("identify", "-version");
+                var (exitCode, output) = await Runner.RunCommand("identify", "-list format");
                 if (exitCode == 0)
                 {
                     ConsoleService.PrintMessage("ImageMagick v2 seems to be available on this device.");
+
+                    SupportedFormats.AddRange(
+                        FormatRegex.Matches(output)
+                            .Select(m => m.Groups["format"].Value)
+                            .ToArray());
+
                     return true;
                 }
 
@@ -46,6 +54,12 @@ namespace PiStellwerk.Images
 
         public override async Task<bool> Resize(string input, string output, int outputScale)
         {
+            var fileFormat = Path.GetExtension(output).Remove(0, 1);
+            if (!SupportedFormats.Contains(fileFormat.ToUpperInvariant()))
+            {
+                return false;
+            }
+
             var (returnCode, _) = await Runner.RunCommand("convert", $"{input} -resize {outputScale}% {output}");
             return returnCode == 0;
         }

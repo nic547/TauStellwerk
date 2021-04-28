@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,7 +22,13 @@ namespace PiStellwerk.Images
 
         internal ICommandRunner Runner { get; }
 
-        protected Regex SizeRegex { get; } = new Regex(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
+        internal List<string> SupportedFormats { get; } = new();
+
+        protected Regex SizeRegex { get; } = new(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
+
+        protected Regex FormatRegex { get; } = new(
+            "^ *(?<format>\\w+)(\\*| ) .*(r|-)(w|-)(\\+|-).*$",
+            RegexOptions.Multiline | RegexOptions.Compiled);
 
         public static async Task<MagickBase> GetInstance()
         {
@@ -62,6 +69,10 @@ namespace PiStellwerk.Images
             _instance = null;
         }
 
+        /// <summary>
+        /// Check if a given adapter is available on a device and check what file formats are supported.
+        /// </summary>
+        /// <returns>>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public abstract Task<bool> IsAvailable();
 
         public abstract Task<int> GetImageWidth(string path);
