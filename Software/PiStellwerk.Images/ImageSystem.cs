@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,9 @@ namespace PiStellwerk.Images
         private readonly (string Prefix, int Size)[] _downScaleValues = new[] { ("half_", 50), ("quarter_", 25) };
 
         private readonly StwDbContext _context;
+
         private readonly string _userPath;
+
         private readonly string _generatedPath;
 
         public ImageSystem(StwDbContext context, string userPath, string generatedPath)
@@ -26,6 +29,16 @@ namespace PiStellwerk.Images
             _generatedPath = generatedPath;
             _context = context;
         }
+
+        /// <summary>
+        /// Gets list containing additional arguments that should be passed to IM, per format and per Size.
+        /// </summary>
+        private List<(string Format, int Scaling, string Arguments)> AdditionalArguments { get; } = new()
+        {
+            ("WEBP", 025, "-quality 70 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
+            ("WEBP", 050, "-quality 65 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
+            ("WEBP", 100, "-quality 65 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
+        };
 
         public static async Task<bool> HasMagickAvailable()
         {
@@ -136,11 +149,14 @@ namespace PiStellwerk.Images
 
         private async Task<(string Filename, int Width)?> DownscaleImage(string inputFilePath, string prefix, int size)
         {
-            var newFileName = prefix + Path.GetFileName(inputFilePath);
-            var newFilePath = Path.Combine(_generatedPath, newFileName);
             var magick = await MagickBase.GetInstance();
 
-            var success = await magick.Resize(inputFilePath, newFilePath, size);
+            var newFileName = prefix + Path.GetFileName(inputFilePath);
+            var newFilePath = Path.Combine(_generatedPath, newFileName);
+            var format = Path.GetExtension(newFileName).Remove(0, 1).ToUpperInvariant();
+
+            var additionalArguments = AdditionalArguments.SingleOrDefault(t => t.Format == format && t.Scaling == size);
+            var success = await magick.Resize(inputFilePath, newFilePath, size, additionalArguments.Arguments);
             if (!success)
             {
                 ConsoleService.PrintError($"Failed to downscale {Path.GetFileName(inputFilePath)}");

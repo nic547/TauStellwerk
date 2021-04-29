@@ -49,9 +49,9 @@ namespace PiStellwerk.Images.Tests
         public async Task CanOnlyResizeToSupportedFormats()
         {
             var runnerMock = new Mock<ICommandRunner>();
-            runnerMock.Setup(m => m.RunCommand("identify", "-list format")).ReturnsAsync((0, _formatResponse));
-            runnerMock.Setup(m => m.RunCommand("convert", It.IsAny<string>())).ReturnsAsync((0, string.Empty));
-            var magick = new Magick6(runnerMock.Object);
+            runnerMock.Setup(m => m.RunCommand("magick", It.IsAny<string>())).ReturnsAsync((0, string.Empty));
+            runnerMock.Setup(m => m.RunCommand("magick", "identify -list format")).ReturnsAsync((0, _formatResponse));
+            var magick = new Magick7(runnerMock.Object);
 
             (await magick.IsAvailable()).Should().BeTrue();
 
@@ -59,6 +59,25 @@ namespace PiStellwerk.Images.Tests
             (await magick.Resize("image.png", "image.avif", 100)).Should().BeFalse();
             (await magick.Resize("image.png", "image.jpg", 100)).Should().BeTrue();
             (await magick.Resize("image.png", "image.bmp", 100)).Should().BeTrue();
+        }
+
+        [Test]
+        public async Task CanSupplyAdditionalArguments()
+        {
+            var runnerMock = new Mock<ICommandRunner>();
+            var arguments = string.Empty;
+
+            runnerMock.Setup(m => m.RunCommand("magick", It.IsAny<string>()))
+                .ReturnsAsync((0, string.Empty))
+                .Callback<string, string>((_, args) => { arguments = args; });
+            runnerMock.Setup(m => m.RunCommand("magick", "identify -list format")).ReturnsAsync((0, _formatResponse));
+
+            var magick = new Magick7(runnerMock.Object);
+
+            _ = await magick.IsAvailable();
+            _ = await magick.Resize("image.png", "image.jpg", 100, "testString");
+
+            arguments.Should().Contain("testString");
         }
     }
 }

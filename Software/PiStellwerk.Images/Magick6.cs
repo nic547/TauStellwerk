@@ -52,7 +52,7 @@ namespace PiStellwerk.Images
             return int.Parse(match.Groups["width"].Value);
         }
 
-        public override async Task<bool> Resize(string input, string output, int outputScale)
+        public override async Task<bool> Resize(string input, string output, int outputScale, string additionalArguments = "")
         {
             var fileFormat = Path.GetExtension(output).Remove(0, 1);
             if (!SupportedFormats.Contains(fileFormat.ToUpperInvariant()))
@@ -60,7 +60,7 @@ namespace PiStellwerk.Images
                 return false;
             }
 
-            var (returnCode, _) = await Runner.RunCommand("convert", $"{input} -resize {outputScale}% {output}");
+            var (returnCode, _) = await Runner.RunCommand("convert", $"{input} -resize {outputScale}% {additionalArguments} {output}");
             return returnCode == 0;
         }
     }

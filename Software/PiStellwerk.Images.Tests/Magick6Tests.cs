@@ -60,5 +60,24 @@ namespace PiStellwerk.Images.Tests
             (await magick.Resize("image.png", "image.jpg", 100)).Should().BeTrue();
             (await magick.Resize("image.png", "image.bmp", 100)).Should().BeTrue();
         }
+
+        [Test]
+        public async Task CanSupplyAdditionalArguments()
+        {
+            var runnerMock = new Mock<ICommandRunner>();
+            var arguments = string.Empty;
+
+            runnerMock.Setup(m => m.RunCommand("identify", "-list format")).ReturnsAsync((0, _formatResponse));
+            runnerMock.Setup(m => m.RunCommand("convert", It.IsAny<string>()))
+                .ReturnsAsync((0, string.Empty))
+                .Callback<string, string>((_, args) => { arguments = args; });
+
+            var magick = new Magick6(runnerMock.Object);
+
+            _ = await magick.IsAvailable();
+            _ = await magick.Resize("image.png", "image.jpg", 100, "testString");
+
+            arguments.Should().Contain("testString");
+        }
     }
 }

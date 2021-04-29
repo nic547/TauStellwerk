@@ -77,6 +77,6 @@ namespace PiStellwerk.Images
 
         public abstract Task<int> GetImageWidth(string path);
 
-        public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale);
+        public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale, string additionalArguments = "");
     }
 }
