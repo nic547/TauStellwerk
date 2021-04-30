@@ -359,27 +359,13 @@ MigrationBackup/
 # Resharper
 .idea/
 
-#####
-#
-# KiCad related files
-#
-#####
-Hardware/fp-info-cache
-Hardware/PiStellwerk-cache.lib
-Hardware/_autosave-PiStellwerk.kicad_pcb
-Hardware/PiStellwerk.sch-bak
-Hardware/_autosave-PiStellwerk.sch
-Hardware/PiStellwerk.kicad_pcb-bak
-*.gbr
-*.drl
-
 # SQLite DB testfile
 Software/PiStellwerk/StwDatabase.db
 
 ## Javascript Files, generated from typescript files.
-Software/PiStellwerk/wwwroot/scripts/*.js
-Software/PiStellwerk/wwwroot/scripts/*.js.map
-Software/PiStellwerk/wwwroot/lib/*
+src/PiStellwerk/wwwroot/scripts/*.js
+src/PiStellwerk/wwwroot/scripts/*.js.map
+src/PiStellwerk/wwwroot/lib/*
 
 #Place for user-created images
 Software/PiStellwerk/userContent/*
