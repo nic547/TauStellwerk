@@ -10,8 +10,10 @@ using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using PiStellwerk.Data;
+using PiStellwerk.Data.Test;
 
-namespace PiStellwerk.Data.Test
+namespace PiStellwerk.Database.Tests
 {
     /// <summary>
     /// Contains tests related to the DbContext of the application.

@@ -6,8 +6,9 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using PiStellwerk.Data;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database
 {
     /// <summary>
     /// <inheritdoc cref="DbContext"/>

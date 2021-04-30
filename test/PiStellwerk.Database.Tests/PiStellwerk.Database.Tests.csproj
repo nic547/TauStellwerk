@@ -1,18 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
-    <DocumentationFile>.\bin\PiStellwerk.Util.Tests.xml</DocumentationFile>
+    <RootNamespace>PiStellwerk.Database.Tests</RootNamespace>
+    <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>.\bin\PiStellwerk.Database.Tests.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,15 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
-    <PackageReference Include="nunit" Version="3.13.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -37,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\PiStellwerk.Database\PiStellwerk.Database.csproj" />
-    <ProjectReference Include="..\..\src\PiStellwerk.Data\PiStellwerk.Data.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Data.Test\PiStellwerk.Data.Test.csproj" />
   </ItemGroup>
 
 </Project>
