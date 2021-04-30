@@ -52,7 +52,8 @@ function addEngineToControlPanel(engine: Engine) {
     tempNode.querySelector("span").innerHTML = engine.name;
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());
 
-    (tempNode.querySelector("img") as HTMLImageElement).src = engine.imageFileName ?? "/img/noImageImage.webp";
+    var picture = (tempNode.querySelector("picture") as HTMLPictureElement);
+    addEngineImagesToPicture(picture, engine);
 
     tempNode.classList.remove("template");
     tempNode.removeAttribute("id");
@@ -60,7 +61,7 @@ function addEngineToControlPanel(engine: Engine) {
     const tempInput = tempNode.querySelector("input") as HTMLInputElement;
     tempInput.addEventListener("input", handleEngineThrottleChange);
 
-    tempNode.getElementsByClassName("button")[0].addEventListener("click", removeEngineFromControlPanel);
+    tempNode.getElementsByTagName("button")[0].addEventListener("click", removeEngineFromControlPanel);
 
     const functionContainer = tempNode.getElementsByClassName("ec-grid-functions")[0] as HTMLDivElement;
 
@@ -89,7 +90,7 @@ async function handleEngineThrottleChange(event): Promise<void> {
     const speedStep = targetElement.value;
     const engineId = getEngineId(targetElement);
 
-    targetElement.parentElement.querySelector("output").innerHTML = speedStep;
+    targetElement.parentElement.parentElement.querySelector("output").innerHTML = speedStep;
 
     await fetch(`/engine/${engineId}/speed/${speedStep}`, Util.getRequestInit("POST"));
 }
@@ -153,12 +154,12 @@ function openEngineSelectionModal() {
 function addEngineToEngineSelection(engine: Engine) {
     const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
     const titleElement = tempNode.children[0] as HTMLElement;
-    const imageElement = tempNode.children[1].children[0] as HTMLImageElement;
+    const imageElement = tempNode.querySelector("picture") as HTMLPictureElement;
     const tagsElement = tempNode.children[2] as HTMLElement;
 
     titleElement.innerHTML = engine.name;
-    imageElement.setAttribute("src", engine.imageFileName ?? "/img/noImageImage.webp");
-    tagsElement.innerHTML = engine.tags.map(tag => `<span class="tag is-rounded has-background-primary-light">${tag}</span>`).join("");
+    addEngineImagesToPicture(imageElement, engine);
+    tagsElement.innerHTML = engine.tags.map(tag => `<span>${tag}</span>`).join("");
 
     tempNode.addEventListener("click", choseEngineFromSelection);
     tempNode.setAttribute(engineIdAttribute, engine.id.toString());
@@ -202,7 +203,7 @@ async function refreshContent() {
 class Engine {
     name: string;
     id: number;
-    imageFileName: string;
+    image: EngineImage[];
     tags: string[];
     functions: DccFunction[];
 }
@@ -211,6 +212,23 @@ class DccFunction {
     name: string;
     number: number;
     id: number;
+}
+
+class EngineImage {
+    filename: string;
+    type: string;
+    importance: number;
+    width: number;
+}
+
+class GroupedImage {
+    type: string;
+    images: EngineImage[];
+
+    constructor(type: string) {
+        this.type = type;
+        this.images = new Array<EngineImage>();
+    }
 }
 
 
@@ -228,4 +246,34 @@ function getEngineId(element: HTMLElement): number {
         }
     }
     return parseInt(element.getAttribute(engineIdAttribute));
+}
+
+function addEngineImagesToPicture(element: HTMLPictureElement, engine: Engine): void {
+    if (engine.image.length === 0) {
+        return;
+    }
+
+    var groups = groupImages(engine.image);
+
+    for (const group of groups) {
+        const sizes = 'sizes="(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw"';
+        const srcsetElement = group.images.map(i => `engineimages/${i.filename} ${i.width}w`);
+        const srcset = srcsetElement.join(",");
+        element.insertAdjacentHTML("afterbegin", `<source ${sizes} srcset="${srcset}" type="${group.type}">`);
+    }
+}
+
+function groupImages(images: EngineImage[]): GroupedImage[] {
+    const result = new Array<GroupedImage>();
+
+    for (let image of images) {
+        let group = result.find(g => g.type === image.type);
+
+        if (group == null) {
+            group = new GroupedImage(image.type);
+            result.push(group);
+        }
+        group.images.push(image);
+    }
+    return result;
 }

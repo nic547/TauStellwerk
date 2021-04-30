@@ -40,7 +40,7 @@ namespace PiStellwerk.Services
                 LastContact = DateTime.Now,
             };
             _sessions.TryAdd(session.SessionId, session);
-            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} created new session");
+            ConsoleService.PrintMessage($"{session} created new session");
             return session;
         }
 
@@ -65,7 +65,7 @@ namespace PiStellwerk.Services
                 throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
             }
 
-            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} renamed to {newUsername}");
+            ConsoleService.PrintMessage($"{session} renamed to {newUsername}");
             session.UserName = newUsername;
         }
 
@@ -93,7 +93,7 @@ namespace PiStellwerk.Services
         /// <inheritdoc/>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("SessionService is starting.");
+            ConsoleService.PrintMessage("SessionService is starting.");
 
             stoppingToken.Register(() => Console.WriteLine("SessionService is stopping."));
 
@@ -107,11 +107,11 @@ namespace PiStellwerk.Services
                         case > _timeoutInactive when session.IsActive:
                             session.IsActive = false;
                             SessionTimeout?.Invoke(session);
-                            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} has been marked as inactive.");
+                            ConsoleService.PrintMessage($"{session} has been marked as inactive.");
                             break;
                         case > _timeoutDeletion:
                             _sessions.TryRemove(session.SessionId, out _);
-                            ConsoleService.PrintMessage($"{session.ShortSessionId}:{session.UserName} has been deleted after {Math.Round(idle)} seconds");
+                            ConsoleService.PrintMessage($"{session} has been deleted after {Math.Round(idle)} seconds");
                             break;
                     }
                 }
@@ -119,7 +119,7 @@ namespace PiStellwerk.Services
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
 
-            Console.WriteLine("SessionService background task is stopping.");
+            ConsoleService.PrintMessage("SessionService background task is stopping.");
         }
     }
 }

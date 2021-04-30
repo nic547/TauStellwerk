@@ -1,0 +1,128 @@
+﻿/* 
+    generic.css
+    
+    Contains styles that are not specific to a single element.
+    Essentially a "Mini"-Framework
+*/
+
+.bold {
+    font-weight: bold;
+}
+
+.has-background-primary {
+    background-color: var(--primary-color);
+}
+
+.has-background-primary-light {
+    background-color: var(--primary-color-light);
+}
+
+.has-background-danger {
+    background-color: var(--danger-color);
+}
+
+.has-background-danger-light {
+    background-color: var(--danger-color-light);
+}
+
+.has-background {
+    background-color: var(--background-color);
+}
+
+.is-clickable {
+    cursor: pointer;
+}
+
+.is-flex-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.can-scroll-y{
+    overflow-y: auto;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+}
+
+.active-modal {
+    display: block;
+}
+
+.is-pulled-left {
+    float: left;
+}
+
+.is-pulled-right {
+    float: right;
+}
+
+.has-80percent-width {
+    width: 80%;
+}
+
+.has-100percent-height {
+    height: 100%;
+}
+
+.has-100percent-max-height {
+    max-height: 100%;
+}
+
+.modal-content, .modal-content-fullwidth {
+    background-color: var(--background-color);
+    /* Ensure the e-stop button cannot cover the content of a modal*/
+    margin-top: 90px;
+    margin-bottom: 20px;
+}
+
+.modal-content {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+}
+
+.modal-content-fullwidth {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 110px);
+}
+.modal-header, .modal-footer {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.modal-body {
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    overflow-y:auto;
+
+    /* Hack to get the vertical scrollbar to not disturb the content.*/
+    padding-right: 10px;
+    overflow-x: hidden;
+}
+
+.has-shadow {
+    box-shadow: 0 0 8px lightgray;
+}
+.tags > span {
+    display: inline-block;
+    margin: 2px;
+    padding: 2px 4px;
+    background-color: var(--primary-color-light);
+    border-radius: 5px;
+    border-width: 0;
+}

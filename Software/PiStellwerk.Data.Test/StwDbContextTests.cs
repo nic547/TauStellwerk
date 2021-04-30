@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -59,7 +60,9 @@ namespace PiStellwerk.Data.Test
 
             var loadContext = new StwDbContext(_connectionString);
             var loadedEngine = loadContext.Engines.Include(x => x.Functions).Single();
-            Assert.True(originalEngine.Equals(loadedEngine));
+
+            loadedEngine.Should().NotBeSameAs(originalEngine);
+            loadedEngine.Should().BeEquivalentTo(originalEngine);
         }
 
         /// <summary>
@@ -98,7 +101,8 @@ namespace PiStellwerk.Data.Test
             var testContext = new StwDbContext(_connectionString);
             var testEngine = testContext.Engines.Include(x => x.Functions).Single();
 
-            Assert.True(testEngine.Equals(updateEngine));
+            testEngine.Should().NotBeSameAs(updateEngine);
+            testEngine.Should().BeEquivalentTo(updateEngine);
         }
     }
 }

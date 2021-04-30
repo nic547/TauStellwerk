@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -18,7 +17,7 @@ namespace PiStellwerk.Data
     /// <summary>
     /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
     /// </summary>
-    public class Engine : IEquatable<Engine>
+    public class Engine
     {
         private string _name;
 
@@ -75,29 +74,9 @@ namespace PiStellwerk.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData ECoSEngineData { get; init; }
 
-        [CanBeNull]
-        public string ImageFileName { get; set; }
+        public List<EngineImage> Image { get; } = new();
 
         public DateTime LastUsed { get; set; }
-
-        /// <inheritdoc/>
-        public bool Equals(Engine other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return
-                Name.Equals(other.Name) &&
-                Id.Equals(other.Id) &&
-                Address.Equals(other.Address) &&
-                SpeedSteps.Equals(other.SpeedSteps) &&
-                TopSpeed.Equals(other.TopSpeed) &&
-                SpeedDisplayType.Equals(other.SpeedDisplayType) &&
-                Functions.SequenceEqual(other.Functions) &&
-                Tags.SequenceEqual(other.Tags);
-        }
 
         /// <summary>
         /// Create a deep copy of this object.
@@ -108,6 +87,11 @@ namespace PiStellwerk.Data
             // Probably not the fastest way for a deep clone, but very simple.
             var json = JsonSerializer.Serialize(this);
             return JsonSerializer.Deserialize<Engine>(json);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

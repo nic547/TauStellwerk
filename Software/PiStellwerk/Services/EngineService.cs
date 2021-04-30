@@ -6,6 +6,7 @@
 #nullable enable
 
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
@@ -30,6 +31,7 @@ namespace PiStellwerk.Services
             var result = _activeEngines.TryAdd(engine.Id, new ActiveEngine(session, engine));
             if (!result)
             {
+                ConsoleService.PrintMessage($"{session} tried acquiring {engine}, but engine is already acquired.");
                 return result;
             }
 
@@ -37,30 +39,32 @@ namespace PiStellwerk.Services
 
             if (systemResult == false)
             {
+                ConsoleService.PrintWarning($"{session} tried acquiring {engine}, but ICommandSystem returned false");
                 _activeEngines.TryRemove(engine.Id, out _);
+                return false;
             }
 
-            return systemResult;
+            ConsoleService.PrintMessage($"{session} acquired {engine}");
+
+            return true;
         }
 
         public async Task<bool> ReleaseEngine(Session session, int engineId)
         {
-            _activeEngines.TryGetValue(engineId, out var activeEngine);
-
-            if (activeEngine?.Session != session)
+            if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
             {
                 return false;
             }
 
             _activeEngines.TryRemove(engineId, out _);
+            ConsoleService.PrintMessage($"{session} released {activeEngine.Engine}");
+
             return await _commandSystem.TryReleaseEngine(activeEngine.Engine);
         }
 
         public async Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? forward)
         {
-            _activeEngines.TryGetValue(engineId, out var activeEngine);
-
-            if (activeEngine?.Session != session)
+            if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
             {
                 return false;
             }
@@ -71,14 +75,35 @@ namespace PiStellwerk.Services
 
         public async Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on)
         {
-            _activeEngines.TryGetValue(engineId, out var activeEngine);
-
-            if (activeEngine?.Session != session)
+            if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
             {
                 return false;
             }
 
             await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, on);
+            return true;
+        }
+
+        private bool IsValidEngineId(int engineId, [NotNullWhen(true)] out ActiveEngine? activeEngine, Session session)
+        {
+            _activeEngines.TryGetValue(engineId, out activeEngine);
+            if (activeEngine == null)
+            {
+                ConsoleService.PrintMessage($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsCorrectSession(Session session, ActiveEngine? activeEngine)
+        {
+            if (activeEngine?.Session != session)
+            {
+                ConsoleService.PrintWarning($"{session} tried releasing {activeEngine?.Engine}, but has wrong session");
+                return false;
+            }
+
             return true;
         }
 
@@ -89,7 +114,7 @@ namespace PiStellwerk.Services
                 if (active.Session == session)
                 {
                     _activeEngines.TryRemove(active.Engine.Id, out var _);
-                    ConsoleService.PrintWarning($"Released {active.Engine.Name} because {session.UserName} timed out!");
+                    ConsoleService.PrintWarning($"Released {active.Engine} because {session.UserName} timed out!");
                 }
             }
         }

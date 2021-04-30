@@ -34,7 +34,8 @@ namespace PiStellwerk.Controllers
             return _statusService.CheckStatus();
         }
 
-        public async Task<Status> GetChange([FromQuery]bool lastKnownStatus)
+        [HttpGet]
+        public async Task<Status> GetChange([FromQuery]bool? lastKnownStatus)
         {
             var longTask = _statusService.WaitForStatusChangeAsync();
 

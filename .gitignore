@@ -356,6 +356,9 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+# Resharper
+.idea/
+
 #####
 #
 # KiCad related files
@@ -379,4 +382,5 @@ Software/PiStellwerk/wwwroot/scripts/*.js.map
 Software/PiStellwerk/wwwroot/lib/*
 
 #Place for user-created images
-Software/PiStellwerk/userImages/*
+Software/PiStellwerk/userContent/*
+Software/PiStellwerk/generatedContent/*

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using PiStellwerk.Commands;
 using PiStellwerk.Data;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Services
 {
@@ -57,6 +58,7 @@ namespace PiStellwerk.Services
         {
             _isRunning = isRunning;
             _lastActionUsername = "SYSTEM";
+            ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the PiStellwerk");
             NotifyStatusChanged();
         }
 

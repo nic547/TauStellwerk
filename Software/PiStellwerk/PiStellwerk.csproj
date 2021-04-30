@@ -12,8 +12,19 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Content Remove="libman.json" />
+    <Compile Remove="userContent\**" />
+    <Content Remove="userContent\**" />
+    <EmbeddedResource Remove="userContent\**" />
+    <None Remove="userContent\**" />
+    <TypeScriptCompile Remove="userContent\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\scripts\Engine.ts" />
   </ItemGroup>
 
@@ -22,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="libman.json" />
     <None Include="wwwroot\scripts\Engine.js.map" />
     <None Include="wwwroot\scripts\overlays.js.map" />
     <None Include="wwwroot\scripts\status.js.map" />
@@ -31,12 +41,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.4">
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.2.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -45,6 +55,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Images\PiStellwerk.Images.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
   </ItemGroup>
 
@@ -52,31 +63,10 @@
     <Content Update="wwwroot\default.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\img\noImageImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\img\noImageImage.webp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\bulma\css\bulma.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\css\fontawesome.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\css\solid.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.eot">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.woff">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\font-awesome\webfonts\fa-solid-900.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="tsconfig.json">
@@ -97,7 +87,7 @@
     <Content Update="wwwroot\scripts\util.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\style.css">
+    <Content Update="wwwroot\style\style.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

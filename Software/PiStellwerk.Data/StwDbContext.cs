@@ -30,6 +30,8 @@ namespace PiStellwerk.Data
         /// </summary>
         public DbSet<Engine> Engines { get; set; }
 
+        public DbSet<EngineImage> EngineImages { get; set; }
+
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -6,6 +6,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,11 @@ namespace PiStellwerk
     /// </summary>
     public class Startup
     {
+        // TODO: Setting-ify
+        private const string _userContentDirectory = "userContent";
+        private const string _generatedContentDirectory = "generatedContent";
+        private const string _engineImageDirectory = "engineimages";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -93,11 +99,17 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
+            EnsureContentDirectoriesExist(env);
+
+            RunImageSetup(env);
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new CompositeFileProvider(
                     new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, "userImages")),
+                        Path.Combine(env.ContentRootPath, _userContentDirectory)),
+                    new PhysicalFileProvider(
+                        Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
                     new PhysicalFileProvider(
                         Path.Combine(env.ContentRootPath, "wwwroot"))),
             });
@@ -110,6 +122,21 @@ namespace PiStellwerk
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void EnsureContentDirectoriesExist(IHostEnvironment env)
+        {
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+        }
+
+        private static async void RunImageSetup(IHostEnvironment env)
+        {
+            var system = new Images.ImageSystem(
+                new StwDbContext(),
+                Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory),
+                Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+            await Task.Run(system.RunImageSetup);
         }
     }
 }

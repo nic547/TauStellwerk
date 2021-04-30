@@ -3,6 +3,8 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,29 +15,36 @@ namespace PiStellwerk.Util
     /// <summary>
     /// Dictionary for counting how often a key occured.
     /// </summary>
-    public class CounterDictionary : IEnumerable<KeyValuePair<int, ulong>>
+    public class CounterDictionary : IEnumerable<KeyValuePair<int, long>>
     {
-        private readonly Dictionary<int, ulong> _dictionary = new();
+        private readonly Dictionary<int, long> _dictionary = new();
 
         /// <inheritdoc/>
-        public IEnumerator<KeyValuePair<int, ulong>> GetEnumerator()
+        public IEnumerator<KeyValuePair<int, long>> GetEnumerator()
         {
-            return ((IEnumerable<KeyValuePair<int, ulong>>)_dictionary).GetEnumerator();
+            return ((IEnumerable<KeyValuePair<int, long>>)_dictionary).GetEnumerator();
         }
 
         /// <summary>
         /// Calculate the average of all values with respect to how often it occured.
+        /// Returns null if no value was counted yet.
         /// </summary>
         /// <returns>The average of all values.</returns>
-        public double Average()
+        public double? Average()
         {
-            var totalNumber = 0ul;
-            var movingAverage = 1d;
+            ulong totalNumber = 0;
+            double movingAverage = 0;
+
+            if (!this.Any())
+            {
+                return null;
+            }
+
             foreach (var kvp in _dictionary)
             {
-                for (ulong u = 0; u < kvp.Value; u++)
+                for (long u = 0; u < kvp.Value; u++)
                 {
-                    movingAverage += ((double)kvp.Key - movingAverage) / ++totalNumber;
+                    movingAverage += (kvp.Key - movingAverage) / ++totalNumber;
                 }
             }
 
@@ -58,7 +67,7 @@ namespace PiStellwerk.Util
         /// Get the 90th Percentile.
         /// </summary>
         /// <returns>Value representing the 90th Percentile.</returns>
-        public int Get90ThPercentile()
+        public int? Get90ThPercentile()
         {
             return GetPercentile(0.9);
         }
@@ -67,7 +76,7 @@ namespace PiStellwerk.Util
         /// Get the 95th Percentile.
         /// </summary>
         /// <returns>Value representing the 95th Percentile.</returns>
-        public int Get95ThPercentile()
+        public int? Get95ThPercentile()
         {
             return GetPercentile(0.95);
         }
@@ -76,7 +85,7 @@ namespace PiStellwerk.Util
         /// Get the 99th Percentile.
         /// </summary>
         /// <returns>Value representing the 99th Percentile.</returns>
-        public int Get99ThPercentile()
+        public int? Get99ThPercentile()
         {
             return GetPercentile(0.99);
         }
@@ -101,19 +110,19 @@ namespace PiStellwerk.Util
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
-        public ulong GetByKey(int key)
+        public long GetByKey(int key)
         {
-            _dictionary.TryGetValue(key, out ulong value);
+            _dictionary.TryGetValue(key, out long value);
             return value;
         }
 
         /// <summary>
         /// Returns the total number of occurrences this CounterDictionary recorded.
         /// </summary>
-        /// <returns>Total number of occurrences.</returns>
-        public ulong Total()
+        /// <returns>Counted number of occurrences.</returns>
+        public long Count()
         {
-            ulong result = 0;
+            long result = 0;
             foreach (var kv in _dictionary)
             {
                 result += kv.Value;
@@ -122,7 +131,7 @@ namespace PiStellwerk.Util
             return result;
         }
 
-        private void Add(int key, ulong value)
+        private void Add(int key, long value)
         {
             if (_dictionary.TryGetValue(key, out _))
             {
@@ -134,22 +143,22 @@ namespace PiStellwerk.Util
             }
         }
 
-        private int GetPercentile(double k)
+        private int? GetPercentile(double k)
         {
-            ulong index = (ulong)Math.Round(Total() * k);
-            foreach (var kvp in _dictionary.OrderBy(kvp => kvp.Key))
+            var index = (long)Math.Round(Count() * k);
+            foreach (var (key, value) in _dictionary.OrderBy(kvp => kvp.Key))
             {
-                if (kvp.Value < index)
+                if (value < index)
                 {
-                    index -= kvp.Value;
+                    index -= value;
                 }
                 else
                 {
-                    return kvp.Key;
+                    return key;
                 }
             }
 
-            throw new Exception("Cannot calculate Percentile");
+            return null;
         }
     }
 }
