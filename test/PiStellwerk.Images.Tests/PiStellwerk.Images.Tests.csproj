@@ -6,7 +6,7 @@
         <RootNamespace>PiStellwerk.Images.Tests</RootNamespace>
         <NoWarn>1701;1702;1591</NoWarn>
         <DocumentationFile>.\bin\PiStellwerk.Images.Tests.xml</DocumentationFile>
-        <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
+        <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,7 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PiStellwerk.Images\PiStellwerk.Images.csproj" />
+      <ProjectReference Include="..\..\src\PiStellwerk.Images\PiStellwerk.Images.csproj" />
     </ItemGroup>
 
 </Project>

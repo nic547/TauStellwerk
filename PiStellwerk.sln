@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk", "PiStellwerk\PiStellwerk.csproj", "{EB376DEF-DF3E-4313-BC14-26D99A66B53F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk", "src\PiStellwerk\PiStellwerk.csproj", "{EB376DEF-DF3E-4313-BC14-26D99A66B53F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{471EDB6C-5E63-4688-94B9-628F6A573083}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,27 +12,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		StyleCop.json = StyleCop.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "src\PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwareInfo", "HarwareStats\HardwareInfo.csproj", "{8424C18B-EB31-4ABB-99E3-A3E955FFF07F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwareInfo", "src\HarwareStats\HardwareInfo.csproj", "{8424C18B-EB31-4ABB-99E3-A3E955FFF07F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B5DA29DA-A821-4C48-8DC2-78DBE5BD0313}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerkLoadGenerator", "PiStellwerkLoadGenerator\PiStellwerkLoadGenerator.csproj", "{3D0B789F-38DF-4FCC-B289-B9B83F99BF1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerkLoadGenerator", "src\PiStellwerkLoadGenerator\PiStellwerkLoadGenerator.csproj", "{3D0B789F-38DF-4FCC-B289-B9B83F99BF1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Util", "PiStellwerk.Util\PiStellwerk.Util.csproj", "{7EF9E786-6E11-44D4-9F60-524AEA0A8130}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Util", "src\PiStellwerk.Util\PiStellwerk.Util.csproj", "{7EF9E786-6E11-44D4-9F60-524AEA0A8130}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Util.Tests", "PiStellwerk.Util.Tests\PiStellwerk.Util.Tests.csproj", "{CDD2E8AD-F57C-4768-9812-0880BABF9437}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Util.Tests", "test\PiStellwerk.Util.Tests\PiStellwerk.Util.Tests.csproj", "{CDD2E8AD-F57C-4768-9812-0880BABF9437}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DEFECBB3-F873-4F04-99AB-842997EF9A42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data.Test", "PiStellwerk.Data.Test\PiStellwerk.Data.Test.csproj", "{E19E29F2-B8E2-4E31-B1CE-0B3C20B50CBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data.Test", "test\PiStellwerk.Data.Test\PiStellwerk.Data.Test.csproj", "{E19E29F2-B8E2-4E31-B1CE-0B3C20B50CBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Test", "PiStellwerk.Test\PiStellwerk.Test.csproj", "{1DE047AA-DA33-4BA0-9933-745CC9DF935A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Test", "test\PiStellwerk.Test\PiStellwerk.Test.csproj", "{1DE047AA-DA33-4BA0-9933-745CC9DF935A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Images", "PiStellwerk.Images\PiStellwerk.Images.csproj", "{12881C61-4C37-47FF-84A2-BB8D54639FC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Images", "src\PiStellwerk.Images\PiStellwerk.Images.csproj", "{12881C61-4C37-47FF-84A2-BB8D54639FC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Images.Tests", "PiStellwerk.Images.Tests\PiStellwerk.Images.Tests.csproj", "{7C21B849-D8D4-41FA-8936-B2DDF191CBE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Images.Tests", "test\PiStellwerk.Images.Tests\PiStellwerk.Images.Tests.csproj", "{7C21B849-D8D4-41FA-8936-B2DDF191CBE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

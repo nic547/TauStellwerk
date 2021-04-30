@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <CodeAnalysisRuleSet>../customRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerk.ECoS.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\StyleCop.json" Link="StyleCop.json" />
+    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 
   <ItemGroup>
