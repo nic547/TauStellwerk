@@ -356,11 +356,12 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Resharper
+# Resharper/Rider
 .idea/
+global.json
 
 # SQLite DB testfile
-Software/PiStellwerk/StwDatabase.db
+*.db
 
 ## Javascript Files, generated from typescript files.
 src/PiStellwerk/wwwroot/scripts/*.js
@@ -368,5 +369,6 @@ src/PiStellwerk/wwwroot/scripts/*.js.map
 src/PiStellwerk/wwwroot/lib/*
 
 #Place for user-created images
-Software/PiStellwerk/userContent/*
-Software/PiStellwerk/generatedContent/*
+src/PiStellwerk/userContent/*
+src/PiStellwerk/generatedContent/*
+
