@@ -95,7 +95,12 @@
 
 .ec-grid-slider {
 	grid-area: slider;
+}
+
+.ec-grid-slider > input {
 	-webkit-appearance: slider-vertical; /* Ensures the throttle is display vertical in Chrome and Edge (Chrome) */
+	width: 5em;
+	height: 98%
 }
 
 .ec-grid-direction {
