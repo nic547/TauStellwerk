@@ -12,6 +12,7 @@ using NUnit.Framework;
 using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
+using PiStellwerk.Database;
 using PiStellwerk.Services;
 
 namespace PiStellwerk.Test

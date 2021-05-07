@@ -38,9 +38,9 @@ namespace PiStellwerk.Images
                 output = await p.StandardOutput.ReadToEndAsync();
                 await p.WaitForExitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                ConsoleService.PrintError($"CommandRunner failed with {e.Message}");
+                // ignored
             }
 
             if (p.ExitCode != 0)

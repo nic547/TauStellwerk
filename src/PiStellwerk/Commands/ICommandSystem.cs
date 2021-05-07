@@ -7,6 +7,7 @@
 
 using System.Threading.Tasks;
 using PiStellwerk.Data;
+using PiStellwerk.Database;
 
 namespace PiStellwerk.Commands
 {
@@ -30,7 +31,7 @@ namespace PiStellwerk.Commands
         /// <summary>
         /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
         /// </summary>
-        /// <param name="context"><see cref="StwDbContext"/> to compare/insert engines.</param>
+        /// <param name="context"><see cref="PiStellwerk.Database.StwDbContext"/> to compare/insert engines.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public virtual Task LoadEnginesFromSystem(StwDbContext context)
         {

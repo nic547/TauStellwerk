@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PiStellwerk.Data.Migrations
+namespace PiStellwerk.Database.Migrations
 {
     public partial class Initial : Migration
     {

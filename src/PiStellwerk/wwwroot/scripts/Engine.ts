@@ -4,6 +4,8 @@ import * as Util from "./util.js"
 const engineIdAttribute = "data-engine-id";
 const functionNumberAttribute = "data-function-number";
 
+let currentPage = 0;
+
 //Elements
 
 const controlTemplate = document.getElementById("EngineTemplate") as HTMLDivElement;
@@ -15,13 +17,18 @@ const selectionOverlay = document.getElementById("EngineSelectionModal") as HTML
 const selectionCloseButton = document.getElementById("EngineSelectionClose") as HTMLDivElement;
 const selectionContainer = document.getElementById("EngineSelectionContainer") as HTMLDivElement;
 
-var currentPage = 0;
+const forwardsButton = document.getElementById("EngineSelectionForward") as HTMLButtonElement;
+const backwardsButton = document.getElementById("EngineSelectionBackwards") as HTMLButtonElement;
+
 
 document.addEventListener("DOMContentLoaded",
     () => {
         selectionButton.addEventListener("click", openEngineSelectionModal);
 
         selectionCloseButton.addEventListener("click", closeEngineSelectionModal);
+        
+        forwardsButton.addEventListener("click", () => {scrollPages(1)});
+        backwardsButton.addEventListener("click", () => {scrollPages(-1)});
     });
 
 async function choseEngineFromSelection() {
@@ -149,7 +156,7 @@ function openEngineSelectionModal() {
     currentPage = 0;
     refreshContent();
 
-};
+}
 
 function addEngineToEngineSelection(engine: Engine) {
     const tempNode = selectionTemplate.cloneNode(true) as HTMLElement;
@@ -186,18 +193,33 @@ async function loadEnginesFromServer(page: number): Promise<Engine[]> {
 
 function closeEngineSelectionModal() {
     Overlays.toggleVisibility(selectionOverlay);
+    currentPage = 0;
     clearEngineSelection();
 }
 
+async function scrollPages(pages: number) {
+    currentPage+= pages;
+    
+    if (currentPage < 0) {
+        currentPage = 0;
+    }
+    
+    backwardsButton.disabled = currentPage === 0;
+    
+    const count = await refreshContent();
+    forwardsButton.disabled = count === 0;
+}
 
-async function refreshContent() {
+
+async function refreshContent(): Promise<number> {
     const items = await loadEnginesFromServer(currentPage);
 
     clearEngineSelection();
     items.forEach(engine => {
         addEngineToEngineSelection(engine);
     });
-
+    
+    return items.length;
 }
 
 class Engine {

@@ -3,7 +3,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PiStellwerk.Data.Migrations
+namespace PiStellwerk.Database.Migrations
 {
     public partial class EngineLastUsed : Migration
     {

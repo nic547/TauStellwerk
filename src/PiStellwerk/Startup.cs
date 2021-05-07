@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
-using PiStellwerk.Data;
+using PiStellwerk.Database;
 using PiStellwerk.Services;
 using PiStellwerk.Util;
 

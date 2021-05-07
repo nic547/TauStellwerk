@@ -8,7 +8,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace PiStellwerk.Data.Test
+namespace PiStellwerk.Database.Tests
 {
     public class ContextMigrationTests
     {
