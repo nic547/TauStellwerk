@@ -3,6 +3,8 @@ A collection of Software cantered around "Teppichbahning" ("Carpet Railroading")
 The end-goal is a simple user interface, fast setup, solid handling of multiple users and supporting most platforms.
 No support for automatization or feedback modules is planned at this point in time.
 
+![Screenshot of the web app](DesktopWebappScreenshot.png)
+
 ## Current State
 The software is still in a very experimental state. If you're interested in using this project, you should understand that things will break.
 Currently only the ESU Command Station (ECoS) is supported and the only work so far happened on the Webserver and a Webapp.
