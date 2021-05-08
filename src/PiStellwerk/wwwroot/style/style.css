@@ -115,6 +115,16 @@
 	grid-area: functions;
 }
 
+.ec-grid-functions > button {
+	margin: 2px;
+	padding: 5px 5px 5px calc(5px + 2em);
+	display: block;
+	width: 98%;
+	overflow-y: hidden;
+	text-align: start;
+	text-indent: -2em;
+}
+
 .uses-ec-grid > .covers-full-ec-grid {
 	grid-area: 1 / 1 / span 5 / span 2;
 }

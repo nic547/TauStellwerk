@@ -126,3 +126,8 @@
     border-radius: 5px;
     border-width: 0;
 }
+
+.center {
+    text-align: center;
+    align-content: center;
+}
