@@ -1,4 +1,4 @@
-﻿// <copyright file="EngineService.cs" company="Dominic Ritz">
+﻿// <copyright file="IEngineService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -14,7 +14,18 @@ using PiStellwerk.Util;
 
 namespace PiStellwerk.Services
 {
-    public class EngineService
+    public interface IEngineService
+    {
+        Task<bool> AcquireEngine(Session session, Engine engine);
+
+        Task<bool> ReleaseEngine(Session session, int engineId);
+
+        Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? forward);
+
+        Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
+    }
+
+    public class EngineService : IEngineService
     {
         private readonly ICommandSystem _commandSystem;
 

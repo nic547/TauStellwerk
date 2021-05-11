@@ -4,10 +4,14 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.Framework;
 using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
@@ -22,12 +26,13 @@ namespace PiStellwerk.Test
     /// </summary>
     public class EngineControllerTests
     {
-        private const int _engineId = 1;
+        private int _engineId;
 
-        private EngineController _controller;
+        private string _connectionString = string.Empty;
         private SqliteConnection _connection;
-        private StwDbContext _context;
-        private string _sessionId;
+        private string _sessionId = string.Empty;
+
+        private EngineService _engineService;
 
         /// <summary>
         /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
@@ -36,29 +41,25 @@ namespace PiStellwerk.Test
         public void Setup()
         {
             var rnd = new Random();
-            var connectionString = $"Data Source={rnd.Next()};Mode=Memory;Cache=Shared";
+            _connectionString = $"Data Source={rnd.Next()};Mode=Memory;Cache=Shared";
 
             // SQLite removes a database when the connection is closed. By keeping a connection open until teardown, we can prevent this from happening.
-            _connection = new SqliteConnection(connectionString);
+            _connection = new SqliteConnection(_connectionString);
             _connection.Open();
 
-            _context = new StwDbContext(connectionString);
-            _context.Database.EnsureCreated();
+            var context = new StwDbContext(_connectionString);
+            context.Database.EnsureCreated();
 
-            _context.Engines.Add(new Engine
-            {
-                Address = 492,
-                Name = "Hupac Nighpiercer",
-                Id = _engineId,
-                SpeedSteps = 128,
-            });
+            var testEngine = GetTestEngine();
+            context.Engines.Add(testEngine);
+            context.SaveChanges();
 
-            _context.SaveChanges();
+            _engineId = testEngine.Id;
 
-            _controller = new EngineController(_context, new EngineService(new NullCommandSystem()));
+            _engineService = new EngineService(new NullCommandSystem());
 
             var sessionController = new SessionController();
-            if (sessionController.CreateSession("testuser", "none") is ObjectResult sessionResult)
+            if (sessionController.CreateSession("testUser", "none") is ObjectResult sessionResult)
             {
                 _sessionId = sessionResult.Value.ToString();
             }
@@ -74,92 +75,259 @@ namespace PiStellwerk.Test
             SessionService.CleanSessions();
         }
 
-        /// <summary>
-        /// Ensure that an engine can receive commands after being acquired.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public async Task CanSetSpeedOfAcquiredEngine()
+        public async Task CanLoadList()
         {
-            await _controller.AcquireEngine(_engineId, _sessionId);
-            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 100, null);
-
-            Assert.IsInstanceOf(typeof(OkResult), result);
+            var list = await GetController().GetEngines();
+            list.Should().NotBeEmpty();
         }
 
         /// <summary>
-        /// Ensure that an engine cannot receive commands when not acquired.
+        /// Ensure that the engine list only includes necessary properties.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public async Task CannotSetSpeedOfUnacquiredEngine()
+        public async Task LoadedListOnlyIncludesSomeProperties()
         {
-            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 23, true);
-
-            Assert.IsInstanceOf<BadRequestResult>(result);
-        }
-
-        /// <summary>
-        /// Ensure that an engine cannot receive commands after being released.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
-        [Test]
-        public async Task CannotSetSpeedOfReleasedEngine()
-        {
-            await _controller.AcquireEngine(_engineId, _sessionId);
-            await _controller.ReleaseEngine(_engineId, _sessionId);
-
-            var result = await _controller.SetEngineSpeed(_sessionId, _engineId, 124, null);
-
-            Assert.IsInstanceOf<BadRequestResult>(result);
+            var list = await GetController().GetEngines();
+            list[0].Functions.Should().BeEmpty();
+            list[0].ECoSEngineData.Should().BeNull();
+            list[0].Image.Should().NotBeEmpty();
         }
 
         [Test]
-        public async Task CannotSetSpeedWithWrongSession()
+        public async Task CanAddEngine()
         {
-            await _controller.AcquireEngine(_engineId, _sessionId);
+            var engineToAdd = new Engine
+            {
+                Address = 392,
+                Name = "Re 620 088-5 (xrail)",
+                TopSpeed = 140,
+                Tags = new List<string>
+                {
+                    "Freight",
+                },
+                Functions = new List<DccFunction>()
+                {
+                    new(0, "Headlights"),
+                },
+            };
 
-            var result = await _controller.SetEngineSpeed(_sessionId + "wrong", _engineId, 124, null) as ObjectResult;
+            var returnedEngine = (await GetController().UpdateOrAdd(engineToAdd)).Value;
+            var loadedEngine = await GetController().GetEngine(returnedEngine.Id);
+            var list = await GetController().GetEngines();
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
+            engineToAdd.Id = returnedEngine.Id;
+            engineToAdd.Should().BeEquivalentTo(returnedEngine);
+            returnedEngine.Should().BeEquivalentTo(loadedEngine);
+            list.Should().HaveCount(2);
         }
 
-        /// <summary>
-        /// Ensure an engine cannot be acquired twice.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public async Task EngineCannotBeAcquiredTwiceAsync()
+        public async Task CannotAddEngineWithId()
         {
-            await _controller.AcquireEngine(_engineId, _sessionId);
-            var result = await _controller.AcquireEngine(_engineId, _sessionId) as StatusCodeResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status423Locked, result.StatusCode);
+            var engine = new Engine
+            {
+                Id = int.MaxValue,
+            };
+
+            var result = await GetController().UpdateOrAdd(engine);
+            result.Result.Should().BeAssignableTo<UnprocessableEntityResult>();
         }
 
-        /// <summary>
-        /// Ensure trying to acquire a non-existent engine does return a 404.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public async Task NotExistingEngineCannotBeAcquiredAsync()
+        public async Task UpdatingDoesntRemoveECoSData()
         {
-            var result = await _controller.AcquireEngine(_engineId + 1337, _sessionId) as ObjectResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
+            var engine = await GetController().GetEngine(1);
+            engine.ECoSEngineData.Should().BeNull();
+            await GetController().UpdateOrAdd(engine);
+
+            var updatedEngine = GetContext().Engines
+                .Include(e => e.ECoSEngineData)
+                .Single(e => e.Id == 1);
+
+            updatedEngine.ECoSEngineData.Should().NotBeNull();
         }
 
-        /// <summary>
-        /// Ensure an invalid sessionId cannot be used to acquire an engine.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
-        public async Task InvalidSessionIdCannotAcquireAsync()
+        public async Task CanDeleteEngine()
         {
-            var result = await _controller.AcquireEngine(_engineId, "invalidId") as ObjectResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual(StatusCodes.Status400BadRequest, result.StatusCode);
+            var result = await GetController().Delete(1);
+            var list = await GetController().GetEngines();
+
+            result.Should().BeAssignableTo<OkResult>();
+            list.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task CannotDeleteNonExistentEngine()
+        {
+            var result = await GetController().Delete(int.MaxValue);
+            result.Should().BeAssignableTo<NotFoundResult>();
+        }
+
+        [Test]
+        public async Task SpeedFailureReturnsBadRequest()
+        {
+            var result = await GetController(GetMock(false)).SetEngineSpeed(_sessionId, _engineId, 100, null);
+            result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [Test]
+        public async Task SpeedInvalidSessionReturnsForbid()
+        {
+            var result = await GetController().SetEngineSpeed("InvalidSession", 1, 120, false);
+            result.Should().BeAssignableTo<ForbidResult>();
+        }
+
+        [Test]
+        public async Task SpeedSuccessCase()
+        {
+            var result = await GetController(GetMock(true)).SetEngineSpeed(_sessionId, 1, 80, false);
+            result.Should().BeAssignableTo<OkResult>();
+        }
+
+        [Test]
+        public async Task FunctionInvalidSessionReturnsForbid()
+        {
+            var result = await GetController().EngineFunction("invalidSession", 1, 1, "on");
+            result.Should().BeAssignableTo<ForbidResult>();
+        }
+
+        [Test]
+        public async Task FunctionFailureReturnsBadRequest()
+        {
+            var result = await GetController(GetMock(false)).EngineFunction(_sessionId, 1, 1, "on");
+            result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [Test]
+        public async Task FunctionSuccessCase()
+        {
+            var result = await GetController(GetMock(true)).EngineFunction(_sessionId, 1, 1, "on");
+            result.Should().BeAssignableTo<OkResult>();
+        }
+
+        [Test]
+        public async Task AcquireInvalidSessionReturnsForbid()
+        {
+            var result = await GetController().AcquireEngine(1, "InvalidSession");
+            result.Should().BeAssignableTo<ForbidResult>();
+        }
+
+        [Test]
+        public async Task AcquireNonExistentEngineReturnsNotFound()
+        {
+            var result = await GetController().AcquireEngine(int.MaxValue, _sessionId);
+            result.Should().BeAssignableTo<NotFoundResult>();
+        }
+
+        [Test]
+        public async Task AcquireFailureReturnsLocked()
+        {
+            var result = await GetController(GetMock(false)).AcquireEngine(1, _sessionId);
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Which.StatusCode.Should().Be(423);
+        }
+
+        [Test]
+        public async Task AcquireSuccessCase()
+        {
+            var result = await GetController(GetMock(true)).AcquireEngine(1, _sessionId);
+            result.Should().BeAssignableTo<OkResult>();
+        }
+
+        [Test]
+        public async Task ReleaseInvalidSessionReturnsForbid()
+        {
+            var result = await GetController().ReleaseEngine(1, "InvalidSession");
+            result.Should().BeAssignableTo<ForbidResult>();
+        }
+
+        [Test]
+        public async Task ReleaseFailureReturnsBadRequest()
+        {
+            var result = await GetController(GetMock(false)).ReleaseEngine(1, _sessionId);
+            result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [Test]
+        public async Task RelasaeSuccessCase()
+        {
+            var result = await GetController(GetMock(true)).ReleaseEngine(1, _sessionId);
+            result.Should().BeAssignableTo<OkResult>();
+        }
+
+        private EngineController GetController()
+        {
+            return GetController(_engineService);
+        }
+
+        private EngineController GetController(IEngineService engineService)
+        {
+            return new(GetContext(), engineService);
+        }
+
+        private StwDbContext GetContext()
+        {
+            return new(_connectionString);
+        }
+
+        private Engine GetTestEngine()
+        {
+            return new()
+            {
+                Address = 492,
+                Name = "Hupac Vectron (Nightpiercer)",
+                SpeedSteps = 128,
+                Functions = new List<DccFunction>
+                {
+                    new(0, "Headlights"),
+                    new(1, "Sound"),
+                    new(2, "Horn, high - long"),
+                    new(3, "Horn, low - long"),
+                    new(4, "Compressor on/off"),
+                    new(5, "Connect/Disconnect Coupling"),
+                    new(6, "Shunting light and gear"),
+                    new(7, "High beam"),
+                },
+                Image =
+                {
+                    new EngineImage(string.Empty),
+                    new EngineImage(string.Empty),
+                },
+                ECoSEngineData = new ECoSEngineData
+                {
+                    Id = 1001,
+                    Name = "Nightpiercer",
+                },
+            };
+        }
+
+        private IEngineService GetMock(bool returns)
+        {
+            var mock = new Mock<IEngineService>();
+            mock.Setup(e => e.AcquireEngine(
+                    It.IsAny<Session>(),
+                    It.IsAny<Engine>()))
+                .ReturnsAsync(returns);
+            mock.Setup(e => e.ReleaseEngine(
+                    It.IsAny<Session>(),
+                    It.IsAny<int>()))
+                .ReturnsAsync(returns);
+            mock.Setup(e => e.SetEngineFunction(
+                    It.IsAny<Session>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<bool>()))
+                .ReturnsAsync(returns);
+            mock.Setup(e => e.SetEngineSpeed(
+                    It.IsAny<Session>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<bool?>()))
+                .ReturnsAsync(returns);
+            return mock.Object;
         }
     }
 }

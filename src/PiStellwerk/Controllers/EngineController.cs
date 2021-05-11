@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 using PiStellwerk.Database;
 using PiStellwerk.Services;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Controllers
 {
@@ -22,20 +23,20 @@ namespace PiStellwerk.Controllers
     /// Controller for everything related to engines.
     /// </summary>
     [ApiController]
-    [Route("[Controller]")]
+    [Route("engine")]
     public class EngineController : Controller
     {
         private const int _resultsPerPage = 20;
 
         private readonly StwDbContext _dbContext;
-        private readonly EngineService _engineService;
+        private readonly IEngineService _engineService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context for the Controller.</param>
         /// <param name="engineService">A engineService instance.</param>
-        public EngineController(StwDbContext dbContext, EngineService engineService)
+        public EngineController(StwDbContext dbContext, IEngineService engineService)
         {
             _dbContext = dbContext;
             _engineService = engineService;
@@ -50,6 +51,7 @@ namespace PiStellwerk.Controllers
         public async Task<Engine> GetEngine(int id)
         {
             return await _dbContext.Engines
+                .AsNoTracking()
                 .Include(x => x.Functions)
                 .Include(x => x.Image)
                 .SingleAsync(x => x.Id == id);
@@ -65,12 +67,52 @@ namespace PiStellwerk.Controllers
         public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
         {
             var test = await _dbContext.Engines
+                .AsNoTracking()
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
                 .Include(e => e.Image)
                 .ToListAsync();
             return test;
+        }
+
+        /// <summary>
+        /// Add or update an engine.
+        /// </summary>
+        /// <param name="engine">The engine to add or update.</param>
+        /// <returns>The updated engine.</returns>
+        [HttpPost]
+        public async Task<ActionResult<Engine>> UpdateOrAdd(Engine engine)
+        {
+            _dbContext.Update(engine);
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                ConsoleService.PrintError($"Exception while updating engine: {e.GetType()}");
+                return UnprocessableEntity();
+            }
+
+            return engine;
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var engine = await _dbContext.Engines
+                .Include(e => e.Image)
+                .Include(e => e.Functions)
+                .SingleOrDefaultAsync(e => e.Id == id);
+            if (engine == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Engines.Remove(engine);
+            await _dbContext.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPost("{id:int}/speed/{speed}")]
@@ -81,7 +123,7 @@ namespace PiStellwerk.Controllers
             var session = SessionService.TryGetSession(sessionId);
             if (session == null)
             {
-                return BadRequest("Invalid SessionId provided.");
+                return Forbid();
             }
 
             if (await _engineService.SetEngineSpeed(session, id, speed, forward))
@@ -100,7 +142,7 @@ namespace PiStellwerk.Controllers
 
             if (session == null)
             {
-                return BadRequest("Invalid SessionId provided.");
+                return Forbid();
             }
 
             if (await _engineService.SetEngineFunction(session, id, functionNumber, state == "on"))
@@ -121,14 +163,14 @@ namespace PiStellwerk.Controllers
 
             if (engine == null)
             {
-                return BadRequest("Engine not found");
+                return NotFound();
             }
 
             var session = SessionService.TryGetSession(sessionId);
 
             if (session == null)
             {
-                return BadRequest("Session not found");
+                return Forbid();
             }
 
             var result = await _engineService.AcquireEngine(session, engine);
@@ -150,7 +192,7 @@ namespace PiStellwerk.Controllers
             var session = SessionService.TryGetSession(sessionId);
             if (session == null)
             {
-                return BadRequest("Invalid SessionId provided.");
+                return Forbid();
             }
 
             if (!await _engineService.ReleaseEngine(session, id))
