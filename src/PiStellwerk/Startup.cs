@@ -82,7 +82,7 @@ namespace PiStellwerk
             services.AddSingleton(commandSystem);
 
             services.AddSingleton(new StatusService(commandSystem));
-            services.AddSingleton(new EngineService(commandSystem));
+            services.AddSingleton<IEngineService>(new EngineService(commandSystem));
         }
 
         /// <summary>
