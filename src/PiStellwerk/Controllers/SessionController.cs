@@ -14,7 +14,7 @@ namespace PiStellwerk.Controllers
     /// Controller handling user stuff.
     /// </summary>
     [ApiController]
-    [Route("[Controller]")]
+    [Route("session")]
     public class SessionController : Controller
     {
         /// <summary>

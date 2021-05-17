@@ -13,7 +13,7 @@ namespace PiStellwerk.Controllers
     /// HTTP Controller related to information related to the hardware. CPU temps/usage, memory usage etc.
     /// </summary>
     [ApiController]
-    [Route("[Controller]")]
+    [Route("hardwareinfo")]
     public class HardwareInfoController : Controller
     {
         /// <summary>

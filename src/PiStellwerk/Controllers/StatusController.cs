@@ -17,7 +17,7 @@ namespace PiStellwerk.Controllers
     /// Controller for the status of the physical dcc output to the track.
     /// </summary>
     [ApiController]
-    [Route("[Controller]")]
+    [Route("status")]
     public class StatusController : Controller
     {
         private readonly StatusService _statusService;
