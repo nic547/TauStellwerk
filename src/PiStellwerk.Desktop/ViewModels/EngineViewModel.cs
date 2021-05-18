@@ -4,9 +4,13 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls.Primitives;
+using JetBrains.Annotations;
 using PiStellwerk.Data;
 using PiStellwerk.Desktop.Services;
 using ReactiveUI;
@@ -37,8 +41,14 @@ namespace PiStellwerk.Desktop.ViewModels
         public Engine? ActiveEngine
         {
             get => _activeEngine;
-            set => this.RaiseAndSetIfChanged(ref _activeEngine, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _activeEngine, value);
+                this.RaisePropertyChanged(nameof(SortedFunctions));
+            }
         }
+
+        public List<DccFunction>? SortedFunctions => _activeEngine?.Functions.OrderBy(f => f.Number).ToList();
 
         public bool IsInSelectionMode
         {
@@ -68,7 +78,7 @@ namespace PiStellwerk.Desktop.ViewModels
             }
         }
 
-        public async void HandleThrottleChange(int throttle)
+        private async void HandleThrottleChange(int throttle)
         {
             if (_activeEngine != null)
             {
@@ -76,10 +86,33 @@ namespace PiStellwerk.Desktop.ViewModels
             }
         }
 
+        [UsedImplicitly]
         private void ChangeDirection(bool shouldBeDrivingForward)
         {
             IsDrivingForward = shouldBeDrivingForward;
-            Throttle = 0;
+
+            // HandleThrottleChange doesn't get notified if the value isn't changed, so it has to be done manually in that case
+            // If we always did that, the HandleThrottleChange could be called twice. (once via RaiseAndSetIfChanged and once manually)
+            if (Throttle == 0)
+            {
+                HandleThrottleChange(0);
+            }
+            else
+            {
+                Throttle = 0;
+            }
+        }
+
+        [UsedImplicitly]
+        private async void HandleFunction(ToggleButton button)
+        {
+            var functionNumber = (byte)(button.Tag ?? throw new InvalidOperationException());
+            if (_activeEngine == null || button.IsChecked == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            await _engineService.SetFunction(_activeEngine.Id, functionNumber, (bool)button.IsChecked);
         }
 
         private async void Load()

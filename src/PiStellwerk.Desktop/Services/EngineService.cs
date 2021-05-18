@@ -66,5 +66,13 @@ namespace PiStellwerk.Desktop.Services
 
             _ = await client.PostAsync(path, new StringContent(string.Empty));
         }
+
+        public async Task SetFunction(int id, byte function, bool on)
+        {
+            var client = await _clientService.GetHttpClient();
+            var path = $"/engine/{id}/function/{function}/{(on ? "on" : "off")}";
+
+            _ = await client.PostAsync(path, new StringContent(string.Empty));
+        }
     }
 }

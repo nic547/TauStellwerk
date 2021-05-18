@@ -47,6 +47,20 @@
       </StackPanel>
       <Label Grid.Column="0" Grid.Row="4"
         Content="{Binding Throttle}"/>
+      <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3">
+        <StackPanel>
+          <ItemsControl Items="{Binding SortedFunctions, FallbackValue={}}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <ToggleButton Content="{Binding PrettyName}" 
+                              Tag="{Binding Number}" 
+                              Command="{Binding Path=DataContext.HandleFunction ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
+                              CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
     </Grid>
   </Panel>
 </Window>
