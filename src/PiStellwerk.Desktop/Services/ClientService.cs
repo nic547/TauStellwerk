@@ -49,7 +49,7 @@ namespace PiStellwerk.Desktop.Services
             if (string.IsNullOrEmpty(_sessionId))
             {
                 var username = (await _settingsService.GetSettings()).Username;
-                var response = await client.PostAsync("/session", new StringContent(username, Encoding.UTF8, "text/json"));
+                var response = await client.PostAsync("/session", new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
             }
 
