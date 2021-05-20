@@ -123,7 +123,7 @@ namespace PiStellwerk.Controllers
             var session = SessionService.TryGetSession(sessionId);
             if (session == null)
             {
-                return Forbid();
+                return StatusCode(403);
             }
 
             if (await _engineService.SetEngineSpeed(session, id, speed, forward))
@@ -142,7 +142,7 @@ namespace PiStellwerk.Controllers
 
             if (session == null)
             {
-                return Forbid();
+                return StatusCode(403);
             }
 
             if (await _engineService.SetEngineFunction(session, id, functionNumber, state == "on"))
@@ -170,7 +170,7 @@ namespace PiStellwerk.Controllers
 
             if (session == null)
             {
-                return Forbid();
+                return StatusCode(403);
             }
 
             var result = await _engineService.AcquireEngine(session, engine);
@@ -192,7 +192,7 @@ namespace PiStellwerk.Controllers
             var session = SessionService.TryGetSession(sessionId);
             if (session == null)
             {
-                return Forbid();
+                return StatusCode(403);
             }
 
             if (!await _engineService.ReleaseEngine(session, id))
