@@ -7,16 +7,20 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Splat;
 
 namespace PiStellwerk.Desktop.Services
 {
     public class ClientService
     {
-        // TODO: REMOVE FIXED SHIT
-        private const string _username = "\"REPLACEME\"";
-        private const string _target = "https://192.168.1.10";
+        private readonly SettingsService _settingsService;
 
         private string _sessionId = string.Empty;
+
+        public ClientService(SettingsService? settingsService = null)
+        {
+            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
+        }
 
         public async Task<HttpClient> GetHttpClient()
         {
@@ -26,12 +30,15 @@ namespace PiStellwerk.Desktop.Services
                 ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
             };
 
+            var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
+
             var client = new HttpClient(handler)
             {
-                BaseAddress = new Uri(_target),
+                BaseAddress = baseAddress,
             };
 
             var sessionId = await GetSessionId(client);
+
             client.DefaultRequestHeaders.TryAddWithoutValidation("session-id", sessionId);
 
             return client;
@@ -41,7 +48,8 @@ namespace PiStellwerk.Desktop.Services
         {
             if (string.IsNullOrEmpty(_sessionId))
             {
-                var response = await client.PostAsync("/session", new StringContent(_username, Encoding.UTF8, "text/json"));
+                var username = (await _settingsService.GetSettings()).Username;
+                var response = await client.PostAsync("/session", new StringContent(username, Encoding.UTF8, "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
             }
 

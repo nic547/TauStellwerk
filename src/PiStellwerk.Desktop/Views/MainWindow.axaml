@@ -15,5 +15,6 @@
   <StackPanel>
     <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     <Button Command="{Binding OpenEngineList}">Select Engine</Button>
+    <Button Command="{Binding OpenSettings}" Content="Settings" />
   </StackPanel>
 </Window>

@@ -17,6 +17,7 @@ namespace PiStellwerk.Desktop
         // yet and stuff might break.
         public static void Main(string[] args)
         {
+            Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
             Locator.CurrentMutable.RegisterConstant(new ClientService(), typeof(ClientService));
             Locator.CurrentMutable.RegisterConstant(new EngineService(), typeof(EngineService));
 

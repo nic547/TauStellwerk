@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using JetBrains.Annotations;
 using PiStellwerk.Desktop.Views;
 
 namespace PiStellwerk.Desktop.ViewModels
@@ -16,6 +17,12 @@ namespace PiStellwerk.Desktop.ViewModels
         {
             var engineWindow = new EngineWindow();
             engineWindow.Show();
+        }
+
+        [UsedImplicitly]
+        private static void OpenSettings()
+        {
+            new SettingsWindow().Show();
         }
     }
 }
