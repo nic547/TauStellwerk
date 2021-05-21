@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Splat;
 
 namespace PiStellwerk.Desktop.Services
@@ -15,11 +16,16 @@ namespace PiStellwerk.Desktop.Services
     {
         private readonly SettingsService _settingsService;
 
+        private readonly Timer _sessionTimer;
         private string _sessionId = string.Empty;
 
         public ClientService(SettingsService? settingsService = null)
         {
             _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
+
+            _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
+            _sessionTimer.Elapsed += KeepSessionAlive;
+            _sessionTimer.AutoReset = true;
         }
 
         public async Task<HttpClient> GetHttpClient()
@@ -51,9 +57,17 @@ namespace PiStellwerk.Desktop.Services
                 var username = (await _settingsService.GetSettings()).Username;
                 var response = await client.PostAsync("/session", new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
+
+                _sessionTimer.Enabled = true;
             }
 
             return _sessionId;
+        }
+
+        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+        {
+            var client = await GetHttpClient();
+            _ = await client.PutAsync("status", new StringContent(string.Empty));
         }
     }
 }
