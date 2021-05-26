@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Commands
@@ -15,6 +16,10 @@ namespace PiStellwerk.Commands
     [UsedImplicitly]
     public class NullCommandSystem : ICommandSystem
     {
+        public NullCommandSystem(IConfiguration config)
+        {
+        }
+
         public event ICommandSystem.StatusChangeHandler StatusChanged
         {
             add { }

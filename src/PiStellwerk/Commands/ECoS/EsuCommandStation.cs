@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PiStellwerk.Data;
 using PiStellwerk.Database;
 
@@ -19,6 +21,7 @@ namespace PiStellwerk.Commands.ECoS
     /// <summary>
     /// Implementation of a <see cref="ICommandSystem"/> for the ESU Command Station (ECoS).
     /// </summary>
+    [UsedImplicitly]
     public class EsuCommandStation : ICommandSystem
     {
         private readonly ECosConnectionHandler _connectionHandler;
@@ -26,10 +29,12 @@ namespace PiStellwerk.Commands.ECoS
         /// <summary>
         /// Initializes a new instance of the <see cref="EsuCommandStation"/> class.
         /// </summary>
-        public EsuCommandStation()
+        /// <param name="config">IConfiguration to use.</param>
+        public EsuCommandStation(IConfiguration config)
         {
-            // TODO: Remove hardcoded IP and Address
-            _connectionHandler = new ECosConnectionHandler(IPAddress.Parse("192.168.1.153"), 15471);
+            string ipAddress = config["CommandSystem:IP"];
+            var port = int.Parse(config["commandSystem:Port"]);
+            _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port);
 
             _ = Initialize();
         }
