@@ -31,7 +31,8 @@ namespace PiStellwerk.Commands
             {
                 if (setting == system.Name)
                 {
-                     return (ICommandSystem)Activator.CreateInstance(system, config);
+                     var systemInstance = Activator.CreateInstance(system, config) as ICommandSystem;
+                     return systemInstance ?? new ConsoleCommandSystem(config);
                 }
             }
 

@@ -20,9 +20,8 @@ namespace PiStellwerk.Database.Tests
     /// </summary>
     public class StwDbContextTests
     {
-        private string _connectionString;
-        private SqliteConnection _sqliteConnection;
-        private StwDbContext _context;
+        private string _connectionString = string.Empty;
+        private SqliteConnection? _sqliteConnection;
 
         /// <summary>
         /// Does the setup for tests. Creates a SQLite in-memory database.
@@ -37,8 +36,8 @@ namespace PiStellwerk.Database.Tests
             _sqliteConnection = new SqliteConnection(_connectionString);
             _sqliteConnection.Open();
 
-            _context = new StwDbContext(_connectionString);
-            _context.Database.EnsureCreated();
+            var context = GetContext();
+            context.Database.EnsureCreated();
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace PiStellwerk.Database.Tests
         [TearDown]
         public void TearDown()
         {
-            _sqliteConnection.Close();
+            _sqliteConnection?.Close();
         }
 
         /// <summary>
@@ -57,8 +56,9 @@ namespace PiStellwerk.Database.Tests
         public void SaveAndLoadTest()
         {
             var originalEngine = TestDataHelper.CreateTestEngine();
-            _context.Engines.Add(originalEngine);
-            _context.SaveChanges();
+            var context = GetContext();
+            context.Engines.Add(originalEngine);
+            context.SaveChanges();
 
             var loadContext = new StwDbContext(_connectionString);
             var loadedEngine = loadContext.Engines.Include(x => x.Functions).Single();
@@ -74,8 +74,9 @@ namespace PiStellwerk.Database.Tests
         public void InsertMultipleEngines()
         {
             var testData = TestDataService.GetEngines();
-            _context.Engines.AddRange(testData);
-            _context.SaveChanges();
+            var context = GetContext();
+            context.Engines.AddRange(testData);
+            context.SaveChanges();
 
             var testContext = new StwDbContext(_connectionString);
             var loadedEngines = testContext.Engines;
@@ -92,19 +93,22 @@ namespace PiStellwerk.Database.Tests
             var testFunction = new DccFunction(1, "Headlights");
 
             var originalEngine = TestDataHelper.CreateTestEngine();
-            _context.Engines.Add(originalEngine);
-            _context.SaveChanges();
+            var context = GetContext();
+            context.Engines.Add(originalEngine);
+            context.SaveChanges();
 
-            var updateContext = new StwDbContext(_connectionString);
+            var updateContext = GetContext();
             var updateEngine = updateContext.Engines.Include(x => x.Functions).Single();
             updateEngine.Functions = new List<DccFunction> { testFunction };
             updateContext.SaveChanges();
 
-            var testContext = new StwDbContext(_connectionString);
+            var testContext = GetContext();
             var testEngine = testContext.Engines.Include(x => x.Functions).Single();
 
             testEngine.Should().NotBeSameAs(updateEngine);
             testEngine.Should().BeEquivalentTo(updateEngine);
         }
+
+        private StwDbContext GetContext() => new(_connectionString);
     }
 }

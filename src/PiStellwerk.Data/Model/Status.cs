@@ -19,6 +19,6 @@ namespace PiStellwerk.Data
         /// Gets or sets the name of the Person who is responsible for the last status change.
         /// SYSTEM is the software itself, for example because of the over current protection kicking in.
         /// </summary>
-        public string LastActionUsername { get; set; }
+        public string LastActionUsername { get; set; } = string.Empty;
     }
 }

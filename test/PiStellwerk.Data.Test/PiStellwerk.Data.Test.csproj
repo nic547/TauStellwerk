@@ -5,6 +5,7 @@
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <DocumentationFile>.\bin\PiStellwerk.Util.Tests.xml</DocumentationFile>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -7,6 +7,7 @@
     <NoWarn>1701;1702;1591</NoWarn>
     <DocumentationFile>.\bin\PiStellwerk.Database.Tests.xml</DocumentationFile>
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

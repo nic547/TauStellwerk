@@ -6,6 +6,7 @@
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerk.xml</DocumentationFile>
     <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

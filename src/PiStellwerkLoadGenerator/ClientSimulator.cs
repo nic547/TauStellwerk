@@ -52,7 +52,7 @@ namespace PiStellwerkLoadGenerator
 
             foreach (var actionType in actionTypes)
             {
-                var action = (ClientActionBase)Activator.CreateInstance(actionType);
+                var action = Activator.CreateInstance(actionType) as ClientActionBase;
 
                 if (action == null)
                 {

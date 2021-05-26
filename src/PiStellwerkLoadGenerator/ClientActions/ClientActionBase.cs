@@ -14,6 +14,10 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// </summary>
     public abstract class ClientActionBase
     {
+        private HttpClient? _client;
+        private Options? _options;
+        private Random? _random;
+
         /// <summary>
         /// Gets the interval in which the actions should be performed.
         /// </summary>
@@ -22,17 +26,29 @@ namespace PiStellwerkLoadGenerator.ClientActions
         /// <summary>
         /// Gets the HttpClient to use.
         /// </summary>
-        internal HttpClient Client { get; private set; }
+        internal HttpClient Client
+        {
+            get => _client ?? throw new InvalidOperationException();
+            private set => _client = value;
+        }
 
         /// <summary>
         /// Gets the Options to use.
         /// </summary>
-        internal Options Options { get; private set; }
+        internal Options Options
+        {
+            get => _options ?? throw new InvalidOperationException();
+            private set => _options = value;
+        }
 
         /// <summary>
         /// Gets an instance of <see cref="Random"/> to use.
         /// </summary>
-        internal Random Random { get; private set; }
+        internal Random Random
+        {
+            get => _random ?? throw new InvalidOperationException();
+            private set => _random = value;
+        }
 
         /// <summary>
         /// Initialize the stuff needed.

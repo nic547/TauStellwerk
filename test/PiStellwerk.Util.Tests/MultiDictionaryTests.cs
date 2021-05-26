@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace PiStellwerk.Util.Tests
@@ -58,7 +59,9 @@ namespace PiStellwerk.Util.Tests
             mdict.Add(2, "Zwo");
 
             _ = mdict.TryGetAllValues(1, out var immutableList);
-            var list = immutableList.ToList();
+            immutableList.Should().NotBeNull();
+
+            var list = immutableList!.ToList();
 
             Assert.AreEqual(3, list.Count);
             Assert.Contains("Eins", list);

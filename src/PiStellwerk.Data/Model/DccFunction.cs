@@ -15,13 +15,6 @@ namespace PiStellwerk.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="DccFunction"/> class.
         /// </summary>
-        public DccFunction()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DccFunction"/> class.
-        /// </summary>
         /// <param name="number"><see cref="Number"/>.</param>
         /// <param name="name"><see cref="Name"/>.</param>
         public DccFunction(byte number, string name)

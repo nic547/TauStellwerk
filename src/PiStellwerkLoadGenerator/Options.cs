@@ -13,30 +13,34 @@ namespace PiStellwerkLoadGenerator
     /// </summary>
     public class Options
     {
-        private Options()
+        public Options(Uri uri, bool noStats, int clients, int time)
         {
+            Uri = uri;
+            NoStats = noStats;
+            Clients = clients;
+            Time = time;
         }
 
         /// <summary>
         /// Gets the url of the service to test.
         /// </summary>
         // TODO: "Load testing" a server in a external network by accident would be very bad. Some verification that a target is in a local Network would be nice.
-        public Uri Uri { get; private set; }
+        public Uri Uri { get; }
 
         /// <summary>
         /// Gets a value indicating whether the Tool should collect latency statistics, since they might be quite memory-heavy.
         /// </summary>
-        public bool NoStats { get; private set; }
+        public bool NoStats { get; }
 
         /// <summary>
         /// Gets a value indicating how many clients should be simulated. Default Value: 1.
         /// </summary>
-        public int Clients { get; private set; }
+        public int Clients { get; }
 
         /// <summary>
         /// Gets a value indicating for how many seconds the tool should run. 0/Infinite not included.
         /// </summary>
-        public int Time { get; private set; }
+        public int Time { get; }
 
         /// <summary>
         /// Parses the command line arguments and turns them into a <see cref="Options"/> object.
@@ -60,13 +64,7 @@ namespace PiStellwerkLoadGenerator
 
             p.Parse(args);
 
-            var options = new Options()
-            {
-                Uri = uri,
-                NoStats = noStats,
-                Clients = clients,
-                Time = time,
-            };
+            var options = new Options(uri, noStats, clients, time);
 
             return options;
         }
