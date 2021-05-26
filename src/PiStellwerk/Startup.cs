@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using PiStellwerk.Commands;
 using PiStellwerk.Database;
 using PiStellwerk.Services;
@@ -83,6 +84,14 @@ namespace PiStellwerk
 
             services.AddSingleton(new StatusService(commandSystem));
             services.AddSingleton<IEngineService>(new EngineService(commandSystem));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PiStellwerk API", Version = "v1" });
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "PiStellwerk.xml");
+                c.IncludeXmlComments(filePath);
+            });
         }
 
         /// <summary>
@@ -95,6 +104,13 @@ namespace PiStellwerk
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiStellwerk API V1");
+                });
             }
 
             app.UseDefaultFiles();

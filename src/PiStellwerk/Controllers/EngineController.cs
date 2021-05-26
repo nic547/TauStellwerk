@@ -115,9 +115,19 @@ namespace PiStellwerk.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Set the Speed of an Engine.
+        /// Requires having acquired control of an Engine.
+        /// </summary>
+        /// <param name="sessionId">Valid session Id.</param>
+        /// <param name="id">Id of the engine.</param>
+        /// <param name="speed">Desired Speed.</param>
+        /// <param name="forward">Optional parameter indicating the direction.</param>
+        /// <returns>Response indicating success or failure.</returns>
         [HttpPost("{id:int}/speed/{speed}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> SetEngineSpeed([FromHeader(Name = "Session-Id")] string sessionId, int id, short speed, bool? forward)
         {
             var session = SessionService.TryGetSession(sessionId);
@@ -134,8 +144,18 @@ namespace PiStellwerk.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Activate/Deactivate a function of an engine.
+        /// </summary>
+        /// <param name="sessionId">A Valid session Id.</param>
+        /// <param name="id">Id of the engine.</param>
+        /// <param name="functionNumber">The function.</param>
+        /// <param name="state">On or off.</param>
+        /// <returns>Response indicating success or failure.</returns>
         [HttpPost("{id:int}/function/{functionNumber}/{state}")]
-
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> EngineFunction([FromHeader(Name = "Session-Id")] string sessionId, int id, byte functionNumber, string state)
         {
             var session = SessionService.TryGetSession(sessionId);
@@ -153,7 +173,17 @@ namespace PiStellwerk.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Acquire control of an engine.
+        /// </summary>
+        /// <param name="id">Id of the Engine.</param>
+        /// <param name="sessionId">Valid session Id.</param>
+        /// <returns>Response indicating success.</returns>
         [HttpPost("{id:int}/acquire")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status423Locked)]
         public async Task<ActionResult> AcquireEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
             var engine = await _dbContext.Engines
@@ -186,6 +216,12 @@ namespace PiStellwerk.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Release command of an engine.
+        /// </summary>
+        /// <param name="id">Id of the engine.</param>
+        /// <param name="sessionId">SessionId.</param>
+        /// <returns>Response indicating whether the operation was successful.</returns>
         [HttpPost("{id:int}/release")]
         public async Task<ActionResult> ReleaseEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
