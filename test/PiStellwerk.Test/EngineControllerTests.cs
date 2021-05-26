@@ -11,6 +11,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
 using PiStellwerk.Commands;
@@ -56,7 +57,7 @@ namespace PiStellwerk.Test
 
             _engineId = testEngine.Id;
 
-            _engineService = new EngineService(new NullCommandSystem());
+            _engineService = new EngineService(new NullCommandSystem(new Mock<IConfiguration>().Object));
 
             var sessionController = new SessionController();
             if (sessionController.CreateSession("testUser", "none") is ObjectResult sessionResult)
