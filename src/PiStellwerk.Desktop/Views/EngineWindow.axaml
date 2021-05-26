@@ -14,10 +14,12 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid>
-            <Border Background="Red" CornerRadius="4" Padding="4">
-              <TextBlock Text="{Binding Name}"/>
-            </Border>
-            <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
+            <StackPanel>
+              <Border Background="Red" CornerRadius="4" Padding="4">
+                <TextBlock Text="{Binding Name}"/>
+              </Border>
+              <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
+            </StackPanel>
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
