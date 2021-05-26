@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PiStellwerk.Data
 {
@@ -45,5 +46,11 @@ namespace PiStellwerk.Data
         /// Gets or sets the name that this function should have.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets the "pretty" name, ex: "F3 - Horn".
+        /// </summary>
+        [JsonIgnore]
+        public string PrettyName => $"F{Number} - {Name}";
     }
 }

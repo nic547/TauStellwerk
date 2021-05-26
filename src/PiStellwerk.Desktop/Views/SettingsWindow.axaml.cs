@@ -1,4 +1,4 @@
-// <copyright file="MainWindow.axaml.cs" company="Dominic Ritz">
+// <copyright file="SettingsWindow.axaml.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -6,14 +6,16 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using PiStellwerk.Desktop.ViewModels;
 
 namespace PiStellwerk.Desktop.Views
 {
-    public class MainWindow : Window
+    public class SettingsWindow : Window
     {
-        public MainWindow()
+        public SettingsWindow()
         {
             InitializeComponent();
+            DataContext = new SettingsViewModel();
 #if DEBUG
             this.AttachDevTools();
 #endif

@@ -174,10 +174,11 @@ namespace PiStellwerk.Test
         }
 
         [Test]
-        public async Task SpeedInvalidSessionReturnsForbid()
+        public async Task SpeedInvalidSessionReturns403()
         {
             var result = await GetController().SetEngineSpeed("InvalidSession", 1, 120, false);
-            result.Should().BeAssignableTo<ForbidResult>();
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(403);
         }
 
         [Test]
@@ -188,10 +189,11 @@ namespace PiStellwerk.Test
         }
 
         [Test]
-        public async Task FunctionInvalidSessionReturnsForbid()
+        public async Task FunctionInvalidSessionReturns403()
         {
             var result = await GetController().EngineFunction("invalidSession", 1, 1, "on");
-            result.Should().BeAssignableTo<ForbidResult>();
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(403);
         }
 
         [Test]
@@ -209,10 +211,11 @@ namespace PiStellwerk.Test
         }
 
         [Test]
-        public async Task AcquireInvalidSessionReturnsForbid()
+        public async Task AcquireInvalidSessionReturns403()
         {
             var result = await GetController().AcquireEngine(1, "InvalidSession");
-            result.Should().BeAssignableTo<ForbidResult>();
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(403);
         }
 
         [Test]
@@ -238,10 +241,11 @@ namespace PiStellwerk.Test
         }
 
         [Test]
-        public async Task ReleaseInvalidSessionReturnsForbid()
+        public async Task ReleaseInvalidSessionReturns403()
         {
             var result = await GetController().ReleaseEngine(1, "InvalidSession");
-            result.Should().BeAssignableTo<ForbidResult>();
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be(403);
         }
 
         [Test]
