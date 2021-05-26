@@ -20,6 +20,7 @@ namespace PiStellwerk.Desktop
             Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
             Locator.CurrentMutable.RegisterConstant(new ClientService(), typeof(ClientService));
             Locator.CurrentMutable.RegisterConstant(new EngineService(), typeof(EngineService));
+            Locator.CurrentMutable.RegisterConstant(new StatusService(), typeof(StatusService));
 
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);

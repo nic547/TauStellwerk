@@ -67,7 +67,7 @@ namespace PiStellwerk.Desktop.Services
         private async void KeepSessionAlive(object source, ElapsedEventArgs e)
         {
             var client = await GetHttpClient();
-            _ = await client.PutAsync("status", new StringContent(string.Empty));
+            _ = await client.PutAsync("/status", new StringContent(string.Empty));
         }
     }
 }

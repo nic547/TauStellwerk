@@ -48,4 +48,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\CustomStyles.xaml" />
+  </ItemGroup>
 </Project>

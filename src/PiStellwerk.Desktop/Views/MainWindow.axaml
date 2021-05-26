@@ -7,14 +7,20 @@
         x:Class="PiStellwerk.Desktop.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="PiStellwerk.Desktop">
-
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-  <StackPanel>
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    <Button Command="{Binding OpenEngineList}">Select Engine</Button>
-    <Button Command="{Binding OpenSettings}" Content="Settings" />
-  </StackPanel>
+    <DockPanel>
+        <Button IsEnabled="{Binding StopButtonState.ShouldBeEnabled}" DockPanel.Dock="Top" Name="StopButton" Margin="50 0 50 0" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
+            <StackPanel HorizontalAlignment="Center">
+              <Label Content="{Binding StopButtonState.TitleText}" FontSize="24"/>
+              <Label Content="{Binding StopButtonState.BottomText}"/>  
+            </StackPanel>
+        </Button>
+        <StackPanel>
+            <Button Command="{Binding OpenEngineList}">Select Engine</Button>
+            <Button Command="{Binding OpenSettings}" Content="Settings" />
+          </StackPanel>
+    </DockPanel>
 </Window>
