@@ -21,7 +21,7 @@ namespace PiStellwerk.Controllers
         /// HTTP GET.
         /// </summary>
         /// <returns>A list of active users.</returns>
-        [HttpGet]
+        [HttpGet("list")]
         public IReadOnlyList<Session> Get()
         {
             return SessionService.GetSessions();
@@ -35,6 +35,12 @@ namespace PiStellwerk.Controllers
         }
 
         [HttpPut]
+        public void Put([FromHeader(Name = "Session-Id")] string sessionId)
+        {
+            SessionService.TryUpdateSessionLastContact(sessionId);
+        }
+
+        [HttpPut("username")]
         public void Put([FromBody] string newUsername, [FromHeader(Name = "Session-Id")] string sessionId)
         {
             SessionService.RenameSessionUser(sessionId, newUsername);

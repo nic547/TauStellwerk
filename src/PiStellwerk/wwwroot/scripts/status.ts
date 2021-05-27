@@ -77,6 +77,6 @@ async function postStatusChange(isRunning: boolean) {
 
 function regularUpdate() {
     let bodyContent = JSON.stringify({ name: User.getUsername(), UserAgent: navigator.userAgent });
-    fetch("/status", Util.getRequestInit("PUT", bodyContent));
+    fetch("/session", Util.getRequestInit("PUT", bodyContent));
     
 }
