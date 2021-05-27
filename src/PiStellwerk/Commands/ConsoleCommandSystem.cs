@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using PiStellwerk.Data;
 
 namespace PiStellwerk.Commands
@@ -14,6 +15,10 @@ namespace PiStellwerk.Commands
     /// </summary>
     public class ConsoleCommandSystem : ICommandSystem
     {
+        public ConsoleCommandSystem(IConfiguration config)
+        {
+        }
+
         public event ICommandSystem.StatusChangeHandler StatusChanged
         {
             add { }

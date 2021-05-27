@@ -13,7 +13,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using PiStellwerk.Commands;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
 using PiStellwerk.Database;
@@ -29,10 +28,8 @@ namespace PiStellwerk.Test
         private int _engineId;
 
         private string _connectionString = string.Empty;
-        private SqliteConnection _connection;
+        private SqliteConnection? _connection;
         private string _sessionId = string.Empty;
-
-        private EngineService _engineService;
 
         /// <summary>
         /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
@@ -56,12 +53,10 @@ namespace PiStellwerk.Test
 
             _engineId = testEngine.Id;
 
-            _engineService = new EngineService(new NullCommandSystem());
-
             var sessionController = new SessionController();
             if (sessionController.CreateSession("testUser", "none") is ObjectResult sessionResult)
             {
-                _sessionId = sessionResult.Value.ToString();
+                _sessionId = sessionResult.Value.ToString() ?? throw new InvalidOperationException();
             }
         }
 
@@ -71,7 +66,7 @@ namespace PiStellwerk.Test
         [TearDown]
         public void TearDown()
         {
-            _connection.Close();
+            _connection?.Close();
             SessionService.CleanSessions();
         }
 
@@ -264,7 +259,7 @@ namespace PiStellwerk.Test
 
         private EngineController GetController()
         {
-            return GetController(_engineService);
+            return GetController(GetMock(true));
         }
 
         private EngineController GetController(IEngineService engineService)

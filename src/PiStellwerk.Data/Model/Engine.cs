@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
-using JetBrains.Annotations;
 
 namespace PiStellwerk.Data
 {
@@ -19,7 +19,7 @@ namespace PiStellwerk.Data
     /// </summary>
     public class Engine
     {
-        private string _name;
+        private string _name = string.Empty;
 
         /// <summary>
         /// Gets or sets the name of the choo-choo.
@@ -70,9 +70,8 @@ namespace PiStellwerk.Data
         /// </summary>
         public List<string> Tags { get; set; } = new List<string>();
 
-        [CanBeNull]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public ECoSEngineData ECoSEngineData { get; init; }
+        public ECoSEngineData? ECoSEngineData { get; init; }
 
         public List<EngineImage> Image { get; } = new();
 
@@ -86,7 +85,8 @@ namespace PiStellwerk.Data
         {
             // Probably not the fastest way for a deep clone, but very simple.
             var json = JsonSerializer.Serialize(this);
-            return JsonSerializer.Deserialize<Engine>(json);
+            var clonedObject = JsonSerializer.Deserialize<Engine>(json);
+            return clonedObject ?? throw new InvalidDataException("Serialized object could not be deserialized.");
         }
 
         public override string ToString()

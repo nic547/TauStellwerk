@@ -12,7 +12,7 @@ namespace PiStellwerk.Data
     /// </summary>
     public record ECoSEngineData
     {
-        private readonly string _name;
+        private readonly string _name = string.Empty;
 
         /// <summary>
         /// Gets the Name of the choo-choo as in the ECoS.

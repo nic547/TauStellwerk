@@ -22,7 +22,7 @@ namespace PiStellwerk.Commands
         /// <returns>A CommandSystem. Default is the ConsoleCommandSystem.</returns>
         public static ICommandSystem FromConfig(IConfiguration config)
         {
-            var setting = config["CommandSystem"];
+            var setting = config["CommandSystem:Type"];
             var systems = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(ICommandSystem).IsAssignableFrom(p) && !p.IsInterface)
@@ -31,11 +31,12 @@ namespace PiStellwerk.Commands
             {
                 if (setting == system.Name)
                 {
-                     return (ICommandSystem)Activator.CreateInstance(system);
+                     var systemInstance = Activator.CreateInstance(system, config) as ICommandSystem;
+                     return systemInstance ?? new ConsoleCommandSystem(config);
                 }
             }
 
-            return new ConsoleCommandSystem();
+            return new ConsoleCommandSystem(config);
         }
     }
 }

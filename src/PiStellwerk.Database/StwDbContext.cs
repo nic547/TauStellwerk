@@ -27,11 +27,11 @@ namespace PiStellwerk.Database
         }
 
         /// <summary>
-        /// Gets or sets the collection of engines in the database.
+        /// Gets a collection of engines in the database.
         /// </summary>
-        public DbSet<Engine> Engines { get; set; }
+        public DbSet<Engine> Engines => Set<Engine>();
 
-        public DbSet<EngineImage> EngineImages { get; set; }
+        public DbSet<EngineImage> EngineImages => Set<EngineImage>();
 
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

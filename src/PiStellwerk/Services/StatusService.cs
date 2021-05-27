@@ -18,7 +18,7 @@ namespace PiStellwerk.Services
         private readonly List<TaskCompletionSource<Status>> _statusAwaiters = new();
 
         private bool _isRunning;
-        private string _lastActionUsername;
+        private string _lastActionUsername = "SYSTEM";
 
         public StatusService(ICommandSystem system)
         {
