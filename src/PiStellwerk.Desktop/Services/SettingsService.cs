@@ -37,7 +37,7 @@ namespace PiStellwerk.Desktop.Services
         public async Task SetSettings(Settings settings)
         {
             _settings = settings;
-            await using var stream = File.OpenWrite(_fileName);
+            await using var stream = File.Open(_fileName, FileMode.Create);
             await JsonSerializer.SerializeAsync(stream, settings);
         }
     }
