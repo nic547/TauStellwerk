@@ -54,7 +54,7 @@ namespace PiStellwerk.Test
             _engineId = testEngine.Id;
 
             var sessionController = new SessionController();
-            if (sessionController.CreateSession("testUser", "none") is ObjectResult sessionResult)
+            if (sessionController.CreateSession("testUser") is ObjectResult sessionResult)
             {
                 _sessionId = sessionResult.Value.ToString() ?? throw new InvalidOperationException();
             }

@@ -31,11 +31,11 @@ namespace PiStellwerk.Services
 
         public static event SessionTimeoutHandler? SessionTimeout;
 
-        public static Session CreateSession(string username, string userAgent)
+        public static Session CreateSession(string username, string? userAgent)
         {
             var session = new Session
             {
-                UserAgent = userAgent,
+                UserAgent = userAgent ?? string.Empty,
                 UserName = username,
                 LastContact = DateTime.Now,
             };

@@ -28,8 +28,9 @@ namespace PiStellwerk.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateSession([FromBody] string username, [FromHeader(Name = "User-Agent")] string userAgent)
+        public ActionResult CreateSession([FromBody] string username)
         {
+            var userAgent = Request?.Headers["User-Agent"].ToString();
             var session = SessionService.CreateSession(username, userAgent);
             return Ok(session.SessionId);
         }
