@@ -18,6 +18,22 @@ namespace PiStellwerk.Controllers
     public class SessionController : Controller
     {
         /// <summary>
+        /// Get session associated with a given sessionId.
+        /// </summary>
+        /// <param name="sessionId">The sessionId.</param>
+        /// <returns>The session, if found, otherwise null.</returns>
+        [HttpGet]
+        public ActionResult<Session?> GetAssociatedSession([FromHeader(Name = "Session-Id")] string? sessionId)
+        {
+            if (sessionId == null)
+            {
+                return Ok();
+            }
+
+            return SessionService.TryGetSession(sessionId);
+        }
+
+        /// <summary>
         /// HTTP GET.
         /// </summary>
         /// <returns>A list of active users.</returns>
