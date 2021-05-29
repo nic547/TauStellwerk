@@ -27,13 +27,6 @@ namespace PiStellwerk.Controllers
             _statusService = statusService;
         }
 
-        [HttpPut]
-        public Status Put([FromHeader(Name = "Session-Id")] string sessionId)
-        {
-            SessionService.TryUpdateSessionLastContact(sessionId);
-            return _statusService.CheckStatus();
-        }
-
         [HttpGet]
         public async Task<Status> GetChange([FromQuery]bool? lastKnownStatus)
         {

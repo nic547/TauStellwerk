@@ -31,10 +31,10 @@ namespace PiStellwerk.Services
 
         private readonly ConcurrentDictionary<int, ActiveEngine> _activeEngines = new();
 
-        public EngineService(ICommandSystem commandSystem)
+        public EngineService(ICommandSystem commandSystem, SessionService sessionService)
         {
             _commandSystem = commandSystem;
-            SessionService.SessionTimeout += HandleSessionTimeout;
+            sessionService.SessionTimeout += HandleSessionTimeout;
         }
 
         public async Task<bool> AcquireEngine(Session session, Engine engine)

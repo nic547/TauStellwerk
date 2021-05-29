@@ -25,26 +25,32 @@ namespace PiStellwerk.Services
         private const int _timeoutInactive = 60;
         private const int _timeoutDeletion = 3600;
 
-        private static readonly ConcurrentDictionary<string, Session> _sessions = new();
+        private readonly ConcurrentDictionary<string, Session> _sessions = new();
+        private readonly INowProvider _now;
+
+        public SessionService(INowProvider? now = null)
+        {
+            _now = now ?? new NowProvider();
+        }
 
         public delegate void SessionTimeoutHandler(Session session);
 
-        public static event SessionTimeoutHandler? SessionTimeout;
+        public event SessionTimeoutHandler? SessionTimeout;
 
-        public static Session CreateSession(string username, string userAgent)
+        public Session CreateSession(string username, string? userAgent)
         {
             var session = new Session
             {
-                UserAgent = userAgent,
+                UserAgent = userAgent ?? string.Empty,
                 UserName = username,
-                LastContact = DateTime.Now,
+                LastContact = _now.GetNow(),
             };
             _sessions.TryAdd(session.SessionId, session);
             ConsoleService.PrintMessage($"{session} created new session");
             return session;
         }
 
-        public static bool TryUpdateSessionLastContact(string sessionId)
+        public bool TryUpdateSessionLastContact(string sessionId)
         {
             var session = TryGetSession(sessionId);
             if (session == null)
@@ -53,11 +59,11 @@ namespace PiStellwerk.Services
                 return false;
             }
 
-            session.LastContact = DateTime.Now;
+            session.LastContact = _now.GetNow();
             return true;
         }
 
-        public static void RenameSessionUser(string sessionId, string newUsername)
+        public void RenameSessionUser(string sessionId, string newUsername)
         {
             var session = TryGetSession(sessionId);
             if (session == null)
@@ -69,7 +75,7 @@ namespace PiStellwerk.Services
             session.UserName = newUsername;
         }
 
-        public static Session? TryGetSession(string sessionId)
+        public Session? TryGetSession(string sessionId)
         {
             _sessions.TryGetValue(sessionId, out var value);
             return value;
@@ -79,15 +85,35 @@ namespace PiStellwerk.Services
         /// Get a list of all active users.
         /// </summary>
         /// <returns>The list of active users.</returns>
-        public static IReadOnlyList<Session> GetSessions()
+        public IReadOnlyList<Session> GetSessions()
         {
             return _sessions.Values.ToList();
         }
 
-        public static void CleanSessions()
+        public void CheckLastContacts()
         {
-            // TODO: Turn into non-static class
-            _sessions.Clear();
+            foreach (var session in _sessions.Values)
+            {
+                var idle = (_now.GetNow() - session.LastContact).TotalSeconds;
+                switch (idle)
+                {
+                    case > _timeoutInactive when session.IsActive:
+                        session.IsActive = false;
+                        SessionTimeout?.Invoke(session);
+                        ConsoleService.PrintMessage($"{session} has been marked as inactive.");
+                        break;
+
+                    case < _timeoutInactive when !session.IsActive:
+                        session.IsActive = true;
+                        ConsoleService.PrintMessage($"{session} has been reactivated.");
+                        break;
+
+                    case > _timeoutDeletion:
+                        _sessions.TryRemove(session.SessionId, out _);
+                        ConsoleService.PrintMessage($"{session} has been deleted after {Math.Round(idle)} seconds");
+                        break;
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -99,22 +125,7 @@ namespace PiStellwerk.Services
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                foreach (var session in _sessions.Values)
-                {
-                    var idle = (DateTime.Now - session.LastContact).TotalSeconds;
-                    switch (idle)
-                    {
-                        case > _timeoutInactive when session.IsActive:
-                            session.IsActive = false;
-                            SessionTimeout?.Invoke(session);
-                            ConsoleService.PrintMessage($"{session} has been marked as inactive.");
-                            break;
-                        case > _timeoutDeletion:
-                            _sessions.TryRemove(session.SessionId, out _);
-                            ConsoleService.PrintMessage($"{session} has been deleted after {Math.Round(idle)} seconds");
-                            break;
-                    }
-                }
+                CheckLastContacts();
 
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }

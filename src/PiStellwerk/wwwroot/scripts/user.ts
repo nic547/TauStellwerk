@@ -43,7 +43,7 @@ function handleSubmit(event: Event) {
 
 function setUsername(newUsername: string): void {
     if (username != undefined) {
-        fetch("/session", Util.getRequestInit("PUT", JSON.stringify(newUsername)));
+        fetch("/session/username", Util.getRequestInit("PUT", JSON.stringify(newUsername)));
     }
     username = newUsername;
     usernameLabel.textContent = `User: ${username}`;

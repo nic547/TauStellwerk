@@ -17,27 +17,57 @@ namespace PiStellwerk.Controllers
     [Route("session")]
     public class SessionController : Controller
     {
+        private readonly SessionService _sessionService;
+
+        public SessionController(SessionService sessionService)
+        {
+            _sessionService = sessionService;
+        }
+
+        /// <summary>
+        /// Get session associated with a given sessionId.
+        /// </summary>
+        /// <param name="sessionId">The sessionId.</param>
+        /// <returns>The session, if found, otherwise null.</returns>
+        [HttpGet]
+        public ActionResult<Session?> GetAssociatedSession([FromHeader(Name = "Session-Id")] string? sessionId)
+        {
+            if (sessionId == null)
+            {
+                return Ok();
+            }
+
+            return _sessionService.TryGetSession(sessionId);
+        }
+
         /// <summary>
         /// HTTP GET.
         /// </summary>
         /// <returns>A list of active users.</returns>
-        [HttpGet]
+        [HttpGet("list")]
         public IReadOnlyList<Session> Get()
         {
-            return SessionService.GetSessions();
+            return _sessionService.GetSessions();
         }
 
         [HttpPost]
-        public ActionResult CreateSession([FromBody] string username, [FromHeader(Name = "User-Agent")] string userAgent)
+        public ActionResult CreateSession([FromBody] string username)
         {
-            var session = SessionService.CreateSession(username, userAgent);
+            var userAgent = Request?.Headers["User-Agent"].ToString();
+            var session = _sessionService.CreateSession(username, userAgent);
             return Ok(session.SessionId);
         }
 
         [HttpPut]
+        public void Put([FromHeader(Name = "Session-Id")] string sessionId)
+        {
+            _sessionService.TryUpdateSessionLastContact(sessionId);
+        }
+
+        [HttpPut("username")]
         public void Put([FromBody] string newUsername, [FromHeader(Name = "Session-Id")] string sessionId)
         {
-            SessionService.RenameSessionUser(sessionId, newUsername);
+            _sessionService.RenameSessionUser(sessionId, newUsername);
         }
     }
 }
