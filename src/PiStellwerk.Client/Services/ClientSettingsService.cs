@@ -7,11 +7,11 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using PiStellwerk.Desktop.Model;
+using PiStellwerk.Client.Model;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
-    public class SettingsService
+    public class ClientSettingsService
     {
         private const string _fileName = "settings.json";
         private Settings? _settings;

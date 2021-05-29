@@ -9,7 +9,7 @@ using System.Timers;
 using JetBrains.Annotations;
 using PiStellwerk.Data;
 
-namespace PiStellwerk.Desktop.Model
+namespace PiStellwerk.Client.Model
 {
     public class StopButtonState : INotifyPropertyChanged
     {

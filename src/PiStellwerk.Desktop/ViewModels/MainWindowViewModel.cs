@@ -3,10 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using JetBrains.Annotations;
+using PiStellwerk.Client.Model;
+using PiStellwerk.Client.Services;
 using PiStellwerk.Data;
-using PiStellwerk.Desktop.Model;
-using PiStellwerk.Desktop.Services;
 using PiStellwerk.Desktop.Views;
 using Splat;
 
@@ -19,8 +20,8 @@ namespace PiStellwerk.Desktop.ViewModels
 
         public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
-            _statusService = statusService ?? Locator.Current.GetService<StatusService>();
+            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+            _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
             _statusService.StatusChanged += (status) =>
             {
                 StopButtonState.SetStatus(status);

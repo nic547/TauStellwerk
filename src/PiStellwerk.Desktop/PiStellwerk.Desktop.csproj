@@ -32,7 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PiStellwerk.Client\PiStellwerk.Client.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
+    <ProjectReference Include="..\PiStellwerk\PiStellwerk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

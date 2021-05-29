@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
     public class ClientService
     {
@@ -21,7 +21,7 @@ namespace PiStellwerk.Desktop.Services
 
         public ClientService(SettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
+            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
 
             _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
             _sessionTimer.Elapsed += KeepSessionAlive;

@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 using PiStellwerk.Data;
 using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
     public class EngineService
     {
@@ -26,7 +27,7 @@ namespace PiStellwerk.Desktop.Services
 
         public EngineService(ClientService? clientService = null)
         {
-            _clientService = clientService ?? Locator.Current.GetService<ClientService>();
+            _clientService = clientService ?? Locator.Current.GetService<ClientService>() ?? throw new InvalidOperationException();
         }
 
         public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)

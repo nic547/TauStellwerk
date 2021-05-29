@@ -5,7 +5,7 @@
 
 using System;
 
-namespace PiStellwerk.Desktop.Model
+namespace PiStellwerk.Client.Model
 {
     public class Settings
     {

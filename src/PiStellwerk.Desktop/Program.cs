@@ -5,7 +5,7 @@
 
 using Avalonia;
 using Avalonia.ReactiveUI;
-using PiStellwerk.Desktop.Services;
+using PiStellwerk.Client.Services;
 using Splat;
 
 namespace PiStellwerk.Desktop

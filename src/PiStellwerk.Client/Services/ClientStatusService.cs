@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 using PiStellwerk.Data;
 using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
     public class StatusService
     {
@@ -19,7 +20,7 @@ namespace PiStellwerk.Desktop.Services
 
         public StatusService(ClientService? clientService = null)
         {
-            _clientService = clientService ?? Locator.Current.GetService<ClientService>();
+            _clientService = clientService ?? Locator.Current.GetService<ClientService>() ?? throw new InvalidOperationException();
 
             Task.Run(async () => { await TrackStatus(); });
         }
