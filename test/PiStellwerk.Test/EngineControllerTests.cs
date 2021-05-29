@@ -31,6 +31,8 @@ namespace PiStellwerk.Test
         private SqliteConnection? _connection;
         private string _sessionId = string.Empty;
 
+        private SessionService? _sessionService;
+
         /// <summary>
         /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
         /// </summary>
@@ -53,11 +55,8 @@ namespace PiStellwerk.Test
 
             _engineId = testEngine.Id;
 
-            var sessionController = new SessionController();
-            if (sessionController.CreateSession("testUser") is ObjectResult sessionResult)
-            {
-                _sessionId = sessionResult.Value.ToString() ?? throw new InvalidOperationException();
-            }
+            _sessionService = new SessionService();
+            _sessionId = _sessionService.CreateSession("tesUser", "io9urjhgf9rh").SessionId;
         }
 
         /// <summary>
@@ -67,7 +66,6 @@ namespace PiStellwerk.Test
         public void TearDown()
         {
             _connection?.Close();
-            SessionService.CleanSessions();
         }
 
         [Test]
@@ -264,7 +262,7 @@ namespace PiStellwerk.Test
 
         private EngineController GetController(IEngineService engineService)
         {
-            return new(GetContext(), engineService);
+            return new(GetContext(), engineService, _sessionService!);
         }
 
         private StwDbContext GetContext()

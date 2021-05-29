@@ -30,16 +30,19 @@ namespace PiStellwerk.Controllers
 
         private readonly StwDbContext _dbContext;
         private readonly IEngineService _engineService;
+        private readonly SessionService _sessionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context for the Controller.</param>
         /// <param name="engineService">A engineService instance.</param>
-        public EngineController(StwDbContext dbContext, IEngineService engineService)
+        /// <param name="sessionService">A sessionService instance.</param>
+        public EngineController(StwDbContext dbContext, IEngineService engineService, SessionService sessionService)
         {
             _dbContext = dbContext;
             _engineService = engineService;
+            _sessionService = sessionService;
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> SetEngineSpeed([FromHeader(Name = "Session-Id")] string sessionId, int id, short speed, bool? forward)
         {
-            var session = SessionService.TryGetSession(sessionId);
+            var session = _sessionService.TryGetSession(sessionId);
             if (session == null)
             {
                 return StatusCode(403);
@@ -158,7 +161,7 @@ namespace PiStellwerk.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> EngineFunction([FromHeader(Name = "Session-Id")] string sessionId, int id, byte functionNumber, string state)
         {
-            var session = SessionService.TryGetSession(sessionId);
+            var session = _sessionService.TryGetSession(sessionId);
 
             if (session == null)
             {
@@ -196,7 +199,7 @@ namespace PiStellwerk.Controllers
                 return NotFound();
             }
 
-            var session = SessionService.TryGetSession(sessionId);
+            var session = _sessionService.TryGetSession(sessionId);
 
             if (session == null)
             {
@@ -225,7 +228,7 @@ namespace PiStellwerk.Controllers
         [HttpPost("{id:int}/release")]
         public async Task<ActionResult> ReleaseEngine(int id, [FromHeader(Name = "Session-Id")] string sessionId)
         {
-            var session = SessionService.TryGetSession(sessionId);
+            var session = _sessionService.TryGetSession(sessionId);
             if (session == null)
             {
                 return StatusCode(403);

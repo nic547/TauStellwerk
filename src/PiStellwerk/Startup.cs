@@ -83,7 +83,9 @@ namespace PiStellwerk
             services.AddSingleton(commandSystem);
 
             services.AddSingleton(new StatusService(commandSystem));
-            services.AddSingleton<IEngineService>(new EngineService(commandSystem));
+            var sessionService = new SessionService();
+            services.AddSingleton(sessionService);
+            services.AddSingleton<IEngineService>(new EngineService(commandSystem, sessionService));
 
             services.AddSwaggerGen(c =>
             {
