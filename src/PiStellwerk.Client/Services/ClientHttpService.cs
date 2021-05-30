@@ -1,27 +1,27 @@
-﻿// <copyright file="ClientService.cs" company="Dominic Ritz">
+﻿// <copyright file="ClientHttpService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using Splat;
 
 namespace PiStellwerk.Client.Services
 {
-    public class ClientService
+    public class ClientHttpService
     {
-        private readonly SettingsService _settingsService;
+        private readonly ClientSettingsService _settingsService;
 
         private readonly Timer _sessionTimer;
         private string _sessionId = string.Empty;
 
-        public ClientService(SettingsService? settingsService = null)
+        public ClientHttpService(ClientSettingsService settingsService)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+            _settingsService = settingsService;
 
             _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
             _sessionTimer.Elapsed += KeepSessionAlive;
@@ -54,8 +54,10 @@ namespace PiStellwerk.Client.Services
         {
             if (string.IsNullOrEmpty(_sessionId))
             {
+
                 var username = (await _settingsService.GetSettings()).Username;
-                var response = await client.PostAsync("/session", new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
+                var response = await client.PostAsync("/session",
+                    new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
 
                 _sessionTimer.Enabled = true;
@@ -64,10 +66,10 @@ namespace PiStellwerk.Client.Services
             return _sessionId;
         }
 
-        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
-        {
-            var client = await GetHttpClient();
-            _ = await client.PutAsync("/session", new StringContent(string.Empty));
-        }
+    private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+    {
+        var client = await GetHttpClient();
+        _ = await client.PutAsync("/session", new StringContent(string.Empty));
     }
+}
 }

@@ -20,7 +20,7 @@ namespace PiStellwerk.Desktop.ViewModels
 {
     public class EngineViewModel : ViewModelBase
     {
-        private readonly EngineService _engineService;
+        private readonly ClientEngineService _engineService;
         private Engine? _activeEngine;
         private bool _isInSelectionMode = true;
 
@@ -28,9 +28,9 @@ namespace PiStellwerk.Desktop.ViewModels
 
         private int _throttle;
 
-        public EngineViewModel(EngineService? engineService = null)
+        public EngineViewModel(ClientEngineService? engineService = null)
         {
-            _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+            _engineService = engineService ?? Locator.Current.GetService<ClientEngineService>() ?? throw new InvalidOperationException();
             Load();
 
             this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(HandleThrottleChange);

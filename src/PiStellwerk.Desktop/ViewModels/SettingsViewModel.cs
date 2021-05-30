@@ -14,12 +14,12 @@ namespace PiStellwerk.Desktop.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly SettingsService _settingsService;
+        private readonly ClientSettingsService _settingsService;
         private Settings? _settings;
 
-        public SettingsViewModel(SettingsService? settingsService = null)
+        public SettingsViewModel(ClientSettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+            _settingsService = settingsService ?? Locator.Current.GetService<ClientSettingsService>() ?? throw new InvalidOperationException();
             LoadSettings();
         }
 

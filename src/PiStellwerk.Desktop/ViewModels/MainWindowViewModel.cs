@@ -15,13 +15,13 @@ namespace PiStellwerk.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly SettingsService _settingsService;
-        private StatusService _statusService;
+        private readonly ClientSettingsService _settingsService;
+        private ClientStatusService _statusService;
 
-        public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
+        public MainWindowViewModel(ClientStatusService? statusService = null, ClientSettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
-            _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
+            _settingsService = settingsService ?? Locator.Current.GetService<ClientSettingsService>() ?? throw new InvalidOperationException();
+            _statusService = statusService ?? Locator.Current.GetService<ClientStatusService>() ?? throw new InvalidOperationException();
             _statusService.StatusChanged += (status) =>
             {
                 StopButtonState.SetStatus(status);
