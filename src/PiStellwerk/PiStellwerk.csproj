@@ -19,14 +19,15 @@
 
   <ItemGroup>
     <Compile Remove="userContent\**" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="userContent\**" />
+    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="userContent\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="userContent\**" />
+    <None Remove="wwwroot\**" />
     <TypeScriptCompile Remove="userContent\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\scripts\Engine.ts" />
+    <TypeScriptCompile Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,15 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\scripts\Engine.js.map" />
-    <None Include="wwwroot\scripts\overlays.js.map" />
-    <None Include="wwwroot\scripts\status.js.map" />
-    <None Include="wwwroot\scripts\user.js.map" />
-    <None Include="wwwroot\scripts\util.js.map" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.6" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -55,43 +49,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj" />
     <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\PiStellwerk.Database\PiStellwerk.Database.csproj" />
     <ProjectReference Include="..\PiStellwerk.Images\PiStellwerk.Images.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\default.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\img\noImageImage.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\img\noImageImage.webp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="tsconfig.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\scripts\Engine.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\scripts\overlays.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\scripts\status.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\scripts\user.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\scripts\util.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\style\style.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 

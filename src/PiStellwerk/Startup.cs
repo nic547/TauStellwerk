@@ -74,6 +74,9 @@ namespace PiStellwerk
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
             services.AddHostedService<SessionService>();
@@ -106,6 +109,7 @@ namespace PiStellwerk
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseWebAssemblyDebugging();
 
                 app.UseSwagger();
 
@@ -117,26 +121,20 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
+            app.UseBlazorFrameworkFiles();
+
             EnsureContentDirectoriesExist(env);
 
             RunImageSetup(env);
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new CompositeFileProvider(
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, _userContentDirectory)),
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, "wwwroot"))),
-            });
+            app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
 
