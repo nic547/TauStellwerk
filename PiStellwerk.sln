@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Desktop", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Client", "src\PiStellwerk.Client\PiStellwerk.Client.csproj", "{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.WebClient", "src\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj", "{138BD039-6D6E-44A0-9550-B431803376B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.WebClient", "src\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj", "{138BD039-6D6E-44A0-9550-B431803376B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

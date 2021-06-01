@@ -11,7 +11,7 @@ using PiStellwerk.Client.Model;
 
 namespace PiStellwerk.Client.Services
 {
-    public class ClientSettingsService
+    public class ClientSettingsService : IClientSettingsService
     {
         private const string _fileName = "settings.json";
         private Settings? _settings;

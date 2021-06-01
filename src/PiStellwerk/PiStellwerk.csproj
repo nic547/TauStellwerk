@@ -49,11 +49,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj" />
     <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\PiStellwerk.Database\PiStellwerk.Database.csproj" />
     <ProjectReference Include="..\PiStellwerk.Images\PiStellwerk.Images.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
+    <ProjectReference Include="..\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj" />
   </ItemGroup>
 
 

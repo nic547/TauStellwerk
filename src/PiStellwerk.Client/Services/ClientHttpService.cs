@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +13,12 @@ namespace PiStellwerk.Client.Services
 {
     public class ClientHttpService
     {
-        private readonly ClientSettingsService _settingsService;
+        private readonly IClientSettingsService _settingsService;
 
         private readonly Timer _sessionTimer;
         private string _sessionId = string.Empty;
 
-        public ClientHttpService(ClientSettingsService settingsService)
+        public ClientHttpService(IClientSettingsService settingsService)
         {
             _settingsService = settingsService;
 
@@ -54,10 +53,13 @@ namespace PiStellwerk.Client.Services
         {
             if (string.IsNullOrEmpty(_sessionId))
             {
-
                 var username = (await _settingsService.GetSettings()).Username;
-                var response = await client.PostAsync("/session",
-                    new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
+                var response = await client.PostAsync(
+                    "/session",
+                    new StringContent(
+                        $"\"{username}\"",
+                        Encoding.UTF8,
+                        "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
 
                 _sessionTimer.Enabled = true;
@@ -66,10 +68,10 @@ namespace PiStellwerk.Client.Services
             return _sessionId;
         }
 
-    private async void KeepSessionAlive(object source, ElapsedEventArgs e)
-    {
-        var client = await GetHttpClient();
-        _ = await client.PutAsync("/session", new StringContent(string.Empty));
+        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+        {
+            var client = await GetHttpClient();
+            _ = await client.PutAsync("/session", new StringContent(string.Empty));
+        }
     }
-}
 }
