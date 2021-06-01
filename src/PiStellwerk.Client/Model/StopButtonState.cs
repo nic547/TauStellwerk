@@ -43,6 +43,8 @@ namespace PiStellwerk.Client.Model
 
         public bool ShouldBeEnabled => _state != State.StoppedLocked && _state != State.Unknown;
 
+        public bool ShouldBeDisabled => !ShouldBeEnabled;
+
         public string TitleText
         {
             get
@@ -85,7 +87,6 @@ namespace PiStellwerk.Client.Model
                 _state = State.StoppedLocked;
                 _lockingTimer.Start();
             }
-
             OnPropertyChanged();
         }
 
@@ -102,6 +103,7 @@ namespace PiStellwerk.Client.Model
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged()
         {
+            Console.WriteLine("StopButton state changed.");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }

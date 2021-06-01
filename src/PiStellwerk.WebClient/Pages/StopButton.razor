@@ -1,0 +1,49 @@
+﻿@using PiStellwerk.Client.Model
+@using PiStellwerk.Client.Services
+@using PiStellwerk.Data
+
+
+@inject ClientStatusService _statusService;
+@inject IClientSettingsService _settingsService;
+
+
+<button id="CommandButton" disabled="@_state.ShouldBeDisabled" @onclick="StopButtonClick">
+    <span id="CommandTitle">@_state.TitleText</span>
+    <br />
+    <span id="CommandDetails">@_state.BottomText</span>
+</button>
+
+@code {
+    private StopButtonState _state = new();
+
+    protected override void OnInitialized()
+    {
+        if (_statusService == null)
+        {
+            throw new InvalidOperationException("No StatusService was provided to StopButton!");
+        }
+
+        _state!.PropertyChanged += (_, _) => StateHasChanged();
+
+        _statusService.StatusChanged += s => _state.SetStatus(s);
+        ;
+
+        if (_statusService.LastKnownStatus != null)
+        {
+            _state?.SetStatus(_statusService.LastKnownStatus);
+        }
+    }
+
+    private async void StopButtonClick()
+    {
+        var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
+        var username = (await _settingsService.GetSettings()).Username;
+        var status = new Status()
+        {
+            IsRunning = !isCurrentlyRunning ?? true,
+            LastActionUsername = username,
+        };
+
+        await _statusService.SetStatus(status);
+    }
+}

@@ -12,28 +12,38 @@ using System.Timers;
 namespace PiStellwerk.Client.Services
 {
     public class ClientHttpService
+
     {
-        private readonly IClientSettingsService _settingsService;
+    private readonly IClientSettingsService _settingsService;
 
-        private readonly Timer _sessionTimer;
-        private string _sessionId = string.Empty;
+    private readonly Timer _sessionTimer;
+    private string _sessionId = string.Empty;
 
-        public ClientHttpService(IClientSettingsService settingsService)
+    public ClientHttpService(IClientSettingsService settingsService)
+    {
+        _settingsService = settingsService;
+
+        _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        _sessionTimer.Elapsed += KeepSessionAlive;
+        _sessionTimer.AutoReset = true;
+    }
+
+    public async Task<HttpClient> GetHttpClient()
+    {
+        try
         {
-            _settingsService = settingsService;
+            var handler = new HttpClientHandler();
 
-            _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
-            _sessionTimer.Elapsed += KeepSessionAlive;
-            _sessionTimer.AutoReset = true;
-        }
-
-        public async Task<HttpClient> GetHttpClient()
-        {
-            var handler = new HttpClientHandler
+            try
             {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
-                ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
-            };
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            }
+            catch (NotSupportedException)
+            {
+                // Not all platforms support the certificate handling, for example Blazor WebAssembly doesn't.
+                // Luckily the invalid certificates are handled by the browser in that case.
+            }
 
             var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
 
@@ -48,30 +58,36 @@ namespace PiStellwerk.Client.Services
 
             return client;
         }
-
-        private async Task<string> GetSessionId(HttpClient client)
+        catch (Exception e)
         {
-            if (string.IsNullOrEmpty(_sessionId))
-            {
-                var username = (await _settingsService.GetSettings()).Username;
-                var response = await client.PostAsync(
-                    "/session",
-                    new StringContent(
-                        $"\"{username}\"",
-                        Encoding.UTF8,
-                        "text/json"));
-                _sessionId = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 
-                _sessionTimer.Enabled = true;
-            }
+    private async Task<string> GetSessionId(HttpClient client)
+    {
+        if (string.IsNullOrEmpty(_sessionId))
+        {
+            var username = (await _settingsService.GetSettings()).Username;
+            var response = await client.PostAsync(
+                "/session",
+                new StringContent(
+                    $"\"{username}\"",
+                    Encoding.UTF8,
+                    "text/json"));
+            _sessionId = await response.Content.ReadAsStringAsync();
 
-            return _sessionId;
+            _sessionTimer.Enabled = true;
         }
 
-        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
-        {
-            var client = await GetHttpClient();
-            _ = await client.PutAsync("/session", new StringContent(string.Empty));
-        }
+        return _sessionId;
+    }
+
+    private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+    {
+        var client = await GetHttpClient();
+        _ = await client.PutAsync("/session", new StringContent(string.Empty));
+    }
     }
 }
