@@ -1,1 +1,30 @@
-﻿
+﻿.Stopped {
+    background-color: var(--danger-color)
+}
+
+.StoppedLocked {
+    background-color: var(--danger-color-light)
+}
+
+.Running {
+    background-color: var(--primary-color)
+}
+
+div {
+    margin: 0 -8px;
+    text-align: center;
+    padding: 1em;
+    flex: 0 0 auto;
+    z-index: 100; /* Should always be displayed on top, even on overlays*/
+}
+
+@media (min-width: 900px) {
+    div {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+#StopTitle {
+    font-size: 2rem;
+}

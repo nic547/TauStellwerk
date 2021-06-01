@@ -23,8 +23,6 @@ namespace PiStellwerk.Client.Model
 
         private string _lastActionUsername = "Nobody";
 
-        private State _state = State.Unknown;
-
         public StopButtonState()
         {
             _lockingTimer.Elapsed += UnlockState;
@@ -33,7 +31,7 @@ namespace PiStellwerk.Client.Model
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private enum State
+        public enum State
         {
             Unknown,
             Running,
@@ -41,7 +39,7 @@ namespace PiStellwerk.Client.Model
             Stopped,
         }
 
-        public bool ShouldBeEnabled => _state != State.StoppedLocked && _state != State.Unknown;
+        public bool ShouldBeEnabled => CurrentState != State.StoppedLocked && CurrentState != State.Unknown;
 
         public bool ShouldBeDisabled => !ShouldBeEnabled;
 
@@ -49,7 +47,7 @@ namespace PiStellwerk.Client.Model
         {
             get
             {
-                return _state switch
+                return CurrentState switch
                 {
                     State.Unknown => "UNKNOWN",
                     State.Running => "RUNNING",
@@ -64,7 +62,7 @@ namespace PiStellwerk.Client.Model
         {
             get
             {
-                return _state switch
+                return CurrentState switch
                 {
                     State.Unknown => "PiStellwerk is in unknown state",
                     State.Running => $"PiStellwerk started by {_lastActionUsername}",
@@ -74,27 +72,30 @@ namespace PiStellwerk.Client.Model
             }
         }
 
+        public State CurrentState { get; private set; } = State.Unknown;
+
         public void SetStatus(Status status)
         {
             _lockingTimer.Stop();
             _lastActionUsername = status.LastActionUsername;
             if (status.IsRunning)
             {
-                _state = State.Running;
+                CurrentState = State.Running;
             }
             else
             {
-                _state = State.StoppedLocked;
+                CurrentState = State.StoppedLocked;
                 _lockingTimer.Start();
             }
+
             OnPropertyChanged();
         }
 
         private void UnlockState(object source, ElapsedEventArgs e)
         {
-            if (_state == State.StoppedLocked)
+            if (CurrentState == State.StoppedLocked)
             {
-                _state = State.Stopped;
+                CurrentState = State.Stopped;
             }
 
             OnPropertyChanged();

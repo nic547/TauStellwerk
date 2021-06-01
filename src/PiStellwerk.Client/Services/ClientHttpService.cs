@@ -12,24 +12,24 @@ using System.Timers;
 namespace PiStellwerk.Client.Services
 {
     public class ClientHttpService
-
     {
-    private readonly IClientSettingsService _settingsService;
+        private readonly IClientSettingsService _settingsService;
 
-    private readonly Timer _sessionTimer;
-    private string _sessionId = string.Empty;
+        private readonly Timer _sessionTimer;
 
-    public ClientHttpService(IClientSettingsService settingsService)
-    {
+        private string _sessionId = string.Empty;
+
+        public ClientHttpService(IClientSettingsService settingsService)
+        {
         _settingsService = settingsService;
 
         _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
         _sessionTimer.Elapsed += KeepSessionAlive;
         _sessionTimer.AutoReset = true;
-    }
+        }
 
-    public async Task<HttpClient> GetHttpClient()
-    {
+        public async Task<HttpClient> GetHttpClient()
+        {
         try
         {
             var handler = new HttpClientHandler();
@@ -63,31 +63,31 @@ namespace PiStellwerk.Client.Services
             Console.WriteLine(e);
             throw;
         }
-    }
-
-    private async Task<string> GetSessionId(HttpClient client)
-    {
-        if (string.IsNullOrEmpty(_sessionId))
-        {
-            var username = (await _settingsService.GetSettings()).Username;
-            var response = await client.PostAsync(
-                "/session",
-                new StringContent(
-                    $"\"{username}\"",
-                    Encoding.UTF8,
-                    "text/json"));
-            _sessionId = await response.Content.ReadAsStringAsync();
-
-            _sessionTimer.Enabled = true;
         }
 
-        return _sessionId;
-    }
+        private async Task<string> GetSessionId(HttpClient client)
+        {
+            if (string.IsNullOrEmpty(_sessionId))
+            {
+                var username = (await _settingsService.GetSettings()).Username;
+                var response = await client.PostAsync(
+                    "/session",
+                    new StringContent(
+                        $"\"{username}\"",
+                        Encoding.UTF8,
+                        "text/json"));
+                _sessionId = await response.Content.ReadAsStringAsync();
 
-    private async void KeepSessionAlive(object source, ElapsedEventArgs e)
-    {
-        var client = await GetHttpClient();
-        _ = await client.PutAsync("/session", new StringContent(string.Empty));
-    }
+                _sessionTimer.Enabled = true;
+            }
+
+            return _sessionId;
+        }
+
+        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+        {
+            var client = await GetHttpClient();
+            _ = await client.PutAsync("/session", new StringContent(string.Empty));
+        }
     }
 }

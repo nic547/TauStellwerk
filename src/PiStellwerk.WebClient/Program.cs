@@ -1,8 +1,13 @@
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+// <copyright file="Program.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using PiStellwerk.Client.Services;
 
 namespace PiStellwerk.WebClient
