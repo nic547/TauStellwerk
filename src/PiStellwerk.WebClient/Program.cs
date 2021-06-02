@@ -24,12 +24,17 @@ namespace PiStellwerk.WebClient
             var settingsService = new BlazorSettingsService(builder.HostEnvironment.BaseAddress);
             var httpService = new ClientHttpService(settingsService);
             var statusService = new ClientStatusService(httpService);
+            var engineService = new ClientEngineService(httpService);
 
             Console.WriteLine("ADDING SERVICES");
 
             builder.Services.AddSingleton<IClientSettingsService>(_ => settingsService);
             builder.Services.AddSingleton(_ => httpService);
             builder.Services.AddSingleton(_ => statusService);
+            builder.Services.AddSingleton(sp => engineService);
+
+            builder.Services.AddSingleton(new ModalManager());
+            builder.Services.AddSingleton(new AppState());
 
             Console.WriteLine("ADDED SERVICES");
 

@@ -1,0 +1,25 @@
+﻿@using PiStellwerk.Data
+@using JetBrains.Annotations
+<div class="box is-engine-controller has-shadow">
+    <div class="ec-grid-header">
+        <span class="is-pulled-left">Engine name</span><button class="is-pulled-right bold">X</button>
+    </div>
+    <picture class="ec-grid-image">
+        <img src="img/noImageImage.png" alt="Engine image" />
+    </picture>
+    <label class="ec-grid-slider has-100percent-height">
+        <input type="range" orient="vertical" min="0" max="127" value="0" />
+    </label><!-- orient="vertical" is for firefox -->
+    <div class="ec-grid-direction center">
+        <button class="bold" disabled="disabled">&lt;</button>
+        <button class="bold">&gt;</button>
+    </div>
+    <output class="ec-grid-speed center">0</output>
+    <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
+    </div>
+</div>
+
+@code {
+	[Parameter]
+	public Engine? Engine { get; init; }
+}
