@@ -1,0 +1,28 @@
+﻿@using PiStellwerk.Data
+@using PiStellwerk.Client.Services
+
+@inject ClientEngineService _engineService;
+
+<button class="button is-fullwidth has-left-text @BackgroundClass"
+        @onclick="ToggleFunction">
+        @Function.PrettyName
+</button>
+
+@code {
+    [Parameter]
+    public DccFunction Function { get; set; } = null!;
+    
+    [Parameter]
+    public int EngineId { get; set; }
+
+    private bool IsOn { get; set; }
+
+    private string BackgroundClass => IsOn ? "has-background-primary-light" : string.Empty;
+
+        private void ToggleFunction()
+        {
+            IsOn = !IsOn;
+            _ = _engineService.SetFunction(EngineId, Function.Number, IsOn);
+            StateHasChanged();
+        }
+}

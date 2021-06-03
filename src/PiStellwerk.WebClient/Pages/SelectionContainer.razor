@@ -31,12 +31,10 @@
     {
         base.OnInitialized();
         _modalManager.PropertyChanged += HandleModalManagerNotification;
-        Console.WriteLine("SelectionContainer initialized");
     }
 
     private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
-        Console.WriteLine("HandleModalManagerNotification was called");
         if (args.PropertyName != nameof(_modalManager.IsEngineSelectionVisible))
         {
             return;

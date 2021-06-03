@@ -1,25 +1,61 @@
 ﻿@using PiStellwerk.Data
 @using JetBrains.Annotations
+@using PiStellwerk.Client.Services
+@using System.Formats.Asn1
+
+@inject AppState _appState
+@inject ClientEngineService _engineService;
+
 <div class="box is-engine-controller has-shadow">
     <div class="ec-grid-header">
-        <span class="is-pulled-left">Engine name</span><button class="is-pulled-right bold">X</button>
+        <span class="is-pulled-left">@Engine.Name</span>
+        <button class="is-pulled-right bold" @onclick="() => _appState.ActiveEngines.Remove(Engine) ">X</button>
     </div>
     <picture class="ec-grid-image">
         <img src="img/noImageImage.png" alt="Engine image" />
     </picture>
     <label class="ec-grid-slider has-100percent-height">
-        <input type="range" orient="vertical" min="0" max="127" value="0" />
+        <input type="range" orient="vertical" min="0" max="127" @bind-value="Throttle" @bind-value:event="oninput" />
     </label><!-- orient="vertical" is for firefox -->
     <div class="ec-grid-direction center">
-        <button class="bold" disabled="disabled">&lt;</button>
-        <button class="bold">&gt;</button>
+        <button class="bold" disabled="@(!_forward)" @onclick="ChangeDirection">&lt;</button>
+        <button class="bold" disabled="@(_forward)" @onclick="ChangeDirection" >&gt;</button>
     </div>
-    <output class="ec-grid-speed center">0</output>
+    <output class="ec-grid-speed center">@Throttle</output>
     <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
+        @foreach (var function in Engine.Functions.OrderBy(e => e.Number))
+        {
+            <FunctionButton
+                EngineId=Engine.Id
+                Function=function
+                />
+        }
     </div>
 </div>
 
 @code {
-	[Parameter]
-	public Engine? Engine { get; init; }
+
+    private int _throttle = 0;
+
+    private bool _forward  = true;
+
+    [Parameter]
+	public Engine Engine { get; init; } = null!;
+
+    private int Throttle
+    {
+        get => _throttle;
+        set
+        {
+            _throttle = value;
+            _ = _engineService.SetSpeed(Engine.Id, _throttle, _forward);
+        }
+    }
+
+    private void ChangeDirection()
+    {
+        _forward = !_forward;
+        Throttle = 0;
+        StateHasChanged();
+    }
 }

@@ -26,8 +26,6 @@ namespace PiStellwerk.WebClient
             var statusService = new ClientStatusService(httpService);
             var engineService = new ClientEngineService(httpService);
 
-            Console.WriteLine("ADDING SERVICES");
-
             builder.Services.AddSingleton<IClientSettingsService>(_ => settingsService);
             builder.Services.AddSingleton(_ => httpService);
             builder.Services.AddSingleton(_ => statusService);
@@ -35,8 +33,6 @@ namespace PiStellwerk.WebClient
 
             builder.Services.AddSingleton(new ModalManager());
             builder.Services.AddSingleton(new AppState());
-
-            Console.WriteLine("ADDED SERVICES");
 
             await builder.Build().RunAsync();
         }
