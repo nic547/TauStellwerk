@@ -16,7 +16,7 @@ namespace PiStellwerk.Images
 {
     public class ImageSystem
     {
-        private readonly (string Prefix, int Size)[] _downScaleValues = new[] { ("half_", 50), ("quarter_", 25) };
+        private readonly (string Prefix, int Size)[] _downScaleValues = { ("full_", 100), ("half_", 50), ("quarter_", 25) };
 
         private readonly StwDbContext _context;
 
@@ -120,20 +120,20 @@ namespace PiStellwerk.Images
         {
             foreach (var engine in _context.Engines.Include(e => e.Image))
             {
-                if (!engine.Image.Any() || engine.Image.Count == _downScaleValues.Length + 1)
+                if (!engine.Image.Any() || engine.Image.Count == _downScaleValues.Length)
                 {
                     continue;
                 }
 
-                var originalImage = engine.Image.SingleOrDefault(i => !i.IsGenerated);
-                if (originalImage == null)
+                var file = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
+                if (file == null)
                 {
                     continue;
                 }
 
                 foreach (var (prefix, size) in _downScaleValues)
                 {
-                    var newImage = await DownscaleImage(Path.Combine(_userPath, originalImage.Filename), prefix, size);
+                    var newImage = await DownscaleImage(Path.Combine(_userPath, file), prefix, size);
                     if (newImage != null)
                     {
                         engine.Image.Add(

@@ -30,7 +30,6 @@ namespace PiStellwerk
         // TODO: Setting-ify
         private const string _userContentDirectory = "userContent";
         private const string _generatedContentDirectory = "generatedContent";
-        private const string _engineImageDirectory = "engineimages";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
@@ -147,16 +146,16 @@ namespace PiStellwerk
 
         private static void EnsureContentDirectoriesExist(IHostEnvironment env)
         {
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory));
         }
 
         private static async void RunImageSetup(IHostEnvironment env)
         {
             var system = new Images.ImageSystem(
                 new StwDbContext(),
-                Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory),
-                Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+                Path.Combine(env.ContentRootPath, _userContentDirectory),
+                Path.Combine(env.ContentRootPath, _generatedContentDirectory));
             await Task.Run(system.RunImageSetup);
         }
     }
