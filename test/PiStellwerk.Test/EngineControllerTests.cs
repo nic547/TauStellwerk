@@ -290,8 +290,8 @@ namespace PiStellwerk.Test
                 },
                 Image =
                 {
-                    new EngineImage(string.Empty),
-                    new EngineImage(string.Empty),
+                    new EngineImage(),
+                    new EngineImage(),
                 },
                 ECoSEngineData = new ECoSEngineData
                 {

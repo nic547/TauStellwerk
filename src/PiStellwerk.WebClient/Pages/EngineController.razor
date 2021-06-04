@@ -12,7 +12,13 @@
         <button class="is-pulled-right bold" @onclick="() => _appState.ActiveEngines.Remove(Engine) ">X</button>
     </div>
     <picture class="ec-grid-image">
-        <img src="img/noImageImage.png" alt="Engine image" />
+        @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
+        {
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            Console.WriteLine(srcset);
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
+        }
+        <img src="img/noImageImage.png" alt="Engine image"/>
     </picture>
     <label class="ec-grid-slider has-100percent-height">
         <input type="range" orient="vertical" min="0" max="127" @bind-value="Throttle" @bind-value:event="oninput" />
@@ -34,6 +40,7 @@
 </div>
 
 @code {
+    private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
     private int _throttle = 0;
 

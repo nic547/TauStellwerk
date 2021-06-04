@@ -14,16 +14,12 @@ namespace PiStellwerk.Data
 {
     public class EngineImage
     {
-        public EngineImage(string filename)
-        {
-            Filename = filename;
-        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Filename { get; set; }
+        public string Filename { get; set; } = string.Empty;
 
         public bool IsGenerated { get; set; }
 

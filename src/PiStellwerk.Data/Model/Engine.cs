@@ -73,7 +73,7 @@ namespace PiStellwerk.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData? ECoSEngineData { get; init; }
 
-        public List<EngineImage> Image { get; } = new();
+        public List<EngineImage> Image { get; init; } = new();
 
         public DateTime LastUsed { get; set; }
 

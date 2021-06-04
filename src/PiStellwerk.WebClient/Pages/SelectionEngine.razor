@@ -9,7 +9,15 @@
     @if (Engine != null)
     {
         <header>@Engine.Name</header>
-        <picture class="selection-image"><img src="img/noImageImage.png" alt="Engine image"/></picture>
+        <picture class="selection-image">
+        @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
+            {
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            Console.WriteLine(srcset);
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
+            }
+        <img src="img/noImageImage.png" alt="Engine image" />
+        </picture>
         <span class="tags">
             @foreach (var tag in Engine.Tags)
             {
@@ -18,6 +26,8 @@
         </span>
     }</article>
 @code {
+       private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
+
     [Parameter]
     public Engine? Engine { get; init; }
 

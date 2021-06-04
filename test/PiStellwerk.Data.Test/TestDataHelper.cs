@@ -29,6 +29,13 @@ namespace PiStellwerk.Data.Test
                 {
                     new DccFunction(0, "Lights"),
                 },
+                Image =
+                {
+                    new EngineImage()
+                    {
+                        Filename = "test.jpg",
+                    },
+                },
             };
         }
     }

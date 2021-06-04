@@ -59,39 +59,8 @@ namespace PiStellwerk.Images
                 return;
             }
 
-            await CheckForLostUserFiles();
             await CheckForMissingImageWidth();
             await CreateDownScaledImages();
-        }
-
-        private async Task CheckForLostUserFiles()
-        {
-            var files = Directory.GetFiles(_userPath);
-            foreach (string file in files)
-            {
-                var existingEntry = await _context.EngineImages.SingleOrDefaultAsync(x => x.Filename == Path.GetFileName(file));
-
-                if (existingEntry != null)
-                {
-                    continue;
-                }
-
-                var success = int.TryParse(Path.GetFileNameWithoutExtension(file), out var idCandidate);
-
-                if (!success)
-                {
-                    continue;
-                }
-
-                var engine = await _context.Engines.SingleOrDefaultAsync(e => e.Id == idCandidate);
-
-                engine?.Image.Add(new EngineImage(Path.GetFileName(file))
-                {
-                    IsGenerated = false,
-                });
-
-                await _context.SaveChangesAsync();
-            }
         }
 
         private async Task CheckForMissingImageWidth()
@@ -120,7 +89,7 @@ namespace PiStellwerk.Images
         {
             foreach (var engine in _context.Engines.Include(e => e.Image))
             {
-                if (!engine.Image.Any() || engine.Image.Count == _downScaleValues.Length)
+                if (engine.Image.Count == _downScaleValues.Length)
                 {
                     continue;
                 }
@@ -137,8 +106,9 @@ namespace PiStellwerk.Images
                     if (newImage != null)
                     {
                         engine.Image.Add(
-                            new EngineImage(newImage.Value.Filename)
+                            new EngineImage
                             {
+                                Filename = newImage.Value.Filename,
                                 IsGenerated = true,
                                 Width = newImage.Value.Width,
                             });
