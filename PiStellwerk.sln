@@ -38,7 +38,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Database", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Database.Tests", "test\PiStellwerk.Database.Tests\PiStellwerk.Database.Tests.csproj", "{519E6D46-4FA8-4653-9A89-C89812CA4EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiStellwerk.Desktop", "src\PiStellwerk.Desktop\PiStellwerk.Desktop.csproj", "{D0EA1AD9-B3B5-4902-93FC-63587066F07C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Desktop", "src\PiStellwerk.Desktop\PiStellwerk.Desktop.csproj", "{D0EA1AD9-B3B5-4902-93FC-63587066F07C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Client", "src\PiStellwerk.Client\PiStellwerk.Client.csproj", "{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.WebClient", "src\PiStellwerk.WebClient\PiStellwerk.WebClient.csproj", "{138BD039-6D6E-44A0-9550-B431803376B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +102,14 @@ Global
 		{D0EA1AD9-B3B5-4902-93FC-63587066F07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0EA1AD9-B3B5-4902-93FC-63587066F07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0EA1AD9-B3B5-4902-93FC-63587066F07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{138BD039-6D6E-44A0-9550-B431803376B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{138BD039-6D6E-44A0-9550-B431803376B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{138BD039-6D6E-44A0-9550-B431803376B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{138BD039-6D6E-44A0-9550-B431803376B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

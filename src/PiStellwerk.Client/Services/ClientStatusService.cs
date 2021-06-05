@@ -1,4 +1,4 @@
-// <copyright file="StatusService.cs" company="Dominic Ritz">
+// <copyright file="ClientStatusService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -9,17 +9,16 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using PiStellwerk.Data;
-using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
-    public class StatusService
+    public class ClientStatusService
     {
-        private ClientService _clientService;
+        private ClientHttpService _httpService;
 
-        public StatusService(ClientService? clientService = null)
+        public ClientStatusService(ClientHttpService clientService)
         {
-            _clientService = clientService ?? Locator.Current.GetService<ClientService>();
+            _httpService = clientService;
 
             Task.Run(async () => { await TrackStatus(); });
         }
@@ -34,7 +33,7 @@ namespace PiStellwerk.Desktop.Services
 
         public async Task SetStatus(Status status)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var json = JsonSerializer.Serialize(status);
             StatusChanged?.Invoke(status);
             LastKnownStatus = status;
@@ -56,7 +55,7 @@ namespace PiStellwerk.Desktop.Services
 
         private async Task<Status?> GetStatus(bool? lastState)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var uri = lastState == null ? "/status" : $"/status?lastKnownStatus={lastState}";
             var response = await client.GetAsync(uri, CancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();

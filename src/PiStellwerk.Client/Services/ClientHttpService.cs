@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientService.cs" company="Dominic Ritz">
+﻿// <copyright file="ClientHttpService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,33 +8,42 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
-    public class ClientService
+    public class ClientHttpService
     {
-        private readonly SettingsService _settingsService;
+        private readonly IClientSettingsService _settingsService;
 
         private readonly Timer _sessionTimer;
+
         private string _sessionId = string.Empty;
 
-        public ClientService(SettingsService? settingsService = null)
+        public ClientHttpService(IClientSettingsService settingsService)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
+        _settingsService = settingsService;
 
-            _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
-            _sessionTimer.Elapsed += KeepSessionAlive;
-            _sessionTimer.AutoReset = true;
+        _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
+        _sessionTimer.Elapsed += KeepSessionAlive;
+        _sessionTimer.AutoReset = true;
         }
 
         public async Task<HttpClient> GetHttpClient()
         {
-            var handler = new HttpClientHandler
+        try
+        {
+            var handler = new HttpClientHandler();
+
+            try
             {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
-                ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
-            };
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+            }
+            catch (NotSupportedException)
+            {
+                // Not all platforms support the certificate handling, for example Blazor WebAssembly doesn't.
+                // Luckily the invalid certificates are handled by the browser in that case.
+            }
 
             var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
 
@@ -49,13 +58,24 @@ namespace PiStellwerk.Desktop.Services
 
             return client;
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        }
 
         private async Task<string> GetSessionId(HttpClient client)
         {
             if (string.IsNullOrEmpty(_sessionId))
             {
                 var username = (await _settingsService.GetSettings()).Username;
-                var response = await client.PostAsync("/session", new StringContent($"\"{username}\"", Encoding.UTF8, "text/json"));
+                var response = await client.PostAsync(
+                    "/session",
+                    new StringContent(
+                        $"\"{username}\"",
+                        Encoding.UTF8,
+                        "text/json"));
                 _sessionId = await response.Content.ReadAsStringAsync();
 
                 _sessionTimer.Enabled = true;

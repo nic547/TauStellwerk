@@ -125,9 +125,9 @@ namespace PiStellwerk.Services
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                CheckLastContacts();
+                  CheckLastContacts();
 
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                  await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
 
             ConsoleService.PrintMessage("SessionService background task is stopping.");

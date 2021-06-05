@@ -30,7 +30,6 @@ namespace PiStellwerk
         // TODO: Setting-ify
         private const string _userContentDirectory = "userContent";
         private const string _generatedContentDirectory = "generatedContent";
-        private const string _engineImageDirectory = "engineimages";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
@@ -74,18 +73,22 @@ namespace PiStellwerk
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<SessionService>();
+            services.AddSingleton(new SessionService());
 
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
             services.AddSingleton(commandSystem);
 
             services.AddSingleton(new StatusService(commandSystem));
-            var sessionService = new SessionService();
-            services.AddSingleton(sessionService);
-            services.AddSingleton<IEngineService>(new EngineService(commandSystem, sessionService));
+
+            services.AddSingleton<IEngineService>(p => new EngineService(commandSystem, p.GetRequiredService<SessionService>()));
+
+            services.AddHostedService(p => p.GetRequiredService<SessionService>());
 
             services.AddSwaggerGen(c =>
             {
@@ -106,6 +109,7 @@ namespace PiStellwerk
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseWebAssemblyDebugging();
 
                 app.UseSwagger();
 
@@ -117,19 +121,19 @@ namespace PiStellwerk
 
             app.UseDefaultFiles();
 
+            app.UseBlazorFrameworkFiles();
+
             EnsureContentDirectoriesExist(env);
 
             RunImageSetup(env);
 
+            app.UseStaticFiles();
+
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new CompositeFileProvider(
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, _userContentDirectory)),
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
-                    new PhysicalFileProvider(
-                        Path.Combine(env.ContentRootPath, "wwwroot"))),
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
+                RequestPath = "/images",
             });
 
             app.UseRouting();
@@ -137,21 +141,22 @@ namespace PiStellwerk
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
 
         private static void EnsureContentDirectoriesExist(IHostEnvironment env)
         {
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory));
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory));
+            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory));
         }
 
         private static async void RunImageSetup(IHostEnvironment env)
         {
             var system = new Images.ImageSystem(
                 new StwDbContext(),
-                Path.Combine(env.ContentRootPath, _userContentDirectory, _engineImageDirectory),
-                Path.Combine(env.ContentRootPath, _generatedContentDirectory, _engineImageDirectory));
+                Path.Combine(env.ContentRootPath, _userContentDirectory),
+                Path.Combine(env.ContentRootPath, _generatedContentDirectory));
             await Task.Run(system.RunImageSetup);
         }
     }

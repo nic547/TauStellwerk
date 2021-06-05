@@ -1,4 +1,4 @@
-﻿// <copyright file="EngineService.cs" company="Dominic Ritz">
+﻿// <copyright file="ClientEngineService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -10,13 +10,12 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using PiStellwerk.Data;
-using Splat;
 
-namespace PiStellwerk.Desktop.Services
+namespace PiStellwerk.Client.Services
 {
-    public class EngineService
+    public class ClientEngineService
     {
-        private readonly ClientService _clientService;
+        private readonly ClientHttpService _httpService;
 
         private readonly JsonSerializerOptions _serializerOptions = new()
         {
@@ -24,14 +23,14 @@ namespace PiStellwerk.Desktop.Services
             Converters = { new JsonStringEnumConverter() },
         };
 
-        public EngineService(ClientService? clientService = null)
+        public ClientEngineService(ClientHttpService clientService)
         {
-            _clientService = clientService ?? Locator.Current.GetService<ClientService>();
+            _httpService = clientService;
         }
 
         public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var response = await client.GetAsync("/engine/list");
             var responseString = await response.Content.ReadAsStringAsync();
             var engines = JsonSerializer.Deserialize<Engine[]>(responseString, _serializerOptions) ?? System.Array.Empty<Engine>();
@@ -41,7 +40,7 @@ namespace PiStellwerk.Desktop.Services
 
         public async Task<Engine?> AcquireEngine(int id)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var engineTask = client.GetAsync($"/engine/{id}");
             var acquireResult = await client.PostAsync($"/engine/{id}/acquire", new StringContent(string.Empty));
 
@@ -55,9 +54,15 @@ namespace PiStellwerk.Desktop.Services
             return null;
         }
 
+        public async Task ReleaseEngine(int id)
+        {
+            var client = await _httpService.GetHttpClient();
+            await client.PostAsync($"/engine/{id}/release", new StringContent(string.Empty));
+        }
+
         public async Task SetSpeed(int id, int speed, bool? forward)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var path = $"/engine/{id}/speed/{speed}";
             if (forward != null)
             {
@@ -69,7 +74,7 @@ namespace PiStellwerk.Desktop.Services
 
         public async Task SetFunction(int id, byte function, bool on)
         {
-            var client = await _clientService.GetHttpClient();
+            var client = await _httpService.GetHttpClient();
             var path = $"/engine/{id}/function/{function}/{(on ? "on" : "off")}";
 
             _ = await client.PostAsync(path, new StringContent(string.Empty));

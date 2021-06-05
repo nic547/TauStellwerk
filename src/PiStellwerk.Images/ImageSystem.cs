@@ -16,7 +16,7 @@ namespace PiStellwerk.Images
 {
     public class ImageSystem
     {
-        private readonly (string Prefix, int Size)[] _downScaleValues = new[] { ("half_", 50), ("quarter_", 25) };
+        private readonly (string Prefix, int Size)[] _downScaleValues = { ("full_", 100), ("half_", 50), ("quarter_", 25) };
 
         private readonly StwDbContext _context;
 
@@ -59,39 +59,8 @@ namespace PiStellwerk.Images
                 return;
             }
 
-            await CheckForLostUserFiles();
             await CheckForMissingImageWidth();
             await CreateDownScaledImages();
-        }
-
-        private async Task CheckForLostUserFiles()
-        {
-            var files = Directory.GetFiles(_userPath);
-            foreach (string file in files)
-            {
-                var existingEntry = await _context.EngineImages.SingleOrDefaultAsync(x => x.Filename == Path.GetFileName(file));
-
-                if (existingEntry != null)
-                {
-                    continue;
-                }
-
-                var success = int.TryParse(Path.GetFileNameWithoutExtension(file), out var idCandidate);
-
-                if (!success)
-                {
-                    continue;
-                }
-
-                var engine = await _context.Engines.SingleOrDefaultAsync(e => e.Id == idCandidate);
-
-                engine?.Image.Add(new EngineImage(Path.GetFileName(file))
-                {
-                    IsGenerated = false,
-                });
-
-                await _context.SaveChangesAsync();
-            }
         }
 
         private async Task CheckForMissingImageWidth()
@@ -120,25 +89,26 @@ namespace PiStellwerk.Images
         {
             foreach (var engine in _context.Engines.Include(e => e.Image))
             {
-                if (!engine.Image.Any() || engine.Image.Count == _downScaleValues.Length + 1)
+                if (engine.Image.Count == _downScaleValues.Length)
                 {
                     continue;
                 }
 
-                var originalImage = engine.Image.SingleOrDefault(i => !i.IsGenerated);
-                if (originalImage == null)
+                var file = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
+                if (file == null)
                 {
                     continue;
                 }
 
                 foreach (var (prefix, size) in _downScaleValues)
                 {
-                    var newImage = await DownscaleImage(Path.Combine(_userPath, originalImage.Filename), prefix, size);
+                    var newImage = await DownscaleImage(Path.Combine(_userPath, file), prefix, size);
                     if (newImage != null)
                     {
                         engine.Image.Add(
-                            new EngineImage(newImage.Value.Filename)
+                            new EngineImage
                             {
+                                Filename = newImage.Value.Filename,
                                 IsGenerated = true,
                                 Width = newImage.Value.Width,
                             });

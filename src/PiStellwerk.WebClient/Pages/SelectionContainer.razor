@@ -1,0 +1,56 @@
+﻿@using PiStellwerk.Data
+@using System.ComponentModel
+@using PiStellwerk.Client.Services
+@inject ModalManager _modalManager
+@inject ClientEngineService _engineService
+
+<div id="EngineSelectionModal" class="modal @_modalManager.EngineSelectionClass">
+    <div class="modal-content-fullwidth">
+        <div class="modal-header">
+            <header></header>
+            <button class="bold" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
+        </div>
+        <div class="can-scroll-y modal-body">
+            <div id="EngineSelectionContainer" class="selection-grid">
+                @foreach (var engine in _engines)
+                {
+                    <SelectionEngine Engine="engine"/>
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="bold" id="EngineSelectionBackwards" disabled="disabled">&lt;</button>
+            <button class="bold" id="EngineSelectionForward">&gt;</button>
+        </div>
+    </div>
+</div>
+@code {
+    private readonly List<Engine> _engines = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _modalManager.PropertyChanged += HandleModalManagerNotification;
+    }
+
+    private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName != nameof(_modalManager.IsEngineSelectionVisible))
+        {
+            return;
+        }
+
+        if (_modalManager.IsEngineSelectionVisible)
+        {
+            var engines = await _engineService.GetEngines(0);
+            _engines.AddRange(engines);
+        }
+        else
+        {
+            _engines.Clear();
+        }
+
+        StateHasChanged();
+    }
+
+}

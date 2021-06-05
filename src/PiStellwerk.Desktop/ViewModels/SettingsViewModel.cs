@@ -3,9 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
-using PiStellwerk.Desktop.Model;
-using PiStellwerk.Desktop.Services;
+using PiStellwerk.Client.Model;
+using PiStellwerk.Client.Services;
 using ReactiveUI;
 using Splat;
 
@@ -13,12 +14,12 @@ namespace PiStellwerk.Desktop.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly SettingsService _settingsService;
+        private readonly ClientSettingsService _settingsService;
         private Settings? _settings;
 
-        public SettingsViewModel(SettingsService? settingsService = null)
+        public SettingsViewModel(ClientSettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>();
+            _settingsService = settingsService ?? Locator.Current.GetService<ClientSettingsService>() ?? throw new InvalidOperationException();
             LoadSettings();
         }
 

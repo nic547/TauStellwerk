@@ -1,0 +1,36 @@
+﻿@page "/"
+@using PiStellwerk.WebClient.Pages
+@using PiStellwerk.WebClient
+
+@inject ModalManager _modalManager;
+
+<StopButton />
+<ControlContainer />
+
+<!-- Engine selection overlay-->
+
+<SelectionContainer/>
+
+<!-- Username overlay -->
+<div id="UsernameOverlay" class="modal">
+    <div class="modal-content">
+        <form id="UsernameForm">
+            <label for="UsernameInput">Please enter your username:</label>
+            <input required="required" type="text" id="UsernameInput" />
+            <button>Submit</button>
+        </form>
+    </div>
+</div>
+<footer>
+    <button class="is-pulled-left" id="UsernameLabel">User: Username</button>
+    <button class="is-pulled-right">Settings</button>
+</footer>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _modalManager.PropertyChanged += (_, _) => StateHasChanged();
+    }
+}

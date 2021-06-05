@@ -35,21 +35,6 @@
 	font-size: 1.5em
 }
 
-#CommandButton {
-	margin: 0 -8px;
-	text-align: center;
-	padding: 1em;
-	flex: 0 0 auto;
-    z-index: 100; /* Should always be displayed on top, even on overlays*/
-}
-
-@media (min-width: 900px) {
-	#CommandButton {
-		width: 80%;
-		margin: 0 auto;
-	}
-}
-
 #EngineContainer {
 	overflow-x: hidden;
 	overflow-y: hidden;

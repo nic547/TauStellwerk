@@ -5,7 +5,7 @@
 
 using Avalonia;
 using Avalonia.ReactiveUI;
-using PiStellwerk.Desktop.Services;
+using PiStellwerk.Client.Services;
 using Splat;
 
 namespace PiStellwerk.Desktop
@@ -17,10 +17,10 @@ namespace PiStellwerk.Desktop
         // yet and stuff might break.
         public static void Main(string[] args)
         {
-            Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
-            Locator.CurrentMutable.RegisterConstant(new ClientService(), typeof(ClientService));
-            Locator.CurrentMutable.RegisterConstant(new EngineService(), typeof(EngineService));
-            Locator.CurrentMutable.RegisterConstant(new StatusService(), typeof(StatusService));
+            Locator.CurrentMutable.RegisterConstant(new ClientSettingsService(), typeof(ClientSettingsService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(ClientHttpService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(ClientEngineService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(ClientStatusService));
 
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);

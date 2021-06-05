@@ -1,0 +1,48 @@
+﻿@using PiStellwerk.Data
+@using PiStellwerk.Client.Services
+
+@inject AppState _appState
+@inject ClientEngineService _engineService
+@inject ModalManager _modalManager
+
+<article class="is-clickable has-shadow" @onclick="SelectEngine" >
+    @if (Engine != null)
+    {
+        <header>@Engine.Name</header>
+        <picture class="selection-image">
+        @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
+            {
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            Console.WriteLine(srcset);
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
+            }
+        <img src="img/noImageImage.png" alt="Engine image" />
+        </picture>
+        <span class="tags">
+            @foreach (var tag in Engine.Tags)
+            {
+                <span>@tag</span>
+            }
+        </span>
+    }</article>
+@code {
+       private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
+
+    [Parameter]
+    public Engine? Engine { get; init; }
+
+    private async void SelectEngine()
+    {
+        if (Engine == null)
+        {
+            throw new InvalidOperationException();
+        }
+        var engine = await _engineService.AcquireEngine(Engine.Id);
+        if (engine != null)
+        {
+            Console.WriteLine($"Acquired engine {engine}");
+            _appState.ActiveEngines.Add(engine);
+        }
+        _modalManager.IsEngineSelectionVisible = false;
+    }
+}

@@ -1,0 +1,27 @@
+﻿@using System.Collections.ObjectModel
+@using PiStellwerk.Data
+
+@inject ModalManager _modalManager
+@inject AppState _appState;
+
+<div id="EngineContainer" class="is-flex-horizontal has-100percent-height">
+    <!-- Template for each control block -->
+    @foreach (var engine in _appState.ActiveEngines)
+    {
+        <EngineController Engine="engine"/>
+    }
+
+    <!-- "Empty" control panel with Button to open the engine selection dialog. -->
+    <div class="is-engine-controller uses-ec-grid has-shadow">
+        <button id="SelectEngineButton" class="has-background-primary covers-full-ec-grid" @onclick="() => _modalManager.IsEngineSelectionVisible = true" >Select Engine</button>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _appState.ActiveEngines.CollectionChanged += (_,_) => StateHasChanged();
+    }
+
+}

@@ -11,8 +11,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using JetBrains.Annotations;
+using PiStellwerk.Client.Services;
 using PiStellwerk.Data;
-using PiStellwerk.Desktop.Services;
 using ReactiveUI;
 using Splat;
 
@@ -20,7 +20,7 @@ namespace PiStellwerk.Desktop.ViewModels
 {
     public class EngineViewModel : ViewModelBase
     {
-        private readonly EngineService _engineService;
+        private readonly ClientEngineService _engineService;
         private Engine? _activeEngine;
         private bool _isInSelectionMode = true;
 
@@ -28,9 +28,9 @@ namespace PiStellwerk.Desktop.ViewModels
 
         private int _throttle;
 
-        public EngineViewModel(EngineService? engineService = null)
+        public EngineViewModel(ClientEngineService? engineService = null)
         {
-            _engineService = engineService ?? Locator.Current.GetService<EngineService>();
+            _engineService = engineService ?? Locator.Current.GetService<ClientEngineService>() ?? throw new InvalidOperationException();
             Load();
 
             this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(HandleThrottleChange);
