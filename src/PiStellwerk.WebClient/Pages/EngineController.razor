@@ -9,7 +9,7 @@
 <div class="box is-engine-controller has-shadow">
     <div class="ec-grid-header">
         <span class="is-pulled-left">@Engine.Name</span>
-        <button class="is-pulled-right bold" @onclick="() => _appState.ActiveEngines.Remove(Engine) ">X</button>
+        <button class="is-pulled-right bold" @onclick="() => RemoveEngine() ">X</button>
     </div>
     <picture class="ec-grid-image">
         @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
@@ -47,7 +47,7 @@
     private bool _forward  = true;
 
     [Parameter]
-	public Engine Engine { get; init; } = null!;
+    public Engine Engine { get; init; } = null!;
 
     private int Throttle
     {
@@ -64,5 +64,11 @@
         _forward = !_forward;
         Throttle = 0;
         StateHasChanged();
+    }
+
+    private void RemoveEngine()
+    {
+        _appState.ActiveEngines.Remove(Engine);
+        _ = _engineService.ReleaseEngine(Engine.Id);
     }
 }

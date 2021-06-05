@@ -54,6 +54,12 @@ namespace PiStellwerk.Client.Services
             return null;
         }
 
+        public async Task ReleaseEngine(int id)
+        {
+            var client = await _httpService.GetHttpClient();
+            await client.PostAsync($"/engine/{id}/release", new StringContent(string.Empty));
+        }
+
         public async Task SetSpeed(int id, int speed, bool? forward)
         {
             var client = await _httpService.GetHttpClient();

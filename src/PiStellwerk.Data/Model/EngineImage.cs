@@ -14,7 +14,6 @@ namespace PiStellwerk.Data
 {
     public class EngineImage
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
