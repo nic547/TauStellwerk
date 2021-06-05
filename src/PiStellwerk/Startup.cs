@@ -78,16 +78,17 @@ namespace PiStellwerk
 
             services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
 
-            services.AddHostedService<SessionService>();
+            services.AddSingleton(new SessionService());
 
             var commandSystem = CommandSystemFactory.FromConfig(Configuration);
             _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
             services.AddSingleton(commandSystem);
 
             services.AddSingleton(new StatusService(commandSystem));
-            var sessionService = new SessionService();
-            services.AddSingleton(sessionService);
-            services.AddSingleton<IEngineService>(new EngineService(commandSystem, sessionService));
+
+            services.AddSingleton<IEngineService>(p => new EngineService(commandSystem, p.GetRequiredService<SessionService>()));
+
+            services.AddHostedService(p => p.GetRequiredService<SessionService>());
 
             services.AddSwaggerGen(c =>
             {
