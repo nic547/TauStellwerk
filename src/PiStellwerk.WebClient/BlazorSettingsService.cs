@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using PiStellwerk.Client.Model;
 using PiStellwerk.Client.Services;
 
@@ -12,26 +13,81 @@ namespace PiStellwerk.WebClient
 {
     public class BlazorSettingsService : IClientSettingsService
     {
-        private readonly string _baseAddress;
+        private const string _settingsKey = "PiStellwerk_Settings";
 
-        public BlazorSettingsService(string baseAddress)
+        private readonly string _baseAddress;
+        private readonly ILocalStorageService _storageService;
+
+        private bool _hasLoadBeenAttempted;
+
+        private MutableSettings _settings;
+        private ImmutableSettings _immutableSettings;
+
+        public BlazorSettingsService(string baseAddress, ILocalStorageService storageService)
         {
             _baseAddress = baseAddress;
-        }
-
-        public Task<Settings> GetSettings(bool forceReload = false)
-        {
-            var settings = new Settings()
+            _storageService = storageService;
+            _settings = new MutableSettings
             {
-                ServerAddress = _baseAddress,
-                Username = "BLAZOR TEST USER",
+                ServerAddress = baseAddress,
             };
-            return Task.FromResult(settings);
+            _immutableSettings = _settings.GetImmutableCopy();
         }
 
-        public Task SetSettings(Settings settings)
+        public event IClientSettingsService.SettingsChange? SettingsChanged;
+
+        public async Task<ImmutableSettings> GetSettings()
         {
-            throw new NotImplementedException();
+            await EnsureSettingsWereLoaded();
+            return _immutableSettings;
+        }
+
+        public async Task<MutableSettings> GetMutableSettingsCopy()
+        {
+            await EnsureSettingsWereLoaded();
+            return _settings.GetMutableCopy();
+        }
+
+        public async Task SetSettings(MutableSettings mutableSettings)
+        {
+            mutableSettings.ServerAddress = _baseAddress;
+            _settings = mutableSettings;
+
+            _immutableSettings = _settings.GetImmutableCopy();
+
+            await _storageService.SetItemAsync(_settingsKey, mutableSettings);
+
+            SettingsChanged?.Invoke(_immutableSettings);
+        }
+
+        /// <summary>
+        /// Ensures that there was an attempt at loading the settings file.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        private async Task EnsureSettingsWereLoaded()
+        {
+            if (_hasLoadBeenAttempted)
+            {
+                return;
+            }
+
+            try
+            {
+                var potentialSettings = await _storageService.GetItemAsync<MutableSettings>(_settingsKey);
+                if (potentialSettings != null)
+                {
+                    potentialSettings.ServerAddress = _baseAddress;
+                    _settings = potentialSettings;
+                    _immutableSettings = _settings.GetImmutableCopy();
+                    SettingsChanged?.Invoke(_immutableSettings);
+                }
+            }
+            catch (Exception)
+            {
+                // ignore exception, file probably just doesn't exists yet.
+            }
+
+            _hasLoadBeenAttempted = true;
         }
     }
 }

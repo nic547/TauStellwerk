@@ -1,0 +1,14 @@
+@using PiStellwerk.Client.Services
+@inject ModalManager ModalManager
+@inject IClientSettingsService SettingsService
+<div id="UsernameOverlay" class="modal @ModalManager.UsernameModalClass">
+    <div class="modal-content">
+        <form id="UsernameForm">
+            <label for="UsernameInput">Please enter your username:</label>
+            <input required="required" type="text" id="UsernameInput" />
+            <button>Submit</button>
+        </form>
+    </div>
+</div>
+@code {
+}

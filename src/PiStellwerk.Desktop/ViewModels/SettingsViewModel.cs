@@ -15,7 +15,7 @@ namespace PiStellwerk.Desktop.ViewModels
     public class SettingsViewModel : ViewModelBase
     {
         private readonly ClientSettingsService _settingsService;
-        private Settings? _settings;
+        private MutableSettings? _settings;
 
         public SettingsViewModel(ClientSettingsService? settingsService = null)
         {
@@ -23,7 +23,7 @@ namespace PiStellwerk.Desktop.ViewModels
             LoadSettings();
         }
 
-        public Settings? Settings
+        public MutableSettings? Settings
         {
             get => _settings;
             set => this.RaiseAndSetIfChanged(ref _settings, value);
@@ -31,7 +31,7 @@ namespace PiStellwerk.Desktop.ViewModels
 
         public async void LoadSettings()
         {
-            Settings = await _settingsService.GetSettings(true);
+            Settings = await _settingsService.GetMutableSettingsCopy();
         }
 
         public async Task SaveSettings()
