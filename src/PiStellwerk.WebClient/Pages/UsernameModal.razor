@@ -1,14 +1,46 @@
 @using PiStellwerk.Client.Services
-@inject ModalManager ModalManager
-@inject IClientSettingsService SettingsService
-<div id="UsernameOverlay" class="modal @ModalManager.UsernameModalClass">
+@using PiStellwerk.Client.Model
+@using System.ComponentModel
+@inject ModalManager _modalManager
+@inject IClientSettingsService _settingsService
+<div id="UsernameOverlay" class="modal @_modalManager.UsernameModalClass">
     <div class="modal-content">
         <form id="UsernameForm">
             <label for="UsernameInput">Please enter your username:</label>
-            <input required="required" type="text" id="UsernameInput" />
-            <button>Submit</button>
+            <input required="required" type="text" id="UsernameInput" @bind="_username"/>
+            <button type="button" @onclick="SaveNewUsername">Save</button>
         </form>
     </div>
 </div>
 @code {
+    private MutableSettings? _settings;
+
+    private string _username = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _settings = await _settingsService.GetMutableSettingsCopy();
+        _username = _settings.Username;
+
+        _modalManager.PropertyChanged += HandleModalManagerNotification;
+    }
+
+    private void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName != nameof(_modalManager.IsUsernameModalVisible))
+        {
+            return;
+        }
+        StateHasChanged();
+    }
+
+    private void SaveNewUsername()
+    {
+        if (_settings == null) { throw new InvalidOperationException(); }
+        _settings.Username = _username;
+        _settingsService.SetSettings(_settings);
+        _modalManager.IsUsernameModalVisible = false;
+
+    }
 }

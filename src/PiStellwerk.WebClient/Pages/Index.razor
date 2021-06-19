@@ -1,18 +1,16 @@
 ﻿@page "/"
-@using PiStellwerk.WebClient.Pages
-@using PiStellwerk.WebClient
 @using PiStellwerk.Client.Services
 @using PiStellwerk.Client.Model
 
 @inject ModalManager _modalManager;
-@inject IClientSettingsService _settingsService
+@inject IClientSettingsService _settingsService;
 
 <StopButton />
 <ControlContainer />
 
-<!-- Engine selection overlay-->
-
 <SelectionContainer/>
+<UsernameModal/>
+
 
 <footer>
     <button class="is-pulled-left" id="UsernameLabel" @onclick="() => _modalManager.IsUsernameModalVisible = true" >User: @_settings?.Username</button>
@@ -27,8 +25,12 @@
     {
         await base.OnInitializedAsync();
 
-        _settings = await _settingsService.GetSettings();
+        _settingsService.SettingsChanged += settings =>
+        {
+            _settings = settings;
+            StateHasChanged();
+        };
 
-        _modalManager.PropertyChanged += (_, _) => StateHasChanged();
+        _settings = await _settingsService.GetSettings();
     }
 }
