@@ -13,7 +13,6 @@
         @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
             {
             var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
-            Console.WriteLine(srcset);
             <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
             }
         <img src="img/noImageImage.png" alt="Engine image" />
