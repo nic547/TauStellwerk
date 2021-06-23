@@ -1,36 +1,41 @@
 ﻿@page "/"
-@using PiStellwerk.WebClient.Pages
-@using PiStellwerk.WebClient
+@using PiStellwerk.Client.Services
+@using PiStellwerk.Client.Model
 
 @inject ModalManager _modalManager;
+@inject IClientSettingsService _settingsService;
+@inject IJSRuntime _jsRuntime;
 
 <StopButton />
 <ControlContainer />
 
-<!-- Engine selection overlay-->
-
 <SelectionContainer/>
+<UsernameModal/>
+<SettingsModal/>
 
-<!-- Username overlay -->
-<div id="UsernameOverlay" class="modal">
-    <div class="modal-content">
-        <form id="UsernameForm">
-            <label for="UsernameInput">Please enter your username:</label>
-            <input required="required" type="text" id="UsernameInput" />
-            <button>Submit</button>
-        </form>
-    </div>
-</div>
 <footer>
-    <button class="is-pulled-left" id="UsernameLabel">User: Username</button>
-    <button class="is-pulled-right">Settings</button>
+    <button class="is-pulled-left button-secondary" id="UsernameLabel" @onclick="() => _modalManager.IsUsernameModalVisible = true" >User: @_settings?.Username</button>
+    <button class="is-pulled-right button-secondary" @onclick="() => _modalManager.IsSettingsModalVisible = true" >Settings</button>
 </footer>
 
 @code
 {
-    protected override void OnInitialized()
+    private ImmutableSettings? _settings;
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        _modalManager.PropertyChanged += (_, _) => StateHasChanged();
+        await base.OnInitializedAsync();
+
+        _settingsService.SettingsChanged +=async settings =>
+        {
+            _settings = settings;
+            await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
+
+
+            StateHasChanged();
+        };
+
+        _settings = await _settingsService.GetSettings();
+        await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
     }
 }

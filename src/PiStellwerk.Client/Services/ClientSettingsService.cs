@@ -14,31 +14,71 @@ namespace PiStellwerk.Client.Services
     public class ClientSettingsService : IClientSettingsService
     {
         private const string _fileName = "settings.json";
-        private Settings? _settings;
 
-        public async Task<Settings> GetSettings(bool forceReload = false)
+        private bool _hasLoadBeenAttempted;
+
+        private MutableSettings _settings;
+        private ImmutableSettings _immutableSettings;
+
+        public ClientSettingsService()
         {
-            if (_settings == null || forceReload)
-            {
-                try
-                {
-                    await using var stream = File.OpenRead(_fileName);
-                    _settings = await JsonSerializer.DeserializeAsync<Settings>(stream);
-                }
-                catch (Exception)
-                {
-                    // ignore exception, file probably just doesn't exists yet.
-                }
-            }
-
-            return _settings ??= new Settings();
+            _settings = new MutableSettings();
+            _immutableSettings = _settings.GetImmutableCopy();
         }
 
-        public async Task SetSettings(Settings settings)
+        public event IClientSettingsService.SettingsChange? SettingsChanged;
+
+        public async Task<ImmutableSettings> GetSettings()
         {
-            _settings = settings;
+            await EnsureSettingsWereLoaded();
+            return _immutableSettings;
+        }
+
+        public async Task<MutableSettings> GetMutableSettingsCopy()
+        {
+            await EnsureSettingsWereLoaded();
+            return _settings.GetMutableCopy();
+        }
+
+        public async Task SetSettings(MutableSettings mutableSettings)
+        {
+            _settings = mutableSettings;
+            _immutableSettings = _settings.GetImmutableCopy();
+
             await using var stream = File.Open(_fileName, FileMode.Create);
-            await JsonSerializer.SerializeAsync(stream, settings);
+            await JsonSerializer.SerializeAsync(stream, mutableSettings);
+
+            SettingsChanged?.Invoke(_immutableSettings);
+        }
+
+        /// <summary>
+        /// Ensures that there was an attempt at loading the settings file.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        private async Task EnsureSettingsWereLoaded()
+        {
+            if (_hasLoadBeenAttempted)
+            {
+                return;
+            }
+
+            try
+            {
+                await using var stream = File.OpenRead(_fileName);
+                var potentialSettings = await JsonSerializer.DeserializeAsync<MutableSettings>(stream);
+                if (potentialSettings != null)
+                {
+                    _settings = potentialSettings;
+                    _immutableSettings = _settings.GetImmutableCopy();
+                    SettingsChanged?.Invoke(_immutableSettings);
+                }
+            }
+            catch (Exception)
+            {
+                // ignore exception, file probably just doesn't exists yet.
+            }
+
+            _hasLoadBeenAttempted = true;
         }
     }
 }

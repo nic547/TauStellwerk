@@ -8,7 +8,7 @@
     <div class="modal-content-fullwidth">
         <div class="modal-header">
             <header></header>
-            <button class="bold" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
+            <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
         </div>
         <div class="can-scroll-y modal-body">
             <div id="EngineSelectionContainer" class="selection-grid">
@@ -19,13 +19,18 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="bold" id="EngineSelectionBackwards" disabled="disabled">&lt;</button>
-            <button class="bold" id="EngineSelectionForward">&gt;</button>
+            <button class="bold" disabled="@_cannotMoveBackward" @onclick="() => {_ = ChangePage(-1);}">&lt;</button>
+            <button class="bold" disabled="@_cannotMoveForward" @onclick="() => {_ = ChangePage(+1);}" >&gt;</button>
         </div>
     </div>
 </div>
 @code {
     private readonly List<Engine> _engines = new();
+
+    private bool _cannotMoveForward => !_engines.Any();
+    private bool _cannotMoveBackward => _currentPage <= 0;
+
+    private int _currentPage = 0;
 
     protected override void OnInitialized()
     {
@@ -40,15 +45,28 @@
             return;
         }
 
+        _engines.Clear();
+
         if (_modalManager.IsEngineSelectionVisible)
         {
-            var engines = await _engineService.GetEngines(0);
-            _engines.AddRange(engines);
+            _currentPage = 0;
+            await ChangePage(0);
         }
-        else
+
+        StateHasChanged();
+    }
+
+    private async Task ChangePage(int change)
+    {
+        _currentPage += change;
+
+        if (_currentPage < 0)
         {
-            _engines.Clear();
+            _currentPage = 0;
         }
+        var engines = await _engineService.GetEngines(_currentPage);
+        _engines.Clear();
+        _engines.AddRange(engines);
 
         StateHasChanged();
     }

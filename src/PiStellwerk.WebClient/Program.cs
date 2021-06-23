@@ -6,6 +6,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using PiStellwerk.Client.Services;
@@ -19,20 +20,17 @@ namespace PiStellwerk.WebClient
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            var settingsService = new BlazorSettingsService(builder.HostEnvironment.BaseAddress);
-            var httpService = new ClientHttpService(settingsService);
-            var statusService = new ClientStatusService(httpService);
-            var engineService = new ClientEngineService(httpService);
+            builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddSingleton<IClientSettingsService>(_ => settingsService);
-            builder.Services.AddSingleton(_ => httpService);
-            builder.Services.AddSingleton(_ => statusService);
-            builder.Services.AddSingleton(sp => engineService);
+            builder.Services.AddScoped<IClientSettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<ILocalStorageService>()));
+            builder.Services.AddScoped(provider => new ClientHttpService(provider.GetRequiredService<IClientSettingsService>()));
+            builder.Services.AddScoped(provider => new ClientStatusService(provider.GetRequiredService<ClientHttpService>()));
+            builder.Services.AddScoped(provider => new ClientEngineService(provider.GetRequiredService<ClientHttpService>()));
 
-            builder.Services.AddSingleton(new ModalManager());
-            builder.Services.AddSingleton(new AppState());
+            builder.Services.AddScoped(_ => new ModalManager());
+            builder.Services.AddScoped(_ => new AppState());
 
             await builder.Build().RunAsync();
         }

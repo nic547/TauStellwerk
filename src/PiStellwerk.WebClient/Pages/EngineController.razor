@@ -9,7 +9,7 @@
 <div class="box is-engine-controller has-shadow">
     <div class="ec-grid-header">
         <span class="is-pulled-left">@Engine.Name</span>
-        <button class="is-pulled-right bold" @onclick="() => RemoveEngine() ">X</button>
+        <button class="is-pulled-right bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
     </div>
     <picture class="ec-grid-image">
         @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))

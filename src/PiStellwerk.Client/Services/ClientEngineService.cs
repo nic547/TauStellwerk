@@ -31,7 +31,7 @@ namespace PiStellwerk.Client.Services
         public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
         {
             var client = await _httpService.GetHttpClient();
-            var response = await client.GetAsync("/engine/list");
+            var response = await client.GetAsync($"/engine/list?page={page}");
             var responseString = await response.Content.ReadAsStringAsync();
             var engines = JsonSerializer.Deserialize<Engine[]>(responseString, _serializerOptions) ?? System.Array.Empty<Engine>();
 

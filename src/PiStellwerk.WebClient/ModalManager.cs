@@ -14,6 +14,8 @@ namespace PiStellwerk.WebClient
     public class ModalManager : INotifyPropertyChanged
     {
         private bool _isEngineSelectionVisible;
+        private bool _isUsernameModalVisible;
+        private bool _isSettingsModalVisible;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -29,5 +31,31 @@ namespace PiStellwerk.WebClient
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEngineSelectionVisible)));
             }
         }
+
+        public bool IsUsernameModalVisible
+        {
+            get => _isUsernameModalVisible;
+            set
+            {
+                _isUsernameModalVisible = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUsernameModalVisible)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UsernameModalClass)));
+            }
+        }
+
+        public string UsernameModalClass => _isUsernameModalVisible ? "active-modal" : "inactive-modal";
+
+        public bool IsSettingsModalVisible
+        {
+            get => _isSettingsModalVisible;
+            set
+            {
+                _isSettingsModalVisible = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSettingsModalVisible)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SettingsModalClass)));
+            }
+        }
+
+        public string SettingsModalClass => _isSettingsModalVisible ? "active-modal" : "inactive-modal";
     }
 }

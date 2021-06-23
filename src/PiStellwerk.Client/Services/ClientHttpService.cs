@@ -5,7 +5,7 @@
 
 using System;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -72,10 +72,7 @@ namespace PiStellwerk.Client.Services
                 var username = (await _settingsService.GetSettings()).Username;
                 var response = await client.PostAsync(
                     "/session",
-                    new StringContent(
-                        $"\"{username}\"",
-                        Encoding.UTF8,
-                        "text/json"));
+                    JsonContent.Create(username));
                 _sessionId = await response.Content.ReadAsStringAsync();
 
                 _sessionTimer.Enabled = true;

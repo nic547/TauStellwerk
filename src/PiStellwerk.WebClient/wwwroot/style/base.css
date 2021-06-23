@@ -7,6 +7,9 @@
 :root {
     font-family: sans-serif;
     user-select: none;
+    background-color: var(--background-color);
+    color: var(--primary-text);
+    box-sizing: border-box;
 }
 
 html {
@@ -24,13 +27,21 @@ body {
 
 button {
     border-radius: 5px;
-    border-width: 0;
-    padding: 8px;
+    border-width: 3px;
+    border-style: solid;
+    padding: 5px;
     font-size: 1em;
     cursor: pointer;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--primary-text) /* Doesn't seem to accept the color set for :root  */
 }
 
-button, output, input, label {
+button:active, button:disabled {
+    filter: brightness(var(--filter-value));
+}
+ 
+output, input, label {
     font-size: 1em;
 }
 

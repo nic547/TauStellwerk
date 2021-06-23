@@ -10,8 +10,18 @@ namespace PiStellwerk.Client.Services
 {
     public interface IClientSettingsService
     {
-        public Task<Settings> GetSettings(bool forceReload = false);
+        public delegate void SettingsChange(ImmutableSettings settings);
 
-        public Task SetSettings(Settings settings);
+        public event SettingsChange SettingsChanged;
+
+        /// <summary>
+        /// Returns a immutable object with the currently active settings.
+        /// </summary>
+        /// <returns>A instance of <see cref="ImmutableSettings"/>.</returns>
+        public Task<ImmutableSettings> GetSettings();
+
+        public Task<MutableSettings> GetMutableSettingsCopy();
+
+        public Task SetSettings(MutableSettings mutableSettings);
     }
 }
