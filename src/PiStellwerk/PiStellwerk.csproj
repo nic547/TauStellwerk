@@ -7,28 +7,12 @@
     <DocumentationFile>.\bin\PiStellwerk.xml</DocumentationFile>
     <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
     <Nullable>enable</Nullable>
+	<NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="userContent\**" />
-    <Compile Remove="wwwroot\**" />
-    <Content Remove="userContent\**" />
-    <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="userContent\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="userContent\**" />
-    <None Remove="wwwroot\**" />
-    <TypeScriptCompile Remove="userContent\**" />
-    <TypeScriptCompile Remove="wwwroot\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
@@ -37,10 +21,6 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.6" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
