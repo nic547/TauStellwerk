@@ -7,14 +7,17 @@ namespace PiStellwerk.Client.Model
 {
     public class ImmutableSettings
     {
-        public ImmutableSettings(string username, string serverAddress)
+        public ImmutableSettings(string username, string serverAddress, string theme)
         {
             Username = username;
             ServerAddress = serverAddress;
+            Theme = theme;
         }
 
         public string Username { get; }
 
         public string ServerAddress { get; }
+
+        public string Theme { get; }
     }
 }

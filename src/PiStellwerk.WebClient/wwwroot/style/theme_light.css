@@ -5,13 +5,22 @@
 */
 
 
-:root {
+:root, [data-theme="default"], [data-theme="light"] {
     --primary-color: #9ccc65;
-    --primary-color-light: #cfff95;
-    --primary-color-dark: #6b9b37;
+    --primary-color-alt: #cfff95;
     --danger-color: #f44336;
-    --danger-color-light: #ff7961;
-    --danger-color-dark: #ba000d;
+    --danger-color-alt: #ff7961;
 
-    --background-color: #ffffff;
+    --background-color: #FFFFFF;
+    --primary-text: #000000;
+}
+
+[data-theme="dark"] {
+    --primary-color: #689F38;
+    --primary-color-alt: #7cb342;
+    --danger-color: #D32F2F;
+    --danger-color-alt: #9a0007;
+    
+    --background-color: #333333;
+    --primary-text: #EEEEEE;
 }

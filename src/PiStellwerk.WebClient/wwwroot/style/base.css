@@ -7,6 +7,8 @@
 :root {
     font-family: sans-serif;
     user-select: none;
+    background-color: var(--background-color);
+    color: var(--primary-text);
 }
 
 html {

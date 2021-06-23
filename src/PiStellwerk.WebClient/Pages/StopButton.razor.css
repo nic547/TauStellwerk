@@ -3,7 +3,7 @@
 }
 
 .StoppedLocked {
-    background-color: var(--danger-color-light)
+    background-color: var(--danger-color-alt)
 }
 
 .Running {

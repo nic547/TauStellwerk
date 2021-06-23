@@ -13,11 +13,14 @@ namespace PiStellwerk.Client.Model
 
         public string ServerAddress { get; set; } = "https://localhost";
 
+        public string Theme { get; set; } = "default";
+
         public ImmutableSettings GetImmutableCopy()
         {
             return new ImmutableSettings(
                 Username,
-                ServerAddress);
+                ServerAddress,
+                Theme);
         }
 
         public MutableSettings GetMutableCopy()
@@ -26,6 +29,7 @@ namespace PiStellwerk.Client.Model
             {
                 Username = Username,
                 ServerAddress = ServerAddress,
+                Theme = Theme,
             };
         }
     }

@@ -14,7 +14,7 @@
 }
 
 .has-background-primary-light {
-    background-color: var(--primary-color-light);
+    background-color: var(--primary-color-alt);
 }
 
 .has-background-danger {
@@ -22,7 +22,7 @@
 }
 
 .has-background-danger-light {
-    background-color: var(--danger-color-light);
+    background-color: var(--danger-color-alt);
 }
 
 .has-background {
@@ -122,7 +122,7 @@
     display: inline-block;
     margin: 2px;
     padding: 2px 4px;
-    background-color: var(--primary-color-light);
+    background-color: var(--primary-color-alt);
     border-radius: 5px;
     border-width: 0;
 }

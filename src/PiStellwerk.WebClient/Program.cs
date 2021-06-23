@@ -20,17 +20,17 @@ namespace PiStellwerk.WebClient
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             builder.Services.AddBlazoredLocalStorage();
 
             builder.Services.AddScoped<IClientSettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<ILocalStorageService>()));
-            builder.Services.AddScoped(sp => new ClientHttpService(sp.GetRequiredService<IClientSettingsService>()));
-            builder.Services.AddScoped(sp => new ClientStatusService(sp.GetRequiredService<ClientHttpService>()));
-            builder.Services.AddScoped(sp => new ClientEngineService(sp.GetRequiredService<ClientHttpService>()));
+            builder.Services.AddScoped(provider => new ClientHttpService(provider.GetRequiredService<IClientSettingsService>()));
+            builder.Services.AddScoped(provider => new ClientStatusService(provider.GetRequiredService<ClientHttpService>()));
+            builder.Services.AddScoped(provider => new ClientEngineService(provider.GetRequiredService<ClientHttpService>()));
 
-            builder.Services.AddScoped(sp => new ModalManager());
-            builder.Services.AddScoped(sp => new AppState());
+            builder.Services.AddScoped(_ => new ModalManager());
+            builder.Services.AddScoped(_ => new AppState());
 
             await builder.Build().RunAsync();
         }

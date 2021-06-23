@@ -4,17 +4,18 @@
 
 @inject ModalManager _modalManager;
 @inject IClientSettingsService _settingsService;
+@inject IJSRuntime _jsRuntime;
 
 <StopButton />
 <ControlContainer />
 
 <SelectionContainer/>
 <UsernameModal/>
-
+<SettingsModal/>
 
 <footer>
     <button class="is-pulled-left" id="UsernameLabel" @onclick="() => _modalManager.IsUsernameModalVisible = true" >User: @_settings?.Username</button>
-    <button class="is-pulled-right">Settings</button>
+    <button class="is-pulled-right" @onclick="() => _modalManager.IsSettingsModalVisible = true" >Settings</button>
 </footer>
 
 @code
@@ -25,12 +26,16 @@
     {
         await base.OnInitializedAsync();
 
-        _settingsService.SettingsChanged += settings =>
+        _settingsService.SettingsChanged +=async settings =>
         {
             _settings = settings;
+            await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
+
+
             StateHasChanged();
         };
 
         _settings = await _settingsService.GetSettings();
+        await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
     }
 }
