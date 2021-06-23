@@ -3,7 +3,8 @@
 }
 
 .StoppedLocked {
-    background-color: var(--danger-color-alt)
+    background-color: var(--danger-color);
+    filter: brightness(var(--filter-value));
 }
 
 .Running {

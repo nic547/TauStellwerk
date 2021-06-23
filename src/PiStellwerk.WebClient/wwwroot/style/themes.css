@@ -1,26 +1,31 @@
 ﻿/*
-    Default "light" theme
     https://material.io/resources/color/
     
 */
 
 
 :root, [data-theme="default"], [data-theme="light"] {
-    --primary-color: #9ccc65;
-    --primary-color-alt: #cfff95;
+    --primary-color: #2196f3;
+    --secondary-color: #BBBBBB;
     --danger-color: #f44336;
-    --danger-color-alt: #ff7961;
 
     --background-color: #FFFFFF;
     --primary-text: #000000;
+    
+    --shadow-color: #D3D3D3;
+    
+    --filter-value: 130%
 }
 
 [data-theme="dark"] {
-    --primary-color: #689F38;
-    --primary-color-alt: #7cb342;
+    --primary-color: #1e88e5;
+    --secondary-color: #445963;
     --danger-color: #D32F2F;
-    --danger-color-alt: #9a0007;
     
     --background-color: #333333;
-    --primary-text: #EEEEEE;
+    --primary-text: #eeeeee;
+
+    --shadow-color: #000000;
+    
+    --filter-value: 70%;
 }

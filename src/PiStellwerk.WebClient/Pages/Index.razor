@@ -14,8 +14,8 @@
 <SettingsModal/>
 
 <footer>
-    <button class="is-pulled-left" id="UsernameLabel" @onclick="() => _modalManager.IsUsernameModalVisible = true" >User: @_settings?.Username</button>
-    <button class="is-pulled-right" @onclick="() => _modalManager.IsSettingsModalVisible = true" >Settings</button>
+    <button class="is-pulled-left button-secondary" id="UsernameLabel" @onclick="() => _modalManager.IsUsernameModalVisible = true" >User: @_settings?.Username</button>
+    <button class="is-pulled-right button-secondary" @onclick="() => _modalManager.IsSettingsModalVisible = true" >Settings</button>
 </footer>
 
 @code

@@ -13,16 +13,21 @@
     background-color: var(--primary-color);
 }
 
-.has-background-primary-light {
-    background-color: var(--primary-color-alt);
+
+.button-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+
+.button-secondary-toggled {
+    background-color: var(--background-color);
+    border-style: solid;
+    border-color: var(--secondary-color);
 }
 
 .has-background-danger {
     background-color: var(--danger-color);
-}
-
-.has-background-danger-light {
-    background-color: var(--danger-color-alt);
 }
 
 .has-background {
@@ -116,13 +121,12 @@
 }
 
 .has-shadow {
-    box-shadow: 0 0 8px lightgray;
+    box-shadow: 0 0 8px var(--shadow-color);
 }
-.tags > span {
+.tags > button {
     display: inline-block;
     margin: 2px;
     padding: 2px 4px;
-    background-color: var(--primary-color-alt);
     border-radius: 5px;
     border-width: 0;
 }
