@@ -102,7 +102,8 @@ namespace PiStellwerk.Database.Tests
 
             var updateContext = GetContext();
             var updateEngine = updateContext.Engines.Include(x => x.Functions).Single();
-            updateEngine.Functions = new List<DccFunction> { testFunction };
+            updateEngine.Functions.Clear();
+            updateEngine.Functions.Add(testFunction);
             updateContext.SaveChanges();
 
             var testContext = GetContext();

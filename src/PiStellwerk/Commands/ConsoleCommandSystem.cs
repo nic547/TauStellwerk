@@ -3,10 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using PiStellwerk.Data;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Commands
 {
@@ -27,22 +27,35 @@ namespace PiStellwerk.Commands
 
         public Task HandleEngineEStop(Engine engine)
         {
-            throw new NotImplementedException();
+            ConsoleService.PrintMessage($"{engine} has been emergency-stopped");
+            return Task.CompletedTask;
         }
 
         public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {
-            throw new NotImplementedException();
+            ConsoleService.PrintMessage($"{engine} function {functionNumber} has been turned {(on ? "on" : "off")}");
+            return Task.CompletedTask;
         }
 
         public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
-            throw new NotImplementedException();
+            if (forward != null)
+            {
+                var forwardValue = (bool)forward;
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}, driving {(forwardValue ? "forward" : "backwards")}");
+            }
+            else
+            {
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
+            }
+
+            return Task.CompletedTask;
         }
 
         public Task HandleSystemStatus(bool shouldBeRunning)
         {
-            throw new NotImplementedException();
+            ConsoleService.PrintMessage($"System was {(shouldBeRunning ? "started" : "stopped")}");
+            return Task.CompletedTask;
         }
     }
 }

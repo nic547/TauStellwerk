@@ -57,10 +57,9 @@ namespace PiStellwerk
         }
 
         /// <summary>
-        /// Gets some configuration.
-        /// TODO: Find out what exactly this configuration is, sounds pretty useful.
+        /// Gets the <see cref="IConfiguration"/> this application was started with.
         /// </summary>
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
