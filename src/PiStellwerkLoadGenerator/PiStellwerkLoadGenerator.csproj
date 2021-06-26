@@ -6,6 +6,7 @@
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerkLoadGenerator.xml</DocumentationFile>
     <Nullable>enable</Nullable>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PiStellwerk.Client\PiStellwerk.Client.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
   </ItemGroup>

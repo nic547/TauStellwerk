@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
+using PiStellwerk.Client.Services;
 using PiStellwerk.Util;
 using PiStellwerkLoadGenerator.ClientActions;
 
@@ -35,18 +35,16 @@ namespace PiStellwerkLoadGenerator
         /// </summary>
         /// <param name="actionTypes">Types that are assignable from ClientActionBase.</param>
         /// <param name="options"><see cref="Options"/>.</param>
+        /// <param name="id">Id of the engine to use.</param>
         /// <returns>A <see cref="Task"/> containing the new instance.</returns>
-        public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options)
+        public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options, int id)
         {
-            var handler = new HttpClientHandler
-            {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
-                ServerCertificateCustomValidationCallback =
-                (_, _, _, _) => true, // Override the ssl cert check because the self-signed certs aren't valid.
-            };
-
             var random = new Random();
-            var client = new HttpClient(handler);
+            var settingsService = new LoadGeneratorSettingsService(options, random);
+            var httpService = new ClientHttpService(settingsService);
+            var engineService = new ClientEngineService(httpService);
+
+            await engineService.AcquireEngine(id);
 
             var instancedActions = new List<ClientActionBase>();
 
@@ -59,7 +57,7 @@ namespace PiStellwerkLoadGenerator
                     throw new ArgumentException($"{actionType} could not be cast to ClientActionBase");
                 }
 
-                await action.Initialize(client, options, random);
+                await action.Initialize(engineService, options, id, random);
                 _ = await action.PerformRequest(); // Perform a first request so that overhead of it doesn't factor into the measurement.
                 instancedActions.Add(action);
             }

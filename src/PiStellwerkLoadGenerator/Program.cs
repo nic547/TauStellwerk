@@ -31,27 +31,18 @@ namespace PiStellwerkLoadGenerator
 
             var simulators = new List<ClientSimulator>();
 
-            var actions = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(ClientActionBase).IsAssignableFrom(p) && !p.IsAbstract)
-                .ToImmutableList();
+            var actions = GetAvailableClientActions();
 
             for (var i = 0; i < options.Clients; i++)
             {
-                var sim = await ClientSimulator.Create(actions, options);
+                var sim = await ClientSimulator.Create(actions, options, i + 1);
                 sim.Start();
                 simulators.Add(sim);
             }
 
             await Task.Delay(options.Time * 1000);
 
-            var results = new CounterDictionary();
-
-            foreach (var sim in simulators)
-            {
-                sim.Stop();
-                results.Combine(sim.GetStatistics());
-            }
+            var results = GatherResults(simulators);
 
             var max = results.Max(kv => kv.Key);
             foreach (var ms in Enumerable.Range(1, max))
@@ -63,6 +54,28 @@ namespace PiStellwerkLoadGenerator
             Console.WriteLine($"90th Percentile: {results.Get90ThPercentile()} ms");
             Console.WriteLine($"95th Percentile: {results.Get95ThPercentile()} ms");
             Console.WriteLine($"99th Percentile: {results.Get99ThPercentile()} ms");
+        }
+
+        private static CounterDictionary GatherResults(List<ClientSimulator> simulators)
+        {
+            var results = new CounterDictionary();
+
+            foreach (var sim in simulators)
+            {
+                sim.Stop();
+                results.Combine(sim.GetStatistics());
+            }
+
+            return results;
+        }
+
+        private static ImmutableList<Type> GetAvailableClientActions()
+        {
+            var actions = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(ClientActionBase).IsAssignableFrom(p) && !p.IsAbstract)
+                .ToImmutableList();
+            return actions;
         }
     }
 }

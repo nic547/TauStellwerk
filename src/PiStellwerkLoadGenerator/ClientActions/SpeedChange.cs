@@ -4,10 +4,9 @@
 // </copyright>
 
 using System;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using PiStellwerk.Client.Services;
 
 namespace PiStellwerkLoadGenerator.ClientActions
 {
@@ -21,19 +20,18 @@ namespace PiStellwerkLoadGenerator.ClientActions
         public override int Interval => Random.Next(190, 210);
 
         /// <inheritdoc/>
-        public override async Task Initialize(HttpClient client, Options options, Random random)
+        public override async Task Initialize(ClientEngineService engineService, Options options, int id,  Random random)
         {
-            await base.Initialize(client, options, random);
+            await base.Initialize(engineService, options, id, random);
         }
 
         /// <inheritdoc/>
         public override async Task<int> PerformRequest()
         {
-            // TODO: Adopt new EngineSetSpeed functionality.
-            var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
+            int newSpeed = Random.Next(0, 128);
             var startTime = DateTime.Now;
 
-            _ = await Client.PostAsync(Options.Uri + "engine/1/command/", content);
+            await EngineService.SetSpeed(Id, newSpeed, true);
             return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
         }
     }
