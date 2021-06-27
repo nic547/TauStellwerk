@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandLine;
 using PiStellwerk.Util;
 using PiStellwerkLoadGenerator.ClientActions;
 
@@ -25,10 +26,11 @@ namespace PiStellwerkLoadGenerator
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async options => await Run(options));
+        }
 
-            var options = Options.GetOptionsFromArgs(args);
-
+        private static async Task Run(Options options)
+        {
             var simulators = new List<ClientSimulator>();
 
             var actions = GetAvailableClientActions();
