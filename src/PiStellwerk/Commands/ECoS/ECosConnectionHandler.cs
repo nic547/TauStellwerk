@@ -49,7 +49,7 @@ namespace PiStellwerk.Commands.ECoS
         public async Task<string> SendCommandAsync(string command)
         {
             await _client.GetStream().WriteAsync(Encoding.UTF8.GetBytes(command));
-            var tcs = new TaskCompletionSource<string>();
+            var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
             _sentCommands.Add(command, tcs);
 
             return await tcs.Task;
