@@ -58,17 +58,16 @@ namespace PiStellwerk.Data
         public SpeedDisplayType SpeedDisplayType { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of functions a decoder offers.
+        /// Gets a list of functions a decoder offers.
         /// </summary>
-        // TODO (NET 5.0?): It seems that both lists need a public setter for them to be deserialized correctly. Maybe the upcoming init-only properties could help.
-        public List<DccFunction> Functions { get; set; } = new List<DccFunction>();
+        public List<DccFunction> Functions { get; init; } = new List<DccFunction>();
 
         /// <summary>
-        /// Gets or sets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
+        /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
-        public List<string> Tags { get; set; } = new List<string>();
+        public List<string> Tags { get; init; } = new List<string>();
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData? ECoSEngineData { get; init; }

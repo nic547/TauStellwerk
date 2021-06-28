@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -102,7 +101,8 @@ namespace PiStellwerk.Database.Tests
 
             var updateContext = GetContext();
             var updateEngine = updateContext.Engines.Include(x => x.Functions).Single();
-            updateEngine.Functions = new List<DccFunction> { testFunction };
+            updateEngine.Functions.Clear();
+            updateEngine.Functions.Add(testFunction);
             updateContext.SaveChanges();
 
             var testContext = GetContext();

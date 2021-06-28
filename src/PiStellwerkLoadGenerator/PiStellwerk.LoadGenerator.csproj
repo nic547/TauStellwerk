@@ -6,6 +6,7 @@
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\PiStellwerkLoadGenerator.xml</DocumentationFile>
     <Nullable>enable</Nullable>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -17,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
-    <PackageReference Include="NDesk.Options.Core" Version="1.2.5" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PiStellwerk.Client\PiStellwerk.Client.csproj" />
     <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
     <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
   </ItemGroup>

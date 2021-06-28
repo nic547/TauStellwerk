@@ -4,7 +4,7 @@
 // </copyright>
 
 using System;
-using NDesk.Options;
+using CommandLine;
 
 namespace PiStellwerkLoadGenerator
 {
@@ -24,49 +24,25 @@ namespace PiStellwerkLoadGenerator
         /// <summary>
         /// Gets the url of the service to test.
         /// </summary>
-        // TODO: "Load testing" a server in a external network by accident would be very bad. Some verification that a target is in a local Network would be nice.
+        [Option('u', "uri", Default = "https://localhost:5001/", HelpText = "The Uri of the PiStellwerk instance to test.")]
         public Uri Uri { get; }
 
         /// <summary>
         /// Gets a value indicating whether the Tool should collect latency statistics, since they might be quite memory-heavy.
         /// </summary>
+        [Option("nostats", Hidden = true)]
         public bool NoStats { get; }
 
         /// <summary>
         /// Gets a value indicating how many clients should be simulated. Default Value: 1.
         /// </summary>
+        [Option('c', "clients", Default = 1, HelpText = "How many \"clients\" should be simulated")]
         public int Clients { get; }
 
         /// <summary>
         /// Gets a value indicating for how many seconds the tool should run. 0/Infinite not included.
         /// </summary>
+        [Option('t', "time", Default = 60, HelpText = "How long the LoadGenerator should run.")]
         public int Time { get; }
-
-        /// <summary>
-        /// Parses the command line arguments and turns them into a <see cref="Options"/> object.
-        /// </summary>
-        /// <param name="args">string[] args (as received by a main function).</param>
-        /// <returns><see cref="Options"/>with the parsed argument values. Otherwise default values are used.</returns>
-        public static Options GetOptionsFromArgs(string[] args)
-        {
-            var uri = new Uri("http://localhost:8080/");
-            var noStats = false;
-            var clients = 1;
-            var time = 60;
-
-            var p = new OptionSet()
-            {
-                { "u|uri=", u => uri = new Uri(u) },
-                { "ns|nostats=", ns => noStats = ns != null },
-                { "c|clients=", (int c) => clients = c },
-                { "t|time=", (int t) => time = t },
-            };
-
-            p.Parse(args);
-
-            var options = new Options(uri, noStats, clients, time);
-
-            return options;
-        }
     }
 }

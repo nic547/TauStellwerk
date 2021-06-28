@@ -4,8 +4,8 @@
 // </copyright>
 
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
+using PiStellwerk.Client.Services;
 
 namespace PiStellwerkLoadGenerator.ClientActions
 {
@@ -14,7 +14,7 @@ namespace PiStellwerkLoadGenerator.ClientActions
     /// </summary>
     public abstract class ClientActionBase
     {
-        private HttpClient? _client;
+        private ClientEngineService? _engineService;
         private Options? _options;
         private Random? _random;
 
@@ -26,10 +26,10 @@ namespace PiStellwerkLoadGenerator.ClientActions
         /// <summary>
         /// Gets the HttpClient to use.
         /// </summary>
-        internal HttpClient Client
+        internal ClientEngineService EngineService
         {
-            get => _client ?? throw new InvalidOperationException();
-            private set => _client = value;
+            get => _engineService ?? throw new InvalidOperationException();
+            private set => _engineService = value;
         }
 
         /// <summary>
@@ -50,18 +50,14 @@ namespace PiStellwerkLoadGenerator.ClientActions
             private set => _random = value;
         }
 
-        /// <summary>
-        /// Initialize the stuff needed.
-        /// </summary>
-        /// <param name="client">The HTTPClient to use.</param>
-        /// <param name="options">The Options to use.</param>
-        /// <param name="random">A instance of <see cref="System.Random"/> to use.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public virtual Task Initialize(HttpClient client, Options options, Random random)
+        internal int Id { get; set; }
+
+        public virtual Task Initialize(ClientEngineService engineService, Options options, int id, Random random)
         {
-            Client = client;
+            EngineService = engineService;
             Options = options;
             Random = random;
+            Id = id;
 
             return Task.CompletedTask;
         }
