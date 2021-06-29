@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
+using PiStellwerk.Model.Model;
 
 namespace PiStellwerk.Data
 {
@@ -19,16 +21,10 @@ namespace PiStellwerk.Data
     /// </summary>
     public class Engine
     {
-        private string _name = string.Empty;
-
         /// <summary>
         /// Gets or sets the name of the choo-choo.
         /// </summary>
-        public string Name
-        {
-            get => _name;
-            set => _name = HttpUtility.HtmlEncode(value);
-        }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the Id of the Engine in the database system.
@@ -91,6 +87,43 @@ namespace PiStellwerk.Data
         public override string ToString()
         {
             return Name;
+        }
+
+        public EngineDto ToEngineDto()
+        {
+            return new EngineDto()
+            {
+                Id = Id,
+                Name = Name,
+                Images = Image.Select(i => i.ToImageDto()).ToList(),
+                Tags = Tags,
+                LastUsed = LastUsed,
+            };
+        }
+
+        public EngineFullDto ToEngineFullDto()
+        {
+            return new()
+            {
+                Id = Id,
+                Name = Name,
+                Images = Image.Select(i => i.ToImageDto()).ToList(),
+                Tags = Tags,
+                LastUsed = LastUsed,
+                TopSpeed = TopSpeed,
+                Address = Address,
+                Functions = Functions.Select(f => f.ToFunctionDto()).ToList(),
+            };
+        }
+
+        public void UpdateWith(EngineFullDto engineDto)
+        {
+            Name = HttpUtility.HtmlEncode(engineDto.Name);
+            TopSpeed = engineDto.TopSpeed;
+            Address = engineDto.Address;
+
+            Tags.Clear();
+            Tags.AddRange(engineDto.Tags.Select(t => HttpUtility.HtmlEncode(t)));
         }
     }
 }

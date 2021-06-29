@@ -9,11 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Data;
 using PiStellwerk.Database;
+using PiStellwerk.Model.Model;
 using PiStellwerk.Services;
 using PiStellwerk.Util;
 
@@ -51,13 +53,14 @@ namespace PiStellwerk.Controllers
         /// <param name="id">The id of the engine.</param>
         /// <returns>The engine with the given id.</returns>
         [HttpGet("{id:int}")]
-        public async Task<Engine> GetEngine(int id)
+        public async Task<EngineFullDto> GetEngine(int id)
         {
             return await _dbContext.Engines
                 .AsNoTracking()
                 .Include(x => x.Functions)
                 .Include(x => x.Image)
-                .SingleAsync(x => x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id)
+                .ContinueWith(x => x.Result.ToEngineFullDto());
         }
 
         /// <summary>
@@ -67,27 +70,46 @@ namespace PiStellwerk.Controllers
         /// <param name="page">Page to load. Default and start is Zero.</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
+        public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0)
         {
-            var test = await _dbContext.Engines
+            return await _dbContext.Engines
                 .AsNoTracking()
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
                 .Include(e => e.Image)
+                .Select(e => e.ToEngineDto())
                 .ToListAsync();
-            return test;
         }
 
         /// <summary>
         /// Add or update an engine.
         /// </summary>
-        /// <param name="engine">The engine to add or update.</param>
+        /// <param name="engineDto">The engine to add or update.</param>
         /// <returns>The updated engine.</returns>
         [HttpPost]
-        public async Task<ActionResult<Engine>> UpdateOrAdd(Engine engine)
+        public async Task<ActionResult<EngineFullDto>> UpdateOrAdd(EngineFullDto engineDto)
         {
-            _dbContext.Update(engine);
+            Engine engine;
+            if (engineDto.Id == 0)
+            {
+                engine = new Engine();
+                _dbContext.Engines.Add(engine);
+            }
+            else
+            {
+                engine = await _dbContext.Engines
+                    .Include(x => x.Functions)
+                    .SingleOrDefaultAsync(x => x.Id == engineDto.Id);
+
+                if (engine == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            engine.UpdateWith(engineDto);
+
             try
             {
                 await _dbContext.SaveChangesAsync();
@@ -98,7 +120,9 @@ namespace PiStellwerk.Controllers
                 return UnprocessableEntity();
             }
 
-            return engine;
+            engineDto.Id = engine.Id;
+
+            return engineDto;
         }
 
         [HttpDelete("{id:int}")]

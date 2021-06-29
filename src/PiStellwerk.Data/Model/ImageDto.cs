@@ -1,31 +1,24 @@
-﻿// <copyright file="EngineImage.cs" company="Dominic Ritz">
+﻿// <copyright file="ImageDto.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-#nullable enable
-
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Model.Model
 {
-    public class EngineImage
+    public class ImageDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         public string Filename { get; set; } = string.Empty;
-
-        public bool IsGenerated { get; set; }
 
         public int Width { get; set; }
 
+        [JsonIgnore]
         public string Type => GetFileType().Type;
 
+        [JsonIgnore]
         public int Importance => GetFileType().Importance;
 
         private (string Type, int Importance) GetFileType()

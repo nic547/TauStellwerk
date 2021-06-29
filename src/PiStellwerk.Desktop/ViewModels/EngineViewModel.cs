@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using JetBrains.Annotations;
 using PiStellwerk.Client.Services;
-using PiStellwerk.Data;
+using PiStellwerk.Model.Model;
 using ReactiveUI;
 using Splat;
 
@@ -21,7 +21,7 @@ namespace PiStellwerk.Desktop.ViewModels
     public class EngineViewModel : ViewModelBase
     {
         private readonly ClientEngineService _engineService;
-        private Engine? _activeEngine;
+        private EngineFullDto? _activeEngine;
         private bool _isInSelectionMode = true;
 
         private bool _isDrivingForward = true;
@@ -36,9 +36,9 @@ namespace PiStellwerk.Desktop.ViewModels
             this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(HandleThrottleChange);
         }
 
-        public ObservableCollection<Engine> Engines { get; } = new();
+        public ObservableCollection<EngineDto> Engines { get; } = new();
 
-        public Engine? ActiveEngine
+        public EngineFullDto? ActiveEngine
         {
             get => _activeEngine;
             set
@@ -48,7 +48,7 @@ namespace PiStellwerk.Desktop.ViewModels
             }
         }
 
-        public List<DccFunction>? SortedFunctions => _activeEngine?.Functions.OrderBy(f => f.Number).ToList();
+        public List<FunctionDto>? SortedFunctions => _activeEngine?.Functions.OrderBy(f => f.Number).ToList();
 
         public bool IsInSelectionMode
         {

@@ -4,7 +4,7 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using PiStellwerk.Model.Model;
 
 namespace PiStellwerk.Data
 {
@@ -40,10 +40,9 @@ namespace PiStellwerk.Data
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets the "pretty" name, ex: "F3 - Horn".
-        /// </summary>
-        [JsonIgnore]
-        public string PrettyName => $"F{Number} - {Name}";
+        public FunctionDto ToFunctionDto()
+        {
+            return new(Number, Name);
+        }
     }
 }

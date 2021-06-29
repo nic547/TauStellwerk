@@ -1,6 +1,7 @@
 ﻿@using PiStellwerk.Data
 @using System.ComponentModel
 @using PiStellwerk.Client.Services
+@using PiStellwerk.Model.Model
 @inject ModalManager _modalManager
 @inject ClientEngineService _engineService
 
@@ -25,7 +26,7 @@
     </div>
 </div>
 @code {
-    private readonly List<Engine> _engines = new();
+    private readonly List<EngineDto> _engines = new();
 
     private bool _cannotMoveForward => !_engines.Any();
     private bool _cannotMoveBackward => _currentPage <= 0;

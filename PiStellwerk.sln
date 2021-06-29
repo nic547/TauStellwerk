@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29920.165
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk", "src\PiStellwerk\PiStellwerk.csproj", "{EB376DEF-DF3E-4313-BC14-26D99A66B53F}"
 EndProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		StyleCop.json = StyleCop.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Data", "src\PiStellwerk.Data\PiStellwerk.Data.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiStellwerk.Model", "src\PiStellwerk.Data\PiStellwerk.Model.csproj", "{E0C57B46-6109-499C-A192-7B381117CE1F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwareInfo", "src\HarwareStats\HardwareInfo.csproj", "{8424C18B-EB31-4ABB-99E3-A3E955FFF07F}"
 EndProject

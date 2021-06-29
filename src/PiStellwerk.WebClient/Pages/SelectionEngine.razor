@@ -1,5 +1,6 @@
 ﻿@using PiStellwerk.Data
 @using PiStellwerk.Client.Services
+@using PiStellwerk.Model.Model
 
 @inject AppState _appState
 @inject ClientEngineService _engineService
@@ -10,7 +11,7 @@
     {
         <header>@Engine.Name</header>
         <picture class="selection-image">
-        @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
+        @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))
             {
             var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
             <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
@@ -28,7 +29,7 @@
        private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
     [Parameter]
-    public Engine? Engine { get; init; }
+    public EngineDto? Engine { get; init; }
 
     private async void SelectEngine()
     {

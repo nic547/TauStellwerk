@@ -5,17 +5,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using PiStellwerk.Controllers;
 using PiStellwerk.Data;
 using PiStellwerk.Database;
+using PiStellwerk.Model.Model;
 using PiStellwerk.Services;
 
 namespace PiStellwerk.Test
@@ -75,23 +74,10 @@ namespace PiStellwerk.Test
             list.Should().NotBeEmpty();
         }
 
-        /// <summary>
-        /// Ensure that the engine list only includes necessary properties.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
-        [Test]
-        public async Task LoadedListOnlyIncludesSomeProperties()
-        {
-            var list = await GetController().GetEngines();
-            list[0].Functions.Should().BeEmpty();
-            list[0].ECoSEngineData.Should().BeNull();
-            list[0].Image.Should().NotBeEmpty();
-        }
-
         [Test]
         public async Task CanAddEngine()
         {
-            var engineToAdd = new Engine
+            var engineToAdd = new EngineFullDto
             {
                 Address = 392,
                 Name = "Re 620 088-5 (xrail)",
@@ -100,9 +86,9 @@ namespace PiStellwerk.Test
                 {
                     "Freight",
                 },
-                Functions = new List<DccFunction>()
+                Functions =
                 {
-                    new(0, "Headlights"),
+                   // TODO: Enable functions again.
                 },
             };
 
@@ -119,27 +105,13 @@ namespace PiStellwerk.Test
         [Test]
         public async Task CannotAddEngineWithId()
         {
-            var engine = new Engine
+            var engine = new EngineFullDto
             {
                 Id = int.MaxValue,
             };
 
             var result = await GetController().UpdateOrAdd(engine);
-            result.Result.Should().BeAssignableTo<UnprocessableEntityResult>();
-        }
-
-        [Test]
-        public async Task UpdatingDoesntRemoveECoSData()
-        {
-            var engine = await GetController().GetEngine(1);
-            engine.ECoSEngineData.Should().BeNull();
-            await GetController().UpdateOrAdd(engine);
-
-            var updatedEngine = GetContext().Engines
-                .Include(e => e.ECoSEngineData)
-                .Single(e => e.Id == 1);
-
-            updatedEngine.ECoSEngineData.Should().NotBeNull();
+            result.Result.Should().BeAssignableTo<NotFoundResult>();
         }
 
         [Test]

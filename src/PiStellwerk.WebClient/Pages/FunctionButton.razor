@@ -1,16 +1,17 @@
 ﻿@using PiStellwerk.Data
 @using PiStellwerk.Client.Services
+@using PiStellwerk.Model.Model
 
 @inject ClientEngineService _engineService;
 
 <button class="button is-fullwidth has-left-text @BackgroundClass"
         @onclick="ToggleFunction">
-        @Function.PrettyName
+        @Function
 </button>
 
 @code {
     [Parameter]
-    public DccFunction Function { get; set; } = null!;
+    public FunctionDto Function { get; set; } = null!;
     
     [Parameter]
     public int EngineId { get; set; }

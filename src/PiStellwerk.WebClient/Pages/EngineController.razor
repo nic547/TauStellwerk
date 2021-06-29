@@ -2,6 +2,7 @@
 @using JetBrains.Annotations
 @using PiStellwerk.Client.Services
 @using System.Formats.Asn1
+@using PiStellwerk.Model.Model
 
 @inject AppState _appState
 @inject ClientEngineService _engineService;
@@ -12,7 +13,7 @@
         <button class="is-pulled-right bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
     </div>
     <picture class="ec-grid-image">
-        @foreach (var imageset in Engine.Image.GroupBy(e => e.Type))
+        @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))
         {
             var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
             Console.WriteLine(srcset);
@@ -47,7 +48,7 @@
     private bool _forward  = true;
 
     [Parameter]
-    public Engine Engine { get; init; } = null!;
+    public EngineFullDto Engine { get; init; } = null!;
 
     private int Throttle
     {

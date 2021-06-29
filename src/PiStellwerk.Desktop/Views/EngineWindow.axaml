@@ -54,7 +54,7 @@
           <ItemsControl Items="{Binding SortedFunctions, FallbackValue={}}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <ToggleButton Content="{Binding PrettyName}" 
+                <ToggleButton Content="{Binding }" 
                               Tag="{Binding Number}" 
                               Command="{Binding Path=DataContext.HandleFunction ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
                               CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
