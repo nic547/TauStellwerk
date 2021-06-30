@@ -12,9 +12,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Base.Model;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database.Model
 {
     /// <summary>
     /// A choo-choo, in this context generally understood to be smaller than real-live-sized.

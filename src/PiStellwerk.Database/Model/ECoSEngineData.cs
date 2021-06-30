@@ -5,7 +5,7 @@
 
 using System.Web;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database.Model
 {
     /// <summary>
     /// Data used by the ECoS-related components.

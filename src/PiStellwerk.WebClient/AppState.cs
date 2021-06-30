@@ -4,7 +4,7 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.WebClient
 {

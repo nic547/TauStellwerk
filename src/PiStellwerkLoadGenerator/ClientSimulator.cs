@@ -9,10 +9,10 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using System.Timers;
 using PiStellwerk.Client.Services;
+using PiStellwerk.LoadGenerator.ClientActions;
 using PiStellwerk.Util;
-using PiStellwerkLoadGenerator.ClientActions;
 
-namespace PiStellwerkLoadGenerator
+namespace PiStellwerk.LoadGenerator
 {
     /// <summary>
     /// Simulates a single client that makes it's HTTP Requests.

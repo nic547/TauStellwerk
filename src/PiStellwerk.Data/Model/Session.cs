@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Base.Model
 {
     /// <summary>
     /// A user of the PiStellwerk software. Does not necessarily correspond to actual people.

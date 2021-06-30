@@ -6,7 +6,7 @@
 using System;
 using CommandLine;
 
-namespace PiStellwerkLoadGenerator
+namespace PiStellwerk.LoadGenerator
 {
     /// <summary>
     /// Class containing the options of the tool. Options come from arguments.

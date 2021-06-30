@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Database;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Services;
 using PiStellwerk.Util;
 

@@ -6,7 +6,7 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
-using PiStellwerk.Data;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Commands
 {

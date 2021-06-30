@@ -3,7 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace PiStellwerk.Model.Model
+namespace PiStellwerk.Base.Model
 {
     public class FunctionDto
     {

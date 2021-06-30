@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace PiStellwerk.Model.Model
+namespace PiStellwerk.Base.Model
 {
     public class ImageDto
     {

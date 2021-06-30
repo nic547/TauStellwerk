@@ -7,9 +7,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Base.Model;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database.Model
 {
     public class EngineImage
     {

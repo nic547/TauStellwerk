@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using PiStellwerk.Data;
 using PiStellwerk.Database;
+using PiStellwerk.Database.Model;
 
 #nullable enable
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using PiStellwerk.Client.Model;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerkLoadGenerator
+namespace PiStellwerk.LoadGenerator
 {
     public class LoadGeneratorSettingsService : IClientSettingsService
     {

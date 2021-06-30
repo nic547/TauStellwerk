@@ -4,8 +4,9 @@
 // </copyright>
 
 using System.Collections.Generic;
+using PiStellwerk.Database.Model;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database
 {
     /// <summary>
     /// Provides data for testing.

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Services

@@ -9,8 +9,7 @@ using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using PiStellwerk.Data;
-using PiStellwerk.Data.Test;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Database.Tests
 {

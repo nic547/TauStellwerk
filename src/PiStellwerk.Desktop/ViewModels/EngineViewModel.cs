@@ -11,8 +11,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using JetBrains.Annotations;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Client.Services;
-using PiStellwerk.Model.Model;
 using ReactiveUI;
 using Splat;
 

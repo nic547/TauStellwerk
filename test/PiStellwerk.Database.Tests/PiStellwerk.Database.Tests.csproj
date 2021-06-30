@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\PiStellwerk.Database\PiStellwerk.Database.csproj" />
-    <ProjectReference Include="..\PiStellwerk.Data.Test\PiStellwerk.Data.Test.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using PiStellwerk.Data;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Commands

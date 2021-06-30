@@ -6,7 +6,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using PiStellwerk.Data;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Database
 {

@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Services;
 
 namespace PiStellwerk.Controllers

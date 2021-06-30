@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerkLoadGenerator.ClientActions
+namespace PiStellwerk.LoadGenerator.ClientActions
 {
     /// <summary>
     /// Simulates sending a new Speed for an engine.

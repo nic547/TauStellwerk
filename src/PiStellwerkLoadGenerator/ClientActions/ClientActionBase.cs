@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerkLoadGenerator.ClientActions
+namespace PiStellwerk.LoadGenerator.ClientActions
 {
     /// <summary>
     /// A action performed by a client.

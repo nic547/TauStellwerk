@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Moq;
 using NUnit.Framework;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Controllers;
-using PiStellwerk.Data;
 using PiStellwerk.Database;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Services;
 
 namespace PiStellwerk.Test

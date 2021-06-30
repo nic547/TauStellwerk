@@ -7,8 +7,9 @@ using System;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Commands;
-using PiStellwerk.Data;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Services;
 
 namespace PiStellwerk.Test.Services

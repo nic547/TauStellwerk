@@ -8,8 +8,9 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Commands;
-using PiStellwerk.Data;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Services

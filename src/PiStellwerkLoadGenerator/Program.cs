@@ -9,10 +9,10 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandLine;
+using PiStellwerk.LoadGenerator.ClientActions;
 using PiStellwerk.Util;
-using PiStellwerkLoadGenerator.ClientActions;
 
-namespace PiStellwerkLoadGenerator
+namespace PiStellwerk.LoadGenerator
 {
     /// <summary>
     /// A tool that tries to simulate a "realistic user" by making requests to the PiStellwerk-server.

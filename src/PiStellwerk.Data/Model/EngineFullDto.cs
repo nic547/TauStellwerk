@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace PiStellwerk.Model.Model
+namespace PiStellwerk.Base.Model
 {
     public class EngineFullDto : EngineDto
     {

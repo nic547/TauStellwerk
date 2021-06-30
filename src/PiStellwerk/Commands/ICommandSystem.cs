@@ -6,8 +6,8 @@
 #nullable enable
 
 using System.Threading.Tasks;
-using PiStellwerk.Data;
 using PiStellwerk.Database;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Commands
 {

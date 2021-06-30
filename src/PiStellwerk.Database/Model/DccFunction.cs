@@ -4,9 +4,9 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations.Schema;
-using PiStellwerk.Model.Model;
+using PiStellwerk.Base.Model;
 
-namespace PiStellwerk.Data
+namespace PiStellwerk.Database.Model
 {
     /// <summary>
     /// A Function as programmed on the physical dcc decoder in a model engine.
