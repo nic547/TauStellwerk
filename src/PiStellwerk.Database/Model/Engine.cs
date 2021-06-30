@@ -49,11 +49,6 @@ namespace PiStellwerk.Data
         public int TopSpeed { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="SpeedDisplayType"/>, indicating how the speed of the model should be displayed.
-        /// </summary>
-        public SpeedDisplayType SpeedDisplayType { get; set; }
-
-        /// <summary>
         /// Gets a list of functions a decoder offers.
         /// </summary>
         public List<DccFunction> Functions { get; init; } = new List<DccFunction>();

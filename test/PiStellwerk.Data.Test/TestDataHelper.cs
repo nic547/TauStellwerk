@@ -23,7 +23,6 @@ namespace PiStellwerk.Data.Test
                 Id = 7777,
                 Address = 77,
                 SpeedSteps = 128,
-                SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 Tags = { "testtag1", "testtag2" },
                 Functions =
                 {

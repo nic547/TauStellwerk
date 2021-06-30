@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.Collections.Generic;
-using PiStellwerk.Data;
 
 namespace PiStellwerk.Data
 {
@@ -28,7 +27,6 @@ namespace PiStellwerk.Data
                     SpeedSteps = 128,
                     Address = 49,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions =
                     {
                         new DccFunction(0, "Headlights"),
@@ -76,7 +74,6 @@ namespace PiStellwerk.Data
                     SpeedSteps = 128,
                     Address = 49,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions =
                     {
                         new DccFunction(0, "Headlights"),
@@ -138,7 +135,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.Percent,
                     Functions =
                     {
                         new DccFunction(0, "Headlights"),
@@ -189,7 +185,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions =
                     {
                         new DccFunction(0, "Headlights / Red marker light"),
@@ -223,7 +218,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                     Functions =
                     {
                         new DccFunction(0, "Headlights with „Swiss headlight changeover“"),
@@ -273,7 +267,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -292,7 +285,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
                 new Engine
                 {
@@ -310,7 +302,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
                 new Engine
                 {
@@ -329,7 +320,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
                 new Engine
                 {
@@ -345,7 +335,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
                 new Engine
                 {
@@ -366,7 +355,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -386,7 +374,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -406,7 +393,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -426,7 +412,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -446,7 +431,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -465,7 +449,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -485,7 +468,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -504,7 +486,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -521,7 +502,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -538,7 +518,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -555,7 +534,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 140,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
 
                 new Engine
@@ -572,7 +550,6 @@ namespace PiStellwerk.Data
                     },
                     SpeedSteps = 128,
                     TopSpeed = 200,
-                    SpeedDisplayType = SpeedDisplayType.TopSpeed,
                 },
             };
         }
