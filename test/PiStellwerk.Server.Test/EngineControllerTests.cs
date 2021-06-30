@@ -85,6 +85,8 @@ namespace PiStellwerk.Test
                 Tags = new List<string>
                 {
                     "Freight",
+                    "SLM",
+                    "Märklin",
                 },
                 Functions =
                 {
@@ -221,7 +223,7 @@ namespace PiStellwerk.Test
         }
 
         [Test]
-        public async Task RelasaeSuccessCase()
+        public async Task ReleaseSuccessCase()
         {
             var result = await GetController(GetMock(true)).ReleaseEngine(1, _sessionId);
             result.Should().BeAssignableTo<OkResult>();
@@ -260,7 +262,7 @@ namespace PiStellwerk.Test
                     new(6, "Shunting light and gear"),
                     new(7, "High beam"),
                 },
-                Image =
+                Images =
                 {
                     new EngineImage(),
                     new EngineImage(),

@@ -25,12 +25,11 @@ namespace PiStellwerk.Database.Tests
                 Id = 7777,
                 Address = 77,
                 SpeedSteps = 128,
-                Tags = { "testtag1", "testtag2" },
                 Functions =
                 {
                     new DccFunction(0, "Lights"),
                 },
-                Image =
+                Images =
                 {
                     new EngineImage()
                     {

@@ -61,7 +61,7 @@ namespace PiStellwerk.Database.Tests
             var loadContext = new StwDbContext(_connectionString);
             var loadedEngine = loadContext.Engines
                 .Include(x => x.Functions)
-                .Include(e => e.Image)
+                .Include(e => e.Images)
                 .Single();
 
             loadedEngine.Should().NotBeSameAs(originalEngine);

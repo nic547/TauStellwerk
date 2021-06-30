@@ -36,7 +36,7 @@ namespace PiStellwerk.Database.Tests
         public void ClonedTagsAreNotReferenceEqual()
         {
             var e1 = new Engine();
-            var testTag = "testTag";
+            var testTag = new Tag(0, "testtag");
             e1.Tags.Add(testTag);
 
             Assert.True(ReferenceEquals(e1.Tags.First(), testTag));

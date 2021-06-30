@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using System.Web;
 using PiStellwerk.Base.Model;
 
@@ -51,21 +52,25 @@ namespace PiStellwerk.Database.Model
         /// <summary>
         /// Gets a list of functions a decoder offers.
         /// </summary>
-        public List<DccFunction> Functions { get; init; } = new List<DccFunction>();
+        public List<DccFunction> Functions { get; init; } = new();
 
         /// <summary>
         /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
         /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
-        public List<string> Tags { get; init; } = new List<string>();
+        public List<Tag> Tags { get; init; } = new();
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ECoSEngineData? ECoSEngineData { get; init; }
 
-        public List<EngineImage> Image { get; init; } = new();
+        public List<EngineImage> Images { get; init; } = new();
 
         public DateTime LastUsed { get; set; }
+
+        public DateTime Created { get; init; }
+
+        public bool IsHidden { get; set; }
 
         /// <summary>
         /// Create a deep copy of this object.
@@ -90,8 +95,8 @@ namespace PiStellwerk.Database.Model
             {
                 Id = Id,
                 Name = Name,
-                Images = Image.Select(i => i.ToImageDto()).ToList(),
-                Tags = Tags,
+                Images = Images.Select(i => i.ToImageDto()).ToList(),
+                Tags = Tags.Select(t => t.Name).ToList(),
                 LastUsed = LastUsed,
             };
         }
@@ -102,8 +107,8 @@ namespace PiStellwerk.Database.Model
             {
                 Id = Id,
                 Name = Name,
-                Images = Image.Select(i => i.ToImageDto()).ToList(),
-                Tags = Tags,
+                Images = Images.Select(i => i.ToImageDto()).ToList(),
+                Tags = Tags.Select(t => t.Name).ToList(),
                 LastUsed = LastUsed,
                 TopSpeed = TopSpeed,
                 Address = Address,
@@ -111,14 +116,14 @@ namespace PiStellwerk.Database.Model
             };
         }
 
-        public void UpdateWith(EngineFullDto engineDto)
+        public async Task UpdateWith(EngineFullDto engineDto, StwDbContext dbContext)
         {
             Name = HttpUtility.HtmlEncode(engineDto.Name);
             TopSpeed = engineDto.TopSpeed;
             Address = engineDto.Address;
 
             Tags.Clear();
-            Tags.AddRange(engineDto.Tags.Select(t => HttpUtility.HtmlEncode(t)));
+            Tags.AddRange(await Tag.GetTagsFromStrings(engineDto.Tags, dbContext));
         }
     }
 }

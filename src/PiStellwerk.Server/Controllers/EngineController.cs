@@ -57,7 +57,8 @@ namespace PiStellwerk.Controllers
             return await _dbContext.Engines
                 .AsNoTracking()
                 .Include(x => x.Functions)
-                .Include(x => x.Image)
+                .Include(x => x.Images)
+                .Include(x => x.Tags)
                 .SingleOrDefaultAsync(x => x.Id == id)
                 .ContinueWith(x => x.Result.ToEngineFullDto());
         }
@@ -76,7 +77,8 @@ namespace PiStellwerk.Controllers
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
-                .Include(e => e.Image)
+                .Include(e => e.Images)
+                .Include(x => x.Tags)
                 .Select(e => e.ToEngineDto())
                 .ToListAsync();
         }
@@ -107,7 +109,7 @@ namespace PiStellwerk.Controllers
                 }
             }
 
-            engine.UpdateWith(engineDto);
+            await engine.UpdateWith(engineDto, _dbContext);
 
             try
             {
@@ -128,7 +130,7 @@ namespace PiStellwerk.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var engine = await _dbContext.Engines
-                .Include(e => e.Image)
+                .Include(e => e.Images)
                 .Include(e => e.Functions)
                 .SingleOrDefaultAsync(e => e.Id == id);
             if (engine == null)

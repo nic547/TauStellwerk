@@ -15,6 +15,7 @@ namespace PiStellwerk.Commands
     /// </summary>
     public class ConsoleCommandSystem : ICommandSystem
     {
+        // ReSharper disable once UnusedParameter.Local
         public ConsoleCommandSystem(IConfiguration config)
         {
         }

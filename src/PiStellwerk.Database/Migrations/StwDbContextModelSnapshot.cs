@@ -16,7 +16,22 @@ namespace PiStellwerk.Database.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("PiStellwerk.Data.DccFunction", b =>
+            modelBuilder.Entity("EngineTag", b =>
+                {
+                    b.Property<int>("EnginesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EnginesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("EngineTag");
+                });
+
+            modelBuilder.Entity("PiStellwerk.Database.Model.DccFunction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +54,7 @@ namespace PiStellwerk.Database.Migrations
                     b.ToTable("DccFunction");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.ECoSEngineData", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.ECoSEngineData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +69,7 @@ namespace PiStellwerk.Database.Migrations
                     b.ToTable("ECoSEngineData");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.Engine", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.Engine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +78,13 @@ namespace PiStellwerk.Database.Migrations
                     b.Property<ushort>("Address")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("ECoSEngineDataId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastUsed")
@@ -76,10 +97,6 @@ namespace PiStellwerk.Database.Migrations
                     b.Property<byte>("SpeedSteps")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Tags")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("TopSpeed")
                         .HasColumnType("INTEGER");
 
@@ -90,7 +107,7 @@ namespace PiStellwerk.Database.Migrations
                     b.ToTable("Engines");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.EngineImage", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.EngineImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,34 +133,67 @@ namespace PiStellwerk.Database.Migrations
                     b.ToTable("EngineImages");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.DccFunction", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.Tag", b =>
                 {
-                    b.HasOne("PiStellwerk.Data.Engine", null)
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("EngineTag", b =>
+                {
+                    b.HasOne("PiStellwerk.Database.Model.Engine", null)
+                        .WithMany()
+                        .HasForeignKey("EnginesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PiStellwerk.Database.Model.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PiStellwerk.Database.Model.DccFunction", b =>
+                {
+                    b.HasOne("PiStellwerk.Database.Model.Engine", null)
                         .WithMany("Functions")
                         .HasForeignKey("EngineId");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.Engine", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.Engine", b =>
                 {
-                    b.HasOne("PiStellwerk.Data.ECoSEngineData", "ECoSEngineData")
+                    b.HasOne("PiStellwerk.Database.Model.ECoSEngineData", "ECoSEngineData")
                         .WithMany()
                         .HasForeignKey("ECoSEngineDataId");
 
                     b.Navigation("ECoSEngineData");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.EngineImage", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.EngineImage", b =>
                 {
-                    b.HasOne("PiStellwerk.Data.Engine", null)
-                        .WithMany("Image")
+                    b.HasOne("PiStellwerk.Database.Model.Engine", null)
+                        .WithMany("Images")
                         .HasForeignKey("EngineId");
                 });
 
-            modelBuilder.Entity("PiStellwerk.Data.Engine", b =>
+            modelBuilder.Entity("PiStellwerk.Database.Model.Engine", b =>
                 {
                     b.Navigation("Functions");
 
-                    b.Navigation("Image");
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
