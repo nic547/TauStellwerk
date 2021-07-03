@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PiStellwerk.Database;
 using PiStellwerk.Database.Model;
+using PiStellwerk.Util;
 
 #nullable enable
 
@@ -73,6 +74,7 @@ namespace PiStellwerk.Commands.ECoS
                             },
                         };
 
+                        ConsoleService.PrintHighlightedMessage($"Loaded new engine from ECoS: {engine}");
                         await context.Engines.AddAsync(engine);
                     }
 
