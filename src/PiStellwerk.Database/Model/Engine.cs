@@ -57,7 +57,6 @@ namespace PiStellwerk.Database.Model
         /// <summary>
         /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
         /// everything one might search for if the exact name is unknown.
-        /// TODO: HTMLEncode these before actually displaying them anywhere.
         /// </summary>
         public List<Tag> Tags { get; init; } = new();
 
@@ -122,8 +121,10 @@ namespace PiStellwerk.Database.Model
             TopSpeed = engineDto.TopSpeed;
             Address = engineDto.Address;
 
-            Tags.Clear();
-            Tags.AddRange(await Tag.GetTagsFromStrings(engineDto.Tags, dbContext));
+            Tags.RemoveAll(t => !engineDto.Tags.Contains(t.Name));
+
+            var newTags = engineDto.Tags.Where(newTag => !Tags.Any(existingTag => existingTag.Name == newTag)).ToList();
+            Tags.AddRange(await Tag.GetTagsFromStrings(newTags, dbContext));
         }
     }
 }

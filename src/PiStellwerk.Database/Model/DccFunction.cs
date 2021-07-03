@@ -3,7 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.Database.Model

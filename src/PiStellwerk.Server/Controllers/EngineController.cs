@@ -101,6 +101,7 @@ namespace PiStellwerk.Controllers
             {
                 engine = await _dbContext.Engines
                     .Include(x => x.Functions)
+                    .Include(x => x.Tags)
                     .SingleOrDefaultAsync(x => x.Id == engineDto.Id);
 
                 if (engine == null)

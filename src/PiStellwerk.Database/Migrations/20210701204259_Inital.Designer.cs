@@ -9,7 +9,7 @@ using PiStellwerk.Database;
 namespace PiStellwerk.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    [Migration("20210630201841_Inital")]
+    [Migration("20210701204259_Inital")]
     partial class Inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
