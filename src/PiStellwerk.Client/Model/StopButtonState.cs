@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel;
 using System.Timers;
 using JetBrains.Annotations;
-using PiStellwerk.Database.Model;
+using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.Client.Model
 {

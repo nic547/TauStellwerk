@@ -5,9 +5,9 @@
 
 using System;
 using JetBrains.Annotations;
+using PiStellwerk.Base.Model;
 using PiStellwerk.Client.Model;
 using PiStellwerk.Client.Services;
-using PiStellwerk.Database.Model;
 using PiStellwerk.Desktop.Views;
 using Splat;
 
