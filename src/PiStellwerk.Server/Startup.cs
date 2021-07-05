@@ -4,9 +4,7 @@
 // </copyright>
 
 using System.IO;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +16,6 @@ using Microsoft.OpenApi.Models;
 using PiStellwerk.Commands;
 using PiStellwerk.Database;
 using PiStellwerk.Services;
-using PiStellwerk.Util;
 
 namespace PiStellwerk
 {
@@ -27,7 +24,6 @@ namespace PiStellwerk
     /// </summary>
     public class Startup
     {
-        // TODO: Setting-ify
         private const string _userContentDirectory = "userContent";
         private const string _generatedContentDirectory = "generatedContent";
 
@@ -39,21 +35,17 @@ namespace PiStellwerk
         {
             Configuration = configuration;
 
-            using var client = new StwDbContext();
-            if (client.Database.GetPendingMigrations().Any())
-            {
-                ConsoleService.PrintHighlightedMessage("Applying database migrations.");
-                client.Database.Migrate();
-                ConsoleService.PrintHighlightedMessage("Database migrations applied.");
-            }
-            else
-            {
-                ConsoleService.PrintMessage("No database migrations necessary.");
-            }
-
-            // UNCOMMENT TO ADD TEST DATA.
-            // client.Engines.AddRange(TestDataService.GetEngines());
-            // client.SaveChanges();
+            // using var client = new StwDbContext();
+            // if (client.Database.GetPendingMigrations().Any())
+            // {
+            //     ConsoleService.PrintHighlightedMessage("Applying database migrations.");
+            //     client.Database.Migrate();
+            //     ConsoleService.PrintHighlightedMessage("Database migrations applied.");
+            // }
+            // else
+            // {
+            //     ConsoleService.PrintMessage("No database migrations necessary.");
+            // }
         }
 
         /// <summary>
@@ -75,17 +67,13 @@ namespace PiStellwerk
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddEntityFrameworkSqlite().AddDbContext<StwDbContext>();
+            services.AddDbContext<StwDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("Database") ?? "Filename=StwDatabase.db;cache=shared"));
 
             services.AddSingleton(new SessionService());
-
-            var commandSystem = CommandSystemFactory.FromConfig(Configuration);
-            _ = commandSystem.LoadEnginesFromSystem(new StwDbContext());
-            services.AddSingleton(commandSystem);
-
-            services.AddSingleton(new StatusService(commandSystem));
-
-            services.AddSingleton<IEngineService>(p => new EngineService(commandSystem, p.GetRequiredService<SessionService>()));
+            services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
+            services.AddSingleton(p => new StatusService(p.GetRequiredService<ICommandSystem>()));
+            services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<ICommandSystem>(), p.GetRequiredService<SessionService>()));
 
             services.AddHostedService(p => p.GetRequiredService<SessionService>());
 
@@ -124,8 +112,6 @@ namespace PiStellwerk
 
             EnsureContentDirectoriesExist(env);
 
-            RunImageSetup(env);
-
             app.UseStaticFiles();
 
             app.UseStaticFiles(new StaticFileOptions
@@ -148,15 +134,6 @@ namespace PiStellwerk
         {
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory));
             Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory));
-        }
-
-        private static async void RunImageSetup(IHostEnvironment env)
-        {
-            var system = new Images.ImageSystem(
-                new StwDbContext(),
-                Path.Combine(env.ContentRootPath, _userContentDirectory),
-                Path.Combine(env.ContentRootPath, _generatedContentDirectory));
-            await Task.Run(system.RunImageSetup);
         }
     }
 }

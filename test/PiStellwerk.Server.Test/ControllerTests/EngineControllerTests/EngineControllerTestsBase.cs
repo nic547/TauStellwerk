@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using PiStellwerk.Base.Model;
@@ -41,7 +42,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
             Connection = new SqliteConnection(ConnectionString);
             Connection.Open();
 
-            var context = new StwDbContext(ConnectionString);
+            var context = GetContext();
             context.Database.EnsureCreated();
 
             var testEngine = GetTestEngine();
@@ -75,10 +76,11 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
         protected StwDbContext GetContext()
         {
-            return new(ConnectionString);
+            var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(ConnectionString);
+            return new StwDbContext(contextOptions.Options);
         }
 
-        private Engine GetTestEngine()
+        protected Engine GetTestEngine()
         {
             return new()
             {
