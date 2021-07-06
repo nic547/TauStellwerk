@@ -56,6 +56,7 @@ namespace PiStellwerk.Controllers
         {
             return await _dbContext.Engines
                 .AsNoTracking()
+                .AsSingleQuery()
                 .Include(x => x.Functions)
                 .Include(x => x.Images)
                 .Include(x => x.Tags)
@@ -74,6 +75,7 @@ namespace PiStellwerk.Controllers
         {
             return await _dbContext.Engines
                 .AsNoTracking()
+                .AsSplitQuery()
                 .OrderByDescending(e => e.LastUsed)
                 .Skip(page * _resultsPerPage)
                 .Take(_resultsPerPage)
