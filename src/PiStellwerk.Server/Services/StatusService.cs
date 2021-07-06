@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using PiStellwerk.Base.Model;
 using PiStellwerk.Commands;
-using PiStellwerk.Database.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Services

@@ -24,8 +24,8 @@ namespace PiStellwerk
     /// </summary>
     public class Startup
     {
-        private const string _userContentDirectory = "userContent";
-        private const string _generatedContentDirectory = "generatedContent";
+        private const string _userContentDirectory = "./userContent";
+        private const string _generatedContentDirectory = "./generatedContent";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.

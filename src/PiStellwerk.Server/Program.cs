@@ -18,8 +18,8 @@ namespace PiStellwerk
 {
     public static class Program
     {
-        private const string _userContentDirectory = "userContent";
-        private const string _generatedContentDirectory = "generatedContent";
+        private const string _userContentDirectory = "./userContent";
+        private const string _generatedContentDirectory = "./generatedContent";
 
         public static void Main(string[] args)
         {
