@@ -3,14 +3,21 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Moq;
 using NUnit.Framework;
 using PiStellwerk.Base.Model;
 using PiStellwerk.Controllers;
+using PiStellwerk.Database;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 {
@@ -39,6 +46,11 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
                     "Freight",
                     "SLM",
                     "Märklin",
+                },
+                Functions = new()
+                {
+                    new(0, "Headlight"),
+                    new(1, "Sound"),
                 },
             };
 
@@ -112,6 +124,24 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             result.Should().BeAssignableTo<OkResult>();
             list.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task CanUpdateFunctions()
+        {
+            var engine = new EngineFullDto
+            {
+                Functions = new()
+                { new(0, "H"), },
+            };
+
+            var returnedEngine = (await GetController().UpdateOrAdd(engine)).Value;
+            returnedEngine.Functions[0].Name = "Headlights";
+            await GetController().UpdateOrAdd(engine);
+
+            var resultEngine = (await GetController().UpdateOrAdd(engine)).Value;
+            resultEngine.Functions.Should().HaveCount(1);
+            resultEngine.Functions[0].Name.Should().Be("Headlights");
         }
     }
 }

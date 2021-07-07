@@ -123,8 +123,31 @@ namespace PiStellwerk.Database.Model
 
             Tags.RemoveAll(t => !engineDto.Tags.Contains(t.Name));
 
-            var newTags = engineDto.Tags.Where(newTag => !Tags.Any(existingTag => existingTag.Name == newTag)).ToList();
+            var newTags = engineDto.Tags.Where(newTag => Tags.All(existingTag => existingTag.Name != newTag)).ToList();
             Tags.AddRange(await Tag.GetTagsFromStrings(newTags, dbContext));
+
+            UpdateFunctions(engineDto.Functions);
+        }
+
+        private void UpdateFunctions(List<FunctionDto> updateFunctions)
+        {
+            Functions.RemoveAll(existingFunction => updateFunctions.All(updateFunction => updateFunction.Number != existingFunction.Number));
+
+            foreach (var updateFunction in updateFunctions)
+            {
+                var matchingExistingFunction = Functions.SingleOrDefault(f => f.Number == updateFunction.Number);
+
+                if (matchingExistingFunction == null)
+                {
+                    Functions.Add(new DccFunction(updateFunction.Number, updateFunction.Name));
+                    continue;
+                }
+
+                if (matchingExistingFunction.Name != updateFunction.Name)
+                {
+                    matchingExistingFunction.Name = updateFunction.Name;
+                }
+            }
         }
     }
 }

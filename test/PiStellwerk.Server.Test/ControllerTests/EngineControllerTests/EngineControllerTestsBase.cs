@@ -27,7 +27,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
         protected string SessionId { get; set; } = string.Empty;
 
-        protected SessionService? Service { get; set; }
+        protected SessionService? SessionService { get; set; }
 
         /// <summary>
         /// Does the setup for the tests. Sets up a in-memory sqlite database etc.
@@ -51,8 +51,8 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             EngineId = testEngine.Id;
 
-            Service = new SessionService();
-            SessionId = Service.CreateSession("tesUser", "io9urjhgf9rh").SessionId;
+            SessionService = new SessionService();
+            SessionId = SessionService.CreateSession("tesUser", "io9urjhgf9rh").SessionId;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
         protected EngineController GetController(IEngineService engineService)
         {
-            return new(GetContext(), engineService, Service!);
+            return new(GetContext(), engineService, SessionService!);
         }
 
         protected StwDbContext GetContext()
