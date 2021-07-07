@@ -3,21 +3,14 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Moq;
 using NUnit.Framework;
 using PiStellwerk.Base.Model;
 using PiStellwerk.Controllers;
-using PiStellwerk.Database;
-using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 {

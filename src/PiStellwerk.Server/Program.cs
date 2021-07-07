@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PiStellwerk.Commands;
@@ -18,9 +19,6 @@ namespace PiStellwerk
 {
     public static class Program
     {
-        private const string _userContentDirectory = "./userContent";
-        private const string _generatedContentDirectory = "./generatedContent";
-
         public static void Main(string[] args)
         {
             CreateHostBuilder(args)
@@ -36,7 +34,9 @@ namespace PiStellwerk
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .ConfigureHostConfiguration((config) =>
+            config.AddInMemoryCollection(DefaultConfiguration.Values));
 
         public static IHost MigrateDatabase(this IHost host)
         {
@@ -81,10 +81,11 @@ namespace PiStellwerk
             var scope = serviceScopeFactory.CreateScope();
             var services = scope.ServiceProvider;
 
+            var config = services.GetRequiredService<IConfiguration>();
             var system = new Images.ImageSystem(
                 services.GetRequiredService<StwDbContext>(),
-                _userContentDirectory,
-                _generatedContentDirectory);
+                config["originalImageDirectory"],
+                config["generatedImageDirectory"]);
             _ = Task.Run(system.RunImageSetup);
 
             return host;

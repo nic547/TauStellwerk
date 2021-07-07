@@ -24,9 +24,6 @@ namespace PiStellwerk
     /// </summary>
     public class Startup
     {
-        private const string _userContentDirectory = "./userContent";
-        private const string _generatedContentDirectory = "./generatedContent";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -34,18 +31,6 @@ namespace PiStellwerk
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            // using var client = new StwDbContext();
-            // if (client.Database.GetPendingMigrations().Any())
-            // {
-            //     ConsoleService.PrintHighlightedMessage("Applying database migrations.");
-            //     client.Database.Migrate();
-            //     ConsoleService.PrintHighlightedMessage("Database migrations applied.");
-            // }
-            // else
-            // {
-            //     ConsoleService.PrintMessage("No database migrations necessary.");
-            // }
         }
 
         /// <summary>
@@ -68,7 +53,7 @@ namespace PiStellwerk
             services.AddRazorPages();
 
             services.AddDbContext<StwDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("Database") ?? "Filename=StwDatabase.db;cache=shared"));
+                options.UseSqlite(Configuration.GetConnectionString("Database")));
 
             services.AddSingleton(new SessionService());
             services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
@@ -117,7 +102,7 @@ namespace PiStellwerk
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, _generatedContentDirectory)),
+                    Path.Combine(env.ContentRootPath, Configuration["generatedImageDirectory"])),
                 RequestPath = "/images",
             });
 
@@ -130,10 +115,10 @@ namespace PiStellwerk
             });
         }
 
-        private static void EnsureContentDirectoriesExist(IHostEnvironment env)
+        private void EnsureContentDirectoriesExist(IHostEnvironment env)
         {
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _userContentDirectory));
-            Directory.CreateDirectory(Path.Combine(env.ContentRootPath, _generatedContentDirectory));
+            Directory.CreateDirectory(Configuration["originalImageDirectory"]);
+            Directory.CreateDirectory(Configuration["generatedImageDirectory"]);
         }
     }
 }
