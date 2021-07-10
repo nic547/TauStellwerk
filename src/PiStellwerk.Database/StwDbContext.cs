@@ -4,6 +4,7 @@
 // </copyright>
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Database
@@ -26,5 +27,16 @@ namespace PiStellwerk.Database
         public DbSet<EngineImage> EngineImages => Set<EngineImage>();
 
         public DbSet<Tag> Tags => Set<Tag>();
+
+        internal class StwDbContextDesignTimeFactory : IDesignTimeDbContextFactory<StwDbContext>
+        {
+            public StwDbContext CreateDbContext(string[] args)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<StwDbContext>();
+                optionsBuilder.UseSqlite($"Filename=MigrationTestDatabase.db;cache=shared");
+
+                return new StwDbContext(optionsBuilder.Options);
+            }
+        }
     }
 }

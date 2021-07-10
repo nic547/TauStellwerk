@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -69,20 +70,38 @@ namespace PiStellwerk.Controllers
         /// Results are paginated.
         /// </summary>
         /// <param name="page">Page to load. Default and start is Zero.</param>
+        /// <param name="showHiddenEngines">Whether engines that are hidden should be included.</param>
+        /// <param name="sortBy">Should engines be sorted by LastUsed or Created?.</param>
+        /// <param name="sortDescending">Should Engines be sorted descending (or ascending).</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0)
+        public async Task<IList<EngineDto>> GetEngines(int page = 0, bool showHiddenEngines = false, string? sortBy = "LastUsed", bool sortDescending = true)
         {
-            return await _dbContext.Engines
-                .AsNoTracking()
-                .AsSplitQuery()
-                .OrderByDescending(e => e.LastUsed)
-                .Skip(page * _resultsPerPage)
-                .Take(_resultsPerPage)
-                .Include(e => e.Images)
-                .Include(x => x.Tags)
-                .Select(e => e.ToEngineDto())
-                .ToListAsync();
+            var query = _dbContext.Engines
+               .AsNoTracking()
+               .AsSplitQuery();
+
+            if (!showHiddenEngines)
+            {
+                query = query.Where(e => !e.IsHidden);
+            }
+
+            query = (sortBy?.ToLower(CultureInfo.InvariantCulture), sortDescending) switch
+            {
+                ("created", false) => query.OrderBy(e => e.Created),
+                ("created", true) => query.OrderByDescending(e => e.Created),
+                ("lastused", false) => query.OrderBy(e => e.LastUsed),
+                (_, _) => query.OrderByDescending(e => e.LastUsed),
+            };
+
+            query = query.OrderByDescending(e => e.LastUsed);
+            query = query.Skip(page * _resultsPerPage)
+            .Take(_resultsPerPage)
+            .Include(e => e.Images)
+            .Include(x => x.Tags);
+
+            var result = await query.ToListAsync();
+            return result.Select(e => e.ToEngineDto()).ToList();
         }
 
         /// <summary>

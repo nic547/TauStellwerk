@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
 using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.Database.Model
@@ -20,6 +21,8 @@ namespace PiStellwerk.Database.Model
     /// <summary>
     /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
     /// </summary>
+    [Index(nameof(LastUsed))]
+    [Index(nameof(Created))]
     public class Engine
     {
         /// <summary>
@@ -67,7 +70,7 @@ namespace PiStellwerk.Database.Model
 
         public DateTime LastUsed { get; set; }
 
-        public DateTime Created { get; init; }
+        public DateTime Created { get; init; } = DateTime.Now;
 
         public bool IsHidden { get; set; }
 

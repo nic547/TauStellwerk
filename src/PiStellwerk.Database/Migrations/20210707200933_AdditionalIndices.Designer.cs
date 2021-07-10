@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PiStellwerk.Database;
 
 namespace PiStellwerk.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    partial class StwDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210707200933_AdditionalIndices")]
+    partial class AdditionalIndices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
