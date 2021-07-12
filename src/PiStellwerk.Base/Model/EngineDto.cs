@@ -19,5 +19,9 @@ namespace PiStellwerk.Base.Model
         public List<ImageDto> Images { get; init; } = new();
 
         public DateTime LastUsed { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public bool IsHidden { get; set; }
     }
 }

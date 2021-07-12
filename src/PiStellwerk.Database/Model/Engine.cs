@@ -70,7 +70,7 @@ namespace PiStellwerk.Database.Model
 
         public DateTime LastUsed { get; set; }
 
-        public DateTime Created { get; init; } = DateTime.Now;
+        public DateTime Created { get; set; } = DateTime.Now;
 
         public bool IsHidden { get; set; }
 
@@ -100,6 +100,8 @@ namespace PiStellwerk.Database.Model
                 Images = Images.Select(i => i.ToImageDto()).ToList(),
                 Tags = Tags.Select(t => t.Name).ToList(),
                 LastUsed = LastUsed,
+                Created = Created,
+                IsHidden = IsHidden,
             };
         }
 
@@ -112,9 +114,11 @@ namespace PiStellwerk.Database.Model
                 Images = Images.Select(i => i.ToImageDto()).ToList(),
                 Tags = Tags.Select(t => t.Name).ToList(),
                 LastUsed = LastUsed,
+                Created = Created,
                 TopSpeed = TopSpeed,
                 Address = Address,
                 Functions = Functions.Select(f => f.ToFunctionDto()).ToList(),
+                IsHidden = IsHidden,
             };
         }
 
@@ -130,6 +134,10 @@ namespace PiStellwerk.Database.Model
             Tags.AddRange(await Tag.GetTagsFromStrings(newTags, dbContext));
 
             UpdateFunctions(engineDto.Functions);
+
+            LastUsed = engineDto.LastUsed;
+            Created = engineDto.Created;
+            IsHidden = engineDto.IsHidden;
         }
 
         private void UpdateFunctions(List<FunctionDto> updateFunctions)

@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -22,30 +23,75 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
         [Test]
         public async Task CanLoadList()
         {
+            await InsertEngines(99);
             var list = await GetController().GetEngines();
-            list.Should().NotBeEmpty();
+            list.Should().HaveCount(20);
+        }
+
+        [Test]
+        public async Task ListIsCompletlySorted()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.LastUsed).Should().BeInDescendingOrder();
+        }
+
+        [Test]
+        public async Task ListCanBeSortedAscending()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i, false, null, false));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.LastUsed).Should().BeInAscendingOrder();
+        }
+
+        [Test]
+        public async Task ListCanBeSortedDescendingByCreationDate()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", true));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.Created).Should().BeInDescendingOrder();
+        }
+
+        [Test]
+        public async Task ListCanBeSortedAscendingByCreationDate()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", false));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.Created).Should().BeInAscendingOrder();
         }
 
         [Test]
         public async Task CanAddEngine()
         {
-            var engineToAdd = new EngineFullDto
-            {
-                Address = 392,
-                Name = "Re 620 088-5 (xrail)",
-                TopSpeed = 140,
-                Tags = new List<string>
-                {
-                    "Freight",
-                    "SLM",
-                    "Märklin",
-                },
-                Functions = new()
-                {
-                    new(0, "Headlight"),
-                    new(1, "Sound"),
-                },
-            };
+            var engineToAdd = EngineDtoGenerator.GetEngineDto();
 
             var returnedEngine = (await GetController().UpdateOrAdd(engineToAdd)).Value;
             var loadedEngine = await GetController().GetEngine(returnedEngine.Id);
@@ -135,6 +181,15 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
             var resultEngine = (await GetController().UpdateOrAdd(engine)).Value;
             resultEngine.Functions.Should().HaveCount(1);
             resultEngine.Functions[0].Name.Should().Be("Headlights");
+        }
+
+        public async Task InsertEngines(int number)
+        {
+            var engines = EngineDtoGenerator.GetEngineFullDtos(number);
+            foreach (var engine in engines)
+            {
+                await GetController().UpdateOrAdd(engine);
+            }
         }
     }
 }

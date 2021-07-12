@@ -90,11 +90,10 @@ namespace PiStellwerk.Controllers
             {
                 ("created", false) => query.OrderBy(e => e.Created),
                 ("created", true) => query.OrderByDescending(e => e.Created),
-                ("lastused", false) => query.OrderBy(e => e.LastUsed),
-                (_, _) => query.OrderByDescending(e => e.LastUsed),
+                (_, false) => query.OrderBy(e => e.LastUsed),
+                (_, true) => query.OrderByDescending(e => e.LastUsed),
             };
 
-            query = query.OrderByDescending(e => e.LastUsed);
             query = query.Skip(page * _resultsPerPage)
             .Take(_resultsPerPage)
             .Include(e => e.Images)
