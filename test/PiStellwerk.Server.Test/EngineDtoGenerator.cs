@@ -16,25 +16,29 @@ namespace PiStellwerk.Test
         private static readonly List<EngineNameSet> _engineNameComponents = new()
         {
             new("BLS Re 465", 1, 18, 160, new() { "Universal", "SLM" }),
-            new("BLS Re 475", 1, 15, 200, new() { "Freight" }),
-            new("BLS Re 485", 1, 20, 140, new() { "Freight" }),
-            new("BLS Re 486", 1, 10, 140, new()),
-            new("SBB Re 420", 101, 349, 140, new()),
-            new("SBB Re 620", 0, 89, 140, new()),
-            new("SBB Re 460", 0, 118, 200, new()),
-            new("SBB Re 474", 1, 18, 140, new()),
-            new("SBB Re 482", 0, 49, 140, new()),
-            new("SBB Re 484", 2, 21, 140, new()),
-            new("SBB Re 484", 103, 105, 140, new()),
-            new("SBB Ae 610", 401, 520, 125, new()),
-            new("SOB Re 446", 15, 18, 160, new()),
-            new("SOB Re 456", 91, 96, 130, new()),
-            new("SRT Rem 487", 1, 1, 140, new()),
-            new("Railcare Rem 476", 451, 457, 200, new()),
+            new("BLS Re 475", 1, 15, 200, new() { "Freight", "Siemens" }),
+            new("BLS Re 485", 1, 20, 140, new() { "Freight", "Bombardier" }),
+            new("BLS Re 486", 1, 10, 140, new() { "Freight", "Bombardier" }),
+
+            new("SBB Re 420", 101, 349, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 620", 0, 89, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 460", 0, 118, 200, new() { "Passenger", "SLM" }),
+            new("SBB Re 474", 1, 18, 140, new() { "Freight", "Siemens" }),
+            new("SBB Re 482", 0, 49, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Re 484", 2, 21, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Re 484", 103, 105, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Ae 610", 401, 520, 125, new() { "Universal", "SLM" }),
+
+            new("SOB Re 446", 15, 18, 160, new() { "Universal", "SLM" }),
+            new("SOB Re 456", 91, 96, 130, new() { "Universal", "SLM" }),
+
+            new("SRT Rem 487", 1, 1, 140, new() { "Freight", "Bombardier" }),
+
+            new("Railcare Rem 476", 451, 457, 200, new() { "Freight", "Siemens" }),
         };
 
         private static readonly List<string> _manufacturerTags = new() { "Märklin", "Pikp", "Roco", "LS Models", "HAG", "Lilliput", "ESU" };
-        private static readonly List<string> _ownerTag = new() { "Peter", "Mike", "Sara", "Nax", "Jean" };
+        private static readonly List<string> _ownerTag = new() { "Peter", "Mike", "Sara", "Max", "Jean" };
 
         public static EngineFullDto GetEngineDto()
         {
