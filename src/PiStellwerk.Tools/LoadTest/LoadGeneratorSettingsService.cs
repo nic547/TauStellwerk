@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 using PiStellwerk.Client.Model;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerk.LoadGenerator
+namespace PiStellwerk.Tools.LoadTest
 {
     public class LoadGeneratorSettingsService : IClientSettingsService
     {
         private readonly ImmutableSettings _settings;
 
-        public LoadGeneratorSettingsService(Options options, Random random)
+        public LoadGeneratorSettingsService(LoadTestOptions options, Random random)
         {
             _settings = new ImmutableSettings(
                 $"Random User {random.Next(999_999)}",

@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="Dominic Ritz">
+﻿// <copyright file="LoadTester.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,28 +8,14 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using CommandLine;
-using PiStellwerk.LoadGenerator.ClientActions;
+using PiStellwerk.Tools.LoadTest.ClientActions;
 using PiStellwerk.Util;
 
-namespace PiStellwerk.LoadGenerator
+namespace PiStellwerk.Tools.LoadTest
 {
-    /// <summary>
-    /// A tool that tries to simulate a "realistic user" by making requests to the PiStellwerk-server.
-    /// </summary>
-    public class Program
+    public static class LoadTester
     {
-        /// <summary>
-        /// Entry point for the console application.
-        /// </summary>
-        /// <param name="args">The command line arguments.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task Main(string[] args)
-        {
-            await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async options => await Run(options));
-        }
-
-        private static async Task Run(Options options)
+        public static async Task Run(LoadTestOptions options)
         {
             var simulators = new List<ClientSimulator>();
 

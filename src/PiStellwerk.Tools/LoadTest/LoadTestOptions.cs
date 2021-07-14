@@ -1,19 +1,22 @@
-﻿// <copyright file="Options.cs" company="Dominic Ritz">
+﻿// <copyright file="LoadTestOptions.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
 using System;
 using CommandLine;
+using JetBrains.Annotations;
 
-namespace PiStellwerk.LoadGenerator
+namespace PiStellwerk.Tools.LoadTest
 {
     /// <summary>
     /// Class containing the options of the tool. Options come from arguments.
     /// </summary>
-    public class Options
+    [Verb("loadtest")]
+    [UsedImplicitly]
+    public class LoadTestOptions
     {
-        public Options(Uri uri, bool noStats, int clients, int time)
+        public LoadTestOptions(Uri uri, bool noStats, int clients, int time)
         {
             Uri = uri;
             NoStats = noStats;

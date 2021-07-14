@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerk.LoadGenerator.ClientActions
+namespace PiStellwerk.Tools.LoadTest.ClientActions
 {
     /// <summary>
     /// Simulates sending a new Speed for an engine.
@@ -20,7 +20,7 @@ namespace PiStellwerk.LoadGenerator.ClientActions
         public override int Interval => Random.Next(190, 210);
 
         /// <inheritdoc/>
-        public override async Task Initialize(ClientEngineService engineService, Options options, int id,  Random random)
+        public override async Task Initialize(ClientEngineService engineService, LoadTestOptions options, int id,  Random random)
         {
             await base.Initialize(engineService, options, id, random);
         }

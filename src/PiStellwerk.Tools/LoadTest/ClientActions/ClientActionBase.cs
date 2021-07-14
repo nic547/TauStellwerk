@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using PiStellwerk.Client.Services;
 
-namespace PiStellwerk.LoadGenerator.ClientActions
+namespace PiStellwerk.Tools.LoadTest.ClientActions
 {
     /// <summary>
     /// A action performed by a client.
@@ -15,7 +15,7 @@ namespace PiStellwerk.LoadGenerator.ClientActions
     public abstract class ClientActionBase
     {
         private ClientEngineService? _engineService;
-        private Options? _options;
+        private LoadTestOptions? _options;
         private Random? _random;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace PiStellwerk.LoadGenerator.ClientActions
         /// <summary>
         /// Gets the Options to use.
         /// </summary>
-        internal Options Options
+        internal LoadTestOptions Options
         {
             get => _options ?? throw new InvalidOperationException();
             private set => _options = value;
@@ -52,7 +52,7 @@ namespace PiStellwerk.LoadGenerator.ClientActions
 
         internal int Id { get; set; }
 
-        public virtual Task Initialize(ClientEngineService engineService, Options options, int id, Random random)
+        public virtual Task Initialize(ClientEngineService engineService, LoadTestOptions options, int id, Random random)
         {
             EngineService = engineService;
             Options = options;

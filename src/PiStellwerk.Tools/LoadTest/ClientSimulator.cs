@@ -9,10 +9,10 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using System.Timers;
 using PiStellwerk.Client.Services;
-using PiStellwerk.LoadGenerator.ClientActions;
+using PiStellwerk.Tools.LoadTest.ClientActions;
 using PiStellwerk.Util;
 
-namespace PiStellwerk.LoadGenerator
+namespace PiStellwerk.Tools.LoadTest
 {
     /// <summary>
     /// Simulates a single client that makes it's HTTP Requests.
@@ -34,10 +34,10 @@ namespace PiStellwerk.LoadGenerator
         /// Initializes a new instance of the <see cref="ClientSimulator"/> class.
         /// </summary>
         /// <param name="actionTypes">Types that are assignable from ClientActionBase.</param>
-        /// <param name="options"><see cref="Options"/>.</param>
+        /// <param name="options"><see cref="LoadTestOptions"/>.</param>
         /// <param name="id">Id of the engine to use.</param>
         /// <returns>A <see cref="Task"/> containing the new instance.</returns>
-        public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, Options options, int id)
+        public static async Task<ClientSimulator> Create(ImmutableList<Type> actionTypes, LoadTestOptions options, int id)
         {
             var random = new Random();
             var settingsService = new LoadGeneratorSettingsService(options, random);
