@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using CommandLine;
+using PiStellwerk.Tools.CreateTestDb;
 using PiStellwerk.Tools.LoadTest;
 
 namespace PiStellwerk.Tools
@@ -21,7 +22,10 @@ namespace PiStellwerk.Tools
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task Main(string[] args)
         {
-            await Parser.Default.ParseArguments<LoadTestOptions>(args).WithParsedAsync(async options => await LoadTester.Run(options));
+            var parsedArguments = Parser.Default.ParseArguments<LoadTestOptions, CreateTestDbOptions>(args);
+
+            await parsedArguments.WithParsedAsync<LoadTestOptions>(async options => await LoadTester.Run(options));
+            await parsedArguments.WithParsedAsync<CreateTestDbOptions>(async options => await CreateTestDbTool.Run(options));
         }
     }
 }

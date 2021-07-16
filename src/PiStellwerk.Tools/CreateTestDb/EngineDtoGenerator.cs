@@ -9,7 +9,7 @@ using System.Linq;
 using PiStellwerk.Base.Model;
 using PiStellwerk.Util;
 
-namespace PiStellwerk.Test
+namespace PiStellwerk.Tools.CreateTestDb
 {
     public static class EngineDtoGenerator
     {
