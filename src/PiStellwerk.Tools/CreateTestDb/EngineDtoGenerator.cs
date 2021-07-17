@@ -15,26 +15,34 @@ namespace PiStellwerk.Tools.CreateTestDb
     {
         private static readonly List<EngineNameSet> _engineNameComponents = new()
         {
-            new("BLS Re 465", 1, 18, 160, new() { "Universal", "SLM" }),
-            new("BLS Re 475", 1, 15, 200, new() { "Freight", "Siemens" }),
-            new("BLS Re 485", 1, 20, 140, new() { "Freight", "Bombardier" }),
-            new("BLS Re 486", 1, 10, 140, new() { "Freight", "Bombardier" }),
+            new("BLS Re 465 {0:000} (Blau)", 1, 18, 160, new() { "Universal", "SLM" }),
+            new("BLS Re 465 {0:000} (Gruen)", 1, 18, 160, new() { "Universal", "SLM" }),
+            new("BLS Re 475 {0:000} (Alpinist)", 1, 15, 200, new() { "Freight", "Siemens" }),
+            new("BLS Re 485 {0:000} (Connecting Europe)", 1, 20, 140, new() { "Freight", "Bombardier" }),
+            new("BLS Re 485 {0:000} (Alpinist)", 1, 20, 140, new() { "Freight", "Bombardier" }),
+            new("BLS Re 486 {0:000} (Alpinist)", 1, 10, 140, new() { "Freight", "Bombardier" }),
 
-            new("SBB Re 420", 101, 349, 140, new() { "Universal", "SLM" }),
-            new("SBB Re 620", 0, 89, 140, new() { "Universal", "SLM" }),
-            new("SBB Re 460", 0, 118, 200, new() { "Passenger", "SLM" }),
-            new("SBB Re 474", 1, 18, 140, new() { "Freight", "Siemens" }),
-            new("SBB Re 482", 0, 49, 140, new() { "Freight", "Bombardier" }),
-            new("SBB Re 484", 2, 21, 140, new() { "Freight", "Bombardier" }),
-            new("SBB Re 484", 103, 105, 140, new() { "Freight", "Bombardier" }),
-            new("SBB Ae 610", 401, 520, 125, new() { "Universal", "SLM" }),
+            new("Hupac BR 193 {0:000}", 490, 497, 200, new() { "Freight", "Siemens", "DACHINL", "Vectron MS" }),
 
-            new("SOB Re 446", 15, 18, 160, new() { "Universal", "SLM" }),
-            new("SOB Re 456", 91, 96, 130, new() { "Universal", "SLM" }),
+            new("Railcare Rem 476 {0:000}", 451, 457, 200, new() { "Freight", "Siemens" }),
 
-            new("SRT Rem 487", 1, 1, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Re 4/4 {0} (Grün)", 11101, 11376, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 420 {0:000} (Rot)", 101, 349, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 420 {0:000} (LION)", 201, 230, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 620 {0:000}", 0, 89, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 460 {0:000} (Lok 2000)", 0, 118, 200, new() { "Passenger", "SLM" }),
+            new("SBB Re 460 {0:000} (Refit)", 0, 118, 200, new() { "Passenger", "SLM" }),
+            new("SBB Re 474 {0:000} (SBB Cargo)", 1, 18, 140, new() { "Freight", "Siemens" }),
+            new("SBB Re 482 {0:000} (SBB Cargo)", 0, 49, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Re 484 {0:000} (SBB Cargo)", 2, 21, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Re 484 {0:000} (SBB Cargo)", 103, 105, 140, new() { "Freight", "Bombardier" }),
+            new("SBB Ae 610 {0:000} (Rot)", 401, 520, 125, new() { "Universal", "SLM" }),
+            new("SBB BR 193 {0:000} (Daypiercer)", 461, 478, 20, new() { "Freight", "Siemens", "LokRoll" }),
 
-            new("Railcare Rem 476", 451, 457, 200, new() { "Freight", "Siemens" }),
+            new("SOB Re 446 {0:000}", 15, 18, 160, new() { "Universal", "SLM" }),
+            new("SOB Re 456 {0:000}", 91, 96, 130, new() { "Universal", "SLM" }),
+
+            new("SRT Rem 487 {0:000} (Biene Maja)", 1, 1, 140, new() { "Freight", "Bombardier" }),
         };
 
         private static readonly List<string> _manufacturerTags = new() { "Märklin", "Pikp", "Roco", "LS Models", "HAG", "Lilliput", "ESU" };
@@ -55,6 +63,11 @@ namespace PiStellwerk.Tools.CreateTestDb
             var random = new Random();
             var engines = new List<EngineFullDto>();
 
+            foreach (var set in _engineNameComponents.OrderBy(e => e.TotalNumber))
+            {
+                Console.WriteLine($"{set.ClassName}: {set.TotalNumber}");
+            }
+
             for (var i = 0; i < number; i++)
             {
                 engines.Add(CreateEngine(random));
@@ -65,7 +78,7 @@ namespace PiStellwerk.Tools.CreateTestDb
 
         private static EngineFullDto CreateEngine(Random random)
         {
-            var totalPossibleEngineNames = _engineNameComponents.Sum(nameSet => nameSet.MaxNumber - nameSet.MinNumber);
+            var totalPossibleEngineNames = _engineNameComponents.Sum(nameSet => nameSet.TotalNumber);
             var chosenIndex = random.Next(0, totalPossibleEngineNames);
 
             EngineNameSet? engineNameSet = null;
@@ -95,7 +108,7 @@ namespace PiStellwerk.Tools.CreateTestDb
 
             return new EngineFullDto()
             {
-                Name = engineNameSet.ClassName + " " + number.ToString("000"),
+                Name = string.Format(engineNameSet.ClassName, number),
                 Address = (ushort)random.Next(ushort.MinValue, ushort.MaxValue),
                 TopSpeed = engineNameSet.TopSpeed,
                 Tags = tags,
@@ -126,7 +139,7 @@ namespace PiStellwerk.Tools.CreateTestDb
 
             public int MaxNumber { get; }
 
-            public int TotalNumber => MaxNumber - MinNumber;
+            public int TotalNumber => MaxNumber - MinNumber + 1;
 
             public int TopSpeed { get; }
 
