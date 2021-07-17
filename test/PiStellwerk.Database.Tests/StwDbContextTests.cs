@@ -9,8 +9,7 @@ using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using PiStellwerk.Data;
-using PiStellwerk.Data.Test;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Database.Tests
 {
@@ -59,10 +58,10 @@ namespace PiStellwerk.Database.Tests
             context.Engines.Add(originalEngine);
             context.SaveChanges();
 
-            var loadContext = new StwDbContext(_connectionString);
+            var loadContext = GetContext();
             var loadedEngine = loadContext.Engines
                 .Include(x => x.Functions)
-                .Include(e => e.Image)
+                .Include(e => e.Images)
                 .Single();
 
             loadedEngine.Should().NotBeSameAs(originalEngine);
@@ -80,7 +79,7 @@ namespace PiStellwerk.Database.Tests
             context.Engines.AddRange(testData);
             context.SaveChanges();
 
-            var testContext = new StwDbContext(_connectionString);
+            var testContext = GetContext();
             var loadedEngines = testContext.Engines;
 
             Assert.AreEqual(testData.Count, loadedEngines.Count());
@@ -112,6 +111,10 @@ namespace PiStellwerk.Database.Tests
             testEngine.Should().BeEquivalentTo(updateEngine);
         }
 
-        private StwDbContext GetContext() => new(_connectionString);
+        private StwDbContext GetContext()
+        {
+            var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(_connectionString);
+            return new StwDbContext(contextOptions.Options);
+        }
     }
 }

@@ -363,12 +363,7 @@ global.json
 # SQLite DB testfile
 *.db
 
-## Javascript Files, generated from typescript files.
-src/PiStellwerk/wwwroot/scripts/*.js
-src/PiStellwerk/wwwroot/scripts/*.js.map
-src/PiStellwerk/wwwroot/lib/*
-
 #Place for user-created images
-src/PiStellwerk/userContent/*
-src/PiStellwerk/generatedContent/*
+src/PiStellwerk.Server/originalImages/*
+src/PiStellwerk.Server/generatedImages/*
 

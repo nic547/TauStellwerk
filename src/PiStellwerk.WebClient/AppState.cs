@@ -4,12 +4,12 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.WebClient
 {
     public class AppState
     {
-        public ObservableCollection<Engine> ActiveEngines { get; } = new();
+        public ObservableCollection<EngineFullDto> ActiveEngines { get; } = new();
     }
 }

@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PiStellwerkLoadGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "-c 20 -t 60 -u https://192.168.1.10"
-    }
-  }
-}

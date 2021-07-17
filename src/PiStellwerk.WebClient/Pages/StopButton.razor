@@ -1,6 +1,6 @@
 ﻿@using PiStellwerk.Client.Model
 @using PiStellwerk.Client.Services
-@using PiStellwerk.Data
+@using PiStellwerk.Base.Model
 
 
 @inject ClientStatusService _statusService;
@@ -26,11 +26,10 @@
         _state!.PropertyChanged += (_, _) => StateHasChanged();
 
         _statusService.StatusChanged += s => _state.SetStatus(s);
-        ;
 
         if (_statusService.LastKnownStatus != null)
         {
-            _state?.SetStatus(_statusService.LastKnownStatus);
+            _state.SetStatus(_statusService.LastKnownStatus);
         }
     }
 

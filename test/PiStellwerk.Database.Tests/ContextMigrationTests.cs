@@ -21,7 +21,8 @@ namespace PiStellwerk.Database.Tests
             var dbConnection = new SqliteConnection(connectionString);
             dbConnection.Open();
 
-            var context = new StwDbContext(connectionString);
+            var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(connectionString);
+            var context = new StwDbContext(contextOptions.Options);
             Assert.DoesNotThrowAsync(async () => await context.Database.MigrateAsync());
 
             dbConnection.Close();

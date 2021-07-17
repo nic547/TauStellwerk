@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.Client.Services
 {
@@ -28,17 +28,17 @@ namespace PiStellwerk.Client.Services
             _httpService = clientService;
         }
 
-        public async Task<IReadOnlyList<Engine>> GetEngines(int page = 0)
+        public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0)
         {
             var client = await _httpService.GetHttpClient();
             var response = await client.GetAsync($"/engine/list?page={page}");
             var responseString = await response.Content.ReadAsStringAsync();
-            var engines = JsonSerializer.Deserialize<Engine[]>(responseString, _serializerOptions) ?? System.Array.Empty<Engine>();
+            var engines = JsonSerializer.Deserialize<EngineDto[]>(responseString, _serializerOptions) ?? System.Array.Empty<EngineDto>();
 
             return engines;
         }
 
-        public async Task<Engine?> AcquireEngine(int id)
+        public async Task<EngineFullDto?> AcquireEngine(int id)
         {
             var client = await _httpService.GetHttpClient();
             var engineTask = client.GetAsync($"/engine/{id}");
@@ -48,7 +48,7 @@ namespace PiStellwerk.Client.Services
             {
                 var response = await engineTask;
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<Engine>(json, _serializerOptions);
+                return JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
             }
 
             return null;

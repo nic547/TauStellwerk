@@ -25,7 +25,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -33,8 +33,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PiStellwerk.Client\PiStellwerk.Client.csproj" />
-    <ProjectReference Include="..\PiStellwerk.Data\PiStellwerk.Data.csproj" />
-    <ProjectReference Include="..\PiStellwerk\PiStellwerk.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Base\PiStellwerk.Base.csproj" />
+    <ProjectReference Include="..\PiStellwerk.Server\PiStellwerk.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

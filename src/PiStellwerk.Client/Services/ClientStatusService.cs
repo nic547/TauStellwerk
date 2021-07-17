@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using PiStellwerk.Data;
+using PiStellwerk.Base.Model;
 
 namespace PiStellwerk.Client.Services
 {

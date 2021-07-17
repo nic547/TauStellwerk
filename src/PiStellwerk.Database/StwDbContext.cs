@@ -3,10 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using PiStellwerk.Data;
+using Microsoft.EntityFrameworkCore.Design;
+using PiStellwerk.Database.Model;
 
 namespace PiStellwerk.Database
 {
@@ -15,15 +14,9 @@ namespace PiStellwerk.Database
     /// </summary>
     public class StwDbContext : DbContext
     {
-        private readonly string _connectionString;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StwDbContext"/> class.
-        /// </summary>
-        /// <param name="connectionString">The SQLite connection string to use. Default: "Filename=StwDatabase.db".</param>
-        public StwDbContext(string connectionString = "Filename=StwDatabase.db;cache=shared")
+        public StwDbContext(DbContextOptions<StwDbContext> context)
+            : base(context)
         {
-            _connectionString = connectionString;
         }
 
         /// <summary>
@@ -33,20 +26,17 @@ namespace PiStellwerk.Database
 
         public DbSet<EngineImage> EngineImages => Set<EngineImage>();
 
-        /// <inheritdoc/>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(_connectionString);
-        }
+        public DbSet<Tag> Tags => Set<Tag>();
 
-        /// <inheritdoc/>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        internal class StwDbContextDesignTimeFactory : IDesignTimeDbContextFactory<StwDbContext>
         {
-            modelBuilder.Entity<Engine>()
-            .Property(e => e.Tags)
-            .HasConversion(v => string.Join(";", v), v => v.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList());
+            public StwDbContext CreateDbContext(string[] args)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<StwDbContext>();
+                optionsBuilder.UseSqlite($"Filename=MigrationTestDatabase.db;cache=shared");
 
-            base.OnModelCreating(modelBuilder);
+                return new StwDbContext(optionsBuilder.Options);
+            }
         }
     }
 }

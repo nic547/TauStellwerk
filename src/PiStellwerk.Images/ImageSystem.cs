@@ -8,8 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiStellwerk.Data;
 using PiStellwerk.Database;
+using PiStellwerk.Database.Model;
 using PiStellwerk.Util;
 
 namespace PiStellwerk.Images
@@ -87,9 +87,9 @@ namespace PiStellwerk.Images
 
         private async Task CreateDownScaledImages()
         {
-            foreach (var engine in _context.Engines.Include(e => e.Image))
+            foreach (var engine in _context.Engines.Include(e => e.Images))
             {
-                if (engine.Image.Count == _downScaleValues.Length)
+                if (engine.Images.Count == _downScaleValues.Length)
                 {
                     continue;
                 }
@@ -105,7 +105,7 @@ namespace PiStellwerk.Images
                     var newImage = await DownscaleImage(Path.Combine(_userPath, file), prefix, size);
                     if (newImage != null)
                     {
-                        engine.Image.Add(
+                        engine.Images.Add(
                             new EngineImage
                             {
                                 Filename = newImage.Value.Filename,
