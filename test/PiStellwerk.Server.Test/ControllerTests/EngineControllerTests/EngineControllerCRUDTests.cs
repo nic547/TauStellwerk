@@ -52,7 +52,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, null, false));
+                list.AddRange(await GetController().GetEngines(i, false, default, false));
             }
 
             list.Should().HaveCount(100);
@@ -67,7 +67,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", true));
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Created, true));
             }
 
             list.Should().HaveCount(100);
@@ -82,7 +82,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", false));
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Created, false));
             }
 
             list.Should().HaveCount(100);
