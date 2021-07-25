@@ -19,19 +19,24 @@ namespace PiStellwerk.Client.Services
 
         private string _sessionId = string.Empty;
 
+        private HttpClient? _httpClient;
+
         public ClientHttpService(IClientSettingsService settingsService)
         {
-        _settingsService = settingsService;
+            _settingsService = settingsService;
 
-        _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
-        _sessionTimer.Elapsed += KeepSessionAlive;
-        _sessionTimer.AutoReset = true;
+            _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
+            _sessionTimer.Elapsed += KeepSessionAlive;
+            _sessionTimer.AutoReset = true;
         }
 
         public async Task<HttpClient> GetHttpClient()
         {
-        try
-        {
+            if (_httpClient != null)
+            {
+                return _httpClient;
+            }
+
             var handler = new HttpClientHandler();
 
             try
@@ -47,22 +52,16 @@ namespace PiStellwerk.Client.Services
 
             var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
 
-            var client = new HttpClient(handler)
+            _httpClient = new HttpClient(handler)
             {
                 BaseAddress = baseAddress,
             };
 
-            var sessionId = await GetSessionId(client);
+            var sessionId = await GetSessionId(_httpClient);
 
-            client.DefaultRequestHeaders.TryAddWithoutValidation("session-id", sessionId);
+            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("session-id", sessionId);
 
-            return client;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+            return _httpClient;
         }
 
         private async Task<string> GetSessionId(HttpClient client)
