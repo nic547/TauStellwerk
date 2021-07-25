@@ -15,8 +15,8 @@ namespace PiStellwerk.Tools.CreateTestDb
     {
         private static readonly List<EngineNameSet> _engineNameComponents = new()
         {
-            new("BLS Re 465 {0:000} (Blau)", 1, 18, 160, new() { "Universal", "SLM" }),
-            new("BLS Re 465 {0:000} (Gruen)", 1, 18, 160, new() { "Universal", "SLM" }),
+            new("BLS Re 465 {0:000} (Blue)", 1, 18, 160, new() { "Universal", "SLM" }),
+            new("BLS Re 465 {0:000} (Green)", 1, 18, 160, new() { "Universal", "SLM" }),
             new("BLS Re 475 {0:000} (Alpinist)", 1, 15, 200, new() { "Freight", "Siemens" }),
             new("BLS Re 485 {0:000} (Connecting Europe)", 1, 20, 140, new() { "Freight", "Bombardier" }),
             new("BLS Re 485 {0:000} (Alpinist)", 1, 20, 140, new() { "Freight", "Bombardier" }),
@@ -26,8 +26,8 @@ namespace PiStellwerk.Tools.CreateTestDb
 
             new("Railcare Rem 476 {0:000}", 451, 457, 200, new() { "Freight", "Siemens" }),
 
-            new("SBB Re 4/4 {0} (Grün)", 11101, 11376, 140, new() { "Universal", "SLM" }),
-            new("SBB Re 420 {0:000} (Rot)", 101, 349, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 4/4 {0} (Green)", 11101, 11376, 140, new() { "Universal", "SLM" }),
+            new("SBB Re 420 {0:000} (Red)", 101, 349, 140, new() { "Universal", "SLM" }),
             new("SBB Re 420 {0:000} (LION)", 201, 230, 140, new() { "Universal", "SLM" }),
             new("SBB Re 620 {0:000}", 0, 89, 140, new() { "Universal", "SLM" }),
             new("SBB Re 460 {0:000} (Lok 2000)", 0, 118, 200, new() { "Passenger", "SLM" }),
@@ -36,7 +36,7 @@ namespace PiStellwerk.Tools.CreateTestDb
             new("SBB Re 482 {0:000} (SBB Cargo)", 0, 49, 140, new() { "Freight", "Bombardier" }),
             new("SBB Re 484 {0:000} (SBB Cargo)", 2, 21, 140, new() { "Freight", "Bombardier" }),
             new("SBB Re 484 {0:000} (SBB Cargo)", 103, 105, 140, new() { "Freight", "Bombardier" }),
-            new("SBB Ae 610 {0:000} (Rot)", 401, 520, 125, new() { "Universal", "SLM" }),
+            new("SBB Ae 610 {0:000} (Red)", 401, 520, 125, new() { "Universal", "SLM" }),
             new("SBB BR 193 {0:000} (Daypiercer)", 461, 478, 20, new() { "Freight", "Siemens", "LokRoll" }),
 
             new("SOB Re 446 {0:000}", 15, 18, 160, new() { "Universal", "SLM" }),
