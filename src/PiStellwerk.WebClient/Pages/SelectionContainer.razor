@@ -8,6 +8,16 @@
     <div class="modal-content-fullwidth">
         <div class="modal-header">
             <header></header>
+            <select @onchange="SortingChanged">
+                @foreach(var sortingOption in Enum.GetValues<SortEnginesBy>())
+                    {
+                        <option value="@sortingOption">@sortingOption</option>
+                    }
+            </select>
+            <select @onchange="SortingDirectionChanged">
+                <option>DESC</option>
+                <option>ASC</option>
+            </select>
             <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
         </div>
         <div class="can-scroll-y modal-body">
@@ -31,6 +41,9 @@
     private bool _cannotMoveBackward => _currentPage <= 0;
 
     private int _currentPage = 0;
+
+    private string _currentSorting = "LastUsed";
+    private bool _isSortedDescending = true;
 
     protected override void OnInitialized()
     {
@@ -56,6 +69,19 @@
         StateHasChanged();
     }
 
+    private async void SortingChanged(ChangeEventArgs eventArgs)
+    {
+        _currentSorting = eventArgs.Value as string ?? throw new ArgumentException("Value shouldn't be null", nameof(eventArgs));
+        await ChangePage(int.MinValue);
+    }
+
+    private async void SortingDirectionChanged(ChangeEventArgs eventArgs)
+    {
+        var optionValue = eventArgs.Value as string;
+        _isSortedDescending = optionValue == "DESC";
+        await ChangePage(int.MinValue);
+    }
+
     private async Task ChangePage(int change)
     {
         _currentPage += change;
@@ -64,8 +90,13 @@
         {
             _currentPage = 0;
         }
-        var engines = await _engineService.GetEngines(_currentPage);
-        _engines.Clear();
+        _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
+        var engines = await _engineService.GetEngines(
+            page: _currentPage,
+            sorting: sortEnum, 
+            sortDescending: _isSortedDescending);
+        
+            _engines.Clear();
         _engines.AddRange(engines);
 
         StateHasChanged();

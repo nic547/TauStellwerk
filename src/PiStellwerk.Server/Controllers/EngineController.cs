@@ -89,8 +89,11 @@ namespace PiStellwerk.Controllers
             {
                 (SortEnginesBy.Created, false) => query.OrderBy(e => e.Created),
                 (SortEnginesBy.Created, true) => query.OrderByDescending(e => e.Created),
-                (_, false) => query.OrderBy(e => e.LastUsed),
-                (_, true) => query.OrderByDescending(e => e.LastUsed),
+                (SortEnginesBy.Name, false) => query.OrderBy(e => e.Name),
+                (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
+                (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
+                (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
+                _ => throw new NotImplementedException(),
             };
 
             query = query.Skip(page * _resultsPerPage)

@@ -9,5 +9,6 @@ namespace PiStellwerk.Base.Model
         {
             LastUsed,
             Created,
+            Name,
         }
 }
