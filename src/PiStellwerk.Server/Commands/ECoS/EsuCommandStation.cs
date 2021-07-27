@@ -8,21 +8,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PiStellwerk.Database;
 using PiStellwerk.Database.Model;
 using PiStellwerk.Util;
 
-#nullable enable
-
 namespace PiStellwerk.Commands.ECoS
 {
     /// <summary>
     /// Implementation of a <see cref="ICommandSystem"/> for the ESU Command Station (ECoS).
     /// </summary>
-    [UsedImplicitly]
     public class EsuCommandStation : ICommandSystem
     {
         private readonly ECosConnectionHandler _connectionHandler;

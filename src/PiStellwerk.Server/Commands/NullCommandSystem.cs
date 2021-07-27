@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using PiStellwerk.Database.Model;
 
@@ -13,7 +12,6 @@ namespace PiStellwerk.Commands
     /// <summary>
     /// Implements a <see cref="ICommandSystem"/> that does nothing.
     /// </summary>
-    [UsedImplicitly]
     public class NullCommandSystem : ICommandSystem
     {
         public NullCommandSystem(IConfiguration config)

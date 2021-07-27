@@ -13,6 +13,7 @@ namespace PiStellwerk.Commands
 {
     /// <summary>
     /// Interface for implementing communication with a specific command system.
+    /// Every implementation needs to be "registered" in <see cref="CommandSystemFactory"/> by hand.
     /// </summary>
     public interface ICommandSystem
     {
