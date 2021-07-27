@@ -52,7 +52,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, null, false));
+                list.AddRange(await GetController().GetEngines(i, false, default, false));
             }
 
             list.Should().HaveCount(100);
@@ -67,7 +67,7 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", true));
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Created, true));
             }
 
             list.Should().HaveCount(100);
@@ -82,11 +82,41 @@ namespace PiStellwerk.Test.ControllerTests.EngineControllerTests
 
             for (var i = 0; i < 5; i++)
             {
-                list.AddRange(await GetController().GetEngines(i, false, "CrEaTEd", false));
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Created, false));
             }
 
             list.Should().HaveCount(100);
             list.Select(e => e.Created).Should().BeInAscendingOrder();
+        }
+
+        [Test]
+        public async Task ListCanBeSortedDescendingByName()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Name, true));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.Name).Should().BeInDescendingOrder();
+        }
+
+        [Test]
+        public async Task ListCanBeSortedAscendingByName()
+        {
+            await InsertEngines(99);
+            List<EngineDto> list = new();
+
+            for (var i = 0; i < 5; i++)
+            {
+                list.AddRange(await GetController().GetEngines(i, false, SortEnginesBy.Name, false));
+            }
+
+            list.Should().HaveCount(100);
+            list.Select(e => e.Name).Should().BeInAscendingOrder();
         }
 
         [Test]

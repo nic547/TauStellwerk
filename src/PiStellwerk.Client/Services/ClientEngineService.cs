@@ -28,10 +28,10 @@ namespace PiStellwerk.Client.Services
             _httpService = clientService;
         }
 
-        public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0)
+        public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true)
         {
             var client = await _httpService.GetHttpClient();
-            var response = await client.GetAsync($"/engine/list?page={page}");
+            var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}");
             var responseString = await response.Content.ReadAsStringAsync();
             var engines = JsonSerializer.Deserialize<EngineDto[]>(responseString, _serializerOptions) ?? System.Array.Empty<EngineDto>();
 

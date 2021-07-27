@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -75,7 +74,7 @@ namespace PiStellwerk.Controllers
         /// <param name="sortDescending">Should Engines be sorted descending (or ascending).</param>
         /// <returns>A list of engines.</returns>
         [HttpGet("List")]
-        public async Task<IList<EngineDto>> GetEngines(int page = 0, bool showHiddenEngines = false, string? sortBy = "LastUsed", bool sortDescending = true)
+        public async Task<IList<EngineDto>> GetEngines(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
         {
             var query = _dbContext.Engines
                .AsNoTracking()
@@ -86,12 +85,15 @@ namespace PiStellwerk.Controllers
                 query = query.Where(e => !e.IsHidden);
             }
 
-            query = (sortBy?.ToLower(CultureInfo.InvariantCulture), sortDescending) switch
+            query = (sortBy, sortDescending) switch
             {
-                ("created", false) => query.OrderBy(e => e.Created),
-                ("created", true) => query.OrderByDescending(e => e.Created),
-                (_, false) => query.OrderBy(e => e.LastUsed),
-                (_, true) => query.OrderByDescending(e => e.LastUsed),
+                (SortEnginesBy.Created, false) => query.OrderBy(e => e.Created),
+                (SortEnginesBy.Created, true) => query.OrderByDescending(e => e.Created),
+                (SortEnginesBy.Name, false) => query.OrderBy(e => e.Name),
+                (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
+                (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
+                (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
+                _ => throw new NotImplementedException(),
             };
 
             query = query.Skip(page * _resultsPerPage)
