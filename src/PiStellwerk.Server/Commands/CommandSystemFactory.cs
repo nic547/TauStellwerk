@@ -23,19 +23,19 @@ namespace PiStellwerk.Commands
         };
 
         /// <summary>
-        /// Create a instance of a class that implements <see cref="ICommandSystem"/>.
+        /// Create a instance of a class that implements <see cref="CommandSystemBase"/>.
         /// </summary>
-        /// <param name="config">Config that might contain a setting for the CommandSystem.</param>
-        /// <returns>A CommandSystem. Default is the ConsoleCommandSystem.</returns>
-        public static ICommandSystem FromConfig(IConfiguration config)
+        /// <param name="config">Config that might contain a setting for the CommandSystemBase.</param>
+        /// <returns>A CommandSystemBase. Default is the ConsoleCommandSystem.</returns>
+        public static CommandSystemBase FromConfig(IConfiguration config)
         {
-            var setting = config["CommandSystem:Type"];
+            var setting = config["CommandSystemBase:Type"];
 
             foreach (var system in _commandStations)
             {
                 if (string.Equals(setting, system.Name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                     var systemInstance = Activator.CreateInstance(system, config) as ICommandSystem;
+                     var systemInstance = Activator.CreateInstance(system, config) as CommandSystemBase;
                      return systemInstance ?? new ConsoleCommandSystem(config);
                 }
             }

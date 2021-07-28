@@ -68,7 +68,7 @@ namespace PiStellwerk
 
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<StwDbContext>();
-            var commandSystem = services.GetRequiredService<ICommandSystem>();
+            var commandSystem = services.GetRequiredService<CommandSystemBase>();
 
             _ = commandSystem.LoadEnginesFromSystem(dbContext);
 

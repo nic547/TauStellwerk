@@ -10,40 +10,35 @@ using PiStellwerk.Database.Model;
 namespace PiStellwerk.Commands
 {
     /// <summary>
-    /// Implements a <see cref="ICommandSystem"/> that does nothing.
+    /// Implements a <see cref="CommandSystemBase"/> that does nothing.
     /// </summary>
-    public class NullCommandSystem : ICommandSystem
+    public class NullCommandSystem : CommandSystemBase
     {
         public NullCommandSystem(IConfiguration config)
+            : base(config)
         {
-        }
-
-        public event ICommandSystem.StatusChangeHandler StatusChanged
-        {
-            add { }
-            remove { }
         }
 
         /// <inheritdoc/>
-        public Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine)
         {
             return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {
             return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public Task HandleSystemStatus(bool shouldBeRunning)
+        public override Task HandleSystemStatus(bool shouldBeRunning)
         {
             return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             return Task.CompletedTask;
         }

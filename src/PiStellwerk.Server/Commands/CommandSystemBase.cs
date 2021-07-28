@@ -1,4 +1,4 @@
-﻿// <copyright file="ICommandSystem.cs" company="Dominic Ritz">
+﻿// <copyright file="CommandSystemBase.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -6,6 +6,7 @@
 #nullable enable
 
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using PiStellwerk.Database;
 using PiStellwerk.Database.Model;
 
@@ -15,19 +16,26 @@ namespace PiStellwerk.Commands
     /// Interface for implementing communication with a specific command system.
     /// Every implementation needs to be "registered" in <see cref="CommandSystemFactory"/> by hand.
     /// </summary>
-    public interface ICommandSystem
+    public abstract class CommandSystemBase
     {
+        protected CommandSystemBase(IConfiguration configuration)
+        {
+            Config = configuration;
+        }
+
         public delegate void StatusChangeHandler(bool isRunning);
 
-        public event StatusChangeHandler StatusChanged;
+        public event StatusChangeHandler? StatusChanged;
 
-        public Task HandleSystemStatus(bool shouldBeRunning);
+        protected IConfiguration Config { get; }
 
-        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
+        public abstract Task HandleSystemStatus(bool shouldBeRunning);
 
-        public Task HandleEngineEStop(Engine engine);
+        public abstract Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
 
-        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
+        public abstract Task HandleEngineEStop(Engine engine);
+
+        public abstract Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
 
         /// <summary>
         /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
@@ -59,6 +67,11 @@ namespace PiStellwerk.Commands
         public virtual Task<bool> TryReleaseEngine(Engine engine)
         {
             return Task.FromResult(true);
+        }
+
+        protected void OnStatusChange(bool isRunning)
+        {
+            StatusChanged?.Invoke(isRunning);
         }
     }
 }

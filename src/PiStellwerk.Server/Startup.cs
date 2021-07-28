@@ -57,8 +57,8 @@ namespace PiStellwerk
 
             services.AddSingleton(new SessionService());
             services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
-            services.AddSingleton(p => new StatusService(p.GetRequiredService<ICommandSystem>()));
-            services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<ICommandSystem>(), p.GetRequiredService<SessionService>()));
+            services.AddSingleton(p => new StatusService(p.GetRequiredService<CommandSystemBase>()));
+            services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
 
             services.AddHostedService(p => p.GetRequiredService<SessionService>());
 

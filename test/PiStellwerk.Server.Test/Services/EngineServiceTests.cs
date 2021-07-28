@@ -149,7 +149,7 @@ namespace PiStellwerk.Test.Services
             Assert.False(await service.SetEngineFunction(session2, 1, 10, true));
         }
 
-        private (EngineService EngineService, Session Session) PrepareEngineService(Mock<ICommandSystem>? mock = null)
+        private (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
         {
             var sessionService = new SessionService();
             var session = sessionService.CreateSession("TEST", "TEST");
@@ -158,9 +158,9 @@ namespace PiStellwerk.Test.Services
             return (engineService, session);
         }
 
-        private Mock<ICommandSystem> GetAlwaysTrueMock()
+        private Mock<CommandSystemBase> GetAlwaysTrueMock()
         {
-            var mock = new Mock<ICommandSystem>();
+            var mock = new Mock<CommandSystemBase>();
             mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
             mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>()).Result).Returns(true);
 

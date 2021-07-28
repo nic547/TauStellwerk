@@ -17,9 +17,9 @@ using PiStellwerk.Util;
 namespace PiStellwerk.Commands.ECoS
 {
     /// <summary>
-    /// Implementation of a <see cref="ICommandSystem"/> for the ESU Command Station (ECoS).
+    /// Implementation of a <see cref="CommandSystemBase"/> for the ESU Command Station (ECoS).
     /// </summary>
-    public class EsuCommandStation : ICommandSystem
+    public class EsuCommandStation : CommandSystemBase
     {
         private readonly ECosConnectionHandler _connectionHandler;
 
@@ -28,18 +28,17 @@ namespace PiStellwerk.Commands.ECoS
         /// </summary>
         /// <param name="config">IConfiguration to use.</param>
         public EsuCommandStation(IConfiguration config)
+            : base(config)
         {
-            string ipAddress = config["CommandSystem:IP"];
-            var port = int.Parse(config["commandSystem:Port"]);
+            string ipAddress = Config["CommandSystemBase:IP"];
+            var port = int.Parse(Config["commandSystem:Port"]);
             _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port);
 
             _ = Initialize();
         }
 
-        public event ICommandSystem.StatusChangeHandler? StatusChanged;
-
         /// <inheritdoc/>
-        public async Task LoadEnginesFromSystem(StwDbContext context)
+        public override async Task LoadEnginesFromSystem(StwDbContext context)
         {
             try
             {
@@ -89,12 +88,12 @@ namespace PiStellwerk.Commands.ECoS
             }
         }
 
-        public async Task HandleSystemStatus(bool shouldBeRunning)
+        public override async Task HandleSystemStatus(bool shouldBeRunning)
         {
             await _connectionHandler.SendCommandAsync($"set(1,{(shouldBeRunning ? "go" : "stop")})");
         }
 
-        public async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
         {
             var ecosData = CheckForEcosData(engine);
             Task directionTask = forward != null ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{((bool)forward ? "0" : "1")}])") : Task.CompletedTask;
@@ -105,26 +104,26 @@ namespace PiStellwerk.Commands.ECoS
             await speedTask;
         }
 
-        public Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public async Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        public override async Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {
             var engineData = CheckForEcosData(engine);
             await _connectionHandler.SendCommandAsync($"set({engineData.Id},func[{functionNumber},{(on ? "1" : "0")}])");
         }
 
         /// <inheritdoc/>
-        public Task<bool> TryAcquireEngine(Engine engine)
+        public override Task<bool> TryAcquireEngine(Engine engine)
         {
             return Task.FromResult(true);
         }
 
         /// <inheritdoc/>
-        public Task<bool> TryReleaseEngine(Engine engine)
+        public override Task<bool> TryReleaseEngine(Engine engine)
         {
             return Task.FromResult(true);
         }
@@ -133,13 +132,13 @@ namespace PiStellwerk.Commands.ECoS
         {
             if (message.Contains("status[GO]"))
             {
-                StatusChanged?.Invoke(true);
+                OnStatusChange(true);
                 return;
             }
 
             if (message.Contains("status[STOP]"))
             {
-                StatusChanged?.Invoke(false);
+                OnStatusChange(false);
             }
         }
 

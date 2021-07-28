@@ -28,11 +28,11 @@ namespace PiStellwerk.Services
 
     public class EngineService : IEngineService
     {
-        private readonly ICommandSystem _commandSystem;
+        private readonly CommandSystemBase _commandSystem;
 
         private readonly ConcurrentDictionary<int, ActiveEngine> _activeEngines = new();
 
-        public EngineService(ICommandSystem commandSystem, SessionService sessionService)
+        public EngineService(CommandSystemBase commandSystem, SessionService sessionService)
         {
             _commandSystem = commandSystem;
             sessionService.SessionTimeout += HandleSessionTimeout;
