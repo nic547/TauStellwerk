@@ -33,16 +33,15 @@ namespace PiStellwerk.Commands
             return Task.CompletedTask;
         }
 
-        public override Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
         {
-            if (forward != null)
+            if (hasBeenDrivingForward == shouldBeDrivingForward)
             {
-                var forwardValue = (bool)forward;
-                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}, driving {(forwardValue ? "forward" : "backwards")}");
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
             }
             else
             {
-                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed} and is now driving {(shouldBeDrivingForward ? "forwards" : "backwards")}");
             }
 
             return Task.CompletedTask;

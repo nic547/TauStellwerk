@@ -45,7 +45,7 @@ namespace PiStellwerk.Commands
             return Task.CompletedTask;
         }
 
-        public override Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards)
         {
             throw new NotImplementedException();
         }

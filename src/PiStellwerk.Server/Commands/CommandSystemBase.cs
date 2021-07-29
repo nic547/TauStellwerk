@@ -31,7 +31,7 @@ namespace PiStellwerk.Commands
 
         public abstract Task HandleSystemStatus(bool shouldBeRunning);
 
-        public abstract Task HandleEngineSpeed(Engine engine, short speed, bool? forward);
+        public abstract Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards);
 
         public abstract Task HandleEngineEStop(Engine engine);
 

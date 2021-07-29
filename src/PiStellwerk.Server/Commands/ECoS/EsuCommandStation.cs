@@ -93,10 +93,12 @@ namespace PiStellwerk.Commands.ECoS
             await _connectionHandler.SendCommandAsync($"set(1,{(shouldBeRunning ? "go" : "stop")})");
         }
 
-        public override async Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override async Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
         {
             var ecosData = CheckForEcosData(engine);
-            Task directionTask = forward != null ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{((bool)forward ? "0" : "1")}])") : Task.CompletedTask;
+            Task directionTask = hasBeenDrivingForward != shouldBeDrivingForward
+                ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{(shouldBeDrivingForward ? "0" : "1")}])")
+                : Task.CompletedTask;
 
             var speedTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},speed[{speed}])");
 
