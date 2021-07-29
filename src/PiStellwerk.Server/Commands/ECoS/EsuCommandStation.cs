@@ -106,7 +106,7 @@ namespace PiStellwerk.Commands.ECoS
             await speedTask;
         }
 
-        public override Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
             throw new NotImplementedException();
         }

@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.IO.Ports;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +18,8 @@ namespace PiStellwerk.Commands
         public DccExSerialSystem(IConfiguration configuration)
             : base(configuration)
         {
+            ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+
             _serialPort = new SerialPort();
             _serialPort.PortName = Config["CommandSystem:SerialPort"];
             _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
@@ -47,17 +48,20 @@ namespace PiStellwerk.Commands
 
         public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards)
         {
-            throw new NotImplementedException();
+            _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(shouldBeDrivingForwards ? 1 : 0)}>");
+            return Task.CompletedTask;
         }
 
-        public override Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
-            throw new NotImplementedException();
+            _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(hasBeenDrivingForwards ? 1 : 0)}>");
+            return Task.CompletedTask;
         }
 
         public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {
-            throw new NotImplementedException();
+            _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(on ? "1" : "0")}>");
+            return Task.CompletedTask;
         }
     }
 }

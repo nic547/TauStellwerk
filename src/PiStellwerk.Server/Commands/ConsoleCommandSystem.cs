@@ -21,7 +21,7 @@ namespace PiStellwerk.Commands
         {
         }
 
-        public override Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
             ConsoleService.PrintMessage($"{engine} has been emergency-stopped");
             return Task.CompletedTask;

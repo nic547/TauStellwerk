@@ -20,7 +20,7 @@ namespace PiStellwerk.Commands
         }
 
         /// <inheritdoc/>
-        public override Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
             return Task.CompletedTask;
         }
