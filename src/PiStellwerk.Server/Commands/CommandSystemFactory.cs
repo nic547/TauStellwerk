@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using PiStellwerk.Commands.ECoS;
+using PiStellwerk.Util;
 
 namespace PiStellwerk.Commands
 {
@@ -20,6 +21,7 @@ namespace PiStellwerk.Commands
             typeof(NullCommandSystem),
             typeof(ConsoleCommandSystem),
             typeof(EsuCommandStation),
+            typeof(DccExSerialSystem),
         };
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace PiStellwerk.Commands
         /// <returns>A CommandSystemBase. Default is the ConsoleCommandSystem.</returns>
         public static CommandSystemBase FromConfig(IConfiguration config)
         {
-            var setting = config["CommandSystemBase:Type"];
+            var setting = config["CommandSystem:Type"];
 
             foreach (var system in _commandStations)
             {
@@ -40,6 +42,7 @@ namespace PiStellwerk.Commands
                 }
             }
 
+            ConsoleService.PrintError($"Could not find CommandSystem \"{setting}\", continuing with default (ConsoleCommandSystem)");
             return new ConsoleCommandSystem(config);
         }
     }
