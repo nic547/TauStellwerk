@@ -4,7 +4,9 @@
 // </copyright>
 
 using System;
+using System.Configuration;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
 using PiStellwerk.Base.Model;
@@ -160,7 +162,8 @@ namespace PiStellwerk.Test.Services
 
         private Mock<CommandSystemBase> GetAlwaysTrueMock()
         {
-            var mock = new Mock<CommandSystemBase>();
+            var configMock = new Mock<IConfiguration>();
+            var mock = new Mock<CommandSystemBase>(configMock.Object);
             mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
             mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>()).Result).Returns(true);
 
