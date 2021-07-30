@@ -20,18 +20,23 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _settings = await _settingsService.GetMutableSettingsCopy();
-        _username = _settings.Username;
 
         _modalManager.PropertyChanged += HandleModalManagerNotification;
     }
 
-    private void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
         if (args.PropertyName != nameof(_modalManager.IsUsernameModalVisible))
         {
             return;
         }
+
+        if (_modalManager.IsUsernameModalVisible)
+        {
+            _settings = await _settingsService.GetMutableSettingsCopy();
+            _username = _settings.Username;
+        }
+
         StateHasChanged();
     }
 
