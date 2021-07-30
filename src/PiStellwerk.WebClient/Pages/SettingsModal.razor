@@ -23,18 +23,23 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _settings = await _settingsService.GetMutableSettingsCopy();
-        _theme = _settings.Theme;
 
         _modalManager.PropertyChanged += HandleModalManagerNotification;
     }
 
-    private void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
         if (args.PropertyName != nameof(_modalManager.IsSettingsModalVisible))
         {
             return;
         }
+
+        if (_modalManager.IsSettingsModalVisible)
+        {
+            _settings = await _settingsService.GetMutableSettingsCopy();
+            _theme = _settings.Theme;
+        }
+
         StateHasChanged();
     }
 
