@@ -39,7 +39,7 @@
               Grid.Row="1"
               Grid.Column="0"
               Grid.RowSpan="2"
-              Maximum="127"
+              Maximum="126"
               Minimum="0"
               Value="{Binding Throttle}"/>
       <StackPanel Grid.Column="0" Grid.Row="3"

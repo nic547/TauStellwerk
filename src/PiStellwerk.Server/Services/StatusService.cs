@@ -13,14 +13,14 @@ namespace PiStellwerk.Services
 {
     public class StatusService
     {
-        private readonly ICommandSystem _system;
+        private readonly CommandSystemBase _system;
 
         private readonly List<TaskCompletionSource<Status>> _statusAwaiters = new();
 
         private bool _isRunning;
         private string _lastActionUsername = "SYSTEM";
 
-        public StatusService(ICommandSystem system)
+        public StatusService(CommandSystemBase system)
         {
             _system = system;
 

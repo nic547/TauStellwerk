@@ -21,18 +21,18 @@ namespace PiStellwerk.Services
 
         Task<bool> ReleaseEngine(Session session, int engineId);
 
-        Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? forward);
+        Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldDriveForward);
 
         Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
     }
 
     public class EngineService : IEngineService
     {
-        private readonly ICommandSystem _commandSystem;
+        private readonly CommandSystemBase _commandSystem;
 
         private readonly ConcurrentDictionary<int, ActiveEngine> _activeEngines = new();
 
-        public EngineService(ICommandSystem commandSystem, SessionService sessionService)
+        public EngineService(CommandSystemBase commandSystem, SessionService sessionService)
         {
             _commandSystem = commandSystem;
             sessionService.SessionTimeout += HandleSessionTimeout;
@@ -74,14 +74,18 @@ namespace PiStellwerk.Services
             return await _commandSystem.TryReleaseEngine(activeEngine.Engine);
         }
 
-        public async Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? forward)
+        public async Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)
         {
             if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
             {
                 return false;
             }
 
-            await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, forward);
+            var hasBeenDrivingForward = activeEngine.IsDrivingForward;
+            shouldBeDrivingForwards ??= hasBeenDrivingForward;
+            activeEngine.IsDrivingForward = (bool)shouldBeDrivingForwards;
+
+            await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, hasBeenDrivingForward, (bool)shouldBeDrivingForwards);
             return true;
         }
 
@@ -142,6 +146,8 @@ namespace PiStellwerk.Services
             public Session Session { get; }
 
             public Engine Engine { get; }
+
+            public bool IsDrivingForward { get; set; } = true;
         }
     }
 }

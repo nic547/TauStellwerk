@@ -11,49 +11,43 @@ using PiStellwerk.Util;
 namespace PiStellwerk.Commands
 {
     /// <summary>
-    /// <see cref="ICommandSystem"/> that just writes everything to the console.
+    /// <see cref="CommandSystemBase"/> that just writes everything to the console.
     /// </summary>
-    public class ConsoleCommandSystem : ICommandSystem
+    public class ConsoleCommandSystem : CommandSystemBase
     {
         // ReSharper disable once UnusedParameter.Local
         public ConsoleCommandSystem(IConfiguration config)
+            : base(config)
         {
         }
 
-        public event ICommandSystem.StatusChangeHandler StatusChanged
-        {
-            add { }
-            remove { }
-        }
-
-        public Task HandleEngineEStop(Engine engine)
+        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
             ConsoleService.PrintMessage($"{engine} has been emergency-stopped");
             return Task.CompletedTask;
         }
 
-        public Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+        public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
         {
             ConsoleService.PrintMessage($"{engine} function {functionNumber} has been turned {(on ? "on" : "off")}");
             return Task.CompletedTask;
         }
 
-        public Task HandleEngineSpeed(Engine engine, short speed, bool? forward)
+        public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
         {
-            if (forward != null)
+            if (hasBeenDrivingForward == shouldBeDrivingForward)
             {
-                var forwardValue = (bool)forward;
-                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}, driving {(forwardValue ? "forward" : "backwards")}");
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
             }
             else
             {
-                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
+                ConsoleService.PrintMessage($"{engine} speed  has been set to {speed} and is now driving {(shouldBeDrivingForward ? "forwards" : "backwards")}");
             }
 
             return Task.CompletedTask;
         }
 
-        public Task HandleSystemStatus(bool shouldBeRunning)
+        public override Task HandleSystemStatus(bool shouldBeRunning)
         {
             ConsoleService.PrintMessage($"System was {(shouldBeRunning ? "started" : "stopped")}");
             return Task.CompletedTask;
