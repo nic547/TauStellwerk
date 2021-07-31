@@ -364,6 +364,6 @@ global.json
 *.db
 
 #Place for user-created images
-src/PiStellwerk.Server/originalImages/*
-src/PiStellwerk.Server/generatedImages/*
+src/TauStellwerk.Server/originalImages/*
+src/TauStellwerk.Server/generatedImages/*
 

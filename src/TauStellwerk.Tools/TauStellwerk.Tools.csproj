@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>.\bin\TauStellwerkLoadGenerator.xml</DocumentationFile>
+    <Nullable>enable</Nullable>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Database\TauStellwerk.Database.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
+  </ItemGroup>
+
+</Project>

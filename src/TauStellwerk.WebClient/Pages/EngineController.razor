@@ -1,0 +1,74 @@
+﻿@using JetBrains.Annotations
+@using TauStellwerk.Client.Services
+@using System.Formats.Asn1
+@using TauStellwerk.Base.Model
+
+@inject AppState _appState
+@inject ClientEngineService _engineService;
+
+<div class="box is-engine-controller has-shadow">
+    <div class="ec-grid-header">
+        <span class="is-pulled-left">@Engine.Name</span>
+        <button class="is-pulled-right bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
+    </div>
+    <picture class="ec-grid-image">
+        @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))
+        {
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            Console.WriteLine(srcset);
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
+        }
+        <img src="img/noImageImage.png" alt="Engine image"/>
+    </picture>
+    <label class="ec-grid-slider has-100percent-height">
+        <input type="range" orient="vertical" min="0" max="126" @bind-value="Throttle" @bind-value:event="oninput" />
+    </label><!-- orient="vertical" is for firefox -->
+    <div class="ec-grid-direction center">
+        <button class="bold" disabled="@(!_forward)" @onclick="ChangeDirection">&lt;</button>
+        <button class="bold" disabled="@(_forward)" @onclick="ChangeDirection" >&gt;</button>
+    </div>
+    <output class="ec-grid-speed center">@Throttle</output>
+    <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
+        @foreach (var function in Engine.Functions.OrderBy(e => e.Number))
+        {
+            <FunctionButton
+                EngineId=Engine.Id
+                Function=function
+                />
+        }
+    </div>
+</div>
+
+@code {
+    private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
+
+    private int _throttle = 0;
+
+    private bool _forward  = true;
+
+    [Parameter]
+    public EngineFullDto Engine { get; init; } = null!;
+
+    private int Throttle
+    {
+        get => _throttle;
+        set
+        {
+            _throttle = value;
+            _ = _engineService.SetSpeed(Engine.Id, _throttle, _forward);
+        }
+    }
+
+    private void ChangeDirection()
+    {
+        _forward = !_forward;
+        Throttle = 0;
+        StateHasChanged();
+    }
+
+    private void RemoveEngine()
+    {
+        _appState.ActiveEngines.Remove(Engine);
+        _ = _engineService.ReleaseEngine(Engine.Id);
+    }
+}

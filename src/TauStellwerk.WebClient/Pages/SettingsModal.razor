@@ -1,0 +1,53 @@
+@using TauStellwerk.Client.Services
+@using TauStellwerk.Client.Model
+@using System.ComponentModel
+
+@inject ModalManager _modalManager
+@inject IClientSettingsService _settingsService
+<div class="modal @_modalManager.SettingsModalClass">
+    <div class="modal-content">
+        <EditForm Model="typeof(MutableSettings)">
+            <InputSelect @bind-Value="_theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </InputSelect>
+            <button type="button" @onclick="SaveNewSettings">Save</button>
+        </EditForm>
+    </div>
+</div>
+@code {
+    private MutableSettings? _settings;
+
+    private string _theme = "light";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _modalManager.PropertyChanged += HandleModalManagerNotification;
+    }
+
+    private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName != nameof(_modalManager.IsSettingsModalVisible))
+        {
+            return;
+        }
+
+        if (_modalManager.IsSettingsModalVisible)
+        {
+            _settings = await _settingsService.GetMutableSettingsCopy();
+            _theme = _settings.Theme;
+        }
+
+        StateHasChanged();
+    }
+
+    private void SaveNewSettings()
+    {
+        if (_settings == null) { throw new InvalidOperationException(); }
+        _settings.Theme = _theme;
+        _settingsService.SetSettings(_settings);
+        _modalManager.IsSettingsModalVisible = false;
+    }
+}

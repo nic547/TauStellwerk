@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TauStellwerk.Desktop.Views.MainWindow"
+        Icon="/Assets/tauStellwerk.ico"
+        Title="TauStellwerk.Desktop">
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <Button IsEnabled="{Binding StopButtonState.ShouldBeEnabled}" DockPanel.Dock="Top" Name="StopButton" Margin="50 0 50 0" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
+            <StackPanel HorizontalAlignment="Center">
+              <Label Content="{Binding StopButtonState.TitleText}" FontSize="24"/>
+              <Label Content="{Binding StopButtonState.BottomText}"/>  
+            </StackPanel>
+        </Button>
+        <StackPanel>
+            <Button Command="{Binding OpenEngineList}">Select Engine</Button>
+            <Button Command="{Binding OpenSettings}" Content="Settings" />
+          </StackPanel>
+    </DockPanel>
+</Window>

@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using PiStellwerk.Util;
+using TauStellwerk.Util;
 
 namespace HardwareInfo.CpuUsage
 {

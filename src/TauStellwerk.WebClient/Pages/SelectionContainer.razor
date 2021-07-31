@@ -1,0 +1,105 @@
+﻿@using System.ComponentModel
+@using TauStellwerk.Base.Model
+@using TauStellwerk.Client.Services
+@inject ModalManager _modalManager
+@inject ClientEngineService _engineService
+
+<div id="EngineSelectionModal" class="modal @_modalManager.EngineSelectionClass">
+    <div class="modal-content-fullwidth">
+        <div class="modal-header">
+            <header></header>
+            <select @onchange="SortingChanged">
+                @foreach(var sortingOption in Enum.GetValues<SortEnginesBy>())
+                    {
+                        <option value="@sortingOption">@sortingOption</option>
+                    }
+            </select>
+            <select @onchange="SortingDirectionChanged">
+                <option>DESC</option>
+                <option>ASC</option>
+            </select>
+            <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
+        </div>
+        <div class="can-scroll-y modal-body">
+            <div id="EngineSelectionContainer" class="selection-grid">
+                @foreach (var engine in _engines)
+                {
+                    <SelectionEngine Engine="engine"/>
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="bold" disabled="@_cannotMoveBackward" @onclick="() => {_ = ChangePage(-1);}">&lt;</button>
+            <button class="bold" disabled="@_cannotMoveForward" @onclick="() => {_ = ChangePage(+1);}" >&gt;</button>
+        </div>
+    </div>
+</div>
+@code {
+    private readonly List<EngineDto> _engines = new();
+
+    private bool _cannotMoveForward => !_engines.Any();
+    private bool _cannotMoveBackward => _currentPage <= 0;
+
+    private int _currentPage = 0;
+
+    private string _currentSorting = "LastUsed";
+    private bool _isSortedDescending = true;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _modalManager.PropertyChanged += HandleModalManagerNotification;
+    }
+
+    private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName != nameof(_modalManager.IsEngineSelectionVisible))
+        {
+            return;
+        }
+
+        _engines.Clear();
+
+        if (_modalManager.IsEngineSelectionVisible)
+        {
+            _currentPage = 0;
+            await ChangePage(0);
+        }
+
+        StateHasChanged();
+    }
+
+    private async void SortingChanged(ChangeEventArgs eventArgs)
+    {
+        _currentSorting = eventArgs.Value as string ?? throw new ArgumentException("Value shouldn't be null", nameof(eventArgs));
+        await ChangePage(int.MinValue);
+    }
+
+    private async void SortingDirectionChanged(ChangeEventArgs eventArgs)
+    {
+        var optionValue = eventArgs.Value as string;
+        _isSortedDescending = optionValue == "DESC";
+        await ChangePage(int.MinValue);
+    }
+
+    private async Task ChangePage(int change)
+    {
+        _currentPage += change;
+
+        if (_currentPage < 0)
+        {
+            _currentPage = 0;
+        }
+        _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
+        var engines = await _engineService.GetEngines(
+            page: _currentPage,
+            sorting: sortEnum, 
+            sortDescending: _isSortedDescending);
+        
+            _engines.Clear();
+        _engines.AddRange(engines);
+
+        StateHasChanged();
+    }
+
+}

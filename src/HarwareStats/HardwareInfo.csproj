@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PiStellwerk.Util\PiStellwerk.Util.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
   </ItemGroup>
 
 </Project>
