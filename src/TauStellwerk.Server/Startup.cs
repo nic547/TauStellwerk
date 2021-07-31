@@ -64,9 +64,9 @@ namespace TauStellwerk
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PiStellwerk API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TauStellwerk API", Version = "v1" });
 
-                var filePath = Path.Combine(System.AppContext.BaseDirectory, "PiStellwerk.xml");
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "TauStellwerk.xml");
                 c.IncludeXmlComments(filePath);
             });
         }
@@ -87,7 +87,7 @@ namespace TauStellwerk
 
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiStellwerk API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TauStellwerk API V1");
                 });
             }
 

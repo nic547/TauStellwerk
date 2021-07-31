@@ -13,7 +13,7 @@ namespace TauStellwerk.WebClient
 {
     public class BlazorSettingsService : IClientSettingsService
     {
-        private const string _settingsKey = "PiStellwerk_Settings";
+        private const string _settingsKey = "TauStellwerk_Settings";
 
         private readonly string _baseAddress;
         private readonly ILocalStorageService _storageService;

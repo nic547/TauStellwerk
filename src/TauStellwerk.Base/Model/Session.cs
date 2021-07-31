@@ -13,7 +13,7 @@ using System.Web;
 namespace TauStellwerk.Base.Model
 {
     /// <summary>
-    /// A user of the PiStellwerk software. Does not necessarily correspond to actual people.
+    /// A user of the TauStellwerk software. Does not necessarily correspond to actual people.
     /// </summary>
     public class Session
     {

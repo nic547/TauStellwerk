@@ -58,7 +58,7 @@ namespace TauStellwerk.Services
         {
             _isRunning = isRunning;
             _lastActionUsername = "SYSTEM";
-            ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the PiStellwerk");
+            ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the TauStellwerk");
             NotifyStatusChanged();
         }
 

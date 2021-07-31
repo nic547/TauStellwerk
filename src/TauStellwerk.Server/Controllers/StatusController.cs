@@ -47,7 +47,7 @@ namespace TauStellwerk.Controllers
         {
             // TODO: Take username from Session instead.
             await _statusService.HandleStatusCommand(status.IsRunning, status.LastActionUsername);
-            ConsoleService.PrintMessage($"{status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the PiStellwerk");
+            ConsoleService.PrintMessage($"{status.LastActionUsername} has {(status.IsRunning ? "started" : "stopped")} the TauStellwerk");
         }
     }
 }

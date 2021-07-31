@@ -11,7 +11,7 @@ using TauStellwerk.Tools.LoadTest;
 namespace TauStellwerk.Tools
 {
     /// <summary>
-    /// A tool that tries to simulate a "realistic user" by making requests to the PiStellwerk-server.
+    /// A tool that tries to simulate a "realistic user" by making requests to the TauStellwerk-server.
     /// </summary>
     public static class Program
     {

@@ -27,7 +27,7 @@ namespace TauStellwerk.Tools.LoadTest
         /// <summary>
         /// Gets the url of the service to test.
         /// </summary>
-        [Option('u', "uri", Default = "https://localhost:5001/", HelpText = "The Uri of the PiStellwerk instance to test.")]
+        [Option('u', "uri", Default = "https://localhost:5001/", HelpText = "The Uri of the TauStellwerk instance to test.")]
         public Uri Uri { get; }
 
         /// <summary>

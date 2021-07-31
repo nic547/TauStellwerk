@@ -64,9 +64,9 @@ namespace TauStellwerk.Client.Model
             {
                 return CurrentState switch
                 {
-                    State.Unknown => "PiStellwerk is in unknown state",
-                    State.Running => $"PiStellwerk started by {_lastActionUsername}",
-                    State.Stopped or State.StoppedLocked => $"PiStellwerk started by {_lastActionUsername}",
+                    State.Unknown => "TauStellwerk is in unknown state",
+                    State.Running => $"TauStellwerk started by {_lastActionUsername}",
+                    State.Stopped or State.StoppedLocked => $"TauStellwerk started by {_lastActionUsername}",
                     _ => throw new ArgumentOutOfRangeException(),
                 };
             }
