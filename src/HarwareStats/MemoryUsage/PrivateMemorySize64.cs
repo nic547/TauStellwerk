@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
-using PiStellwerk.Util;
+using TauStellwerk.Util;
 
 namespace HardwareInfo.MemoryUsage
 {

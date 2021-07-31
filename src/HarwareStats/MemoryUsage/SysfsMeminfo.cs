@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using PiStellwerk.Util;
+using TauStellwerk.Util;
 
 namespace HardwareInfo.MemoryUsage
 {
