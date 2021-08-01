@@ -34,7 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
-    <ProjectReference Include="..\TauStellwerk.Server\TauStellwerk.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
