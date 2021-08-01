@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HarwareStats\HardwareInfo.csproj" />
     <ProjectReference Include="..\TauStellwerk.Database\TauStellwerk.Database.csproj" />
     <ProjectReference Include="..\TauStellwerk.Images\TauStellwerk.Images.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
