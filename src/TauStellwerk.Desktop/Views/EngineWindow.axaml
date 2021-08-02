@@ -3,36 +3,52 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        xmlns:views="clr-namespace:TauStellwerk.Desktop.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.EngineWindow"
         Icon="/Assets/tauStellwerk.ico"
-        Title="EngineListWindow">
+        Title="EngineListWindow"
+        MinWidth="200"
+        MinHeight="200">
   <Design.DataContext>
     <viewModels:EngineViewModel/>
   </Design.DataContext>
   <Panel>
     <ListBox Items="{Binding Engines}" IsVisible="{Binding IsInSelectionMode}">
+      <ListBox.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid/>
+        </ItemsPanelTemplate>
+      </ListBox.ItemsPanel>
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <Grid>
-            <StackPanel>
-              <Border Background="Red" CornerRadius="4" Padding="4">
-                <TextBlock Text="{Binding Name}"/>
-              </Border>
-              <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
-            </StackPanel>
-          </Grid>
+          <StackPanel MinWidth="200">
+            <Border Background="Red" CornerRadius="4" Padding="4">
+              <TextBlock Text="{Binding Name}"/>
+            </Border>
+              <ItemsRepeater Items="{Binding Tags}">
+                <ItemsRepeater.Layout>
+                    <WrapLayout HorizontalSpacing="4"/>
+                </ItemsRepeater.Layout>
+                      <ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                  </ItemsRepeater.ItemTemplate>
+              </ItemsRepeater>
+            <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
+          </StackPanel>
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
     <Grid IsVisible="{Binding !IsInSelectionMode}"
-          ColumnDefinitions="60 *" 
+          ColumnDefinitions="60 *"
           RowDefinitions="auto auto * auto auto"
           VerticalAlignment="Stretch"
           Margin="5">
-      <Label Content="{Binding ActiveEngine.Name, FallbackValue={}}" 
+      <Label Content="{Binding ActiveEngine.Name, FallbackValue={}}"
              Grid.ColumnSpan="2"/>
-      <Image Grid.Column="1" Grid.Row="1" 
+      <Image Grid.Column="1" Grid.Row="1"
              Source="../Assets/noImageImage.png"
              Stretch="Uniform"
              StretchDirection="Both"/>
@@ -55,8 +71,8 @@
           <ItemsControl Items="{Binding SortedFunctions, FallbackValue={}}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <ToggleButton Content="{Binding }" 
-                              Tag="{Binding Number}" 
+                <ToggleButton Content="{Binding }"
+                              Tag="{Binding Number}"
                               Command="{Binding Path=DataContext.HandleFunction ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
                               CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
               </DataTemplate>
