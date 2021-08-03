@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls.Primitives;
 using JetBrains.Annotations;
 using ReactiveUI;
@@ -22,6 +23,8 @@ namespace TauStellwerk.Desktop.ViewModels
     {
         private readonly ClientEngineService _engineService;
         private readonly ObservableCollection<EngineDto> _engines = new();
+
+        private Size _windowSize;
 
         private bool _showHiddenEngines;
         private SortEnginesBy _currentEngineSortMode = SortEnginesBy.LastUsed;
@@ -50,6 +53,30 @@ namespace TauStellwerk.Desktop.ViewModels
         public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
 
         public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
+
+        public Size WindowSize
+        {
+            get => _windowSize;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _windowSize, value);
+                this.RaisePropertyChanged(nameof(Columns));
+            }
+        }
+
+        public int Columns
+        {
+            get
+            {
+                return WindowSize.Width switch
+                {
+                    < 768 => 1,
+                    < 992 => 2,
+                    < 1400 => 4,
+                    _ => 5,
+                };
+            }
+        }
 
         public ObservableCollection<EngineDto> Engines => _engines;
 
