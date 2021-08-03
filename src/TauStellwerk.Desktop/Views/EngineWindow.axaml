@@ -48,7 +48,7 @@
               </Border>
               <ItemsRepeater Items="{Binding Tags}">
                 <ItemsRepeater.Layout>
-                  <WrapLayout HorizontalSpacing="4"/>
+                  <WrapLayout HorizontalSpacing="6"/>
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                   <DataTemplate>
