@@ -13,34 +13,54 @@
   <Design.DataContext>
     <viewModels:EngineViewModel/>
   </Design.DataContext>
-  <Panel>
-    <ListBox Items="{Binding Engines}" IsVisible="{Binding IsInSelectionMode}">
-      <ListBox.ItemsPanel>
-        <ItemsPanelTemplate>
-          <UniformGrid/>
-        </ItemsPanelTemplate>
-      </ListBox.ItemsPanel>
-      <ListBox.ItemTemplate>
-        <DataTemplate>
-          <StackPanel MinWidth="200">
-            <Border Background="Red" CornerRadius="4" Padding="4">
-              <TextBlock Text="{Binding Name}"/>
-            </Border>
+  <Panel Margin="5">
+    <DockPanel LastChildFill="True" IsVisible="{Binding IsInSelectionMode}">
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" IsVisible="{Binding IsInSelectionMode}">
+        <ComboBox Items="{Binding EngineSortModes}"
+                  SelectedItem="{Binding CurrentEngineSortMode}"/>
+        <ComboBox Items="{Binding EngineSortDirections}"
+                  SelectedItem="{Binding CurrentEngineSortDirection}"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+        <Button Command="{Binding ScrollPages}" 
+                CommandParameter="-1" 
+                IsEnabled="{Binding CanScrollBackwards}"
+                Content="&lt;"/>
+        <TextBlock Text="{Binding CurrentPage}"
+                   VerticalAlignment="Center"/>
+        <Button Command="{Binding ScrollPages}" 
+                CommandParameter="1" 
+                IsEnabled="{Binding CanScrollForwards}"
+                Content="&gt;"/>
+      </StackPanel>
+      <ListBox Items="{Binding Engines}">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel MinWidth="200">
+              <Border Background="Red" CornerRadius="4" Padding="4">
+                <TextBlock Text="{Binding Name}"/>
+              </Border>
               <ItemsRepeater Items="{Binding Tags}">
                 <ItemsRepeater.Layout>
-                    <WrapLayout HorizontalSpacing="4"/>
+                  <WrapLayout HorizontalSpacing="4"/>
                 </ItemsRepeater.Layout>
-                      <ItemsRepeater.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                  </ItemsRepeater.ItemTemplate>
+                <ItemsRepeater.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding}"/>
+                  </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
               </ItemsRepeater>
-            <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
-          </StackPanel>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
+              <Button Command="{Binding DataContext.SelectEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </DockPanel>
     <Grid IsVisible="{Binding !IsInSelectionMode}"
           ColumnDefinitions="60 *"
           RowDefinitions="auto auto * auto auto"

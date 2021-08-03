@@ -21,22 +21,37 @@ namespace TauStellwerk.Desktop.ViewModels
     public class EngineViewModel : ViewModelBase
     {
         private readonly ClientEngineService _engineService;
+        private readonly ObservableCollection<EngineDto> _engines = new();
+
+        private bool _showHiddenEngines;
+        private SortEnginesBy _currentEngineSortMode = SortEnginesBy.LastUsed;
+        private string _currentEngineSortDirection = "DESC";
+
         private EngineFullDto? _activeEngine;
         private bool _isInSelectionMode = true;
-
         private bool _isDrivingForward = true;
-
         private int _throttle;
+        private int _currentPage;
 
         public EngineViewModel(ClientEngineService? engineService = null)
         {
             _engineService = engineService ?? Locator.Current.GetService<ClientEngineService>() ?? throw new InvalidOperationException();
-            Load();
+            Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
 
             this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(HandleThrottleChange);
+            this.WhenAnyValue(
+                    v => v.CurrentPage,
+                    v => v.CurrentEngineSortMode,
+                    v => v.CurrentEngineSortDirection,
+                    v => v.ShowHiddenEngines)
+                .Subscribe(Load);
         }
 
-        public ObservableCollection<EngineDto> Engines { get; } = new();
+        public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
+
+        public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
+
+        public ObservableCollection<EngineDto> Engines => _engines;
 
         public EngineFullDto? ActiveEngine
         {
@@ -68,6 +83,42 @@ namespace TauStellwerk.Desktop.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isDrivingForward, value);
         }
 
+        public int CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+
+                this.RaiseAndSetIfChanged(ref _currentPage, value);
+            }
+        }
+
+        public bool CanScrollForwards => Engines.Any();
+
+        public bool CanScrollBackwards => CurrentPage > 0;
+
+        public SortEnginesBy CurrentEngineSortMode
+        {
+            get => _currentEngineSortMode;
+            set => this.RaiseAndSetIfChanged(ref _currentEngineSortMode, value);
+        }
+
+        public string CurrentEngineSortDirection
+        {
+            get => _currentEngineSortDirection;
+            set => this.RaiseAndSetIfChanged(ref _currentEngineSortDirection, value);
+        }
+
+        public bool ShowHiddenEngines
+        {
+            get => _showHiddenEngines;
+            set => this.RaiseAndSetIfChanged(ref _showHiddenEngines, value);
+        }
+
         public async Task SelectEngine(int id)
         {
             var engine = await _engineService.AcquireEngine(id);
@@ -76,6 +127,11 @@ namespace TauStellwerk.Desktop.ViewModels
                 ActiveEngine = engine;
                 IsInSelectionMode = false;
             }
+        }
+
+        public void ScrollPages(int change)
+        {
+            CurrentPage += change;
         }
 
         private async void HandleThrottleChange(int throttle)
@@ -115,14 +171,19 @@ namespace TauStellwerk.Desktop.ViewModels
             await _engineService.SetFunction(_activeEngine.Id, functionNumber, (bool)button.IsChecked);
         }
 
-        private async void Load()
+        private async void Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
         {
-            var engines = await _engineService.GetEngines();
+            var sortDescending = args.SortDirection == "DESC";
+            var engines = await _engineService.GetEngines(args.Page, args.SortBy, sortDescending);
 
+            Engines.Clear();
             foreach (var engine in engines)
             {
                 Engines.Add(engine);
             }
+
+            this.RaisePropertyChanged(nameof(CanScrollForwards));
+            this.RaisePropertyChanged(nameof(CanScrollBackwards));
         }
     }
 }
