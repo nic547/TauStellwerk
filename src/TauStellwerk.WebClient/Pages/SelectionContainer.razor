@@ -1,6 +1,7 @@
 ﻿@using System.ComponentModel
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Services
+@using TauStellwerk.Util
 @inject ModalManager _modalManager
 @inject ClientEngineService _engineService
 
@@ -86,10 +87,7 @@
     {
         _currentPage += change;
 
-        if (_currentPage < 0)
-        {
-            _currentPage = 0;
-        }
+        _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
         var engines = await _engineService.GetEngines(
             page: _currentPage,
@@ -101,5 +99,4 @@
 
         StateHasChanged();
     }
-
 }

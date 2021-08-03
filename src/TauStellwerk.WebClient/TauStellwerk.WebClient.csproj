@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
   </ItemGroup>
 
 </Project>
