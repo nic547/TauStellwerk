@@ -16,6 +16,7 @@ using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Util;
 
 namespace TauStellwerk.Desktop.ViewModels
 {
@@ -113,15 +114,7 @@ namespace TauStellwerk.Desktop.ViewModels
         public int CurrentPage
         {
             get => _currentPage;
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-
-                this.RaiseAndSetIfChanged(ref _currentPage, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref _currentPage, value.Clamp());
         }
 
         public bool CanScrollForwards => Engines.Any();
