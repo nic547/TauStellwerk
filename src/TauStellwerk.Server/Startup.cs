@@ -101,8 +101,7 @@ namespace TauStellwerk
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, Configuration["generatedImageDirectory"])),
+                FileProvider = new PhysicalFileProvider(Path.GetFullPath(Configuration["generatedImageDirectory"])),
                 RequestPath = "/images",
             });
 
