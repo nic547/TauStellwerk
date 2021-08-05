@@ -11,7 +11,7 @@ using System.Timers;
 
 namespace TauStellwerk.Client.Services
 {
-    public class ClientHttpService
+    public class ClientHttpService : IClientHttpService
     {
         private readonly IClientSettingsService _settingsService;
 

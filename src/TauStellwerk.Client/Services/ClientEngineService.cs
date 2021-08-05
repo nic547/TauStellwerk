@@ -15,7 +15,7 @@ namespace TauStellwerk.Client.Services
 {
     public class ClientEngineService
     {
-        private readonly ClientHttpService _httpService;
+        private readonly IClientHttpService _httpService;
 
         private readonly JsonSerializerOptions _serializerOptions = new()
         {
@@ -23,7 +23,7 @@ namespace TauStellwerk.Client.Services
             Converters = { new JsonStringEnumConverter() },
         };
 
-        public ClientEngineService(ClientHttpService clientService)
+        public ClientEngineService(IClientHttpService clientService)
         {
             _httpService = clientService;
         }

@@ -66,7 +66,7 @@ namespace TauStellwerk
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TauStellwerk API", Version = "v1" });
 
-                var filePath = Path.Combine(System.AppContext.BaseDirectory, "TauStellwerk.xml");
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "TauStellwerk.Server.xml");
                 c.IncludeXmlComments(filePath);
             });
         }
@@ -95,7 +95,7 @@ namespace TauStellwerk
 
             app.UseBlazorFrameworkFiles();
 
-            EnsureContentDirectoriesExist(env);
+            EnsureContentDirectoriesExist();
 
             app.UseStaticFiles();
 
@@ -115,7 +115,7 @@ namespace TauStellwerk
             });
         }
 
-        private void EnsureContentDirectoriesExist(IHostEnvironment env)
+        private void EnsureContentDirectoriesExist()
         {
             Directory.CreateDirectory(Configuration["originalImageDirectory"]);
             Directory.CreateDirectory(Configuration["generatedImageDirectory"]);

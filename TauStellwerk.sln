@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Server", "src\TauStellwerk.Server\TauStellwerk.Server.csproj", "{EB376DEF-DF3E-4313-BC14-26D99A66B53F}"
 EndProject
@@ -39,6 +39,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Client", "src\TauStellwerk.Client\TauStellwerk.Client.csproj", "{D80B2A5D-F24C-48CE-8C83-A32C5A24D233}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.WebClient", "src\TauStellwerk.WebClient\TauStellwerk.WebClient.csproj", "{138BD039-6D6E-44A0-9550-B431803376B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Server.IntegrationTests", "test\TauStellwerk.Server.IntegrationTests\TauStellwerk.Server.IntegrationTests.csproj", "{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{138BD039-6D6E-44A0-9550-B431803376B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{138BD039-6D6E-44A0-9550-B431803376B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{138BD039-6D6E-44A0-9550-B431803376B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{1DE047AA-DA33-4BA0-9933-745CC9DF935A} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 		{7C21B849-D8D4-41FA-8936-B2DDF191CBE6} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 		{519E6D46-4FA8-4653-9A89-C89812CA4EA4} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
+		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EFC0537-3BEE-4528-BBFD-FC8E6D95C0C1}
