@@ -10,7 +10,7 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Tools.LoadTest
 {
-    public class LoadGeneratorSettingsService : IClientSettingsService
+    public class LoadGeneratorSettingsService : ISettingsService
     {
         private readonly ImmutableSettings _settings;
 
@@ -22,7 +22,7 @@ namespace TauStellwerk.Tools.LoadTest
                 "ThisIsNotATheme");
         }
 
-        public event IClientSettingsService.SettingsChange SettingsChanged
+        public event ISettingsService.SettingsChange SettingsChanged
         {
             add { }
             remove { }

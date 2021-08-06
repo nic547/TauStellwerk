@@ -3,8 +3,8 @@
 @using TauStellwerk.Base.Model
 
 
-@inject ClientStatusService _statusService;
-@inject IClientSettingsService _settingsService;
+@inject StatusService _statusService;
+@inject ISettingsService _settingsService;
 
 
 <div id="StopButton" disabled="@_state.ShouldBeDisabled" @onclick="StopButtonClick" class="@_state.CurrentState">

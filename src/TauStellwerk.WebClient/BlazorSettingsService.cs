@@ -11,7 +11,7 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.WebClient
 {
-    public class BlazorSettingsService : IClientSettingsService
+    public class BlazorSettingsService : ISettingsService
     {
         private const string _settingsKey = "TauStellwerk_Settings";
 
@@ -34,7 +34,7 @@ namespace TauStellwerk.WebClient
             _immutableSettings = _settings.GetImmutableCopy();
         }
 
-        public event IClientSettingsService.SettingsChange? SettingsChanged;
+        public event ISettingsService.SettingsChange? SettingsChanged;
 
         public async Task<ImmutableSettings> GetSettings()
         {

@@ -45,7 +45,7 @@ namespace TauStellwerk.Tools.CreateTestDb
             new("SRT Rem 487 {0:000} (Biene Maja)", 1, 1, 140, new() { "Freight", "Bombardier" }),
         };
 
-        private static readonly List<string> _manufacturerTags = new() { "Märklin", "Pikp", "Roco", "LS Models", "HAG", "Lilliput", "ESU" };
+        private static readonly List<string> _manufacturerTags = new() { "Märklin", "Piko", "Roco", "LS Models", "HAG", "Lilliput", "ESU" };
         private static readonly List<string> _ownerTag = new() { "Peter", "Mike", "Sara", "Max", "Jean" };
 
         public static EngineFullDto GetEngineDto()
@@ -62,11 +62,6 @@ namespace TauStellwerk.Tools.CreateTestDb
 
             var random = new Random();
             var engines = new List<EngineFullDto>();
-
-            foreach (var set in _engineNameComponents.OrderBy(e => e.TotalNumber))
-            {
-                Console.WriteLine($"{set.ClassName}: {set.TotalNumber}");
-            }
 
             for (var i = 0; i < number; i++)
             {

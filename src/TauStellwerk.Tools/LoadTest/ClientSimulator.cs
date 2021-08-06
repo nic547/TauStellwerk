@@ -41,8 +41,8 @@ namespace TauStellwerk.Tools.LoadTest
         {
             var random = new Random();
             var settingsService = new LoadGeneratorSettingsService(options, random);
-            var httpService = new ClientHttpService(settingsService);
-            var engineService = new ClientEngineService(httpService);
+            var httpService = new HttpClientService(settingsService);
+            var engineService = new EngineService(httpService);
 
             await engineService.AcquireEngine(id);
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientHttpService.cs" company="Dominic Ritz">
+﻿// <copyright file="HttpClientService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,9 +11,9 @@ using System.Timers;
 
 namespace TauStellwerk.Client.Services
 {
-    public class ClientHttpService
+    public class HttpClientService : IHttpClientService
     {
-        private readonly IClientSettingsService _settingsService;
+        private readonly ISettingsService _settingsService;
 
         private readonly Timer _sessionTimer;
 
@@ -21,7 +21,7 @@ namespace TauStellwerk.Client.Services
 
         private HttpClient? _httpClient;
 
-        public ClientHttpService(IClientSettingsService settingsService)
+        public HttpClientService(ISettingsService settingsService)
         {
             _settingsService = settingsService;
 
