@@ -24,10 +24,10 @@ namespace TauStellwerk.WebClient
 
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddScoped<IClientSettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<ILocalStorageService>()));
-            builder.Services.AddScoped(provider => new ClientHttpService(provider.GetRequiredService<IClientSettingsService>()));
-            builder.Services.AddScoped(provider => new ClientStatusService(provider.GetRequiredService<ClientHttpService>()));
-            builder.Services.AddScoped(provider => new ClientEngineService(provider.GetRequiredService<ClientHttpService>()));
+            builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<ILocalStorageService>()));
+            builder.Services.AddScoped(provider => new HttpClientService(provider.GetRequiredService<ISettingsService>()));
+            builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<HttpClientService>()));
+            builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<HttpClientService>()));
 
             builder.Services.AddScoped(_ => new ModalManager());
             builder.Services.AddScoped(_ => new AppState());

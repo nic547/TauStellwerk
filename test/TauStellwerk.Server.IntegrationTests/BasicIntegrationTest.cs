@@ -28,9 +28,9 @@ namespace TauStellwerk.Server.IntegrationTests
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
         {
             var client = _factory.CreateClient();
-            var mock = new Mock<IClientHttpService>(MockBehavior.Strict);
+            var mock = new Mock<IHttpClientService>(MockBehavior.Strict);
             mock.Setup(m => m.GetHttpClient()).ReturnsAsync(client);
-            var engineService = new ClientEngineService(mock.Object);
+            var engineService = new EngineService(mock.Object);
 
             // TODO: Add Add-Functionality to TauStellwerk.Client and use it in tests
             var engines = await engineService.GetEngines(1, SortEnginesBy.Name, true);

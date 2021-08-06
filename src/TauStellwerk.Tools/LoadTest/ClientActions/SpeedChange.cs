@@ -20,7 +20,7 @@ namespace TauStellwerk.Tools.LoadTest.ClientActions
         public override int Interval => Random.Next(190, 210);
 
         /// <inheritdoc/>
-        public override async Task Initialize(ClientEngineService engineService, LoadTestOptions options, int id,  Random random)
+        public override async Task Initialize(EngineService engineService, LoadTestOptions options, int id,  Random random)
         {
             await base.Initialize(engineService, options, id, random);
         }

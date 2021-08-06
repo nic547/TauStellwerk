@@ -14,12 +14,12 @@ namespace TauStellwerk.Desktop.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        private readonly ClientSettingsService _settingsService;
+        private readonly SettingsService _settingsService;
         private MutableSettings? _settings;
 
-        public SettingsViewModel(ClientSettingsService? settingsService = null)
+        public SettingsViewModel(SettingsService? settingsService = null)
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<ClientSettingsService>() ?? throw new InvalidOperationException();
+            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
             LoadSettings();
         }
 

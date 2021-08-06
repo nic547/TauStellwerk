@@ -1,4 +1,4 @@
-// <copyright file="ClientSettingsService.cs" company="Dominic Ritz">
+// <copyright file="SettingsService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,7 +11,7 @@ using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.Client.Services
 {
-    public class ClientSettingsService : IClientSettingsService
+    public class SettingsService : ISettingsService
     {
         private const string _fileName = "settings.json";
 
@@ -20,13 +20,13 @@ namespace TauStellwerk.Client.Services
         private MutableSettings _settings;
         private ImmutableSettings _immutableSettings;
 
-        public ClientSettingsService()
+        public SettingsService()
         {
             _settings = new MutableSettings();
             _immutableSettings = _settings.GetImmutableCopy();
         }
 
-        public event IClientSettingsService.SettingsChange? SettingsChanged;
+        public event ISettingsService.SettingsChange? SettingsChanged;
 
         public async Task<ImmutableSettings> GetSettings()
         {

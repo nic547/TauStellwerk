@@ -22,7 +22,7 @@ namespace TauStellwerk.Desktop.ViewModels
 {
     public class EngineViewModel : ViewModelBase
     {
-        private readonly ClientEngineService _engineService;
+        private readonly EngineService _engineService;
         private readonly ObservableCollection<EngineDto> _engines = new();
 
         private Size _windowSize;
@@ -37,9 +37,9 @@ namespace TauStellwerk.Desktop.ViewModels
         private int _throttle;
         private int _currentPage;
 
-        public EngineViewModel(ClientEngineService? engineService = null)
+        public EngineViewModel(EngineService? engineService = null)
         {
-            _engineService = engineService ?? Locator.Current.GetService<ClientEngineService>() ?? throw new InvalidOperationException();
+            _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
             Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
 
             this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(HandleThrottleChange);

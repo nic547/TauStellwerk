@@ -1,4 +1,4 @@
-// <copyright file="ClientStatusService.cs" company="Dominic Ritz">
+// <copyright file="StatusService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -12,13 +12,13 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Services
 {
-    public class ClientStatusService
+    public class StatusService
     {
-        private ClientHttpService _httpService;
+        private readonly HttpClientService _service;
 
-        public ClientStatusService(ClientHttpService clientService)
+        public StatusService(HttpClientService httpClientService)
         {
-            _httpService = clientService;
+            _service = httpClientService;
 
             Task.Run(async () => { await TrackStatus(); });
         }
@@ -33,7 +33,7 @@ namespace TauStellwerk.Client.Services
 
         public async Task SetStatus(Status status)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var json = JsonSerializer.Serialize(status);
             StatusChanged?.Invoke(status);
             LastKnownStatus = status;
@@ -55,7 +55,7 @@ namespace TauStellwerk.Client.Services
 
         private async Task<Status?> GetStatus(bool? lastState)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var uri = lastState == null ? "/status" : $"/status?lastKnownStatus={lastState}";
             var response = await client.GetAsync(uri, CancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();

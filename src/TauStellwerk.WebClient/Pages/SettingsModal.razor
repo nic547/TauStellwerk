@@ -3,7 +3,7 @@
 @using System.ComponentModel
 
 @inject ModalManager _modalManager
-@inject IClientSettingsService _settingsService
+@inject ISettingsService _settingsService
 <div class="modal @_modalManager.SettingsModalClass">
     <div class="modal-content">
         <EditForm Model="typeof(MutableSettings)">

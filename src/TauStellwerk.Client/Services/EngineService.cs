@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientEngineService.cs" company="Dominic Ritz">
+﻿// <copyright file="EngineService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -13,9 +13,9 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Services
 {
-    public class ClientEngineService
+    public class EngineService
     {
-        private readonly IClientHttpService _httpService;
+        private readonly IHttpClientService _service;
 
         private readonly JsonSerializerOptions _serializerOptions = new()
         {
@@ -23,14 +23,14 @@ namespace TauStellwerk.Client.Services
             Converters = { new JsonStringEnumConverter() },
         };
 
-        public ClientEngineService(IClientHttpService clientService)
+        public EngineService(IHttpClientService httpClientService)
         {
-            _httpService = clientService;
+            _service = httpClientService;
         }
 
         public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}");
             var responseString = await response.Content.ReadAsStringAsync();
             var engines = JsonSerializer.Deserialize<EngineDto[]>(responseString, _serializerOptions) ?? System.Array.Empty<EngineDto>();
@@ -40,7 +40,7 @@ namespace TauStellwerk.Client.Services
 
         public async Task<EngineFullDto?> AcquireEngine(int id)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var engineTask = client.GetAsync($"/engine/{id}");
             var acquireResult = await client.PostAsync($"/engine/{id}/acquire", new StringContent(string.Empty));
 
@@ -56,13 +56,13 @@ namespace TauStellwerk.Client.Services
 
         public async Task ReleaseEngine(int id)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             await client.PostAsync($"/engine/{id}/release", new StringContent(string.Empty));
         }
 
         public async Task SetSpeed(int id, int speed, bool? forward)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var path = $"/engine/{id}/speed/{speed}";
             if (forward != null)
             {
@@ -74,7 +74,7 @@ namespace TauStellwerk.Client.Services
 
         public async Task SetFunction(int id, byte function, bool on)
         {
-            var client = await _httpService.GetHttpClient();
+            var client = await _service.GetHttpClient();
             var path = $"/engine/{id}/function/{function}/{(on ? "on" : "off")}";
 
             _ = await client.PostAsync(path, new StringContent(string.Empty));

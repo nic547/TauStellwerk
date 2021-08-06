@@ -14,7 +14,7 @@ namespace TauStellwerk.Tools.LoadTest.ClientActions
     /// </summary>
     public abstract class ClientActionBase
     {
-        private ClientEngineService? _engineService;
+        private EngineService? _engineService;
         private LoadTestOptions? _options;
         private Random? _random;
 
@@ -26,7 +26,7 @@ namespace TauStellwerk.Tools.LoadTest.ClientActions
         /// <summary>
         /// Gets the HttpClient to use.
         /// </summary>
-        internal ClientEngineService EngineService
+        internal EngineService EngineService
         {
             get => _engineService ?? throw new InvalidOperationException();
             private set => _engineService = value;
@@ -52,7 +52,7 @@ namespace TauStellwerk.Tools.LoadTest.ClientActions
 
         internal int Id { get; set; }
 
-        public virtual Task Initialize(ClientEngineService engineService, LoadTestOptions options, int id, Random random)
+        public virtual Task Initialize(EngineService engineService, LoadTestOptions options, int id, Random random)
         {
             EngineService = engineService;
             Options = options;

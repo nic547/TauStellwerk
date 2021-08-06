@@ -14,22 +14,22 @@ namespace TauStellwerk.Desktop
     /// </summary>
     public static class SplatFactory
     {
-        public static ClientEngineService CreateClientEngineService()
+        public static EngineService CreateClientEngineService()
         {
-            var httpService = Locator.Current.GetService<ClientHttpService>() ?? throw new InvalidOperationException();
-            return new ClientEngineService(httpService);
+            var httpService = Locator.Current.GetService<HttpClientService>() ?? throw new InvalidOperationException();
+            return new EngineService(httpService);
         }
 
-        public static ClientStatusService CreateClientStatusService()
+        public static StatusService CreateClientStatusService()
         {
-            var httpService = Locator.Current.GetService<ClientHttpService>() ?? throw new InvalidOperationException();
-            return new ClientStatusService(httpService);
+            var httpService = Locator.Current.GetService<HttpClientService>() ?? throw new InvalidOperationException();
+            return new StatusService(httpService);
         }
 
-        public static ClientHttpService CreateClientHttpService()
+        public static HttpClientService CreateClientHttpService()
         {
-            var settingService = Locator.Current.GetService<ClientSettingsService>() ?? throw new InvalidOperationException();
-            return new ClientHttpService(settingService);
+            var settingService = Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+            return new HttpClientService(settingService);
         }
     }
 }

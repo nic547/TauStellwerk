@@ -17,10 +17,10 @@ namespace TauStellwerk.Desktop
         // yet and stuff might break.
         public static void Main(string[] args)
         {
-            Locator.CurrentMutable.RegisterConstant(new ClientSettingsService(), typeof(ClientSettingsService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(ClientHttpService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(ClientEngineService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(ClientStatusService));
+            Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(HttpClientService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(EngineService));
+            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
 
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
