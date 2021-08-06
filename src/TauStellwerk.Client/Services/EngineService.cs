@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -69,7 +70,7 @@ namespace TauStellwerk.Client.Services
                 path += $"?forward={forward}";
             }
 
-            _ = await client.PostAsync(path, new StringContent(string.Empty));
+            await client.PostAsync(path, new StringContent(string.Empty));
         }
 
         public async Task SetFunction(int id, byte function, bool on)
@@ -77,7 +78,14 @@ namespace TauStellwerk.Client.Services
             var client = await _service.GetHttpClient();
             var path = $"/engine/{id}/function/{function}/{(on ? "on" : "off")}";
 
-            _ = await client.PostAsync(path, new StringContent(string.Empty));
+            await client.PostAsync(path, new StringContent(string.Empty));
+        }
+
+        public async Task AddOrUpdateEngine(EngineFullDto engineDto)
+        {
+            var client = await _service.GetHttpClient();
+
+            await client.PostAsync("/engine", JsonContent.Create(engineDto, typeof(EngineFullDto), null, _serializerOptions));
         }
     }
 }

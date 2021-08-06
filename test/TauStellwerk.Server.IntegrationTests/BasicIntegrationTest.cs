@@ -4,6 +4,9 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -32,14 +35,25 @@ namespace TauStellwerk.Server.IntegrationTests
             mock.Setup(m => m.GetHttpClient()).ReturnsAsync(client);
             var engineService = new EngineService(mock.Object);
 
-            // TODO: Add Add-Functionality to TauStellwerk.Client and use it in tests
-            var engines = await engineService.GetEngines(1, SortEnginesBy.Name, true);
+            var enginesToInsert = Tools.CreateTestDb.EngineDtoGenerator.GetEngineFullDtos(100);
+            foreach (var engine in enginesToInsert)
+            {
+                await engineService.AddOrUpdateEngine(engine);
+            }
 
-            engines.Should().BeEmpty();
+            List<EngineDto> engines = new();
+
+            foreach (var i in Enumerable.Range(0, 6))
+            {
+                engines.AddRange(await engineService.GetEngines(i, SortEnginesBy.Name, true));
+            }
+
+            engines.Should().HaveCount(100);
         }
 
         public void Dispose()
         {
+            File.Delete("StwDatabase.db");
             _factory.Dispose();
             GC.SuppressFinalize(this);
         }
