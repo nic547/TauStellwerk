@@ -30,7 +30,7 @@ namespace TauStellwerk.Commands.ECoS
         public EsuCommandStation(IConfiguration config)
             : base(config)
         {
-            string ipAddress = Config["CommandSystemBase:IP"];
+            string ipAddress = Config["CommandSystem:IP"];
             var port = int.Parse(Config["commandSystem:Port"]);
             _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port);
 
@@ -130,6 +130,16 @@ namespace TauStellwerk.Commands.ECoS
             return Task.FromResult(true);
         }
 
+        private static ECoSEngineData CheckForEcosData(Engine engine)
+        {
+            if (engine.ECoSEngineData == null)
+            {
+                throw new ArgumentException("ECoS-ICommandStation cannot handle engines without ECoS-Data");
+            }
+
+            return engine.ECoSEngineData;
+        }
+
         private void HandleStatusEvent(string message)
         {
             if (message.Contains("status[GO]"))
@@ -151,16 +161,6 @@ namespace TauStellwerk.Commands.ECoS
             // Get the initial state.
             var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");
             HandleStatusEvent(statusMessage);
-        }
-
-        private ECoSEngineData CheckForEcosData(Engine engine)
-        {
-            if (engine.ECoSEngineData == null)
-            {
-                throw new ArgumentException("ECoS-ICommandStation cannot handle engines without ECoS-Data");
-            }
-
-            return engine.ECoSEngineData;
         }
 
         private async Task<IList<DccFunction>> GetEngineFunctionsFromECoS(Engine engine)
