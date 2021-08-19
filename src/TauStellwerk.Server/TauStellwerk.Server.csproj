@@ -8,6 +8,7 @@
     <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
     <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
 	<NoWarn>1701;1702;1591</NoWarn>
 	<RootNamespace>TauStellwerk</RootNamespace>
   </PropertyGroup>
