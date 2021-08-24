@@ -37,8 +37,12 @@ button {
     color: var(--primary-text) /* Doesn't seem to accept the color set for :root  */
 }
 
-button:active, button:disabled {
-    filter: brightness(var(--filter-value));
+button:active {
+    filter: brightness(var(--active-filter-value));
+}
+
+button:disabled {
+    filter: brightness(var(--disabled-filter-value));
 }
  
 output, input, label {
