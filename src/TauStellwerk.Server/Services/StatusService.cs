@@ -25,6 +25,7 @@ namespace TauStellwerk.Services
             _system = system;
 
             _system.StatusChanged += HandleStatusEvent;
+            _system.CheckState();
         }
 
         public Status CheckStatus()
