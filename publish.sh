@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 rm -rf ./publish
-dotnet clean /p:PublishSingleFile=false
+dotnet clean /p:PublishSingleFile=false -c Release
 
 for rid in ${rids[@]}
 
