@@ -7,10 +7,14 @@
 <div class="modal @_modalManager.SettingsModalClass">
     <div class="modal-content">
         <EditForm Model="typeof(MutableSettings)">
-            <InputSelect @bind-Value="_theme">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-            </InputSelect>
+            <label>
+                Theme: 
+                <InputSelect @bind-Value="_theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </InputSelect>
+			</label>
+            
             <button type="button" @onclick="SaveNewSettings">Save</button>
         </EditForm>
     </div>

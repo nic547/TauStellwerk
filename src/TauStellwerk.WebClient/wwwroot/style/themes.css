@@ -4,7 +4,7 @@
 */
 
 
-:root, [data-theme="default"], [data-theme="light"] {
+:root, [data-theme="light"] {
     --primary-color: #2196f3;
     --secondary-color: #BBBBBB;
     --danger-color: #f44336;

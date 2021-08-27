@@ -13,7 +13,7 @@ namespace TauStellwerk.Client.Model
 
         public string ServerAddress { get; set; } = "https://localhost";
 
-        public string Theme { get; set; } = "default";
+        public string Theme { get; set; } = "light";
 
         public ImmutableSettings GetImmutableCopy()
         {
