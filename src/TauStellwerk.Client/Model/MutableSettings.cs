@@ -3,13 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-
 namespace TauStellwerk.Client.Model
 {
     public class MutableSettings
     {
-        public string Username { get; set; } = $"Random User {new Random().Next(999_999)}";
+        public string Username { get; set; } = UsernameGenerator.GetRandomUsername();
 
         public string ServerAddress { get; set; } = "https://localhost";
 
