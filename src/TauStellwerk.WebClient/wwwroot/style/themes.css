@@ -4,7 +4,7 @@
 */
 
 
-:root, [data-theme="default"], [data-theme="light"] {
+:root, [data-theme="light"] {
     --primary-color: #2196f3;
     --secondary-color: #BBBBBB;
     --danger-color: #f44336;
@@ -14,7 +14,8 @@
     
     --shadow-color: #D3D3D3;
     
-    --filter-value: 130%
+    --active-filter-value: 130%;
+    --disabled-filter-value: 80%;
 }
 
 [data-theme="dark"] {
@@ -27,5 +28,6 @@
 
     --shadow-color: #000000;
     
-    --filter-value: 70%;
+    --active-filter-value: 70%;
+    --disabled-filter-value: 70%;
 }

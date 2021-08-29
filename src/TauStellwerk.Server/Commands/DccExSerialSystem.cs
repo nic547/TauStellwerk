@@ -20,6 +20,7 @@ namespace TauStellwerk.Commands
         {
             ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
+            // TODO #131
             _serialPort = new SerialPort();
             _serialPort.PortName = Config["CommandSystem:SerialPort"];
             _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
@@ -62,6 +63,12 @@ namespace TauStellwerk.Commands
         {
             _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(on ? "1" : "0")}>");
             return Task.CompletedTask;
+        }
+
+        public override Task CheckState()
+        {
+            // TODO #130
+            throw new System.NotImplementedException();
         }
     }
 }

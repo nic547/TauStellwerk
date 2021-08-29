@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
   </ItemGroup>
 
 </Project>

@@ -69,6 +69,12 @@ namespace TauStellwerk.Commands
             return Task.FromResult(true);
         }
 
+        /// <summary>
+        /// Ensure that the initial command system state is loaded and trigger <see cref="OnStatusChange(bool)"/>.
+        /// </summary>
+        /// <returns>A task representing the asynchronus operation.</returns>
+        public abstract Task CheckState();
+
         protected void OnStatusChange(bool isRunning)
         {
             StatusChanged?.Invoke(isRunning);

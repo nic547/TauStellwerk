@@ -21,6 +21,11 @@ namespace TauStellwerk.Commands
         {
         }
 
+        public override Task CheckState()
+        {
+            return Task.CompletedTask;
+        }
+
         public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
         {
             ConsoleService.PrintMessage($"{engine} has been emergency-stopped");

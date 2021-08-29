@@ -42,5 +42,10 @@ namespace TauStellwerk.Commands
         {
             return Task.CompletedTask;
         }
+
+        public override Task CheckState()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

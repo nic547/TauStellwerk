@@ -34,7 +34,7 @@ namespace TauStellwerk.Commands.ECoS
             var port = int.Parse(Config["commandSystem:Port"]);
             _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port);
 
-            _ = Initialize();
+            _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
         }
 
         /// <inheritdoc/>
@@ -130,6 +130,12 @@ namespace TauStellwerk.Commands.ECoS
             return Task.FromResult(true);
         }
 
+        public async override Task CheckState()
+        {
+            var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");
+            HandleStatusEvent(statusMessage);
+        }
+
         private static ECoSEngineData CheckForEcosData(Engine engine)
         {
             if (engine.ECoSEngineData == null)
@@ -152,15 +158,6 @@ namespace TauStellwerk.Commands.ECoS
             {
                 OnStatusChange(false);
             }
-        }
-
-        private async Task Initialize()
-        {
-            _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
-
-            // Get the initial state.
-            var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");
-            HandleStatusEvent(statusMessage);
         }
 
         private async Task<IList<DccFunction>> GetEngineFunctionsFromECoS(Engine engine)
