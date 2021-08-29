@@ -358,7 +358,6 @@ MigrationBackup/
 
 # Resharper/Rider
 .idea/
-global.json
 
 # SQLite DB testfile
 *.db
