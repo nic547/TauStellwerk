@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\EngineWindow.axaml.cs">
+    <Compile Update="Views\Engine\EngineWindow.axaml.cs">
       <DependentUpon>EngineWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>

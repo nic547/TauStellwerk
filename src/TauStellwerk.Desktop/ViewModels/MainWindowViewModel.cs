@@ -10,6 +10,7 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.Views;
+using TauStellwerk.Desktop.Views.Engine;
 
 namespace TauStellwerk.Desktop.ViewModels
 {

@@ -6,9 +6,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using TauStellwerk.Desktop.ViewModels;
+using TauStellwerk.Desktop.ViewModels.Engine;
 
-namespace TauStellwerk.Desktop.Views
+namespace TauStellwerk.Desktop.Views.Engine
 {
     public class EngineWindow : Window
     {

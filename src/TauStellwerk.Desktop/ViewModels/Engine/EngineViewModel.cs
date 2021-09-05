@@ -18,7 +18,7 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Desktop.ViewModels
+namespace TauStellwerk.Desktop.ViewModels.Engine
 {
     public class EngineViewModel : ViewModelBase
     {

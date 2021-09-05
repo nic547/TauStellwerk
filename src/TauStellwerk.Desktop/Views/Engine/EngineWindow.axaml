@@ -4,15 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         xmlns:views="clr-namespace:TauStellwerk.Desktop.Views"
+        xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="TauStellwerk.Desktop.Views.EngineWindow"
+        x:Class="TauStellwerk.Desktop.Views.Engine.EngineWindow"
         Icon="/Assets/tauStellwerk.ico"
         Title="EngineListWindow"
         MinWidth="200"
         MinHeight="200"
         ClientSize="{Binding WindowSize, Mode=OneWayToSource}">
   <Design.DataContext>
-    <viewModels:EngineViewModel/>
+    <engine:EngineViewModel/>
   </Design.DataContext>
   <Panel Margin="5">
     <DockPanel LastChildFill="True" IsVisible="{Binding IsInSelectionMode}">
@@ -70,7 +71,7 @@
       <Label Content="{Binding ActiveEngine.Name, FallbackValue={}}"
              Grid.ColumnSpan="2"/>
       <Image Grid.Column="1" Grid.Row="1"
-             Source="../Assets/noImageImage.png"
+             Source="../../Assets/noImageImage.png"
              Stretch="Uniform"
              StretchDirection="Both"/>
       <Slider Orientation="Vertical"
