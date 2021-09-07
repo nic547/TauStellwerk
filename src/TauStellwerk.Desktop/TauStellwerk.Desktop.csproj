@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\TauStellwerk.Database.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
+    <NoWarn>1701;1702;159;1601</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -13,7 +13,6 @@
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,12 +34,6 @@
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Engine\EngineWindow.axaml.cs">
-      <DependentUpon>EngineWindow.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
