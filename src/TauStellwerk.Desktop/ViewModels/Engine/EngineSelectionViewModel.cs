@@ -73,6 +73,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public Interaction<EngineFullDto, Unit> SelectEngine { get; } = new();
 
+        public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
+
         public ObservableCollection<EngineDto> Engines { get; } = new();
 
         public int CurrentPage
@@ -109,6 +111,10 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             if (engine != null)
             {
                 await SelectEngine.Handle(engine);
+            }
+            else
+            {
+                await CannotAcquireEngineError.Handle(Unit.Default);
             }
         }
 
