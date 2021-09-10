@@ -5,7 +5,8 @@
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineControlWindow"
-        Title="EngineControlWindow">
+        Title="EngineControlWindow0"
+        Closing="Window_OnClosing">
     <Design.DataContext>
         <engine:EngineControlViewModel/>
     </Design.DataContext>

@@ -56,6 +56,11 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             set => this.RaiseAndSetIfChanged(ref _isDrivingForward, value);
         }
 
+        public void OnClosing()
+        {
+            _ = _engineService.ReleaseEngine(Engine.Id);
+        }
+
         private async void HandleThrottleChange(int throttle)
         {
             await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward);

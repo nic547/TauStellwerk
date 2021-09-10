@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -23,6 +24,11 @@ namespace TauStellwerk.Desktop.Views.Engine
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void Window_OnClosing(object? sender, CancelEventArgs e)
+        {
+            ViewModel?.OnClosing();
         }
     }
 }
