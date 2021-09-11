@@ -33,14 +33,15 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         public EngineSelectionViewModel(EngineService? engineService = null)
         {
             _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
-            Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
+            _ = Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
 
             this.WhenAnyValue(
                     v => v.CurrentPage,
                     v => v.CurrentEngineSortMode,
                     v => v.CurrentEngineSortDirection,
                     v => v.ShowHiddenEngines)
-                .Subscribe(Load);
+                .Select(values => _ = Load(values))
+                .Subscribe();
         }
 
         public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
@@ -123,7 +124,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             CurrentPage += change;
         }
 
-        private async void Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
+        private async Task Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
         {
             var sortDescending = args.SortDirection == "DESC";
             var engines = await _engineService.GetEngines(args.Page, args.SortBy, sortDescending);

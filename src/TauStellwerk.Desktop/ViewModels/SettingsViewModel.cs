@@ -20,7 +20,7 @@ namespace TauStellwerk.Desktop.ViewModels
         public SettingsViewModel(SettingsService? settingsService = null)
         {
             _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
-            LoadSettings();
+            _ = LoadSettings();
         }
 
         public MutableSettings? Settings
@@ -29,7 +29,7 @@ namespace TauStellwerk.Desktop.ViewModels
             set => this.RaiseAndSetIfChanged(ref _settings, value);
         }
 
-        public async void LoadSettings()
+        public async Task LoadSettings()
         {
             Settings = await _settingsService.GetMutableSettingsCopy();
         }

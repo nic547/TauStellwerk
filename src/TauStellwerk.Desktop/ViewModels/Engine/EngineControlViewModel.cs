@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using JetBrains.Annotations;
 using ReactiveUI;
@@ -21,15 +22,21 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private readonly EngineService _engineService;
         private bool _isDrivingForward = true;
         private int _throttle;
+        private List<FunctionDto> _sortedFunctions = new();
 
         public EngineControlViewModel(EngineFullDto engine, EngineService? engineService = null)
         {
             Engine = engine;
 
-            _engineService = engineService ??
-                             Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+            _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
-            this.WhenAnyValue(v => v.Throttle).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(HandleThrottleChange);
+            this.WhenAnyValue(v => v.Throttle)
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Select(x => _ = HandleThrottleChange(x))
+                .Subscribe();
+            this.WhenAnyValue(p => p.Engine.Functions)
+                .Select(f => SortedFunctions = f.OrderBy(o => o.Number).ToList())
+                .Subscribe();
         }
 
         public EngineControlViewModel()
@@ -42,7 +49,11 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public EngineFullDto Engine { get; }
 
-        public List<FunctionDto> SortedFunctions => Engine.Functions.OrderBy(f => f.Number).ToList();
+        public List<FunctionDto> SortedFunctions
+        {
+            get => _sortedFunctions;
+            private set => this.RaiseAndSetIfChanged(ref _sortedFunctions, value);
+        }
 
         public int Throttle
         {
@@ -61,7 +72,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             _ = _engineService.ReleaseEngine(Engine.Id);
         }
 
-        private async void HandleThrottleChange(int throttle)
+        private async Task HandleThrottleChange(int throttle)
         {
             await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward);
         }
@@ -75,7 +86,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             // If we always did that, the HandleThrottleChange could be called twice. (once via RaiseAndSetIfChanged and once manually)
             if (Throttle == 0)
             {
-                HandleThrottleChange(0);
+                _ = HandleThrottleChange(0);
             }
             else
             {
@@ -84,7 +95,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         }
 
         [UsedImplicitly]
-        private async void HandleFunction(ToggleButton button)
+        private async Task HandleFunction(ToggleButton button)
         {
             var functionNumber = (byte)(button.Tag ?? throw new InvalidOperationException());
             if (button.IsChecked == null)

@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Splat;
 using TauStellwerk.Base.Model;
@@ -37,7 +38,7 @@ namespace TauStellwerk.Desktop.ViewModels
         public StopButtonState StopButtonState { get; } = new();
 
         [UsedImplicitly]
-        private async void StopButtonCommand()
+        private async Task StopButtonCommand()
         {
             var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
             var username = (await _settingsService.GetSettings()).Username;
