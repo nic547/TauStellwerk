@@ -14,8 +14,8 @@ namespace TauStellwerk.Desktop.Views
     {
         public SettingsWindow()
         {
-            InitializeComponent();
             DataContext = new SettingsViewModel();
+            InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif

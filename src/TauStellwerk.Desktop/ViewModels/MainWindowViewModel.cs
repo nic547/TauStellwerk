@@ -4,19 +4,22 @@
 // </copyright>
 
 using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Desktop.ViewModels.Engine;
 using TauStellwerk.Desktop.Views;
+using TauStellwerk.Desktop.Views.Engine;
 
 namespace TauStellwerk.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly SettingsService _settingsService;
-        private StatusService _statusService;
+        private readonly StatusService _statusService;
 
         public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
         {
@@ -35,7 +38,7 @@ namespace TauStellwerk.Desktop.ViewModels
         public StopButtonState StopButtonState { get; } = new();
 
         [UsedImplicitly]
-        private async void StopButtonCommand()
+        private async Task StopButtonCommand()
         {
             var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
             var username = (await _settingsService.GetSettings()).Username;
@@ -51,7 +54,12 @@ namespace TauStellwerk.Desktop.ViewModels
         [UsedImplicitly]
         private void OpenEngineList()
         {
-            var engineWindow = new EngineWindow();
+            var vm = new EngineSelectionViewModel();
+            var engineWindow = new EngineSelectionWindow
+            {
+                DataContext = vm,
+                ViewModel = vm,
+            };
             engineWindow.Show();
         }
 

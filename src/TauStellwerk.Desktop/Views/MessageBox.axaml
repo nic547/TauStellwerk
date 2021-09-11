@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TauStellwerk.Desktop.Views.MessageBox"
+        Title="{Binding Title}"
+        ClientSize="300,100"
+        CanResize="False">
+    <Design.DataContext>
+        <viewModels:MessageBoxModel/>
+    </Design.DataContext>
+	<DockPanel Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" LastChildFill="True">
+        <Button DockPanel.Dock="Bottom" 
+                Width="130"
+                HorizontalAlignment="Right"
+                Content="Ok"
+                Command="{Binding Close}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                />
+        <TextBlock Text="{Binding Message}"/>
+    </DockPanel>
+</Window>
