@@ -21,6 +21,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
     public class EngineSelectionViewModel : ViewModelBase
     {
         private readonly EngineService _engineService;
+        private readonly ObservableAsPropertyHelper<bool> _isAcquiring;
 
         private Size _windowSize;
 
@@ -34,6 +35,9 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         {
             _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
             _ = Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
+
+            AcquireEngine = ReactiveCommand.CreateFromTask<int, Unit>(TryAcquireEngine);
+            AcquireEngine.IsExecuting.ToProperty(this, x => x.IsAcquiring, out _isAcquiring);
 
             this.WhenAnyValue(
                     v => v.CurrentPage,
@@ -76,6 +80,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
 
+        public ReactiveCommand<int, Unit> AcquireEngine { get; }
+
         public ObservableCollection<EngineDto> Engines { get; } = new();
 
         public int CurrentPage
@@ -106,7 +112,14 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             set => this.RaiseAndSetIfChanged(ref _showHiddenEngines, value);
         }
 
-        public async Task AcquireEngine(int id)
+        public bool IsAcquiring => _isAcquiring.Value;
+
+        public void ScrollPages(int change)
+        {
+            CurrentPage += change;
+        }
+
+        private async Task<Unit> TryAcquireEngine(int id)
         {
             var engine = await _engineService.AcquireEngine(id);
             if (engine != null)
@@ -117,11 +130,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             {
                 await CannotAcquireEngineError.Handle(Unit.Default);
             }
-        }
 
-        public void ScrollPages(int change)
-        {
-            CurrentPage += change;
+            return Unit.Default;
         }
 
         private async Task Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
