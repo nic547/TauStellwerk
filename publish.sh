@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-customargs="-c Release /property:PublishTrimmed=True /p:DebugSymbols=false /p:DebugType=None"
+customargs="-c Release /property:PublishTrimmed=True /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link"
 rids=("linux-x64" "linux-arm64" "win-x64" "win-arm64")
 
-BLUE='\033[0;34m'
+BLUE='\033[1;34m'
 NC='\033[0m' # No Color
 
 rm -rf ./publish
@@ -20,6 +20,8 @@ rm ./publish/$rid/*.xml
 rm ./publish/$rid/appsettings.Development.json
 rm -r ./publish/$rid/BlazorDebugProxy
 rm ./publish/$rid/web.config
+
+echo -e "$BLUE ---Finsihed building $rid --- $NC"
 
 done
 
