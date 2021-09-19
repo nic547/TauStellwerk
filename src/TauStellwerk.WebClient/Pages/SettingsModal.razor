@@ -7,22 +7,24 @@
 <div class="modal @_modalManager.SettingsModalClass">
     <div class="modal-content">
         <EditForm Model="typeof(MutableSettings)">
-            <label>
-                Theme: 
-                <InputSelect @bind-Value="_theme">
+            <div class="form-group" title="The username that will be shown to other users.">
+                <label for="UsernameInput">Username:</label>
+                <input required="required" type="text" id="UsernameInput" @bind="_settings.Username"/>
+            </div>
+            <div class="form-group" title="Color-scheme for the application">
+                <label for="themeSetting">Theme:</label>
+                <InputSelect @bind-Value="_settings.Theme" Id="themeSetting">
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                 </InputSelect>
-			</label>
-            
-            <button type="button" @onclick="SaveNewSettings">Save</button>
+            </div>
+            <button type="button" @onclick="SaveAndClose" class="is-pulled-right">Save</button>
+            <button type="button" @onclick="CloseWithoutSaving" class="is-pulled-right">Cancel</button>
         </EditForm>
     </div>
 </div>
 @code {
-    private MutableSettings? _settings;
-
-    private string _theme = "light";
+    private MutableSettings _settings = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,17 +43,19 @@
         if (_modalManager.IsSettingsModalVisible)
         {
             _settings = await _settingsService.GetMutableSettingsCopy();
-            _theme = _settings.Theme;
         }
 
         StateHasChanged();
     }
 
-    private void SaveNewSettings()
+    private void SaveAndClose()
     {
-        if (_settings == null) { throw new InvalidOperationException(); }
-        _settings.Theme = _theme;
         _settingsService.SetSettings(_settings);
+        _modalManager.IsSettingsModalVisible = false;
+    }
+
+    private void CloseWithoutSaving()
+    {
         _modalManager.IsSettingsModalVisible = false;
     }
 }
