@@ -2,7 +2,7 @@
 set -e
 
 customargs="-c Release /property:PublishTrimmed=True /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link"
-rids=("linux-x64" "linux-arm64" "win-x64" "win-arm64")
+rids=("linux-x64" "linux-musl-x64" "linux-arm64" "linux-musl-arm64" "win-x64" "win-arm64")
 
 BLUE='\033[1;34m'
 NC='\033[0m' # No Color
