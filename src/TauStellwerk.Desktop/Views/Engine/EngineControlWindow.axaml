@@ -11,7 +11,7 @@
         <engine:EngineControlViewModel/>
     </Design.DataContext>
     <Grid
-          ColumnDefinitions="60 *"
+          ColumnDefinitions="80 *"
           RowDefinitions="auto auto * auto auto"
           VerticalAlignment="Stretch"
           Margin="5">
@@ -25,14 +25,16 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.RowSpan="2"
+                HorizontalAlignment="Center"
                 Maximum="126"
                 Minimum="0"
                 Value="{Binding Throttle}"/>
-        <StackPanel Grid.Column="0" Grid.Row="3"
+		<StackPanel Grid.Column="0" Grid.Row="3"
                     Orientation="Horizontal">
-            <Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirection}" CommandParameter="false"/>
-            <Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirection}" CommandParameter="true"/>
-        </StackPanel>
+			<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirection}" CommandParameter="false"/>
+			<Button Content="E" Command="{Binding EmergencyStopCommand}" ToolTip.Tip="Emergency Stop - Quickly stops engine skipping any simulated monumentum"/>
+			<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirection}" CommandParameter="true"/>
+		</StackPanel>
         <Label Grid.Column="0" Grid.Row="4"
                Content="{Binding Throttle}"/>
         <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3">

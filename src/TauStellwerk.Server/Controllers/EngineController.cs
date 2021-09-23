@@ -195,6 +195,26 @@ namespace TauStellwerk.Controllers
             return BadRequest();
         }
 
+        [HttpPost("{id:int}/estop")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> SetEngineEStop([FromHeader(Name = "Session-Id")] string sessionId, int id)
+        {
+            var session = _sessionService.TryGetSession(sessionId);
+            if (session == null)
+            {
+                return StatusCode(403);
+            }
+
+            if (await _engineService.SetEngineEStop(session, id))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
         /// <summary>
         /// Activate/Deactivate a function of an engine.
         /// </summary>

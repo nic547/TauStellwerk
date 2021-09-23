@@ -25,6 +25,7 @@
     </label><!-- orient="vertical" is for firefox -->
     <div class="ec-grid-direction center">
         <button class="bold" disabled="@(!_forward)" @onclick="ChangeDirection">&lt;</button>
+        <button class="bold" @onclick="EStop" title="Emergency stop this engine.">E</button>
         <button class="bold" disabled="@(_forward)" @onclick="ChangeDirection" >&gt;</button>
     </div>
     <output class="ec-grid-speed center">@Throttle</output>
@@ -63,6 +64,13 @@
     {
         _forward = !_forward;
         Throttle = 0;
+        StateHasChanged();
+    }
+
+    private void EStop()
+    {
+        _ = _engineService.SetEStop(Engine.Id);
+        _throttle = 0;
         StateHasChanged();
     }
 

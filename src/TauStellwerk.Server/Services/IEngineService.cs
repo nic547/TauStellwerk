@@ -23,6 +23,8 @@ namespace TauStellwerk.Services
 
         Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldDriveForward);
 
+        Task<bool> SetEngineEStop(Session session, int engineId);
+
         Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
     }
 
@@ -86,6 +88,18 @@ namespace TauStellwerk.Services
             activeEngine.IsDrivingForward = (bool)shouldBeDrivingForwards;
 
             await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, hasBeenDrivingForward, (bool)shouldBeDrivingForwards);
+            return true;
+        }
+
+        public async Task<bool> SetEngineEStop(Session session, int engineId)
+        {
+            if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
+            {
+                return false;
+            }
+
+            var hasBeenDrivingForward = activeEngine.IsDrivingForward;
+            await _commandSystem.HandleEngineEStop(activeEngine.Engine, hasBeenDrivingForward);
             return true;
         }
 
