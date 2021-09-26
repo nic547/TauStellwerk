@@ -35,12 +35,12 @@ namespace TauStellwerk.Tools.LoadTest
 
         public Task<MutableSettings> GetMutableSettingsCopy()
         {
-            throw new NotImplementedException("Cannot edit settings for the load generator");
+            throw new InvalidOperationException("Cannot edit settings for the load generator");
         }
 
         public Task SetSettings(MutableSettings mutableSettings)
         {
-            throw new NotImplementedException("Cannot edit settings for the load generator");
+            throw new InvalidOperationException("Cannot edit settings for the load generator");
         }
     }
 }

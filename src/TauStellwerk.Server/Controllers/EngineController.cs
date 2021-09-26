@@ -93,7 +93,7 @@ namespace TauStellwerk.Controllers
                 (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
                 (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
                 (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
-                _ => throw new NotImplementedException(),
+                _ => throw new InvalidOperationException(),
             };
 
             query = query.Skip(page * _resultsPerPage)
