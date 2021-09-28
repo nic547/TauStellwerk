@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TauStellwerk.Desktop.Views.Engine.EngineEditWindow"
+        Title="EngineEditWindow">
+    <Design.DataContext>
+        <engine:EngineEditViewModel/>
+    </Design.DataContext>
+  <StackPanel>
+      <Label Content="Name"></Label>
+      <TextBox Text="{Binding Engine.Name}" />
+      <Label Content="DCC address"/>
+      <NumericUpDown Value="{Binding Engine.Address}" />
+      <Label Content="Top speed"/>
+      <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}"/>
+      <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}"></CheckBox>
+      <StackPanel Orientation="Horizontal">
+          <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+          <Button Content="Save" Command="{Binding SaveCommand}"/>
+      </StackPanel>
+  </StackPanel>
+</Window>

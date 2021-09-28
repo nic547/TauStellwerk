@@ -55,7 +55,10 @@
                   </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
               </ItemsRepeater>
-              <Button Command="{Binding DataContext.AcquireEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}">Select</Button>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+          <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit"/>
+          <Button Command="{Binding DataContext.AcquireEngine, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select"/>
+				</StackPanel>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>

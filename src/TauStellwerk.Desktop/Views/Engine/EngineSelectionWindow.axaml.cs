@@ -26,6 +26,7 @@ namespace TauStellwerk.Desktop.Views.Engine
             this.WhenActivated(d =>
             {
                 ViewModel?.SelectEngine.RegisterHandler(OpenEngineWindow);
+                ViewModel?.OpenEngineEditView.RegisterHandler(OpenEngineEditWindow);
                 ViewModel?.CannotAcquireEngineError.RegisterHandler(ShowAcquireEngineMessage);
             });
         }
@@ -45,6 +46,18 @@ namespace TauStellwerk.Desktop.Views.Engine
 
             view.Show();
             Close();
+            interaction.SetOutput(Unit.Default);
+        }
+
+        private void OpenEngineEditWindow(InteractionContext<EngineFullDto, Unit> interaction)
+        {
+            var vm = new EngineEditViewModel(interaction.Input);
+            var view = new EngineEditWindow()
+            {
+                DataContext = vm,
+            };
+
+            view.Show();
             interaction.SetOutput(Unit.Default);
         }
 

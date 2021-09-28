@@ -39,6 +39,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             AcquireEngine = ReactiveCommand.CreateFromTask<int, Unit>(TryAcquireEngine);
             AcquireEngine.IsExecuting.ToProperty(this, x => x.IsAcquiring, out _isAcquiring);
 
+            EditEngineCommand = ReactiveCommand.CreateFromTask<int, Unit>(HandleEngineEditCommand);
+
             this.WhenAnyValue(
                     v => v.CurrentPage,
                     v => v.CurrentEngineSortMode,
@@ -80,7 +82,11 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
 
+        public Interaction<EngineFullDto, Unit> OpenEngineEditView { get; } = new();
+
         public ReactiveCommand<int, Unit> AcquireEngine { get; }
+
+        public ReactiveCommand<int, Unit> EditEngineCommand { get; }
 
         public ObservableCollection<EngineDto> Engines { get; } = new();
 
@@ -147,6 +153,21 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
             this.RaisePropertyChanged(nameof(CanScrollForwards));
             this.RaisePropertyChanged(nameof(CanScrollBackwards));
+        }
+
+        private async Task<Unit> HandleEngineEditCommand(int id)
+        {
+            var engine = await _engineService.AcquireEngine(id);
+            if (engine != null)
+            {
+                await OpenEngineEditView.Handle(engine);
+            }
+            else
+            {
+                await CannotAcquireEngineError.Handle(Unit.Default);
+            }
+
+            return Unit.Default;
         }
     }
 }
