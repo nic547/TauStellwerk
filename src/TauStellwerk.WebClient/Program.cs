@@ -6,9 +6,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.WebClient
@@ -22,9 +22,7 @@ namespace TauStellwerk.WebClient
 
             builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddBlazoredLocalStorage();
-
-            builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<ILocalStorageService>()));
+            builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<IJSRuntime>()));
             builder.Services.AddScoped(provider => new HttpClientService(provider.GetRequiredService<ISettingsService>()));
             builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<HttpClientService>()));
             builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<HttpClientService>()));
