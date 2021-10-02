@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
@@ -29,6 +30,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             Engine = engine;
 
             _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+
+            EmergencyStopCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleEStop);
 
             this.WhenAnyValue(v => v.Throttle)
                 .Throttle(TimeSpan.FromMilliseconds(100))
@@ -67,6 +70,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             set => this.RaiseAndSetIfChanged(ref _isDrivingForward, value);
         }
 
+        public ReactiveCommand<Unit, Unit> EmergencyStopCommand { get; }
+
         public void OnClosing()
         {
             _ = _engineService.ReleaseEngine(Engine.Id);
@@ -104,6 +109,13 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             }
 
             await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked);
+        }
+
+        private async Task<Unit> HandleEStop(Unit arg)
+        {
+            Throttle = 0;
+            await _engineService.SetEStop(Engine.Id);
+            return Unit.Default;
         }
     }
 }

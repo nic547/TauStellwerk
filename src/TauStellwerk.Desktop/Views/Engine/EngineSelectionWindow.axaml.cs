@@ -45,6 +45,7 @@ namespace TauStellwerk.Desktop.Views.Engine
 
             view.Show();
             Close();
+            interaction.SetOutput(Unit.Default);
         }
 
         private void ShowAcquireEngineMessage(InteractionContext<Unit, Unit> interaction)
@@ -60,6 +61,7 @@ namespace TauStellwerk.Desktop.Views.Engine
             };
 
             window.ShowDialog(this);
+            interaction.SetOutput(Unit.Default);
         }
     }
 }

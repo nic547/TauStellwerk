@@ -73,6 +73,12 @@ namespace TauStellwerk.Client.Services
             await client.PostAsync(path, new StringContent(string.Empty));
         }
 
+        public async Task SetEStop(int id)
+        {
+            var client = await _service.GetHttpClient();
+            await client.PostAsync($"/engine/{id}/estop", new StringContent(string.Empty));
+        }
+
         public async Task SetFunction(int id, byte function, bool on)
         {
             var client = await _service.GetHttpClient();

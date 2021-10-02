@@ -85,19 +85,19 @@
 .modal-content, .modal-content-fullwidth {
     background-color: var(--background-color);
     /* Ensure the e-stop button cannot cover the content of a modal*/
-    margin-top: 90px;
-    margin-bottom: 20px;
+    margin: 90px 20px 20px 20px;
+    overflow: auto;
 }
 
 .modal-content {
-    margin-left: 20px;
-    margin-right: 20px;
     padding: 10px;
+    max-width: 1024px;
+    --modal-side-margin: max(20px, calc((100vw - 1024px) / 2));
+    margin-left: var(--modal-side-margin);
+    margin-right: var(--modal-side-margin);
 }
 
 .modal-content-fullwidth {
-    margin-left: 20px;
-    margin-right: 20px;
     padding: 5px;
 
     display: flex;
@@ -134,4 +134,17 @@
 .center {
     text-align: center;
     align-content: center;
+}
+
+@media (min-width: 769px) {
+    .form-group > label {
+        width: 150px;
+        display: inline-block;
+    }
+}
+
+@media (max-width: 769px) {
+    .form-group > label {
+        display: block;
+    }
 }

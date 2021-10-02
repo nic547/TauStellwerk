@@ -93,7 +93,7 @@ namespace TauStellwerk.Controllers
                 (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
                 (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
                 (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
-                _ => throw new NotImplementedException(),
+                _ => throw new InvalidOperationException(),
             };
 
             query = query.Skip(page * _resultsPerPage)
@@ -188,6 +188,26 @@ namespace TauStellwerk.Controllers
             }
 
             if (await _engineService.SetEngineSpeed(session, id, speed, forward))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("{id:int}/estop")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> SetEngineEStop([FromHeader(Name = "Session-Id")] string sessionId, int id)
+        {
+            var session = _sessionService.TryGetSession(sessionId);
+            if (session == null)
+            {
+                return StatusCode(403);
+            }
+
+            if (await _engineService.SetEngineEStop(session, id))
             {
                 return Ok();
             }

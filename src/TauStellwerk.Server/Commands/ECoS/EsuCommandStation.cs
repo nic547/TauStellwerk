@@ -106,9 +106,10 @@ namespace TauStellwerk.Commands.ECoS
             await speedTask;
         }
 
-        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+        public override async Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForward)
         {
-            throw new NotImplementedException();
+            var ecosData = CheckForEcosData(engine);
+            await _connectionHandler.SendCommandAsync($"set({ecosData.Id},stop)");
         }
 
         /// <inheritdoc/>
