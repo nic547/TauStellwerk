@@ -1,0 +1,75 @@
+﻿// <copyright file="CoalescingLimiter.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
+using Timer = System.Timers.Timer;
+
+namespace TauStellwerk.Util
+{
+    public class CoalescingLimiter<T>
+    {
+        private readonly Func<T, Task> _func;
+        private readonly List<TaskCompletionSource> _waitingTasks = new();
+        private readonly SemaphoreSlim _semaphore = new(1);
+        private readonly Timer _timeoutTimer;
+        private T? _lastParam;
+        private bool _isInTimeout;
+
+        public CoalescingLimiter(Func<T, Task> func, double timeout)
+        {
+            _func = func;
+            _timeoutTimer = new Timer
+            {
+                Interval = timeout,
+                AutoReset = false,
+            };
+            _timeoutTimer.Elapsed += HandleTimer;
+        }
+
+        public async Task Execute(T param)
+        {
+            await _semaphore.WaitAsync();
+            if (_isInTimeout)
+            {
+                _lastParam = param;
+                var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                _waitingTasks.Add(tcs);
+                _semaphore.Release();
+                await tcs.Task;
+            }
+            else
+            {
+                _timeoutTimer.Start();
+                _isInTimeout = true;
+
+                _semaphore.Release();
+                await _func.Invoke(param);
+            }
+        }
+
+        private async void HandleTimer(object? source, ElapsedEventArgs args)
+        {
+            await _semaphore.WaitAsync();
+            if (_waitingTasks.Any())
+            {
+                await _func.Invoke(_lastParam ?? throw new InvalidOperationException());
+                foreach (var tcs in _waitingTasks)
+                {
+                    tcs.SetResult();
+                }
+
+                _waitingTasks.Clear();
+            }
+
+            _isInTimeout = false;
+            _semaphore.Release();
+        }
+    }
+}

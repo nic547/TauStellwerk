@@ -34,7 +34,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             EmergencyStopCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleEStop);
 
             this.WhenAnyValue(v => v.Throttle)
-                .Throttle(TimeSpan.FromMilliseconds(100))
                 .Select(x => _ = HandleThrottleChange(x))
                 .Subscribe();
             this.WhenAnyValue(p => p.Engine.Functions)
