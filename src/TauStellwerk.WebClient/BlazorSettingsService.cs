@@ -4,8 +4,9 @@
 // </copyright>
 
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -16,17 +17,17 @@ namespace TauStellwerk.WebClient
         private const string _settingsKey = "TauStellwerk_Settings";
 
         private readonly string _baseAddress;
-        private readonly ILocalStorageService _storageService;
+        private readonly IJSRuntime _runtime;
 
         private bool _hasLoadBeenAttempted;
 
         private MutableSettings _settings;
         private ImmutableSettings _immutableSettings;
 
-        public BlazorSettingsService(string baseAddress, ILocalStorageService storageService)
+        public BlazorSettingsService(string baseAddress, IJSRuntime runtime)
         {
             _baseAddress = baseAddress;
-            _storageService = storageService;
+            _runtime = runtime;
             _settings = new MutableSettings
             {
                 ServerAddress = baseAddress,
@@ -55,7 +56,7 @@ namespace TauStellwerk.WebClient
 
             _immutableSettings = _settings.GetImmutableCopy();
 
-            await _storageService.SetItemAsync(_settingsKey, mutableSettings);
+            await SaveSettings(mutableSettings);
 
             SettingsChanged?.Invoke(_immutableSettings);
         }
@@ -73,7 +74,7 @@ namespace TauStellwerk.WebClient
 
             try
             {
-                var potentialSettings = await _storageService.GetItemAsync<MutableSettings>(_settingsKey);
+                var potentialSettings = await TryLoadSettings();
                 if (potentialSettings != null)
                 {
                     potentialSettings.ServerAddress = _baseAddress;
@@ -88,6 +89,18 @@ namespace TauStellwerk.WebClient
             }
 
             _hasLoadBeenAttempted = true;
+        }
+
+        private async Task<MutableSettings?> TryLoadSettings()
+        {
+            var json = await _runtime.InvokeAsync<string>("getItem", _settingsKey);
+            return JsonSerializer.Deserialize<MutableSettings>(json);
+        }
+
+        private async Task SaveSettings(MutableSettings settings)
+        {
+            var json = JsonSerializer.Serialize(settings);
+            await _runtime.InvokeVoidAsync("setItem", _settingsKey, json);
         }
     }
 }
