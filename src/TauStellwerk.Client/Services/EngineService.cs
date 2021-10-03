@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -11,13 +12,16 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Util;
 
 namespace TauStellwerk.Client.Services
 {
     public class EngineService
     {
-        private readonly IHttpClientService _service;
+        private const double TimeoutMiliseconds = 100;
 
+        private readonly IHttpClientService _service;
+        private readonly Dictionary<int, CoalescingLimiter<(int, int, bool)>> _activeEngines = new();
         private readonly JsonSerializerOptions _serializerOptions = new()
         {
             PropertyNameCaseInsensitive = true,
@@ -49,6 +53,7 @@ namespace TauStellwerk.Client.Services
             {
                 var response = await engineTask;
                 var json = await response.Content.ReadAsStringAsync();
+                _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMiliseconds));
                 return JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
             }
 
@@ -57,20 +62,20 @@ namespace TauStellwerk.Client.Services
 
         public async Task ReleaseEngine(int id)
         {
+            _activeEngines.Remove(id);
             var client = await _service.GetHttpClient();
             await client.PostAsync($"/engine/{id}/release", new StringContent(string.Empty));
         }
 
-        public async Task SetSpeed(int id, int speed, bool? forward)
+        public async Task SetSpeed(int id, int speed, bool forward)
         {
-            var client = await _service.GetHttpClient();
-            var path = $"/engine/{id}/speed/{speed}";
-            if (forward != null)
+            _ = _activeEngines.TryGetValue(id, out var limiter);
+            if (limiter == null)
             {
-                path += $"?forward={forward}";
+                throw new InvalidOperationException();
             }
 
-            await client.PostAsync(path, new StringContent(string.Empty));
+            await limiter.Execute((id, speed, forward));
         }
 
         public async Task SetEStop(int id)
@@ -92,6 +97,14 @@ namespace TauStellwerk.Client.Services
             var client = await _service.GetHttpClient();
 
             await client.PostAsync("/engine", JsonContent.Create(engineDto, typeof(EngineFullDto), null, _serializerOptions));
+        }
+
+        private async Task SendSpeed((int Id, int Speed, bool Forward) arg)
+        {
+            var (id, speed, forward) = arg;
+            var client = await _service.GetHttpClient();
+            var path = $"/engine/{id}/speed/{speed}?forward={forward}";
+            await client.PostAsync(path, new StringContent(string.Empty));
         }
     }
 }
