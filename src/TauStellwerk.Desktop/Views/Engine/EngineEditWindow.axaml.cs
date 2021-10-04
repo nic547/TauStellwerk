@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Reactive;
 using Avalonia;
 using Avalonia.Markup.Xaml;
@@ -20,7 +21,13 @@ namespace TauStellwerk.Desktop.Views.Engine
 
             this.WhenActivated(d =>
             {
-                ViewModel?.CloseWindow.RegisterHandler(HandleCloseWindow);
+                if (ViewModel == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                ViewModel.CloseWindow.RegisterHandler(HandleCloseWindow);
+                Closing += ViewModel.HandleWindowClosing;
             });
 
 #if DEBUG
