@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Server.IntegrationTests
@@ -38,7 +39,7 @@ namespace TauStellwerk.Server.IntegrationTests
             var enginesToInsert = Tools.CreateTestDb.EngineDtoGenerator.GetEngineFullDtos(100);
             foreach (var engine in enginesToInsert)
             {
-                await engineService.AddOrUpdateEngine(engine);
+                await engineService.AddOrUpdateEngine(new EngineFull(engine));
             }
 
             List<EngineDto> engines = new();

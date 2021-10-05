@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Client.Services
@@ -43,7 +44,7 @@ namespace TauStellwerk.Client.Services
             return engines;
         }
 
-        public async Task<EngineFullDto?> AcquireEngine(int id)
+        public async Task<EngineFull?> AcquireEngine(int id)
         {
             var client = await _service.GetHttpClient();
             var engineTask = client.GetAsync($"/engine/{id}");
@@ -54,7 +55,8 @@ namespace TauStellwerk.Client.Services
                 var response = await engineTask;
                 var json = await response.Content.ReadAsStringAsync();
                 _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMiliseconds));
-                return JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
+                var dto = JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
+                return EngineFull.Create(dto);
             }
 
             return null;
@@ -92,10 +94,10 @@ namespace TauStellwerk.Client.Services
             await client.PostAsync(path, new StringContent(string.Empty));
         }
 
-        public async Task AddOrUpdateEngine(EngineFullDto engineDto)
+        public async Task AddOrUpdateEngine(EngineFull engine)
         {
             var client = await _service.GetHttpClient();
-
+            var engineDto = engine.ToDto();
             await client.PostAsync("/engine", JsonContent.Create(engineDto, typeof(EngineFullDto), null, _serializerOptions));
         }
 

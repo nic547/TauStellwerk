@@ -2,6 +2,7 @@
 @using TauStellwerk.Client.Services
 @using System.Formats.Asn1
 @using TauStellwerk.Base.Model
+@using TauStellwerk.Client.Model
 
 @inject AppState _appState
 @inject EngineService _engineService;
@@ -48,7 +49,7 @@
     private bool _forward  = true;
 
     [Parameter]
-    public EngineFullDto Engine { get; init; } = null!;
+    public EngineFull Engine { get; init; } = null!;
 
     private int Throttle
     {

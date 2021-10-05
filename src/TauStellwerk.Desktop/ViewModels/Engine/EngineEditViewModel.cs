@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels.Engine
@@ -20,7 +21,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private readonly EngineService _engineService;
         private string _tagInputText = string.Empty;
 
-        public EngineEditViewModel(EngineFullDto engine, EngineService? engineService = null)
+        public EngineEditViewModel(EngineFull engine, EngineService? engineService = null)
         {
             Engine = engine;
             Tags = new ObservableCollection<string>(engine.Tags);
@@ -43,7 +44,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public Interaction<Unit, Unit> CloseWindow { get; } = new();
 
-        public EngineFullDto Engine { get; }
+        public EngineFull Engine { get; }
 
         public ObservableCollection<string> Tags { get; }
 
