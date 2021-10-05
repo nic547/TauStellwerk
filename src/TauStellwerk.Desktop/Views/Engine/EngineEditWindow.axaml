@@ -18,7 +18,7 @@
       <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}" Margin="0 0 0 5"/>
       <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
       <Label Content="Tags" Padding="1 1 1 0"/>
-      <ItemsRepeater Items="{Binding Tags}">
+      <ItemsRepeater Items="{Binding Engine.Tags}">
           <ItemsRepeater.Layout>
               <WrapLayout HorizontalSpacing="6"/>
           </ItemsRepeater.Layout>

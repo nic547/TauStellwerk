@@ -24,7 +24,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         public EngineEditViewModel(EngineFull engine, EngineService? engineService = null)
         {
             Engine = engine;
-            Tags = new ObservableCollection<string>(engine.Tags);
 
             _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
@@ -45,8 +44,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         public Interaction<Unit, Unit> CloseWindow { get; } = new();
 
         public EngineFull Engine { get; }
-
-        public ObservableCollection<string> Tags { get; }
 
         public string TagInputText
         {
@@ -77,7 +74,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             if (TagInputText != string.Empty)
             {
                 Engine.Tags.Add(TagInputText);
-                Tags.Add(TagInputText);
                 TagInputText = string.Empty;
             }
 
@@ -87,7 +83,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private Unit HandleRemoveTag(string tag)
         {
             Engine.Tags.Remove(tag);
-            Tags.Remove(tag);
 
             return Unit.Default;
         }
