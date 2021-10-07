@@ -3,44 +3,67 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
-        xmlns:engine1="clr-namespace:TauStellwerk.Desktop.Views.Engine"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineEditWindow"
         Title="EngineEditWindow">
-    <Design.DataContext>
-        <engine:EngineEditViewModel/>
-    </Design.DataContext>
-  <StackPanel Margin="5">
-      <Label Content="Name"/>
-      <TextBox Text="{Binding Engine.Name}" Margin="0 0 0 5"/>
-      <Label Content="DCC address"/>
-      <NumericUpDown Value="{Binding Engine.Address}" Margin="0 0 0 5" />
-      <Label Content="Top speed" Padding="1 1 1 0"/>
-      <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}" Margin="0 0 0 5"/>
-      <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
-      <Label Content="Tags" Padding="1 1 1 0"/>
-      <ItemsRepeater Items="{Binding Tags}">
+  <Design.DataContext>
+    <engine:EngineEditViewModel/>
+  </Design.DataContext>
+  <DockPanel>
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="5">
+      <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+      <Button Content="Save" Command="{Binding SaveCommand}"/>
+    </StackPanel>
+    <ScrollViewer>
+      <StackPanel Margin="5">
+        <Label Content="Name"/>
+        <TextBox Text="{Binding Engine.Name}" Margin="0 0 0 5"/>
+        <Label Content="DCC address"/>
+        <NumericUpDown Value="{Binding Engine.Address}" Margin="0 0 0 5" />
+        <Label Content="Top speed" Padding="1 1 1 0"/>
+        <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}" Margin="0 0 0 5"/>
+        <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
+        <Label Content="Tags" Padding="1 1 1 0"/>
+        <ItemsRepeater Items="{Binding Engine.Tags}">
           <ItemsRepeater.Layout>
-              <WrapLayout HorizontalSpacing="6"/>
+            <WrapLayout HorizontalSpacing="6"/>
           </ItemsRepeater.Layout>
           <ItemsRepeater.ItemTemplate>
-              <DataTemplate>
-                  <Border BorderBrush="Black" Padding="1" BorderThickness="1">
-                      <StackPanel Orientation="Horizontal">
-                          <TextBlock Text="{Binding}" VerticalAlignment="Center" Padding="2"/>
-                          <Button Content="X" Command="{Binding $parent[Window].DataContext.RemoveTagCommand, FallbackValue={}}" CommandParameter="{Binding}"/>
-                      </StackPanel>
-                  </Border>
-              </DataTemplate>
+            <DataTemplate>
+              <Border BorderBrush="Black" Padding="1" BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="{Binding}" VerticalAlignment="Center" Padding="2"/>
+                  <Button Content="X" Command="{Binding $parent[Window].DataContext.RemoveTagCommand, FallbackValue={}}" CommandParameter="{Binding}"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
           </ItemsRepeater.ItemTemplate>
-      </ItemsRepeater>
-	  <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
-		  <TextBox Text="{Binding TagInputText}" Watermark="New Tag"/>
+        </ItemsRepeater>
+        <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
+          <TextBox Text="{Binding TagInputText}" Watermark="New Tag" MinWidth="150"/>
           <Button Content="Add Tag" Command="{Binding AddTagCommand}"/>
-	  </StackPanel>
-      <StackPanel Orientation="Horizontal">
-          <Button Content="Cancel" Command="{Binding CancelCommand}"/>
-          <Button Content="Save" Command="{Binding SaveCommand}"/>
+        </StackPanel>
+        <Label Content="Functions"/>
+        <ItemsRepeater Items="{Binding Engine.Functions}">
+          <ItemsRepeater.Layout>
+            <StackLayout/>
+          </ItemsRepeater.Layout>
+          <ItemsRepeater.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal" Margin="1">
+                <TextBlock Text="F" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Number}" VerticalAlignment="Center"/>
+                <TextBlock Text=" - " VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Name}" MinWidth="200"/>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+        <StackPanel Orientation="Horizontal">
+          <Button Content="Add Function" Command="{Binding AddFunctionCommand}"/>
+          <Button Content="Remove Function" Command="{Binding RemoveLastFunctionCommand}"/>
+        </StackPanel>
       </StackPanel>
-  </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
 </Window>

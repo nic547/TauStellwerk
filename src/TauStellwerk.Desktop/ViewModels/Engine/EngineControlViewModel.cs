@@ -14,6 +14,7 @@ using JetBrains.Annotations;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels.Engine
@@ -25,7 +26,7 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private int _throttle;
         private List<FunctionDto> _sortedFunctions = new();
 
-        public EngineControlViewModel(EngineFullDto engine, EngineService? engineService = null)
+        public EngineControlViewModel(EngineFull engine, EngineService? engineService = null)
         {
             Engine = engine;
 
@@ -42,14 +43,14 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         }
 
         public EngineControlViewModel()
-            : this(new EngineFullDto
+            : this(new EngineFull()
             {
                 Name = "TESTENGINE",
             })
         {
         }
 
-        public EngineFullDto Engine { get; }
+        public EngineFull Engine { get; }
 
         public List<FunctionDto> SortedFunctions
         {

@@ -9,7 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
@@ -36,7 +36,7 @@ namespace TauStellwerk.Desktop.Views.Engine
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void OpenEngineWindow(InteractionContext<EngineFullDto, Unit> interaction)
+        private void OpenEngineWindow(InteractionContext<EngineFull, Unit> interaction)
         {
             var vm = new EngineControlViewModel(interaction.Input);
             var view = new EngineControlWindow()
@@ -49,7 +49,7 @@ namespace TauStellwerk.Desktop.Views.Engine
             interaction.SetOutput(Unit.Default);
         }
 
-        private void OpenEngineEditWindow(InteractionContext<EngineFullDto, Unit> interaction)
+        private void OpenEngineEditWindow(InteractionContext<EngineFull, Unit> interaction)
         {
             var vm = new EngineEditViewModel(interaction.Input);
             var view = new EngineEditWindow()

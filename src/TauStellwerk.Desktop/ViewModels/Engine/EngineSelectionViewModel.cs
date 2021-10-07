@@ -13,6 +13,7 @@ using Avalonia;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Util;
 
@@ -78,11 +79,11 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             }
         }
 
-        public Interaction<EngineFullDto, Unit> SelectEngine { get; } = new();
+        public Interaction<EngineFull, Unit> SelectEngine { get; } = new();
 
         public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
 
-        public Interaction<EngineFullDto, Unit> OpenEngineEditView { get; } = new();
+        public Interaction<EngineFull, Unit> OpenEngineEditView { get; } = new();
 
         public ReactiveCommand<int, Unit> AcquireEngine { get; }
 

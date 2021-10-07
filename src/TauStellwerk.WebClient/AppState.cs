@@ -4,12 +4,12 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.WebClient
 {
     public class AppState
     {
-        public ObservableCollection<EngineFullDto> ActiveEngines { get; } = new();
+        public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
     }
 }
