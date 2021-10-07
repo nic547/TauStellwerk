@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Timer = System.Timers.Timer;
 
 namespace TauStellwerk.Util
 {
@@ -18,19 +17,17 @@ namespace TauStellwerk.Util
         private readonly Func<T, Task> _func;
         private readonly List<TaskCompletionSource> _waitingTasks = new();
         private readonly SemaphoreSlim _semaphore = new(1);
-        private readonly Timer _timeoutTimer;
+        private readonly ITimer _timer;
         private T? _lastParam;
         private bool _isInTimeout;
 
-        public CoalescingLimiter(Func<T, Task> func, double timeout)
+        public CoalescingLimiter(Func<T, Task> func, double timeout, ITimer? timer = null)
         {
             _func = func;
-            _timeoutTimer = new Timer
-            {
-                Interval = timeout,
-                AutoReset = false,
-            };
-            _timeoutTimer.Elapsed += HandleTimer;
+            _timer = timer ?? new TimerWrapper();
+            _timer.Interval = timeout;
+            _timer.AutoReset = false;
+            _timer.Elapsed += HandleTimer;
         }
 
         public async Task Execute(T param)
@@ -46,7 +43,7 @@ namespace TauStellwerk.Util
             }
             else
             {
-                _timeoutTimer.Start();
+                _timer.Start();
                 _isInTimeout = true;
 
                 _semaphore.Release();
