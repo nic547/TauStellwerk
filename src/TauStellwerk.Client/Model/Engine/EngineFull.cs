@@ -1,3 +1,8 @@
+// <copyright file="EngineFull.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -44,7 +49,7 @@ namespace TauStellwerk.Client.Model
             set => SetAndNotifyIfChanged(ref _name, value);
         }
 
-        public ObservableCollection<string> Tags { get;}
+        public ObservableCollection<string> Tags { get; }
 
         public ImmutableList<ImageDto> Images { get; }
 
