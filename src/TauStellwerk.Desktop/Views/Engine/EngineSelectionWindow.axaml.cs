@@ -9,7 +9,6 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
-using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.ViewModels.Engine;

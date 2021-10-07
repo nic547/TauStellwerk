@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Mime;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model
@@ -24,7 +23,7 @@ namespace TauStellwerk.Client.Model
             LastUsed = engine.LastUsed;
             Created = engine.Created;
             _isHidden = engine.IsHidden;
-            Functions = new ObservableCollection<FunctionDto>(engine.Functions);
+            Functions = new ObservableCollection<FunctionDto>(engine.Functions.OrderBy(x => x.Number));
             _address = engine.Address;
             _topSpeed = engine.TopSpeed;
         }

@@ -4,10 +4,11 @@
 // </copyright>
 
 using System;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
@@ -31,6 +32,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             CancelCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleCancel);
             AddTagCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddTag);
             RemoveTagCommand = ReactiveCommand.Create<string, Unit>(HandleRemoveTag);
+            AddFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddFunction);
+            RemoveLastFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleRemoveLastFunction);
         }
 
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
@@ -39,7 +42,12 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public ReactiveCommand<Unit, Unit> AddTagCommand { get; }
 
+        [UsedImplicitly]
         public ReactiveCommand<string, Unit> RemoveTagCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> AddFunctionCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> RemoveLastFunctionCommand { get; }
 
         public Interaction<Unit, Unit> CloseWindow { get; } = new();
 
@@ -83,6 +91,26 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private Unit HandleRemoveTag(string tag)
         {
             Engine.Tags.Remove(tag);
+
+            return Unit.Default;
+        }
+
+        private Unit HandleAddFunction(Unit unit)
+        {
+            var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
+            lastFunctionNumber++;
+            lastFunctionNumber ??= 0;
+            Engine.Functions.Add(new FunctionDto((byte)lastFunctionNumber, string.Empty));
+            return Unit.Default;
+        }
+
+        private Unit HandleRemoveLastFunction(Unit unit)
+        {
+            var last = Engine.Functions.LastOrDefault();
+            if (last != null)
+            {
+                Engine.Functions.Remove(last);
+            }
 
             return Unit.Default;
         }
