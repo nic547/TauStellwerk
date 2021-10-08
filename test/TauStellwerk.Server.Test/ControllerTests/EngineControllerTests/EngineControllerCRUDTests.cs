@@ -125,7 +125,7 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             var engineToAdd = EngineDtoGenerator.GetEngineDto();
 
             var returnedEngine = (await GetController().UpdateOrAdd(engineToAdd)).Value;
-            var loadedEngine = await GetController().GetEngine(returnedEngine.Id);
+            var loadedEngine = await GetController().GetEngine(returnedEngine!.Id);
             var list = await GetController().GetEngines();
 
             engineToAdd.Id = returnedEngine.Id;
@@ -156,12 +156,12 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             };
 
             var result = await GetController().UpdateOrAdd(engine);
-            result.Value.Tags.Clear();
+            result.Value!.Tags.Clear();
             await GetController().UpdateOrAdd(result.Value);
 
             var finalEngine = await GetController().GetEngine(result.Value.Id);
 
-            finalEngine.Functions.Should().BeEmpty();
+            finalEngine!.Functions.Should().BeEmpty();
         }
 
         [Test]
@@ -206,11 +206,11 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             };
 
             var returnedEngine = (await GetController().UpdateOrAdd(engine)).Value;
-            returnedEngine.Functions[0].Name = "Headlights";
+            returnedEngine!.Functions[0].Name = "Headlights";
             await GetController().UpdateOrAdd(engine);
 
             var resultEngine = (await GetController().UpdateOrAdd(engine)).Value;
-            resultEngine.Functions.Should().HaveCount(1);
+            resultEngine!.Functions.Should().HaveCount(1);
             resultEngine.Functions[0].Name.Should().Be("Headlights");
         }
 
