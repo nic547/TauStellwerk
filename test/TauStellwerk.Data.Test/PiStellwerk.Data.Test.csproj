@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <DocumentationFile>.\bin\TauStellwerk.Util.Tests.xml</DocumentationFile>
