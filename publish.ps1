@@ -1,6 +1,6 @@
 param($dotnet='dotnet')
 
-$customargs="-c Release /p:PublishTrimmed=True /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link"
+$customargs="-c Release /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link --self-contained"
 $rids="linux-x64","linux-musl-x64","linux-arm64","linux-musl-arm64","win-x64","win-arm64"
 
 if (Test-Path ./publish){
@@ -15,7 +15,7 @@ foreach ($rid in $rids){
     Remove-Item ./publish/$rid/*.xml
     Remove-Item ./publish/$rid/appsettings.Development.json
     Remove-Item  ./publish/$rid/BlazorDebugProxy -Recurse
-    Remove-Item ./publish/$rid/web.config
+    Remove-Item ./publish/$rid/web.config -ea ig
 
     Write-Host "---Finsihed building $rid ---" -ForegroundColor Blue
 }
