@@ -85,7 +85,7 @@ namespace TauStellwerk.Util.Tests
 
             public void Elapse()
             {
-                Elapsed?.Invoke(this, new EventArgs() as ElapsedEventArgs);
+                Elapsed?.Invoke(this, (ElapsedEventArgs)new EventArgs());
             }
         }
     }

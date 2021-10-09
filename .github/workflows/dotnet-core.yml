@@ -9,8 +9,7 @@ on:
     - '**.csproj'
 
 env:
-  DOTNET_VERSION: '5.0.x' # The .NET SDK version to use
-
+  DOTNET_VERSION: '6.0.x' # The .NET SDK version to use
 jobs:
   build-and-test:
 
@@ -26,6 +25,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+        include-prerelease: true
 
     - name: Install dependencies
       run: dotnet restore

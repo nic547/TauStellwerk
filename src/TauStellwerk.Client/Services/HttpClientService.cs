@@ -80,7 +80,7 @@ namespace TauStellwerk.Client.Services
             return _sessionId;
         }
 
-        private async void KeepSessionAlive(object source, ElapsedEventArgs e)
+        private async void KeepSessionAlive(object? source, ElapsedEventArgs e)
         {
             var client = await GetHttpClient();
             _ = await client.PutAsync("/session", new StringContent(string.Empty));

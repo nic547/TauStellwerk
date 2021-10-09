@@ -91,7 +91,7 @@ namespace TauStellwerk.Client.Model
             OnPropertyChanged();
         }
 
-        private void UnlockState(object source, ElapsedEventArgs e)
+        private void UnlockState(object? source, ElapsedEventArgs e)
         {
             if (CurrentState == State.StoppedLocked)
             {

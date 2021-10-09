@@ -52,7 +52,7 @@ namespace TauStellwerk.Controllers
         /// <param name="id">The id of the engine.</param>
         /// <returns>The engine with the given id.</returns>
         [HttpGet("{id:int}")]
-        public async Task<EngineFullDto> GetEngine(int id)
+        public async Task<EngineFullDto?> GetEngine(int id)
         {
             return await _dbContext.Engines
                 .AsNoTracking()
@@ -61,7 +61,7 @@ namespace TauStellwerk.Controllers
                 .Include(x => x.Images)
                 .Include(x => x.Tags)
                 .SingleOrDefaultAsync(x => x.Id == id)
-                .ContinueWith(x => x.Result.ToEngineFullDto());
+                .ContinueWith(x => x?.Result?.ToEngineFullDto());
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace TauStellwerk.Controllers
         [HttpPost]
         public async Task<ActionResult<EngineFullDto>> UpdateOrAdd(EngineFullDto engineDto)
         {
-            Engine engine;
+            Engine? engine;
             if (engineDto.Id == 0)
             {
                 engine = new Engine();
