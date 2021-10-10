@@ -104,7 +104,6 @@ namespace TauStellwerk.Client.Model
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged()
         {
-            Console.WriteLine("StopButton state changed.");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
