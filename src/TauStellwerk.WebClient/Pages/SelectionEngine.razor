@@ -39,7 +39,6 @@
         var engine = await _engineService.AcquireEngine(Engine.Id);
         if (engine != null)
         {
-            Console.WriteLine($"Acquired engine {engine}");
             _appState.ActiveEngines.Add(engine);
         }
         _modalManager.IsEngineSelectionVisible = false;

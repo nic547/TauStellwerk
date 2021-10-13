@@ -359,10 +359,11 @@ MigrationBackup/
 # Resharper/Rider
 .idea/
 
-# SQLite DB testfile
+# SQLite Databases
 *.db
+*.db-shm
+*.db-wal
 
 #Place for user-created images
 src/TauStellwerk.Server/originalImages/*
 src/TauStellwerk.Server/generatedImages/*
-
