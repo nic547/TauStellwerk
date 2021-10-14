@@ -4,16 +4,13 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
-using JetBrains.Annotations;
 using ReactiveUI;
 using Splat;
-using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -24,7 +21,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         private readonly EngineService _engineService;
         private bool _isDrivingForward = true;
         private int _throttle;
-        private List<FunctionDto> _sortedFunctions = new();
 
         public EngineControlViewModel(EngineFull engine, EngineService? engineService = null)
         {
@@ -33,12 +29,11 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
             EmergencyStopCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleEStop);
+            ChangeDirectionCommand = ReactiveCommand.CreateFromTask<string, Unit>(HandleDirectionChange);
+            FunctionCommand = ReactiveCommand.CreateFromTask<ToggleButton, Unit>(HandleFunction);
 
             this.WhenAnyValue(v => v.Throttle)
                 .Select(x => _ = HandleThrottleChange(x))
-                .Subscribe();
-            this.WhenAnyValue(p => p.Engine.Functions)
-                .Select(f => SortedFunctions = f.OrderBy(o => o.Number).ToList())
                 .Subscribe();
         }
 
@@ -51,12 +46,6 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
         }
 
         public EngineFull Engine { get; }
-
-        public List<FunctionDto> SortedFunctions
-        {
-            get => _sortedFunctions;
-            private set => this.RaiseAndSetIfChanged(ref _sortedFunctions, value);
-        }
 
         public int Throttle
         {
@@ -72,6 +61,10 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
 
         public ReactiveCommand<Unit, Unit> EmergencyStopCommand { get; }
 
+        public ReactiveCommand<string, Unit> ChangeDirectionCommand { get; }
+
+        public ReactiveCommand<ToggleButton, Unit> FunctionCommand { get; }
+
         public void OnClosing()
         {
             _ = _engineService.ReleaseEngine(Engine.Id);
@@ -82,25 +75,25 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward);
         }
 
-        [UsedImplicitly]
-        private void ChangeDirection(bool shouldBeDrivingForward)
+        private async Task<Unit> HandleDirectionChange(string shouldBeDrivingForward)
         {
-            IsDrivingForward = shouldBeDrivingForward;
+            IsDrivingForward = bool.Parse(shouldBeDrivingForward);
 
             // HandleThrottleChange doesn't get notified if the value isn't changed, so it has to be done manually in that case
             // If we always did that, the HandleThrottleChange could be called twice. (once via RaiseAndSetIfChanged and once manually)
             if (Throttle == 0)
             {
-                _ = HandleThrottleChange(0);
+                await HandleThrottleChange(0);
             }
             else
             {
                 Throttle = 0;
             }
+
+            return Unit.Default;
         }
 
-        [UsedImplicitly]
-        private async Task HandleFunction(ToggleButton button)
+        private async Task<Unit> HandleFunction(ToggleButton button)
         {
             var functionNumber = (byte)(button.Tag ?? throw new InvalidOperationException());
             if (button.IsChecked == null)
@@ -109,6 +102,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine
             }
 
             await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked);
+
+            return Unit.Default;
         }
 
         private async Task<Unit> HandleEStop(Unit arg)

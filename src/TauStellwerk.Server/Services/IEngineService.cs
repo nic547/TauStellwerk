@@ -114,23 +114,23 @@ namespace TauStellwerk.Services
             return true;
         }
 
-        private bool IsValidEngineId(int engineId, [NotNullWhen(true)] out ActiveEngine? activeEngine, Session session)
+        private static bool IsCorrectSession(Session session, ActiveEngine? activeEngine)
         {
-            _activeEngines.TryGetValue(engineId, out activeEngine);
-            if (activeEngine == null)
+            if (activeEngine?.Session != session)
             {
-                ConsoleService.PrintMessage($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
+                ConsoleService.PrintWarning($"{session} tried releasing {activeEngine?.Engine}, but has wrong session");
                 return false;
             }
 
             return true;
         }
 
-        private bool IsCorrectSession(Session session, ActiveEngine? activeEngine)
+        private bool IsValidEngineId(int engineId, [NotNullWhen(true)] out ActiveEngine? activeEngine, Session session)
         {
-            if (activeEngine?.Session != session)
+            _activeEngines.TryGetValue(engineId, out activeEngine);
+            if (activeEngine == null)
             {
-                ConsoleService.PrintWarning($"{session} tried releasing {activeEngine?.Engine}, but has wrong session");
+                ConsoleService.PrintMessage($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
                 return false;
             }
 

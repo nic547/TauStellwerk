@@ -50,9 +50,7 @@ namespace TauStellwerk.Tools.LoadTest
 
             foreach (var actionType in actionTypes)
             {
-                var action = Activator.CreateInstance(actionType) as ClientActionBase;
-
-                if (action == null)
+                if (Activator.CreateInstance(actionType) is not ClientActionBase action)
                 {
                     throw new ArgumentException($"{actionType} could not be cast to ClientActionBase");
                 }

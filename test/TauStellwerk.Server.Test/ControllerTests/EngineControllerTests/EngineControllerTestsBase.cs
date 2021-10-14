@@ -64,23 +64,7 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             Connection?.Close();
         }
 
-        protected EngineController GetController()
-        {
-            return GetController(GetMock(true));
-        }
-
-        protected EngineController GetController(IEngineService engineService)
-        {
-            return new(GetContext(), engineService, SessionService!);
-        }
-
-        protected StwDbContext GetContext()
-        {
-            var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(ConnectionString);
-            return new StwDbContext(contextOptions.Options);
-        }
-
-        protected Engine GetTestEngine()
+        protected static Engine GetTestEngine()
         {
             return new()
             {
@@ -111,7 +95,7 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             };
         }
 
-        protected IEngineService GetMock(bool returns)
+        protected static IEngineService GetMock(bool returns)
         {
             var mock = new Mock<IEngineService>();
             mock.Setup(e => e.AcquireEngine(
@@ -135,6 +119,22 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
                     It.IsAny<bool?>()))
                 .ReturnsAsync(returns);
             return mock.Object;
+        }
+
+        protected EngineController GetController()
+        {
+            return GetController(GetMock(true));
+        }
+
+        protected EngineController GetController(IEngineService engineService)
+        {
+            return new(GetContext(), engineService, SessionService!);
+        }
+
+        protected StwDbContext GetContext()
+        {
+            var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(ConnectionString);
+            return new StwDbContext(contextOptions.Options);
         }
     }
 }

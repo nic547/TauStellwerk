@@ -124,10 +124,10 @@ namespace TauStellwerk.Images
 
             var newFileName = prefix + Path.GetFileName(inputFilePath);
             var newFilePath = Path.Combine(_generatedPath, newFileName);
-            var format = Path.GetExtension(newFileName).Remove(0, 1).ToUpperInvariant();
+            var fileExtension = Path.GetExtension(newFileName).Remove(0, 1).ToUpperInvariant();
 
-            var additionalArguments = AdditionalArguments.SingleOrDefault(t => t.Format == format && t.Scaling == size);
-            var success = await magick.Resize(inputFilePath, newFilePath, size, additionalArguments.Arguments);
+            var (format, scaling, arguments) = AdditionalArguments.SingleOrDefault(t => t.Format == fileExtension && t.Scaling == size);
+            var success = await magick.Resize(inputFilePath, newFilePath, size, arguments);
             if (!success)
             {
                 ConsoleService.PrintError($"Failed to downscale {Path.GetFileName(inputFilePath)}");

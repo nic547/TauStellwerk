@@ -19,8 +19,8 @@
             </StackPanel>
         </Button>
         <StackPanel>
-            <Button Command="{Binding OpenEngineList}">Select Engine</Button>
-            <Button Command="{Binding OpenSettings}" Content="Settings" />
+            <Button Command="{Binding OpenEngineListCommand}">Select Engine</Button>
+            <Button Command="{Binding OpenSettingsCommand}" Content="Settings" />
           </StackPanel>
     </DockPanel>
 </Window>

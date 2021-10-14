@@ -4,8 +4,9 @@
 // </copyright>
 
 using System;
+using System.Reactive;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
@@ -33,12 +34,21 @@ namespace TauStellwerk.Desktop.ViewModels
             {
                 StopButtonState.SetStatus(_statusService.LastKnownStatus);
             }
+
+            StopButtonCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleStopButton);
+            OpenEngineListCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenEngineList);
+            OpenSettingsCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenSettings);
         }
 
         public StopButtonState StopButtonState { get; } = new();
 
-        [UsedImplicitly]
-        private async Task StopButtonCommand()
+        public ReactiveCommand<Unit, Unit> StopButtonCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenEngineListCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenSettingsCommand { get; }
+
+        private async Task<Unit> HandleStopButton(Unit param)
         {
             var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
             var username = (await _settingsService.GetSettings()).Username;
@@ -49,10 +59,10 @@ namespace TauStellwerk.Desktop.ViewModels
             };
 
             await _statusService.SetStatus(status);
+            return Unit.Default;
         }
 
-        [UsedImplicitly]
-        private void OpenEngineList()
+        private Unit HandleOpenEngineList(Unit param)
         {
             var vm = new EngineSelectionViewModel();
             var engineWindow = new EngineSelectionWindow
@@ -61,12 +71,14 @@ namespace TauStellwerk.Desktop.ViewModels
                 ViewModel = vm,
             };
             engineWindow.Show();
+
+            return Unit.Default;
         }
 
-        [UsedImplicitly]
-        private void OpenSettings()
+        private Unit HandleOpenSettings(Unit param)
         {
             new SettingsWindow().Show();
+            return Unit.Default;
         }
     }
 }

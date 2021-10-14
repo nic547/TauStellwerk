@@ -13,7 +13,7 @@ namespace TauStellwerk.Commands
 {
     public class DccExSerialSystem : CommandSystemBase
     {
-        private SerialPort _serialPort;
+        private readonly SerialPort _serialPort;
 
         public DccExSerialSystem(IConfiguration configuration)
             : base(configuration)
@@ -21,8 +21,10 @@ namespace TauStellwerk.Commands
             ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
             // TODO #131
-            _serialPort = new SerialPort();
-            _serialPort.PortName = Config["CommandSystem:SerialPort"];
+            _serialPort = new SerialPort
+            {
+                PortName = Config["CommandSystem:SerialPort"],
+            };
             _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
             _serialPort.BaudRate = baudRate;
             _serialPort.Parity = Parity.None;
