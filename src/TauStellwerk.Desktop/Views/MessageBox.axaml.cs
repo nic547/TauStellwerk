@@ -8,17 +8,16 @@ using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views
+namespace TauStellwerk.Desktop.Views;
+
+public class MessageBox : ReactiveWindow<MessageBoxModel>
 {
-    public class MessageBox : ReactiveWindow<MessageBoxModel>
+    public MessageBox()
     {
-        public MessageBox()
-        {
-            AvaloniaXamlLoader.Load(this);
+        AvaloniaXamlLoader.Load(this);
 
 #if DEBUG
-            this.AttachDevTools();
+        this.AttachDevTools();
 #endif
-        }
     }
 }

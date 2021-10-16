@@ -5,16 +5,15 @@
 
 using System.Timers;
 
-namespace TauStellwerk.Util
+namespace TauStellwerk.Util;
+
+public interface ITimer
 {
-    public interface ITimer
-    {
-        public event ElapsedEventHandler? Elapsed;
+    public event ElapsedEventHandler? Elapsed;
 
-        public double Interval { get; set; }
+    public double Interval { get; set; }
 
-        public bool AutoReset { get; set; }
+    public bool AutoReset { get; set; }
 
-        public void Start();
-    }
+    public void Start();
 }

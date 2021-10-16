@@ -7,45 +7,44 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using TauStellwerk.Database.Model;
 
-namespace TauStellwerk.Commands
+namespace TauStellwerk.Commands;
+
+/// <summary>
+/// Implements a <see cref="CommandSystemBase"/> that does nothing.
+/// </summary>
+public class NullCommandSystem : CommandSystemBase
 {
-    /// <summary>
-    /// Implements a <see cref="CommandSystemBase"/> that does nothing.
-    /// </summary>
-    public class NullCommandSystem : CommandSystemBase
+    public NullCommandSystem(IConfiguration config)
+        : base(config)
     {
-        public NullCommandSystem(IConfiguration config)
-            : base(config)
-        {
-        }
+    }
 
-        /// <inheritdoc/>
-        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
-        {
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc/>
+    public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+    {
+        return Task.CompletedTask;
+    }
 
-        /// <inheritdoc/>
-        public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
-        {
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc/>
+    public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    {
+        return Task.CompletedTask;
+    }
 
-        /// <inheritdoc/>
-        public override Task HandleSystemStatus(bool shouldBeRunning)
-        {
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc/>
+    public override Task HandleSystemStatus(bool shouldBeRunning)
+    {
+        return Task.CompletedTask;
+    }
 
-        /// <inheritdoc/>
-        public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
-        {
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc/>
+    public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
+    {
+        return Task.CompletedTask;
+    }
 
-        public override Task CheckState()
-        {
-            return Task.CompletedTask;
-        }
+    public override Task CheckState()
+    {
+        return Task.CompletedTask;
     }
 }

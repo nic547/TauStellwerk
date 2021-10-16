@@ -10,36 +10,35 @@ using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop.ViewModels
+namespace TauStellwerk.Desktop.ViewModels;
+
+public class SettingsViewModel : ViewModelBase
 {
-    public class SettingsViewModel : ViewModelBase
+    private readonly SettingsService _settingsService;
+    private MutableSettings? _settings;
+
+    public SettingsViewModel(SettingsService? settingsService = null)
     {
-        private readonly SettingsService _settingsService;
-        private MutableSettings? _settings;
+        _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        _ = LoadSettings();
+    }
 
-        public SettingsViewModel(SettingsService? settingsService = null)
-        {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
-            _ = LoadSettings();
-        }
+    public MutableSettings? Settings
+    {
+        get => _settings;
+        set => this.RaiseAndSetIfChanged(ref _settings, value);
+    }
 
-        public MutableSettings? Settings
-        {
-            get => _settings;
-            set => this.RaiseAndSetIfChanged(ref _settings, value);
-        }
+    public async Task LoadSettings()
+    {
+        Settings = await _settingsService.GetMutableSettingsCopy();
+    }
 
-        public async Task LoadSettings()
+    public async Task SaveSettings()
+    {
+        if (_settings != null)
         {
-            Settings = await _settingsService.GetMutableSettingsCopy();
-        }
-
-        public async Task SaveSettings()
-        {
-            if (_settings != null)
-            {
-                await _settingsService.SetSettings(_settings);
-            }
+            await _settingsService.SetSettings(_settings);
         }
     }
 }

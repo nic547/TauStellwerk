@@ -10,74 +10,73 @@ using Microsoft.Extensions.Configuration;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 
-namespace TauStellwerk.Commands
+namespace TauStellwerk.Commands;
+
+/// <summary>
+/// Interface for implementing communication with a specific command system.
+/// Every implementation needs to be "registered" in <see cref="CommandSystemFactory"/> by hand.
+/// </summary>
+public abstract class CommandSystemBase
 {
-    /// <summary>
-    /// Interface for implementing communication with a specific command system.
-    /// Every implementation needs to be "registered" in <see cref="CommandSystemFactory"/> by hand.
-    /// </summary>
-    public abstract class CommandSystemBase
+    protected CommandSystemBase(IConfiguration configuration)
     {
-        protected CommandSystemBase(IConfiguration configuration)
-        {
-            Config = configuration;
-        }
+        Config = configuration;
+    }
 
-        public delegate void StatusChangeHandler(bool isRunning);
+    public delegate void StatusChangeHandler(bool isRunning);
 
-        public event StatusChangeHandler? StatusChanged;
+    public event StatusChangeHandler? StatusChanged;
 
-        protected IConfiguration Config { get; }
+    protected IConfiguration Config { get; }
 
-        public abstract Task HandleSystemStatus(bool shouldBeRunning);
+    public abstract Task HandleSystemStatus(bool shouldBeRunning);
 
-        public abstract Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards);
+    public abstract Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards);
 
-        public abstract Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards);
+    public abstract Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards);
 
-        public abstract Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
+    public abstract Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
 
-        /// <summary>
-        /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
-        /// </summary>
-        /// <param name="context"><see cref="TauStellwerk.Database.StwDbContext"/> to compare/insert engines.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public virtual Task LoadEnginesFromSystem(StwDbContext context)
-        {
-            return Task.CompletedTask;
-        }
+    /// <summary>
+    /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
+    /// </summary>
+    /// <param name="context"><see cref="TauStellwerk.Database.StwDbContext"/> to compare/insert engines.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public virtual Task LoadEnginesFromSystem(StwDbContext context)
+    {
+        return Task.CompletedTask;
+    }
 
-        /// <summary>
-        /// "Acquire" an engine - Some command system may require explicitly taking control of a engine before sending commands.
-        /// <see cref="TryReleaseEngine"/> to "release" an engine again.
-        /// </summary>
-        /// <param name="engine">The engine to acquire.</param>
-        /// <returns>A bool indicating whether the operation was successful.</returns>
-        public virtual Task<bool> TryAcquireEngine(Engine engine)
-        {
-            return Task.FromResult(true);
-        }
+    /// <summary>
+    /// "Acquire" an engine - Some command system may require explicitly taking control of a engine before sending commands.
+    /// <see cref="TryReleaseEngine"/> to "release" an engine again.
+    /// </summary>
+    /// <param name="engine">The engine to acquire.</param>
+    /// <returns>A bool indicating whether the operation was successful.</returns>
+    public virtual Task<bool> TryAcquireEngine(Engine engine)
+    {
+        return Task.FromResult(true);
+    }
 
-        /// <summary>
-        /// "Release" an engine.
-        /// <see cref="TryAcquireEngine"/> to "acquire" an engine again.
-        /// </summary>
-        /// <param name="engine">The engine to release.</param>
-        /// <returns>A bool indicating whether the operation was successful.</returns>
-        public virtual Task<bool> TryReleaseEngine(Engine engine)
-        {
-            return Task.FromResult(true);
-        }
+    /// <summary>
+    /// "Release" an engine.
+    /// <see cref="TryAcquireEngine"/> to "acquire" an engine again.
+    /// </summary>
+    /// <param name="engine">The engine to release.</param>
+    /// <returns>A bool indicating whether the operation was successful.</returns>
+    public virtual Task<bool> TryReleaseEngine(Engine engine)
+    {
+        return Task.FromResult(true);
+    }
 
-        /// <summary>
-        /// Ensure that the initial command system state is loaded and trigger <see cref="OnStatusChange(bool)"/>.
-        /// </summary>
-        /// <returns>A task representing the asynchronus operation.</returns>
-        public abstract Task CheckState();
+    /// <summary>
+    /// Ensure that the initial command system state is loaded and trigger <see cref="OnStatusChange(bool)"/>.
+    /// </summary>
+    /// <returns>A task representing the asynchronus operation.</returns>
+    public abstract Task CheckState();
 
-        protected void OnStatusChange(bool isRunning)
-        {
-            StatusChanged?.Invoke(isRunning);
-        }
+    protected void OnStatusChange(bool isRunning)
+    {
+        StatusChanged?.Invoke(isRunning);
     }
 }

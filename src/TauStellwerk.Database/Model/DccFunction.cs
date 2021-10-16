@@ -6,43 +6,42 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TauStellwerk.Base.Model;
 
-namespace TauStellwerk.Database.Model
+namespace TauStellwerk.Database.Model;
+
+/// <summary>
+/// A Function as programmed on the physical dcc decoder in a model engine.
+/// </summary>
+public class DccFunction
 {
     /// <summary>
-    /// A Function as programmed on the physical dcc decoder in a model engine.
+    /// Initializes a new instance of the <see cref="DccFunction"/> class.
     /// </summary>
-    public class DccFunction
+    /// <param name="number"><see cref="Number"/>.</param>
+    /// <param name="name"><see cref="Name"/>.</param>
+    public DccFunction(byte number, string name)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DccFunction"/> class.
-        /// </summary>
-        /// <param name="number"><see cref="Number"/>.</param>
-        /// <param name="name"><see cref="Name"/>.</param>
-        public DccFunction(byte number, string name)
-        {
-            Number = number;
-            Name = name;
-        }
+        Number = number;
+        Name = name;
+    }
 
-        /// <summary>
-        /// Gets or sets the Id of the Function as per Database.
-        /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+    /// <summary>
+    /// Gets or sets the Id of the Function as per Database.
+    /// </summary>
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets the dcc function number this function has (F0 or F18 for example).
-        /// </summary>
-        public byte Number { get; set; }
+    /// <summary>
+    /// Gets or sets the dcc function number this function has (F0 or F18 for example).
+    /// </summary>
+    public byte Number { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name that this function should have.
-        /// </summary>
-        public string Name { get; set; }
+    /// <summary>
+    /// Gets or sets the name that this function should have.
+    /// </summary>
+    public string Name { get; set; }
 
-        public FunctionDto ToFunctionDto()
-        {
-            return new(Number, Name);
-        }
+    public FunctionDto ToFunctionDto()
+    {
+        return new(Number, Name);
     }
 }

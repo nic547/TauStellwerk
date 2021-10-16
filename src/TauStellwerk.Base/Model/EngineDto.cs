@@ -6,22 +6,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace TauStellwerk.Base.Model
+namespace TauStellwerk.Base.Model;
+
+public class EngineDto
 {
-    public class EngineDto
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        public List<string> Tags { get; init; } = new List<string>();
+    public List<string> Tags { get; init; } = new List<string>();
 
-        public List<ImageDto> Images { get; init; } = new();
+    public List<ImageDto> Images { get; init; } = new();
 
-        public DateTime LastUsed { get; set; }
+    public DateTime LastUsed { get; set; }
 
-        public DateTime Created { get; set; }
+    public DateTime Created { get; set; }
 
-        public bool IsHidden { get; set; }
-    }
+    public bool IsHidden { get; set; }
 }

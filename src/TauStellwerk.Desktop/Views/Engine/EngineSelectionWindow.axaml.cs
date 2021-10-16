@@ -13,68 +13,67 @@ using TauStellwerk.Client.Model;
 using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
-namespace TauStellwerk.Desktop.Views.Engine
+namespace TauStellwerk.Desktop.Views.Engine;
+
+public class EngineSelectionWindow : ReactiveWindow<EngineSelectionViewModel>
 {
-    public class EngineSelectionWindow : ReactiveWindow<EngineSelectionViewModel>
+    public EngineSelectionWindow()
     {
-        public EngineSelectionWindow()
-        {
-            InitializeComponent();
+        InitializeComponent();
 #if DEBUG
-            this.AttachDevTools();
+        this.AttachDevTools();
 #endif
-            this.WhenActivated(d =>
-            {
-                ViewModel?.SelectEngine.RegisterHandler(OpenEngineWindow);
-                ViewModel?.OpenEngineEditView.RegisterHandler(OpenEngineEditWindow);
-                ViewModel?.CannotAcquireEngineError.RegisterHandler(ShowAcquireEngineMessage);
-            });
-        }
-
-        private void InitializeComponent()
+        this.WhenActivated(d =>
         {
-            AvaloniaXamlLoader.Load(this);
-        }
+            ViewModel?.SelectEngine.RegisterHandler(OpenEngineWindow);
+            ViewModel?.OpenEngineEditView.RegisterHandler(OpenEngineEditWindow);
+            ViewModel?.CannotAcquireEngineError.RegisterHandler(ShowAcquireEngineMessage);
+        });
+    }
 
-        private void OpenEngineWindow(InteractionContext<EngineFull, Unit> interaction)
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
+    private void OpenEngineWindow(InteractionContext<EngineFull, Unit> interaction)
+    {
+        var vm = new EngineControlViewModel(interaction.Input);
+        var view = new EngineControlWindow()
         {
-            var vm = new EngineControlViewModel(interaction.Input);
-            var view = new EngineControlWindow()
-            {
-                DataContext = vm,
-            };
+            DataContext = vm,
+        };
 
-            view.Show();
-            Close();
-            interaction.SetOutput(Unit.Default);
-        }
+        view.Show();
+        Close();
+        interaction.SetOutput(Unit.Default);
+    }
 
-        private void OpenEngineEditWindow(InteractionContext<EngineFull, Unit> interaction)
+    private void OpenEngineEditWindow(InteractionContext<EngineFull, Unit> interaction)
+    {
+        var vm = new EngineEditViewModel(interaction.Input);
+        var view = new EngineEditWindow()
         {
-            var vm = new EngineEditViewModel(interaction.Input);
-            var view = new EngineEditWindow()
-            {
-                DataContext = vm,
-            };
+            DataContext = vm,
+        };
 
-            view.Show();
-            interaction.SetOutput(Unit.Default);
-        }
+        view.Show();
+        interaction.SetOutput(Unit.Default);
+    }
 
-        private void ShowAcquireEngineMessage(InteractionContext<Unit, Unit> interaction)
+    private void ShowAcquireEngineMessage(InteractionContext<Unit, Unit> interaction)
+    {
+        var window = new MessageBox
         {
-            var window = new MessageBox
+            ViewModel = new MessageBoxModel
             {
-                ViewModel = new MessageBoxModel
-                {
-                    Title = "Cannot acquire engine",
-                    Message = "Engine seems to be in use already.",
-                },
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            };
+                Title = "Cannot acquire engine",
+                Message = "Engine seems to be in use already.",
+            },
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
 
-            window.ShowDialog(this);
-            interaction.SetOutput(Unit.Default);
-        }
+        window.ShowDialog(this);
+        interaction.SetOutput(Unit.Default);
     }
 }

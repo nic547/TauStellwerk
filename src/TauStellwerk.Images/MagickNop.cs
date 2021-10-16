@@ -5,31 +5,30 @@
 
 using System.Threading.Tasks;
 
-namespace TauStellwerk.Images
+namespace TauStellwerk.Images;
+
+/// <summary>
+/// ImageMagick class that does nothing. Used if ImageMagick isn't installed.
+/// </summary>
+public class MagickNop : MagickBase
 {
-    /// <summary>
-    /// ImageMagick class that does nothing. Used if ImageMagick isn't installed.
-    /// </summary>
-    public class MagickNop : MagickBase
+    public MagickNop(ICommandRunner runner)
+        : base(runner)
     {
-        public MagickNop(ICommandRunner runner)
-            : base(runner)
-        {
-        }
+    }
 
-        public override Task<int> GetImageWidth(string path)
-        {
-            return Task.FromResult(0);
-        }
+    public override Task<int> GetImageWidth(string path)
+    {
+        return Task.FromResult(0);
+    }
 
-        public override Task<bool> Resize(string input, string output, int outputScale, string additionalArguments = "")
-        {
-            return Task.FromResult(false);
-        }
+    public override Task<bool> Resize(string input, string output, int outputScale, string additionalArguments = "")
+    {
+        return Task.FromResult(false);
+    }
 
-        public override Task<bool> IsAvailable()
-        {
-            return Task.FromResult(true);
-        }
+    public override Task<bool> IsAvailable()
+    {
+        return Task.FromResult(true);
     }
 }

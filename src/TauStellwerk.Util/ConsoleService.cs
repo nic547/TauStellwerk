@@ -8,35 +8,34 @@ using System.Web;
 
 #nullable enable
 
-namespace TauStellwerk.Util
+namespace TauStellwerk.Util;
+
+public static class ConsoleService
 {
-    public static class ConsoleService
+    public static void PrintMessage(string message)
     {
-        public static void PrintMessage(string message)
-        {
-            Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(message)}");
-        }
+        Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(message)}");
+    }
 
-        public static void PrintWarning(string warning)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(warning)}");
-            Console.ResetColor();
-        }
+    public static void PrintWarning(string warning)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(warning)}");
+        Console.ResetColor();
+    }
 
-        public static void PrintError(string error)
-        {
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(error)}");
-            Console.ResetColor();
-        }
+    public static void PrintError(string error)
+    {
+        Console.BackgroundColor = ConsoleColor.DarkRed;
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(error)}");
+        Console.ResetColor();
+    }
 
-        public static void PrintHighlightedMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(message)}");
-            Console.ResetColor();
-        }
+    public static void PrintHighlightedMessage(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"{DateTime.Now} > {HttpUtility.HtmlDecode(message)}");
+        Console.ResetColor();
     }
 }

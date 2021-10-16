@@ -8,30 +8,29 @@ using Avalonia.ReactiveUI;
 using Splat;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop
+namespace TauStellwerk.Desktop;
+
+public static class Program
 {
-    public static class Program
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    public static void Main(string[] args)
     {
-        // Initialization code. Don't use any Avalonia, third-party APIs or any
-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-        // yet and stuff might break.
-        public static void Main(string[] args)
-        {
-            Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(HttpClientService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(EngineService));
-            Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
+        Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(HttpClientService));
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(EngineService));
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
 
-            BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
-        }
-
-        // Avalonia configuration, don't remove; also used by visual designer.
-        // ReSharper disable once MemberCanBePrivate.Global
-        public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .LogToTrace()
-                .UseReactiveUI();
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
     }
+
+    // Avalonia configuration, don't remove; also used by visual designer.
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .LogToTrace()
+            .UseReactiveUI();
 }

@@ -5,9 +5,8 @@
 
 using ReactiveUI;
 
-namespace TauStellwerk.Desktop.ViewModels
+namespace TauStellwerk.Desktop.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }

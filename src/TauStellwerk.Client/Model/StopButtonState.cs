@@ -9,102 +9,101 @@ using System.Timers;
 using JetBrains.Annotations;
 using TauStellwerk.Base.Model;
 
-namespace TauStellwerk.Client.Model
+namespace TauStellwerk.Client.Model;
+
+public class StopButtonState : INotifyPropertyChanged
 {
-    public class StopButtonState : INotifyPropertyChanged
+    private const int LockingSeconds = 3;
+
+    private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
     {
-        private const int LockingSeconds = 3;
+        AutoReset = false,
+        Enabled = false,
+    };
 
-        private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
+    private string _lastActionUsername = "Nobody";
+
+    public StopButtonState()
+    {
+        _lockingTimer.Elapsed += UnlockState;
+        _lockingTimer.AutoReset = false;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public enum State
+    {
+        Unknown,
+        Running,
+        StoppedLocked,
+        Stopped,
+    }
+
+    public bool ShouldBeEnabled => CurrentState != State.StoppedLocked && CurrentState != State.Unknown;
+
+    public bool ShouldBeDisabled => !ShouldBeEnabled;
+
+    public string TitleText
+    {
+        get
         {
-            AutoReset = false,
-            Enabled = false,
-        };
-
-        private string _lastActionUsername = "Nobody";
-
-        public StopButtonState()
-        {
-            _lockingTimer.Elapsed += UnlockState;
-            _lockingTimer.AutoReset = false;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public enum State
-        {
-            Unknown,
-            Running,
-            StoppedLocked,
-            Stopped,
-        }
-
-        public bool ShouldBeEnabled => CurrentState != State.StoppedLocked && CurrentState != State.Unknown;
-
-        public bool ShouldBeDisabled => !ShouldBeEnabled;
-
-        public string TitleText
-        {
-            get
+            return CurrentState switch
             {
-                return CurrentState switch
-                {
-                    State.Unknown => "UNKNOWN",
-                    State.Running => "RUNNING",
-                    State.StoppedLocked => "STOPPED (LOCKED)",
-                    State.Stopped => "STOPPED",
-                    _ => throw new ArgumentOutOfRangeException(),
-                };
-            }
+                State.Unknown => "UNKNOWN",
+                State.Running => "RUNNING",
+                State.StoppedLocked => "STOPPED (LOCKED)",
+                State.Stopped => "STOPPED",
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
+    }
 
-        public string BottomText
+    public string BottomText
+    {
+        get
         {
-            get
+            return CurrentState switch
             {
-                return CurrentState switch
-                {
-                    State.Unknown => "TauStellwerk is in unknown state",
-                    State.Running => $"TauStellwerk started by {_lastActionUsername}",
-                    State.Stopped or State.StoppedLocked => $"TauStellwerk started by {_lastActionUsername}",
-                    _ => throw new ArgumentOutOfRangeException(),
-                };
-            }
+                State.Unknown => "TauStellwerk is in unknown state",
+                State.Running => $"TauStellwerk started by {_lastActionUsername}",
+                State.Stopped or State.StoppedLocked => $"TauStellwerk started by {_lastActionUsername}",
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
+    }
 
-        public State CurrentState { get; private set; } = State.Unknown;
+    public State CurrentState { get; private set; } = State.Unknown;
 
-        public void SetStatus(Status status)
+    public void SetStatus(Status status)
+    {
+        _lockingTimer.Stop();
+        _lastActionUsername = status.LastActionUsername;
+        if (status.IsRunning)
         {
-            _lockingTimer.Stop();
-            _lastActionUsername = status.LastActionUsername;
-            if (status.IsRunning)
-            {
-                CurrentState = State.Running;
-            }
-            else
-            {
-                CurrentState = State.StoppedLocked;
-                _lockingTimer.Start();
-            }
-
-            OnPropertyChanged();
+            CurrentState = State.Running;
         }
-
-        private void UnlockState(object? source, ElapsedEventArgs e)
+        else
         {
-            if (CurrentState == State.StoppedLocked)
-            {
-                CurrentState = State.Stopped;
-            }
-
-            OnPropertyChanged();
+            CurrentState = State.StoppedLocked;
+            _lockingTimer.Start();
         }
 
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged()
+        OnPropertyChanged();
+    }
+
+    private void UnlockState(object? source, ElapsedEventArgs e)
+    {
+        if (CurrentState == State.StoppedLocked)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+            CurrentState = State.Stopped;
         }
+
+        OnPropertyChanged();
+    }
+
+    [NotifyPropertyChangedInvocator]
+    private void OnPropertyChanged()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
     }
 }

@@ -6,28 +6,27 @@
 using Avalonia.Controls;
 using ReactiveUI;
 
-namespace TauStellwerk.Desktop.ViewModels
+namespace TauStellwerk.Desktop.ViewModels;
+
+public class MessageBoxModel : ViewModelBase
 {
-    public class MessageBoxModel : ViewModelBase
+    private string _title = string.Empty;
+    private string _message = string.Empty;
+
+    public string Title
     {
-        private string _title = string.Empty;
-        private string _message = string.Empty;
+        get => _title;
+        set => this.RaiseAndSetIfChanged(ref _title, value);
+    }
 
-        public string Title
-        {
-            get => _title;
-            set => this.RaiseAndSetIfChanged(ref _title, value);
-        }
+    public string Message
+    {
+        get => _message;
+        set => this.RaiseAndSetIfChanged(ref _message, value);
+    }
 
-        public string Message
-        {
-            get => _message;
-            set => this.RaiseAndSetIfChanged(ref _message, value);
-        }
-
-        public static void Close(Window window)
-        {
-            window.Close();
-        }
+    public static void Close(Window window)
+    {
+        window.Close();
     }
 }

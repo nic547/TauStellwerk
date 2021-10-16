@@ -5,14 +5,13 @@
 
 using System.Collections.Generic;
 
-namespace TauStellwerk.Base.Model
+namespace TauStellwerk.Base.Model;
+
+public class EngineFullDto : EngineDto
 {
-    public class EngineFullDto : EngineDto
-    {
-        public List<FunctionDto> Functions { get; init; } = new();
+    public List<FunctionDto> Functions { get; init; } = new();
 
-        public ushort Address { get; set; }
+    public ushort Address { get; set; }
 
-        public int TopSpeed { get; set; }
-    }
+    public int TopSpeed { get; set; }
 }

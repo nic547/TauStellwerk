@@ -9,74 +9,73 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Images
+namespace TauStellwerk.Images;
+
+public abstract class MagickBase
 {
-    public abstract class MagickBase
+    private static MagickBase? _instance;
+
+    protected MagickBase(ICommandRunner runner)
     {
-        private static MagickBase? _instance;
+        Runner = runner;
+    }
 
-        protected MagickBase(ICommandRunner runner)
+    internal ICommandRunner Runner { get; }
+
+    internal List<string> SupportedFormats { get; } = new();
+
+    protected Regex SizeRegex { get; } = new(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
+
+    protected Regex FormatRegex { get; } = new(
+        "^ *(?<format>\\w+)(\\*| ) .*(r|-)(w|-)(\\+|-).*$",
+        RegexOptions.Multiline | RegexOptions.Compiled);
+
+    public static async Task<MagickBase> GetInstance()
+    {
+        return await GetInstance(new CommandRunner());
+    }
+
+    public static async Task<MagickBase> GetInstance(ICommandRunner runner)
+    {
+        if (_instance != null)
         {
-            Runner = runner;
-        }
-
-        internal ICommandRunner Runner { get; }
-
-        internal List<string> SupportedFormats { get; } = new();
-
-        protected Regex SizeRegex { get; } = new(" (?<width>\\d+)x\\d+ ", RegexOptions.Compiled);
-
-        protected Regex FormatRegex { get; } = new(
-            "^ *(?<format>\\w+)(\\*| ) .*(r|-)(w|-)(\\+|-).*$",
-            RegexOptions.Multiline | RegexOptions.Compiled);
-
-        public static async Task<MagickBase> GetInstance()
-        {
-            return await GetInstance(new CommandRunner());
-        }
-
-        public static async Task<MagickBase> GetInstance(ICommandRunner runner)
-        {
-            if (_instance != null)
-            {
-                return _instance;
-            }
-
-            var m7 = new Magick7(runner);
-            if (await m7.IsAvailable())
-            {
-                _instance = m7;
-                return _instance;
-            }
-
-            var m6 = new Magick6(runner);
-            if (await m6.IsAvailable())
-            {
-                _instance = m6;
-                return _instance;
-            }
-
-            ConsoleService.PrintWarning("No ImageMagick found on this system. Image related functionality won't be available!");
-            _instance = new MagickNop(runner);
             return _instance;
         }
 
-        /// <summary>
-        /// Clear the instance returned. Subsequent request will return a different instance.
-        /// </summary>
-        public static void ClearInstance()
+        var m7 = new Magick7(runner);
+        if (await m7.IsAvailable())
         {
-            _instance = null;
+            _instance = m7;
+            return _instance;
         }
 
-        /// <summary>
-        /// Check if a given adapter is available on a device and check what file formats are supported.
-        /// </summary>
-        /// <returns>>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public abstract Task<bool> IsAvailable();
+        var m6 = new Magick6(runner);
+        if (await m6.IsAvailable())
+        {
+            _instance = m6;
+            return _instance;
+        }
 
-        public abstract Task<int> GetImageWidth(string path);
-
-        public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale, string additionalArguments = "");
+        ConsoleService.PrintWarning("No ImageMagick found on this system. Image related functionality won't be available!");
+        _instance = new MagickNop(runner);
+        return _instance;
     }
+
+    /// <summary>
+    /// Clear the instance returned. Subsequent request will return a different instance.
+    /// </summary>
+    public static void ClearInstance()
+    {
+        _instance = null;
+    }
+
+    /// <summary>
+    /// Check if a given adapter is available on a device and check what file formats are supported.
+    /// </summary>
+    /// <returns>>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public abstract Task<bool> IsAvailable();
+
+    public abstract Task<int> GetImageWidth(string path);
+
+    public abstract Task<bool> Resize(string input, string output, [Range(1, 99)] int outputScale, string additionalArguments = "");
 }

@@ -10,52 +10,51 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace TauStellwerk.Base.Model
+namespace TauStellwerk.Base.Model;
+
+/// <summary>
+/// A user of the TauStellwerk software. Does not necessarily correspond to actual people.
+/// </summary>
+public class Session
 {
-    /// <summary>
-    /// A user of the TauStellwerk software. Does not necessarily correspond to actual people.
-    /// </summary>
-    public class Session
+    private const int SessionBytes = 32;
+
+    private readonly string? _userAgent;
+    private readonly string? _sessionId;
+    private string? _userName;
+
+    public Session()
     {
-        private const int SessionBytes = 32;
+        var rng = RandomNumberGenerator.Create();
+        var bytes = new byte[SessionBytes];
+        rng.GetBytes(bytes);
+        _sessionId = Convert.ToBase64String(bytes);
+    }
 
-        private readonly string? _userAgent;
-        private readonly string? _sessionId;
-        private string? _userName;
+    public string UserName
+    {
+        get => _userName ?? string.Empty;
+        set => _userName = HttpUtility.HtmlEncode(value);
+    }
 
-        public Session()
-        {
-            var rng = RandomNumberGenerator.Create();
-            var bytes = new byte[SessionBytes];
-            rng.GetBytes(bytes);
-            _sessionId = Convert.ToBase64String(bytes);
-        }
+    public string UserAgent
+    {
+        get => _userAgent ?? string.Empty;
+        init => _userAgent = HttpUtility.HtmlEncode(value);
+    }
 
-        public string UserName
-        {
-            get => _userName ?? string.Empty;
-            set => _userName = HttpUtility.HtmlEncode(value);
-        }
+    public DateTime LastContact { get; set; }
 
-        public string UserAgent
-        {
-            get => _userAgent ?? string.Empty;
-            init => _userAgent = HttpUtility.HtmlEncode(value);
-        }
+    public string SessionId
+    {
+        get => _sessionId ?? string.Empty;
+    }
 
-        public DateTime LastContact { get; set; }
+    public bool IsActive { get; set; } = true;
 
-        public string SessionId
-        {
-            get => _sessionId ?? string.Empty;
-        }
-
-        public bool IsActive { get; set; } = true;
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{new string(_sessionId?.Take(8).ToArray())}:{_userName}";
-        }
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"{new string(_sessionId?.Take(8).ToArray())}:{_userName}";
     }
 }

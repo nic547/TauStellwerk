@@ -9,26 +9,25 @@ using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
-namespace TauStellwerk.Desktop.Views.Engine
+namespace TauStellwerk.Desktop.Views.Engine;
+
+public class EngineControlWindow : ReactiveWindow<EngineControlViewModel>
 {
-    public class EngineControlWindow : ReactiveWindow<EngineControlViewModel>
+    public EngineControlWindow()
     {
-        public EngineControlWindow()
-        {
-            InitializeComponent();
+        InitializeComponent();
 #if DEBUG
-            this.AttachDevTools();
+        this.AttachDevTools();
 #endif
-        }
+    }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        private void Window_OnClosing(object? sender, CancelEventArgs e)
-        {
-            ViewModel?.OnClosing();
-        }
+    private void Window_OnClosing(object? sender, CancelEventArgs e)
+    {
+        ViewModel?.OnClosing();
     }
 }

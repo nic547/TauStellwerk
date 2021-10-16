@@ -6,15 +6,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace TauStellwerk
+namespace TauStellwerk;
+
+public class DefaultConfiguration
 {
-    public class DefaultConfiguration
+    public static SortedDictionary<string, string> Values { get; } = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
-        public static SortedDictionary<string, string> Values { get; } = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["connectionstrings:database"] = "Filename=StwDatabase.db;cache=shared",
-            ["originalImageDirectory"] = "./originalImages",
-            ["generatedImageDirectory"] = "./generatedImages",
-        };
-    }
+        ["connectionstrings:database"] = "Filename=StwDatabase.db;cache=shared",
+        ["originalImageDirectory"] = "./originalImages",
+        ["generatedImageDirectory"] = "./generatedImages",
+    };
 }

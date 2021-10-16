@@ -5,30 +5,29 @@
 
 using System.Timers;
 
-namespace TauStellwerk.Util
+namespace TauStellwerk.Util;
+
+/// <summary>
+/// Wraps <see cref="Timer"/> and implements <see cref="ITimer"/>.
+/// </summary>
+public class TimerWrapper : ITimer
 {
-    /// <summary>
-    /// Wraps <see cref="Timer"/> and implements <see cref="ITimer"/>.
-    /// </summary>
-    public class TimerWrapper : ITimer
+    private readonly Timer _timer;
+
+    public TimerWrapper()
     {
-        private readonly Timer _timer;
+        _timer = new Timer();
+        _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args);
+    }
 
-        public TimerWrapper()
-        {
-            _timer = new Timer();
-            _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args);
-        }
+    public event ElapsedEventHandler? Elapsed;
 
-        public event ElapsedEventHandler? Elapsed;
+    public double Interval { get => _timer.Interval; set => _timer.Interval = value; }
 
-        public double Interval { get => _timer.Interval; set => _timer.Interval = value; }
+    public bool AutoReset { get => _timer.AutoReset; set => _timer.AutoReset = value; }
 
-        public bool AutoReset { get => _timer.AutoReset; set => _timer.AutoReset = value; }
-
-        public void Start()
-        {
-            _timer.Start();
-        }
+    public void Start()
+    {
+        _timer.Start();
     }
 }

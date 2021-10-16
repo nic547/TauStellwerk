@@ -9,68 +9,67 @@ using Microsoft.Extensions.Configuration;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Commands
+namespace TauStellwerk.Commands;
+
+public class DccExSerialSystem : CommandSystemBase
 {
-    public class DccExSerialSystem : CommandSystemBase
+    private readonly SerialPort _serialPort;
+
+    public DccExSerialSystem(IConfiguration configuration)
+        : base(configuration)
     {
-        private readonly SerialPort _serialPort;
+        ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
-        public DccExSerialSystem(IConfiguration configuration)
-            : base(configuration)
+        // TODO #131
+        _serialPort = new SerialPort
         {
-            ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+            PortName = Config["CommandSystem:SerialPort"],
+        };
+        _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
+        _serialPort.BaudRate = baudRate;
+        _serialPort.Parity = Parity.None;
+        _serialPort.DataBits = 8;
+        _serialPort.StopBits = StopBits.One;
+        _serialPort.Handshake = Handshake.None;
 
-            // TODO #131
-            _serialPort = new SerialPort
+        _serialPort.Open();
+
+        Task.Run(() =>
+        {
+            while (true)
             {
-                PortName = Config["CommandSystem:SerialPort"],
-            };
-            _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
-            _serialPort.BaudRate = baudRate;
-            _serialPort.Parity = Parity.None;
-            _serialPort.DataBits = 8;
-            _serialPort.StopBits = StopBits.One;
-            _serialPort.Handshake = Handshake.None;
+                ConsoleService.PrintMessage(_serialPort.ReadLine());
+            }
+        });
+    }
 
-            _serialPort.Open();
+    public override Task HandleSystemStatus(bool shouldBeRunning)
+    {
+        _serialPort.WriteLine(shouldBeRunning ? "<1>" : "<0>");
+        return Task.CompletedTask;
+    }
 
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    ConsoleService.PrintMessage(_serialPort.ReadLine());
-                }
-            });
-        }
+    public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards)
+    {
+        _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(shouldBeDrivingForwards ? 1 : 0)}>");
+        return Task.CompletedTask;
+    }
 
-        public override Task HandleSystemStatus(bool shouldBeRunning)
-        {
-            _serialPort.WriteLine(shouldBeRunning ? "<1>" : "<0>");
-            return Task.CompletedTask;
-        }
+    public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+    {
+        _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(hasBeenDrivingForwards ? 1 : 0)}>");
+        return Task.CompletedTask;
+    }
 
-        public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards)
-        {
-            _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(shouldBeDrivingForwards ? 1 : 0)}>");
-            return Task.CompletedTask;
-        }
+    public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    {
+        _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(on ? "1" : "0")}>");
+        return Task.CompletedTask;
+    }
 
-        public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
-        {
-            _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(hasBeenDrivingForwards ? 1 : 0)}>");
-            return Task.CompletedTask;
-        }
-
-        public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
-        {
-            _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(on ? "1" : "0")}>");
-            return Task.CompletedTask;
-        }
-
-        public override Task CheckState()
-        {
-            // TODO #130
-            throw new System.NotImplementedException();
-        }
+    public override Task CheckState()
+    {
+        // TODO #130
+        throw new System.NotImplementedException();
     }
 }
