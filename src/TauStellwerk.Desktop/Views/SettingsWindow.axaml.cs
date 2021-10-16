@@ -8,22 +8,21 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views
-{
-    public class SettingsWindow : Window
-    {
-        public SettingsWindow()
-        {
-            DataContext = new SettingsViewModel();
-            InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
-        }
+namespace TauStellwerk.Desktop.Views;
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+public class SettingsWindow : Window
+{
+    public SettingsWindow()
+    {
+        DataContext = new SettingsViewModel();
+        InitializeComponent();
+#if DEBUG
+        this.AttachDevTools();
+#endif
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

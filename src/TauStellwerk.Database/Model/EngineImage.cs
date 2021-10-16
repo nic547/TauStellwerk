@@ -9,27 +9,26 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TauStellwerk.Base.Model;
 
-namespace TauStellwerk.Database.Model
+namespace TauStellwerk.Database.Model;
+
+public class EngineImage
 {
-    public class EngineImage
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
+    public string Filename { get; set; } = string.Empty;
+
+    public bool IsGenerated { get; set; }
+
+    public int Width { get; set; }
+
+    public ImageDto ToImageDto()
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        public string Filename { get; set; } = string.Empty;
-
-        public bool IsGenerated { get; set; }
-
-        public int Width { get; set; }
-
-        public ImageDto ToImageDto()
+        return new ImageDto()
         {
-            return new ImageDto()
-            {
-                Filename = Filename,
-                Width = Width,
-            };
-        }
+            Filename = Filename,
+            Width = Width,
+        };
     }
 }

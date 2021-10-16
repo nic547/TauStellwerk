@@ -150,7 +150,7 @@ namespace TauStellwerk.Test.Services
             Assert.False(await service.SetEngineFunction(session2, 1, 10, true));
         }
 
-        private (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
+        private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
         {
             var sessionService = new SessionService();
             var session = sessionService.CreateSession("TEST", "TEST");
@@ -159,7 +159,7 @@ namespace TauStellwerk.Test.Services
             return (engineService, session);
         }
 
-        private Mock<CommandSystemBase> GetAlwaysTrueMock()
+        private static Mock<CommandSystemBase> GetAlwaysTrueMock()
         {
             var configMock = new Mock<IConfiguration>();
             var mock = new Mock<CommandSystemBase>(configMock.Object);

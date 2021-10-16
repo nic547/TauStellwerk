@@ -6,10 +6,9 @@
 using System.Collections.ObjectModel;
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.WebClient
+namespace TauStellwerk.WebClient;
+
+public class AppState
 {
-    public class AppState
-    {
-        public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
-    }
+    public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
 }

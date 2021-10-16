@@ -3,12 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace TauStellwerk.Base.Model
+namespace TauStellwerk.Base.Model;
+
+public enum SortEnginesBy
 {
-        public enum SortEnginesBy
-        {
-            LastUsed,
-            Created,
-            Name,
-        }
+    LastUsed,
+    Created,
+    Name,
 }

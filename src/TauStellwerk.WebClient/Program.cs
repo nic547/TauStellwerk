@@ -11,26 +11,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.WebClient
+namespace TauStellwerk.WebClient;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static async Task Main(string[] args)
-        {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+        builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<IJSRuntime>()));
-            builder.Services.AddScoped(provider => new HttpClientService(provider.GetRequiredService<ISettingsService>()));
-            builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<HttpClientService>()));
-            builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<HttpClientService>()));
+        builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<IJSRuntime>()));
+        builder.Services.AddScoped(provider => new HttpClientService(provider.GetRequiredService<ISettingsService>()));
+        builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<HttpClientService>()));
+        builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<HttpClientService>()));
 
-            builder.Services.AddScoped(_ => new ModalManager());
-            builder.Services.AddScoped(_ => new AppState());
+        builder.Services.AddScoped(_ => new ModalManager());
+        builder.Services.AddScoped(_ => new AppState());
 
-            await builder.Build().RunAsync();
-        }
+        await builder.Build().RunAsync();
     }
 }

@@ -7,14 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TauStellwerk.Util
+namespace TauStellwerk.Util;
+
+public static class TakeRandomExtension
 {
-    public static class TakeRandomExtension
+    public static T TakeRandom<T>(this ICollection<T> collection, Random random)
     {
-        public static T TakeRandom<T>(this ICollection<T> collection, Random random)
-        {
-            var index = random.Next(0, collection.Count);
-            return collection.ElementAt(index);
-        }
+        var index = random.Next(0, collection.Count);
+        return collection.ElementAt(index);
     }
 }

@@ -5,18 +5,17 @@
 
 using System;
 
-namespace TauStellwerk.Util
-{
-    public interface INowProvider
-    {
-        public DateTime GetNow();
-    }
+namespace TauStellwerk.Util;
 
-    public class NowProvider : INowProvider
+public interface INowProvider
+{
+    public DateTime GetNow();
+}
+
+public class NowProvider : INowProvider
+{
+    public DateTime GetNow()
     {
-        public DateTime GetNow()
-        {
-            return DateTime.Now;
-        }
+        return DateTime.Now;
     }
 }

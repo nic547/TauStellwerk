@@ -17,158 +17,157 @@ using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Desktop.ViewModels.Engine
+namespace TauStellwerk.Desktop.ViewModels.Engine;
+
+public class EngineSelectionViewModel : ViewModelBase
 {
-    public class EngineSelectionViewModel : ViewModelBase
+    private readonly EngineService _engineService;
+    private readonly ObservableAsPropertyHelper<bool> _isAcquiring;
+
+    private Size _windowSize;
+
+    private bool _showHiddenEngines;
+    private SortEnginesBy _currentEngineSortMode = SortEnginesBy.LastUsed;
+    private string _currentEngineSortDirection = "DESC";
+
+    private int _currentPage;
+
+    public EngineSelectionViewModel(EngineService? engineService = null)
     {
-        private readonly EngineService _engineService;
-        private readonly ObservableAsPropertyHelper<bool> _isAcquiring;
+        _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+        _ = Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
 
-        private Size _windowSize;
+        AcquireEngine = ReactiveCommand.CreateFromTask<int, Unit>(TryAcquireEngine);
+        AcquireEngine.IsExecuting.ToProperty(this, x => x.IsAcquiring, out _isAcquiring);
 
-        private bool _showHiddenEngines;
-        private SortEnginesBy _currentEngineSortMode = SortEnginesBy.LastUsed;
-        private string _currentEngineSortDirection = "DESC";
+        EditEngineCommand = ReactiveCommand.CreateFromTask<int, Unit>(HandleEngineEditCommand);
 
-        private int _currentPage;
+        this.WhenAnyValue(
+                v => v.CurrentPage,
+                v => v.CurrentEngineSortMode,
+                v => v.CurrentEngineSortDirection,
+                v => v.ShowHiddenEngines)
+            .Select(values => _ = Load(values))
+            .Subscribe();
+    }
 
-        public EngineSelectionViewModel(EngineService? engineService = null)
+    public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
+
+    public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
+
+    public Size WindowSize
+    {
+        get => _windowSize;
+        set
         {
-            _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
-            _ = Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
-
-            AcquireEngine = ReactiveCommand.CreateFromTask<int, Unit>(TryAcquireEngine);
-            AcquireEngine.IsExecuting.ToProperty(this, x => x.IsAcquiring, out _isAcquiring);
-
-            EditEngineCommand = ReactiveCommand.CreateFromTask<int, Unit>(HandleEngineEditCommand);
-
-            this.WhenAnyValue(
-                    v => v.CurrentPage,
-                    v => v.CurrentEngineSortMode,
-                    v => v.CurrentEngineSortDirection,
-                    v => v.ShowHiddenEngines)
-                .Select(values => _ = Load(values))
-                .Subscribe();
+            this.RaiseAndSetIfChanged(ref _windowSize, value);
+            this.RaisePropertyChanged(nameof(Columns));
         }
+    }
 
-        public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
-
-        public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
-
-        public Size WindowSize
+    public int Columns
+    {
+        get
         {
-            get => _windowSize;
-            set
+            return WindowSize.Width switch
             {
-                this.RaiseAndSetIfChanged(ref _windowSize, value);
-                this.RaisePropertyChanged(nameof(Columns));
-            }
+                < 768 => 1,
+                < 992 => 2,
+                < 1400 => 4,
+                _ => 5,
+            };
         }
+    }
 
-        public int Columns
+    public Interaction<EngineFull, Unit> SelectEngine { get; } = new();
+
+    public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
+
+    public Interaction<EngineFull, Unit> OpenEngineEditView { get; } = new();
+
+    public ReactiveCommand<int, Unit> AcquireEngine { get; }
+
+    public ReactiveCommand<int, Unit> EditEngineCommand { get; }
+
+    public ObservableCollection<EngineDto> Engines { get; } = new();
+
+    public int CurrentPage
+    {
+        get => _currentPage;
+        set => this.RaiseAndSetIfChanged(ref _currentPage, value.Clamp());
+    }
+
+    public bool CanScrollForwards => Engines.Any();
+
+    public bool CanScrollBackwards => CurrentPage > 0;
+
+    public SortEnginesBy CurrentEngineSortMode
+    {
+        get => _currentEngineSortMode;
+        set => this.RaiseAndSetIfChanged(ref _currentEngineSortMode, value);
+    }
+
+    public string CurrentEngineSortDirection
+    {
+        get => _currentEngineSortDirection;
+        set => this.RaiseAndSetIfChanged(ref _currentEngineSortDirection, value);
+    }
+
+    public bool ShowHiddenEngines
+    {
+        get => _showHiddenEngines;
+        set => this.RaiseAndSetIfChanged(ref _showHiddenEngines, value);
+    }
+
+    public bool IsAcquiring => _isAcquiring.Value;
+
+    public void ScrollPages(int change)
+    {
+        CurrentPage += change;
+    }
+
+    private async Task<Unit> TryAcquireEngine(int id)
+    {
+        var engine = await _engineService.AcquireEngine(id);
+        if (engine != null)
         {
-            get
-            {
-                return WindowSize.Width switch
-                {
-                    < 768 => 1,
-                    < 992 => 2,
-                    < 1400 => 4,
-                    _ => 5,
-                };
-            }
+            await SelectEngine.Handle(engine);
         }
-
-        public Interaction<EngineFull, Unit> SelectEngine { get; } = new();
-
-        public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
-
-        public Interaction<EngineFull, Unit> OpenEngineEditView { get; } = new();
-
-        public ReactiveCommand<int, Unit> AcquireEngine { get; }
-
-        public ReactiveCommand<int, Unit> EditEngineCommand { get; }
-
-        public ObservableCollection<EngineDto> Engines { get; } = new();
-
-        public int CurrentPage
+        else
         {
-            get => _currentPage;
-            set => this.RaiseAndSetIfChanged(ref _currentPage, value.Clamp());
+            await CannotAcquireEngineError.Handle(Unit.Default);
         }
 
-        public bool CanScrollForwards => Engines.Any();
+        return Unit.Default;
+    }
 
-        public bool CanScrollBackwards => CurrentPage > 0;
+    private async Task Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
+    {
+        var sortDescending = args.SortDirection == "DESC";
+        var engines = await _engineService.GetEngines(args.Page, args.SortBy, sortDescending);
 
-        public SortEnginesBy CurrentEngineSortMode
+        Engines.Clear();
+        foreach (var engine in engines)
         {
-            get => _currentEngineSortMode;
-            set => this.RaiseAndSetIfChanged(ref _currentEngineSortMode, value);
+            Engines.Add(engine);
         }
 
-        public string CurrentEngineSortDirection
+        this.RaisePropertyChanged(nameof(CanScrollForwards));
+        this.RaisePropertyChanged(nameof(CanScrollBackwards));
+    }
+
+    private async Task<Unit> HandleEngineEditCommand(int id)
+    {
+        var engine = await _engineService.AcquireEngine(id);
+        if (engine != null)
         {
-            get => _currentEngineSortDirection;
-            set => this.RaiseAndSetIfChanged(ref _currentEngineSortDirection, value);
+            await OpenEngineEditView.Handle(engine);
         }
-
-        public bool ShowHiddenEngines
+        else
         {
-            get => _showHiddenEngines;
-            set => this.RaiseAndSetIfChanged(ref _showHiddenEngines, value);
+            await CannotAcquireEngineError.Handle(Unit.Default);
         }
 
-        public bool IsAcquiring => _isAcquiring.Value;
-
-        public void ScrollPages(int change)
-        {
-            CurrentPage += change;
-        }
-
-        private async Task<Unit> TryAcquireEngine(int id)
-        {
-            var engine = await _engineService.AcquireEngine(id);
-            if (engine != null)
-            {
-                await SelectEngine.Handle(engine);
-            }
-            else
-            {
-                await CannotAcquireEngineError.Handle(Unit.Default);
-            }
-
-            return Unit.Default;
-        }
-
-        private async Task Load((int Page, SortEnginesBy SortBy, string SortDirection, bool ShowHidden) args)
-        {
-            var sortDescending = args.SortDirection == "DESC";
-            var engines = await _engineService.GetEngines(args.Page, args.SortBy, sortDescending);
-
-            Engines.Clear();
-            foreach (var engine in engines)
-            {
-                Engines.Add(engine);
-            }
-
-            this.RaisePropertyChanged(nameof(CanScrollForwards));
-            this.RaisePropertyChanged(nameof(CanScrollBackwards));
-        }
-
-        private async Task<Unit> HandleEngineEditCommand(int id)
-        {
-            var engine = await _engineService.AcquireEngine(id);
-            if (engine != null)
-            {
-                await OpenEngineEditView.Handle(engine);
-            }
-            else
-            {
-                await CannotAcquireEngineError.Handle(Unit.Default);
-            }
-
-            return Unit.Default;
-        }
+        return Unit.Default;
     }
 }

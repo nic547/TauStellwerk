@@ -5,27 +5,26 @@
 
 using System.Web;
 
-namespace TauStellwerk.Database.Model
+namespace TauStellwerk.Database.Model;
+
+/// <summary>
+/// Data used by the ECoS-related components.
+/// </summary>
+public record ECoSEngineData
 {
+    private readonly string _name = string.Empty;
+
     /// <summary>
-    /// Data used by the ECoS-related components.
+    /// Gets the Name of the choo-choo as in the ECoS.
     /// </summary>
-    public record ECoSEngineData
+    public string Name
     {
-        private readonly string _name = string.Empty;
-
-        /// <summary>
-        /// Gets the Name of the choo-choo as in the ECoS.
-        /// </summary>
-        public string Name
-        {
-            get => _name;
-            init => _name = HttpUtility.HtmlEncode(value);
-        }
-
-        /// <summary>
-        /// Gets the Id of an engine in the ECoS.
-        /// </summary>
-        public int Id { get; init; }
+        get => _name;
+        init => _name = HttpUtility.HtmlEncode(value);
     }
+
+    /// <summary>
+    /// Gets the Id of an engine in the ECoS.
+    /// </summary>
+    public int Id { get; init; }
 }

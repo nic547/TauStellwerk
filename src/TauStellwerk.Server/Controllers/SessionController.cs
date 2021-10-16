@@ -8,66 +8,65 @@ using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Services;
 
-namespace TauStellwerk.Controllers
+namespace TauStellwerk.Controllers;
+
+/// <summary>
+/// Controller handling user stuff.
+/// </summary>
+[ApiController]
+[Route("session")]
+public class SessionController : Controller
 {
-    /// <summary>
-    /// Controller handling user stuff.
-    /// </summary>
-    [ApiController]
-    [Route("session")]
-    public class SessionController : Controller
+    private readonly SessionService _sessionService;
+
+    public SessionController(SessionService sessionService)
     {
-        private readonly SessionService _sessionService;
+        _sessionService = sessionService;
+    }
 
-        public SessionController(SessionService sessionService)
+    /// <summary>
+    /// Get session associated with a given sessionId.
+    /// </summary>
+    /// <param name="sessionId">The sessionId.</param>
+    /// <returns>The session, if found, otherwise null.</returns>
+    [HttpGet]
+    public ActionResult<Session?> GetAssociatedSession([FromHeader(Name = "Session-Id")] string? sessionId)
+    {
+        if (sessionId == null)
         {
-            _sessionService = sessionService;
+            return Ok();
         }
 
-        /// <summary>
-        /// Get session associated with a given sessionId.
-        /// </summary>
-        /// <param name="sessionId">The sessionId.</param>
-        /// <returns>The session, if found, otherwise null.</returns>
-        [HttpGet]
-        public ActionResult<Session?> GetAssociatedSession([FromHeader(Name = "Session-Id")] string? sessionId)
-        {
-            if (sessionId == null)
-            {
-                return Ok();
-            }
+        return _sessionService.TryGetSession(sessionId);
+    }
 
-            return _sessionService.TryGetSession(sessionId);
-        }
+    /// <summary>
+    /// HTTP GET.
+    /// </summary>
+    /// <returns>A list of active users.</returns>
+    [HttpGet("list")]
+    public IReadOnlyList<Session> Get()
+    {
+        return _sessionService.GetSessions();
+    }
 
-        /// <summary>
-        /// HTTP GET.
-        /// </summary>
-        /// <returns>A list of active users.</returns>
-        [HttpGet("list")]
-        public IReadOnlyList<Session> Get()
-        {
-            return _sessionService.GetSessions();
-        }
+    [HttpPost]
+    public ActionResult CreateSession([FromBody] string username)
+    {
+        var userAgent = Request?.Headers["User-Agent"].ToString();
+        var session = _sessionService.CreateSession(username, userAgent);
+        return Ok(session.SessionId);
+    }
 
-        [HttpPost]
-        public ActionResult CreateSession([FromBody] string username)
-        {
-            var userAgent = Request?.Headers["User-Agent"].ToString();
-            var session = _sessionService.CreateSession(username, userAgent);
-            return Ok(session.SessionId);
-        }
+    [HttpPut]
+    public void Put([FromHeader(Name = "Session-Id")] string sessionId)
+    {
+        _sessionService.TryUpdateSessionLastContact(sessionId);
+    }
 
-        [HttpPut]
-        public void Put([FromHeader(Name = "Session-Id")] string sessionId)
-        {
-            _sessionService.TryUpdateSessionLastContact(sessionId);
-        }
-
-        [HttpPut("username")]
-        public void Put([FromBody] string newUsername, [FromHeader(Name = "Session-Id")] string sessionId)
-        {
-            _sessionService.RenameSessionUser(sessionId, newUsername);
-        }
+    [HttpPut("username")]
+    public void Put([FromBody] string newUsername, [FromHeader(Name = "Session-Id")] string sessionId)
+    {
+        _sessionService.RenameSessionUser(sessionId, newUsername);
     }
 }

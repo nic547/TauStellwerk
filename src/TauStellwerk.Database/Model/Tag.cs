@@ -8,37 +8,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace TauStellwerk.Database.Model
+namespace TauStellwerk.Database.Model;
+
+[Index(nameof(Name), IsUnique = true)]
+public class Tag
 {
-    [Index(nameof(Name), IsUnique = true)]
-    public class Tag
+    public Tag(int id, string name)
     {
-        public Tag(int id, string name)
+        Id = id;
+        Name = name;
+    }
+
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public List<Engine> Engines { get; } = new();
+
+    public static async Task<List<Tag>> GetTagsFromStrings(List<string> tags, StwDbContext dbContext)
+    {
+        var result = new List<Tag>();
+
+        result.AddRange(await dbContext.Tags.Where(t => tags.Contains(t.Name)).ToListAsync());
+
+        tags.RemoveAll(t => result.Select(x => x.Name).Contains(t));
+
+        foreach (var missingTag in tags)
         {
-            Id = id;
-            Name = name;
+            result.Add(new Tag(0, missingTag));
         }
 
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public List<Engine> Engines { get; } = new();
-
-        public static async Task<List<Tag>> GetTagsFromStrings(List<string> tags, StwDbContext dbContext)
-        {
-            var result = new List<Tag>();
-
-            result.AddRange(await dbContext.Tags.Where(t => tags.Contains(t.Name)).ToListAsync());
-
-            tags.RemoveAll(t => result.Select(x => x.Name).Contains(t));
-
-            foreach (var missingTag in tags)
-            {
-                result.Add(new Tag(0, missingTag));
-            }
-
-            return result;
-        }
+        return result;
     }
 }

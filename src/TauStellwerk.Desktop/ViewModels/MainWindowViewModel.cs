@@ -4,8 +4,9 @@
 // </copyright>
 
 using System;
+using System.Reactive;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
@@ -14,59 +15,69 @@ using TauStellwerk.Desktop.ViewModels.Engine;
 using TauStellwerk.Desktop.Views;
 using TauStellwerk.Desktop.Views.Engine;
 
-namespace TauStellwerk.Desktop.ViewModels
+namespace TauStellwerk.Desktop.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase
 {
-    public class MainWindowViewModel : ViewModelBase
+    private readonly SettingsService _settingsService;
+    private readonly StatusService _statusService;
+
+    public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
     {
-        private readonly SettingsService _settingsService;
-        private readonly StatusService _statusService;
-
-        public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
+        _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
+        _statusService.StatusChanged += (status) =>
         {
-            _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
-            _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
-            _statusService.StatusChanged += (status) =>
-            {
-                StopButtonState.SetStatus(status);
-            };
-            if (_statusService.LastKnownStatus != null)
-            {
-                StopButtonState.SetStatus(_statusService.LastKnownStatus);
-            }
+            StopButtonState.SetStatus(status);
+        };
+        if (_statusService.LastKnownStatus != null)
+        {
+            StopButtonState.SetStatus(_statusService.LastKnownStatus);
         }
 
-        public StopButtonState StopButtonState { get; } = new();
+        StopButtonCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleStopButton);
+        OpenEngineListCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenEngineList);
+        OpenSettingsCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenSettings);
+    }
 
-        [UsedImplicitly]
-        private async Task StopButtonCommand()
+    public StopButtonState StopButtonState { get; } = new();
+
+    public ReactiveCommand<Unit, Unit> StopButtonCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> OpenEngineListCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> OpenSettingsCommand { get; }
+
+    private async Task<Unit> HandleStopButton(Unit param)
+    {
+        var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
+        var username = (await _settingsService.GetSettings()).Username;
+        var status = new Status()
         {
-            var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
-            var username = (await _settingsService.GetSettings()).Username;
-            var status = new Status()
-            {
-                IsRunning = !isCurrentlyRunning ?? true,
-                LastActionUsername = username,
-            };
+            IsRunning = !isCurrentlyRunning ?? true,
+            LastActionUsername = username,
+        };
 
-            await _statusService.SetStatus(status);
-        }
+        await _statusService.SetStatus(status);
+        return Unit.Default;
+    }
 
-        [UsedImplicitly]
-        private void OpenEngineList()
+    private Unit HandleOpenEngineList(Unit param)
+    {
+        var vm = new EngineSelectionViewModel();
+        var engineWindow = new EngineSelectionWindow
         {
-            var vm = new EngineSelectionViewModel();
-            var engineWindow = new EngineSelectionWindow
-            {
-                DataContext = vm,
-                ViewModel = vm,
-            };
-            engineWindow.Show();
-        }
+            DataContext = vm,
+            ViewModel = vm,
+        };
+        engineWindow.Show();
 
-        [UsedImplicitly]
-        private void OpenSettings()
-        {
-            new SettingsWindow().Show();
-        }
+        return Unit.Default;
+    }
+
+    private Unit HandleOpenSettings(Unit param)
+    {
+        new SettingsWindow().Show();
+        return Unit.Default;
     }
 }

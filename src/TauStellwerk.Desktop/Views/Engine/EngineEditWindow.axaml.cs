@@ -11,39 +11,38 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
-namespace TauStellwerk.Desktop.Views.Engine
+namespace TauStellwerk.Desktop.Views.Engine;
+
+public class EngineEditWindow : ReactiveWindow<EngineEditViewModel>
 {
-    public class EngineEditWindow : ReactiveWindow<EngineEditViewModel>
+    public EngineEditWindow()
     {
-        public EngineEditWindow()
+        InitializeComponent();
+
+        this.WhenActivated(d =>
         {
-            InitializeComponent();
-
-            this.WhenActivated(d =>
+            if (ViewModel == null)
             {
-                if (ViewModel == null)
-                {
-                    throw new InvalidOperationException();
-                }
+                throw new InvalidOperationException();
+            }
 
-                ViewModel.CloseWindow.RegisterHandler(HandleCloseWindow);
-                Closing += ViewModel.HandleWindowClosing;
-            });
+            ViewModel.CloseWindow.RegisterHandler(HandleCloseWindow);
+            Closing += ViewModel.HandleWindowClosing;
+        });
 
 #if DEBUG
-            this.AttachDevTools();
+        this.AttachDevTools();
 #endif
-        }
+    }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        private void HandleCloseWindow(InteractionContext<Unit, Unit> context)
-        {
-            Close();
-            context.SetOutput(Unit.Default);
-        }
+    private void HandleCloseWindow(InteractionContext<Unit, Unit> context)
+    {
+        Close();
+        context.SetOutput(Unit.Default);
     }
 }

@@ -15,104 +15,103 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop.ViewModels.Engine
+namespace TauStellwerk.Desktop.ViewModels.Engine;
+
+public class EngineEditViewModel : ViewModelBase
 {
-    public class EngineEditViewModel : ViewModelBase
+    private readonly EngineService _engineService;
+    private string _tagInputText = string.Empty;
+
+    public EngineEditViewModel(EngineFull engine, EngineService? engineService = null)
     {
-        private readonly EngineService _engineService;
-        private string _tagInputText = string.Empty;
+        Engine = engine;
 
-        public EngineEditViewModel(EngineFull engine, EngineService? engineService = null)
+        _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+
+        SaveCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleSave);
+        CancelCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleCancel);
+        AddTagCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddTag);
+        RemoveTagCommand = ReactiveCommand.Create<string, Unit>(HandleRemoveTag);
+        AddFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddFunction);
+        RemoveLastFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleRemoveLastFunction);
+    }
+
+    public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> AddTagCommand { get; }
+
+    [UsedImplicitly]
+    public ReactiveCommand<string, Unit> RemoveTagCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> AddFunctionCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> RemoveLastFunctionCommand { get; }
+
+    public Interaction<Unit, Unit> CloseWindow { get; } = new();
+
+    public EngineFull Engine { get; }
+
+    public string TagInputText
+    {
+        get => _tagInputText;
+        set => this.RaiseAndSetIfChanged(ref _tagInputText, value);
+    }
+
+    public async void HandleWindowClosing(object? sender, EventArgs e)
+    {
+        await _engineService.ReleaseEngine(Engine.Id);
+    }
+
+    private async Task<Unit> HandleSave(Unit arg)
+    {
+        await _engineService.AddOrUpdateEngine(Engine);
+        await CloseWindow.Handle(arg);
+        return Unit.Default;
+    }
+
+    private async Task<Unit> HandleCancel(Unit arg)
+    {
+        await CloseWindow.Handle(arg);
+        return Unit.Default;
+    }
+
+    private Unit HandleAddTag(Unit arg)
+    {
+        if (TagInputText != string.Empty)
         {
-            Engine = engine;
-
-            _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
-
-            SaveCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleSave);
-            CancelCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleCancel);
-            AddTagCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddTag);
-            RemoveTagCommand = ReactiveCommand.Create<string, Unit>(HandleRemoveTag);
-            AddFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleAddFunction);
-            RemoveLastFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleRemoveLastFunction);
+            Engine.Tags.Add(TagInputText);
+            TagInputText = string.Empty;
         }
 
-        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+        return Unit.Default;
+    }
 
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+    private Unit HandleRemoveTag(string tag)
+    {
+        Engine.Tags.Remove(tag);
 
-        public ReactiveCommand<Unit, Unit> AddTagCommand { get; }
+        return Unit.Default;
+    }
 
-        [UsedImplicitly]
-        public ReactiveCommand<string, Unit> RemoveTagCommand { get; }
+    private Unit HandleAddFunction(Unit unit)
+    {
+        var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
+        lastFunctionNumber++;
+        lastFunctionNumber ??= 0;
+        Engine.Functions.Add(new FunctionDto((byte)lastFunctionNumber, string.Empty));
+        return Unit.Default;
+    }
 
-        public ReactiveCommand<Unit, Unit> AddFunctionCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> RemoveLastFunctionCommand { get; }
-
-        public Interaction<Unit, Unit> CloseWindow { get; } = new();
-
-        public EngineFull Engine { get; }
-
-        public string TagInputText
+    private Unit HandleRemoveLastFunction(Unit unit)
+    {
+        var last = Engine.Functions.LastOrDefault();
+        if (last != null)
         {
-            get => _tagInputText;
-            set => this.RaiseAndSetIfChanged(ref _tagInputText, value);
+            Engine.Functions.Remove(last);
         }
 
-        public async void HandleWindowClosing(object? sender, EventArgs e)
-        {
-            await _engineService.ReleaseEngine(Engine.Id);
-        }
-
-        private async Task<Unit> HandleSave(Unit arg)
-        {
-            await _engineService.AddOrUpdateEngine(Engine);
-            await CloseWindow.Handle(arg);
-            return Unit.Default;
-        }
-
-        private async Task<Unit> HandleCancel(Unit arg)
-        {
-            await CloseWindow.Handle(arg);
-            return Unit.Default;
-        }
-
-        private Unit HandleAddTag(Unit arg)
-        {
-            if (TagInputText != string.Empty)
-            {
-                Engine.Tags.Add(TagInputText);
-                TagInputText = string.Empty;
-            }
-
-            return Unit.Default;
-        }
-
-        private Unit HandleRemoveTag(string tag)
-        {
-            Engine.Tags.Remove(tag);
-
-            return Unit.Default;
-        }
-
-        private Unit HandleAddFunction(Unit unit)
-        {
-            var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
-            lastFunctionNumber++;
-            lastFunctionNumber ??= 0;
-            Engine.Functions.Add(new FunctionDto((byte)lastFunctionNumber, string.Empty));
-            return Unit.Default;
-        }
-
-        private Unit HandleRemoveLastFunction(Unit unit)
-        {
-            var last = Engine.Functions.LastOrDefault();
-            if (last != null)
-            {
-                Engine.Functions.Remove(last);
-            }
-
-            return Unit.Default;
-        }
+        return Unit.Default;
     }
 }

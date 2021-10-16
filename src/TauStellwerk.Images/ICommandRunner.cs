@@ -8,47 +8,46 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Images
+namespace TauStellwerk.Images;
+
+public interface ICommandRunner
 {
-    public interface ICommandRunner
-    {
-        public Task<(int ExitCode, string Output)> RunCommand(string command, string arguments);
-    }
+    public Task<(int ExitCode, string Output)> RunCommand(string command, string arguments);
+}
 
-    public class CommandRunner : ICommandRunner
+public class CommandRunner : ICommandRunner
+{
+    public async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
     {
-        public async Task<(int ExitCode, string Output)> RunCommand(string command, string arguments)
+        var p = new Process
         {
-            var p = new Process
+            StartInfo =
             {
-                StartInfo =
-                {
-                    FileName = command,
-                    Arguments = arguments,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    RedirectStandardInput = true,
-                },
-            };
-            string output = string.Empty;
+                FileName = command,
+                Arguments = arguments,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+            },
+        };
+        string output = string.Empty;
 
-            try
-            {
-                p.Start();
-                output = await p.StandardOutput.ReadToEndAsync();
-                await p.WaitForExitAsync();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            if (p.ExitCode != 0)
-            {
-                ConsoleService.PrintError("ImageMagick failed with \"" + await p.StandardError.ReadToEndAsync() + "\"");
-            }
-
-            return (p.ExitCode, output);
+        try
+        {
+            p.Start();
+            output = await p.StandardOutput.ReadToEndAsync();
+            await p.WaitForExitAsync();
         }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (p.ExitCode != 0)
+        {
+            ConsoleService.PrintError("ImageMagick failed with \"" + await p.StandardError.ReadToEndAsync() + "\"");
+        }
+
+        return (p.ExitCode, output);
     }
 }

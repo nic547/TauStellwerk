@@ -6,10 +6,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace TauStellwerk.Client.Services
+namespace TauStellwerk.Client.Services;
+
+public interface IHttpClientService
 {
-    public interface IHttpClientService
-    {
-        Task<HttpClient> GetHttpClient();
-    }
+    Task<HttpClient> GetHttpClient();
 }

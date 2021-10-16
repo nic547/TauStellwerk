@@ -6,22 +6,21 @@
 using System.Threading.Tasks;
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.Client.Services
+namespace TauStellwerk.Client.Services;
+
+public interface ISettingsService
 {
-    public interface ISettingsService
-    {
-        public delegate void SettingsChange(ImmutableSettings settings);
+    public delegate void SettingsChange(ImmutableSettings settings);
 
-        public event SettingsChange SettingsChanged;
+    public event SettingsChange SettingsChanged;
 
-        /// <summary>
-        /// Returns a immutable object with the currently active settings.
-        /// </summary>
-        /// <returns>A instance of <see cref="ImmutableSettings"/>.</returns>
-        public Task<ImmutableSettings> GetSettings();
+    /// <summary>
+    /// Returns a immutable object with the currently active settings.
+    /// </summary>
+    /// <returns>A instance of <see cref="ImmutableSettings"/>.</returns>
+    public Task<ImmutableSettings> GetSettings();
 
-        public Task<MutableSettings> GetMutableSettingsCopy();
+    public Task<MutableSettings> GetMutableSettingsCopy();
 
-        public Task SetSettings(MutableSettings mutableSettings);
-    }
+    public Task SetSettings(MutableSettings mutableSettings);
 }

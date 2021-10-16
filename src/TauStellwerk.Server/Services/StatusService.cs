@@ -9,77 +9,76 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Services
+namespace TauStellwerk.Services;
+
+public class StatusService
 {
-    public class StatusService
+    private readonly CommandSystemBase _system;
+
+    private readonly List<TaskCompletionSource<Status>> _statusAwaiters = new();
+
+    private bool _isRunning;
+    private string _lastActionUsername = "SYSTEM";
+
+    public StatusService(CommandSystemBase system)
     {
-        private readonly CommandSystemBase _system;
+        _system = system;
 
-        private readonly List<TaskCompletionSource<Status>> _statusAwaiters = new();
+        _system.StatusChanged += HandleStatusEvent;
+        _system.CheckState();
+    }
 
-        private bool _isRunning;
-        private string _lastActionUsername = "SYSTEM";
+    public Status CheckStatus()
+    {
+        return new() { IsRunning = _isRunning, LastActionUsername = _lastActionUsername };
+    }
 
-        public StatusService(CommandSystemBase system)
+    public async Task<Status> WaitForStatusChangeAsync()
+    {
+        var tcs = new TaskCompletionSource<Status>();
+        lock (_statusAwaiters)
         {
-            _system = system;
-
-            _system.StatusChanged += HandleStatusEvent;
-            _system.CheckState();
+            _statusAwaiters.Add(tcs);
         }
 
-        public Status CheckStatus()
-        {
-            return new() { IsRunning = _isRunning, LastActionUsername = _lastActionUsername };
-        }
+        return await tcs.Task;
+    }
 
-        public async Task<Status> WaitForStatusChangeAsync()
+    public async Task HandleStatusCommand(bool shouldBeRunning, string username)
+    {
+        var task = _system.HandleSystemStatus(shouldBeRunning);
+
+        _isRunning = shouldBeRunning;
+        _lastActionUsername = username;
+        NotifyStatusChanged();
+
+        await task;
+    }
+
+    private void HandleStatusEvent(bool isRunning)
+    {
+        _isRunning = isRunning;
+        _lastActionUsername = "SYSTEM";
+        ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the TauStellwerk");
+        NotifyStatusChanged();
+    }
+
+    private void NotifyStatusChanged()
+    {
+        Status status = new()
         {
-            var tcs = new TaskCompletionSource<Status>();
-            lock (_statusAwaiters)
+            IsRunning = _isRunning,
+            LastActionUsername = _lastActionUsername,
+        };
+
+        lock (_statusAwaiters)
+        {
+            foreach (var awaiter in _statusAwaiters)
             {
-                _statusAwaiters.Add(tcs);
+                awaiter.SetResult(status);
             }
 
-            return await tcs.Task;
-        }
-
-        public async Task HandleStatusCommand(bool shouldBeRunning, string username)
-        {
-            var task = _system.HandleSystemStatus(shouldBeRunning);
-
-            _isRunning = shouldBeRunning;
-            _lastActionUsername = username;
-            NotifyStatusChanged();
-
-            await task;
-        }
-
-        private void HandleStatusEvent(bool isRunning)
-        {
-            _isRunning = isRunning;
-            _lastActionUsername = "SYSTEM";
-            ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the TauStellwerk");
-            NotifyStatusChanged();
-        }
-
-        private void NotifyStatusChanged()
-        {
-            Status status = new()
-            {
-                IsRunning = _isRunning,
-                LastActionUsername = _lastActionUsername,
-            };
-
-            lock (_statusAwaiters)
-            {
-                foreach (var awaiter in _statusAwaiters)
-                {
-                    awaiter.SetResult(status);
-                }
-
-                _statusAwaiters.Clear();
-            }
+            _statusAwaiters.Clear();
         }
     }
 }

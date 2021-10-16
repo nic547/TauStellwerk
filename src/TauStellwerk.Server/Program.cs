@@ -16,80 +16,79 @@ using TauStellwerk.Database;
 using TauStellwerk.Images;
 using TauStellwerk.Util;
 
-namespace TauStellwerk
+namespace TauStellwerk;
+
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args)
-                .Build()
-                .MigrateDatabase()
-                .LoadEngines()
-                .SetupImages()
-                .Run();
-        }
+        CreateHostBuilder(args)
+            .Build()
+            .MigrateDatabase()
+            .LoadEngines()
+            .SetupImages()
+            .Run();
+    }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
             .ConfigureHostConfiguration((config) =>
-            config.AddInMemoryCollection(DefaultConfiguration.Values));
+                config.AddInMemoryCollection(DefaultConfiguration.Values));
 
-        public static IHost MigrateDatabase(this IHost host)
+    public static IHost MigrateDatabase(this IHost host)
+    {
+        var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+
+        using var scope = serviceScopeFactory.CreateScope();
+
+        var services = scope.ServiceProvider;
+        var dbContext = services.GetRequiredService<StwDbContext>();
+
+        if (dbContext.Database.GetPendingMigrations().Any())
         {
-            var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
-
-            using var scope = serviceScopeFactory.CreateScope();
-
-            var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<StwDbContext>();
-
-            if (dbContext.Database.GetPendingMigrations().Any())
-            {
-                ConsoleService.PrintHighlightedMessage("Applying database migrations.");
-                dbContext.Database.Migrate();
-                ConsoleService.PrintHighlightedMessage("Database migrations applied.");
-            }
-            else
-            {
-                ConsoleService.PrintMessage("No database migrations necessary.");
-            }
-
-            return host;
+            ConsoleService.PrintHighlightedMessage("Applying database migrations.");
+            dbContext.Database.Migrate();
+            ConsoleService.PrintHighlightedMessage("Database migrations applied.");
+        }
+        else
+        {
+            ConsoleService.PrintMessage("No database migrations necessary.");
         }
 
-        public static IHost LoadEngines(this IHost host)
-        {
-            var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
-            var scope = serviceScopeFactory.CreateScope();
+        return host;
+    }
 
-            var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<StwDbContext>();
-            var commandSystem = services.GetRequiredService<CommandSystemBase>();
+    public static IHost LoadEngines(this IHost host)
+    {
+        var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+        var scope = serviceScopeFactory.CreateScope();
 
-            _ = commandSystem.LoadEnginesFromSystem(dbContext);
+        var services = scope.ServiceProvider;
+        var dbContext = services.GetRequiredService<StwDbContext>();
+        var commandSystem = services.GetRequiredService<CommandSystemBase>();
 
-            return host;
-        }
+        _ = commandSystem.LoadEnginesFromSystem(dbContext);
 
-        public static IHost SetupImages(this IHost host)
-        {
-            var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
-            var scope = serviceScopeFactory.CreateScope();
-            var services = scope.ServiceProvider;
+        return host;
+    }
 
-            var config = services.GetRequiredService<IConfiguration>();
-            var system = new ImageSystem(
-                services.GetRequiredService<StwDbContext>(),
-                config["originalImageDirectory"],
-                config["generatedImageDirectory"]);
-            _ = Task.Run(system.RunImageSetup);
+    public static IHost SetupImages(this IHost host)
+    {
+        var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+        var scope = serviceScopeFactory.CreateScope();
+        var services = scope.ServiceProvider;
 
-            return host;
-        }
+        var config = services.GetRequiredService<IConfiguration>();
+        var system = new ImageSystem(
+            services.GetRequiredService<StwDbContext>(),
+            config["originalImageDirectory"],
+            config["generatedImageDirectory"]);
+        _ = Task.Run(system.RunImageSetup);
+
+        return host;
     }
 }
