@@ -13,7 +13,7 @@ namespace TauStellwerk.Client.Services
 {
     public class SettingsService : ISettingsService
     {
-        private const string _fileName = "settings.json";
+        private const string FileName = "settings.json";
 
         private bool _hasLoadBeenAttempted;
 
@@ -45,7 +45,7 @@ namespace TauStellwerk.Client.Services
             _settings = mutableSettings;
             _immutableSettings = _settings.GetImmutableCopy();
 
-            await using var stream = File.Open(_fileName, FileMode.Create);
+            await using var stream = File.Open(FileName, FileMode.Create);
             await JsonSerializer.SerializeAsync(stream, mutableSettings);
 
             SettingsChanged?.Invoke(_immutableSettings);
@@ -64,7 +64,7 @@ namespace TauStellwerk.Client.Services
 
             try
             {
-                await using var stream = File.OpenRead(_fileName);
+                await using var stream = File.OpenRead(FileName);
                 var potentialSettings = await JsonSerializer.DeserializeAsync<MutableSettings>(stream);
                 if (potentialSettings != null)
                 {

@@ -27,7 +27,7 @@ namespace TauStellwerk.Controllers
     [Route("engine")]
     public class EngineController : Controller
     {
-        private const int _resultsPerPage = 20;
+        private const int ResultsPerPage = 20;
 
         private readonly StwDbContext _dbContext;
         private readonly IEngineService _engineService;
@@ -96,8 +96,8 @@ namespace TauStellwerk.Controllers
                 _ => throw new InvalidOperationException(),
             };
 
-            query = query.Skip(page * _resultsPerPage)
-            .Take(_resultsPerPage)
+            query = query.Skip(page * ResultsPerPage)
+            .Take(ResultsPerPage)
             .Include(e => e.Images)
             .Include(x => x.Tags);
 

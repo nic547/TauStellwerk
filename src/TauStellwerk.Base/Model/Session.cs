@@ -17,7 +17,7 @@ namespace TauStellwerk.Base.Model
     /// </summary>
     public class Session
     {
-        private const int _sessionBytes = 32;
+        private const int SessionBytes = 32;
 
         private readonly string? _userAgent;
         private readonly string? _sessionId;
@@ -26,7 +26,7 @@ namespace TauStellwerk.Base.Model
         public Session()
         {
             var rng = RandomNumberGenerator.Create();
-            var bytes = new byte[_sessionBytes];
+            var bytes = new byte[SessionBytes];
             rng.GetBytes(bytes);
             _sessionId = Convert.ToBase64String(bytes);
         }

@@ -14,7 +14,7 @@ namespace TauStellwerk.WebClient
 {
     public class BlazorSettingsService : ISettingsService
     {
-        private const string _settingsKey = "TauStellwerk_Settings";
+        private const string SettingsKey = "TauStellwerk_Settings";
 
         private readonly string _baseAddress;
         private readonly IJSRuntime _runtime;
@@ -93,14 +93,14 @@ namespace TauStellwerk.WebClient
 
         private async Task<MutableSettings?> TryLoadSettings()
         {
-            var json = await _runtime.InvokeAsync<string>("getItem", _settingsKey);
+            var json = await _runtime.InvokeAsync<string>("getItem", SettingsKey);
             return JsonSerializer.Deserialize<MutableSettings>(json);
         }
 
         private async Task SaveSettings(MutableSettings settings)
         {
             var json = JsonSerializer.Serialize(settings);
-            await _runtime.InvokeVoidAsync("setItem", _settingsKey, json);
+            await _runtime.InvokeVoidAsync("setItem", SettingsKey, json);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TauStellwerk.Client.Services
 {
     public class EngineService
     {
-        private const double TimeoutMiliseconds = 100;
+        private const double TimeoutMilliseconds = 100;
 
         private readonly IHttpClientService _service;
         private readonly Dictionary<int, CoalescingLimiter<(int, int, bool)>> _activeEngines = new();
@@ -54,7 +54,7 @@ namespace TauStellwerk.Client.Services
             {
                 var response = await engineTask;
                 var json = await response.Content.ReadAsStringAsync();
-                _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMiliseconds));
+                _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMilliseconds));
                 var dto = JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
                 return EngineFull.Create(dto);
             }

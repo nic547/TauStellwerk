@@ -13,9 +13,9 @@ namespace TauStellwerk.Client.Model
 {
     public class StopButtonState : INotifyPropertyChanged
     {
-        private const int _lockingSeconds = 3;
+        private const int LockingSeconds = 3;
 
-        private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(_lockingSeconds).TotalMilliseconds)
+        private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
         {
             AutoReset = false,
             Enabled = false,

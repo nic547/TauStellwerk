@@ -22,8 +22,8 @@ namespace TauStellwerk.Services
     /// </summary>
     public class SessionService : BackgroundService
     {
-        private const int _timeoutInactive = 60;
-        private const int _timeoutDeletion = 3600;
+        private const int TimeoutInactive = 60;
+        private const int TimeoutDeletion = 3600;
 
         private readonly ConcurrentDictionary<string, Session> _sessions = new();
         private readonly INowProvider _now;
@@ -97,18 +97,18 @@ namespace TauStellwerk.Services
                 var idle = (_now.GetNow() - session.LastContact).TotalSeconds;
                 switch (idle)
                 {
-                    case > _timeoutInactive when session.IsActive:
+                    case > TimeoutInactive when session.IsActive:
                         session.IsActive = false;
                         SessionTimeout?.Invoke(session);
                         ConsoleService.PrintMessage($"{session} has been marked as inactive.");
                         break;
 
-                    case < _timeoutInactive when !session.IsActive:
+                    case < TimeoutInactive when !session.IsActive:
                         session.IsActive = true;
                         ConsoleService.PrintMessage($"{session} has been reactivated.");
                         break;
 
-                    case > _timeoutDeletion:
+                    case > TimeoutDeletion:
                         _sessions.TryRemove(session.SessionId, out _);
                         ConsoleService.PrintMessage($"{session} has been deleted after {Math.Round(idle)} seconds");
                         break;
