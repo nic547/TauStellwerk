@@ -24,6 +24,13 @@ namespace TauStellwerk.Desktop
             window.Show(TryGetMainWindow());
         }
 
+        public void ShowSettingsView(object? source = null)
+        {
+            var vm = new SettingsViewModel();
+            var window = new SettingsWindow(vm);
+            window.Show(TryGetMainWindow());
+        }
+
         public void ShowMessageBox(string title, string message, object? source = null)
         {
             var parentWindow = TryGetAssociatedWindow(source);
@@ -50,7 +57,9 @@ namespace TauStellwerk.Desktop
 
         public void ShowEngineSelectionView(object? source = null)
         {
-            throw new System.NotImplementedException();
+            var vm = new EngineSelectionViewModel();
+            var window = new EngineSelectionWindow(vm);
+            window.Show(TryGetMainWindow());
         }
 
         private static Window? TryGetAssociatedWindow(object? source)

@@ -15,6 +15,8 @@ namespace TauStellwerk.Client
 
         public void ShowEngineControlView(EngineFull engine, object? source = null);
 
+        public void ShowSettingsView(object? source);
+
         public void ShowMessageBox(string title, string message, object? source = null);
     }
 }

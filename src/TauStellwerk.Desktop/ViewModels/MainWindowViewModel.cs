@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
-using TauStellwerk.Desktop.ViewModels.Engine;
-using TauStellwerk.Desktop.Views;
-using TauStellwerk.Desktop.Views.Engine;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
@@ -21,11 +19,14 @@ public class MainWindowViewModel : ViewModelBase
 {
     private readonly SettingsService _settingsService;
     private readonly StatusService _statusService;
+    private readonly IViewService _viewService;
 
-    public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null)
+    public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null, IViewService? viewService = null)
     {
         _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
+
         _statusService.StatusChanged += (status) =>
         {
             StopButtonState.SetStatus(status);
@@ -64,16 +65,13 @@ public class MainWindowViewModel : ViewModelBase
 
     private Unit HandleOpenEngineList(Unit param)
     {
-        var vm = new EngineSelectionViewModel();
-        var engineWindow = new EngineSelectionWindow(vm);
-        engineWindow.Show();
-
+        _viewService.ShowEngineSelectionView(this);
         return Unit.Default;
     }
 
     private Unit HandleOpenSettings(Unit param)
     {
-        new SettingsWindow().Show();
+        _viewService.ShowSettingsView(this);
         return Unit.Default;
     }
 }
