@@ -13,6 +13,7 @@ using Avalonia;
 using ReactiveUI;
 using Splat;
 using TauStellwerk.Base.Model;
+using TauStellwerk.Client;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Util;
@@ -22,6 +23,8 @@ namespace TauStellwerk.Desktop.ViewModels.Engine;
 public class EngineSelectionViewModel : ViewModelBase
 {
     private readonly EngineService _engineService;
+    private readonly IViewService _viewService;
+
     private readonly ObservableAsPropertyHelper<bool> _isAcquiring;
 
     private Size _windowSize;
@@ -32,9 +35,11 @@ public class EngineSelectionViewModel : ViewModelBase
 
     private int _currentPage;
 
-    public EngineSelectionViewModel(EngineService? engineService = null)
+    public EngineSelectionViewModel(EngineService? engineService = null, IViewService? viewService = null)
     {
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
+
         _ = Load((CurrentPage, CurrentEngineSortMode, CurrentEngineSortDirection, ShowHiddenEngines));
 
         AcquireEngine = ReactiveCommand.CreateFromTask<int, Unit>(TryAcquireEngine);
@@ -80,8 +85,6 @@ public class EngineSelectionViewModel : ViewModelBase
     }
 
     public Interaction<EngineFull, Unit> SelectEngine { get; } = new();
-
-    public Interaction<Unit, Unit> CannotAcquireEngineError { get; } = new();
 
     public Interaction<EngineFull, Unit> OpenEngineEditView { get; } = new();
 
@@ -135,7 +138,10 @@ public class EngineSelectionViewModel : ViewModelBase
         }
         else
         {
-            await CannotAcquireEngineError.Handle(Unit.Default);
+            _viewService.ShowMessageBox(
+                "Cannot acquire engine",
+                "Cannot control the engine because it seems to be in use by someone else",
+                this);
         }
 
         return Unit.Default;
@@ -165,7 +171,10 @@ public class EngineSelectionViewModel : ViewModelBase
         }
         else
         {
-            await CannotAcquireEngineError.Handle(Unit.Default);
+            _viewService.ShowMessageBox(
+                "Cannot acquire engine",
+                "Cannot edit the engine because it seems to be in use by someone else",
+                this);
         }
 
         return Unit.Default;

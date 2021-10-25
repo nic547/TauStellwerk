@@ -5,12 +5,10 @@
 
 using System.Reactive;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using TauStellwerk.Client.Model;
-using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
 namespace TauStellwerk.Desktop.Views.Engine;
@@ -27,7 +25,6 @@ public class EngineSelectionWindow : ReactiveWindow<EngineSelectionViewModel>
         {
             ViewModel?.SelectEngine.RegisterHandler(OpenEngineWindow);
             ViewModel?.OpenEngineEditView.RegisterHandler(OpenEngineEditWindow);
-            ViewModel?.CannotAcquireEngineError.RegisterHandler(ShowAcquireEngineMessage);
         });
     }
 
@@ -58,22 +55,6 @@ public class EngineSelectionWindow : ReactiveWindow<EngineSelectionViewModel>
         };
 
         view.Show();
-        interaction.SetOutput(Unit.Default);
-    }
-
-    private void ShowAcquireEngineMessage(InteractionContext<Unit, Unit> interaction)
-    {
-        var window = new MessageBox
-        {
-            ViewModel = new MessageBoxModel
-            {
-                Title = "Cannot acquire engine",
-                Message = "Engine seems to be in use already.",
-            },
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-        };
-
-        window.ShowDialog(this);
         interaction.SetOutput(Unit.Default);
     }
 }
