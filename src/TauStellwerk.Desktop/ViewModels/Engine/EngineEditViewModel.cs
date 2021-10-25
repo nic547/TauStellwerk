@@ -36,6 +36,10 @@ public class EngineEditViewModel : ViewModelBase
         RemoveLastFunctionCommand = ReactiveCommand.Create<Unit, Unit>(HandleRemoveLastFunction);
     }
 
+    public delegate void HandleClosingRequested();
+
+    public event HandleClosingRequested? ClosingRequested;
+
     public ReactiveCommand<Unit, Unit> SaveCommand { get; }
 
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
@@ -48,8 +52,6 @@ public class EngineEditViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddFunctionCommand { get; }
 
     public ReactiveCommand<Unit, Unit> RemoveLastFunctionCommand { get; }
-
-    public Interaction<Unit, Unit> CloseWindow { get; } = new();
 
     public EngineFull Engine { get; }
 
@@ -67,14 +69,14 @@ public class EngineEditViewModel : ViewModelBase
     private async Task<Unit> HandleSave(Unit arg)
     {
         await _engineService.AddOrUpdateEngine(Engine);
-        await CloseWindow.Handle(arg);
+        ClosingRequested?.Invoke();
         return Unit.Default;
     }
 
-    private async Task<Unit> HandleCancel(Unit arg)
+    private Task<Unit> HandleCancel(Unit arg)
     {
-        await CloseWindow.Handle(arg);
-        return Unit.Default;
+        ClosingRequested?.Invoke();
+        return Task.FromResult(Unit.Default);
     }
 
     private Unit HandleAddTag(Unit arg)

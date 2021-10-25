@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -65,7 +66,7 @@ public class EngineControlViewModel : ViewModelBase
 
     public ReactiveCommand<ToggleButton, Unit> FunctionCommand { get; }
 
-    public void OnClosing()
+    public void OnClosing(object? sender, CancelEventArgs e)
     {
         _ = _engineService.ReleaseEngine(Engine.Id);
     }

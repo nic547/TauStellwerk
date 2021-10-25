@@ -65,11 +65,7 @@ public class MainWindowViewModel : ViewModelBase
     private Unit HandleOpenEngineList(Unit param)
     {
         var vm = new EngineSelectionViewModel();
-        var engineWindow = new EngineSelectionWindow
-        {
-            DataContext = vm,
-            ViewModel = vm,
-        };
+        var engineWindow = new EngineSelectionWindow(vm);
         engineWindow.Show();
 
         return Unit.Default;

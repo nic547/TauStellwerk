@@ -9,7 +9,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using TauStellwerk.Client;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Desktop.ViewModels;
+using TauStellwerk.Desktop.ViewModels.Engine;
 using TauStellwerk.Desktop.Views;
+using TauStellwerk.Desktop.Views.Engine;
 
 namespace TauStellwerk.Desktop
 {
@@ -17,7 +19,9 @@ namespace TauStellwerk.Desktop
     {
         public void ShowEngineControlView(EngineFull engine, object? source = null)
         {
-            throw new System.NotImplementedException();
+            var vm = new EngineControlViewModel(engine);
+            var window = new EngineControlWindow(vm);
+            window.Show(TryGetMainWindow());
         }
 
         public void ShowMessageBox(string title, string message, object? source = null)
@@ -39,7 +43,9 @@ namespace TauStellwerk.Desktop
 
         public void ShowEngineEditView(EngineFull engine, object? source = null)
         {
-            throw new System.NotImplementedException();
+            var vm = new EngineEditViewModel(engine);
+            var window = new EngineEditWindow(vm);
+            window.Show(TryGetAssociatedWindow(source));
         }
 
         public void ShowEngineSelectionView(object? source = null)
@@ -49,9 +55,7 @@ namespace TauStellwerk.Desktop
 
         private static Window? TryGetAssociatedWindow(object? source)
         {
-            var appLifetime = Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-
-            if (appLifetime == null)
+            if (Application.Current.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime appLifetime)
             {
                 return null;
             }

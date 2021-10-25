@@ -56,6 +56,10 @@ public class EngineSelectionViewModel : ViewModelBase
             .Subscribe();
     }
 
+    public delegate void HandleClosingRequested();
+
+    public event HandleClosingRequested? ClosingRequested;
+
     public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
 
     public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
@@ -134,7 +138,8 @@ public class EngineSelectionViewModel : ViewModelBase
         var engine = await _engineService.AcquireEngine(id);
         if (engine != null)
         {
-            await SelectEngine.Handle(engine);
+            _viewService.ShowEngineControlView(engine);
+            ClosingRequested?.Invoke();
         }
         else
         {
@@ -167,7 +172,7 @@ public class EngineSelectionViewModel : ViewModelBase
         var engine = await _engineService.AcquireEngine(id);
         if (engine != null)
         {
-            await OpenEngineEditView.Handle(engine);
+            _viewService.ShowEngineEditView(engine, this);
         }
         else
         {
