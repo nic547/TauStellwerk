@@ -4,45 +4,38 @@
 // </copyright>
 
 using System;
-using System.Reactive;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using ReactiveUI;
+using JetBrains.Annotations;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
 namespace TauStellwerk.Desktop.Views.Engine;
 
-public class EngineEditWindow : ReactiveWindow<EngineEditViewModel>
+public class EngineEditWindow : Window
 {
-    public EngineEditWindow()
+    public EngineEditWindow(EngineEditViewModel vm)
     {
+        DataContext = vm;
+        Closing += vm.HandleWindowClosing;
+        vm.ClosingRequested += Close;
+
         InitializeComponent();
-
-        this.WhenActivated(d =>
-        {
-            if (ViewModel == null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            ViewModel.CloseWindow.RegisterHandler(HandleCloseWindow);
-            Closing += ViewModel.HandleWindowClosing;
-        });
 
 #if DEBUG
         this.AttachDevTools();
 #endif
     }
 
+    [UsedImplicitly]
+    [Obsolete("Use constructor with ViewModel parameter", true)]
+    public EngineEditWindow()
+    {
+        // https://github.com/AvaloniaUI/Avalonia/issues/2593
+    }
+
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
-    }
-
-    private void HandleCloseWindow(InteractionContext<Unit, Unit> context)
-    {
-        Close();
-        context.SetOutput(Unit.Default);
     }
 }

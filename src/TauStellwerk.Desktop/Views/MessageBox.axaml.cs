@@ -4,13 +4,12 @@
 // </copyright>
 
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class MessageBox : ReactiveWindow<MessageBoxModel>
+public class MessageBox : Window
 {
     public MessageBox()
     {

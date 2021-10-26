@@ -4,8 +4,8 @@
 // </copyright>
 
 using Avalonia;
-using Avalonia.ReactiveUI;
 using Splat;
+using TauStellwerk.Client;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop;
@@ -21,6 +21,7 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(HttpClientService));
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(EngineService));
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
+        Locator.CurrentMutable.RegisterConstant<IViewService>(new AvaloniaViewService());
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
@@ -31,6 +32,5 @@ public static class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace()
-            .UseReactiveUI();
+            .LogToTrace();
 }

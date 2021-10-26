@@ -5,16 +5,19 @@
 
 using System;
 using System.Threading.Tasks;
-using ReactiveUI;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public class SettingsViewModel : ViewModelBase
+public partial class SettingsViewModel : ViewModelBase
 {
     private readonly SettingsService _settingsService;
+
+    [ObservableProperty]
     private MutableSettings? _settings;
 
     public SettingsViewModel(SettingsService? settingsService = null)
@@ -23,22 +26,29 @@ public class SettingsViewModel : ViewModelBase
         _ = LoadSettings();
     }
 
-    public MutableSettings? Settings
-    {
-        get => _settings;
-        set => this.RaiseAndSetIfChanged(ref _settings, value);
-    }
+    public delegate void HandleClosingRequested();
 
-    public async Task LoadSettings()
-    {
-        Settings = await _settingsService.GetMutableSettingsCopy();
-    }
+    public event HandleClosingRequested? ClosingRequested;
 
-    public async Task SaveSettings()
+    [ICommand]
+    public async Task Save()
     {
         if (_settings != null)
         {
             await _settingsService.SetSettings(_settings);
         }
+
+        ClosingRequested?.Invoke();
+    }
+
+    [ICommand]
+    public void Cancel()
+    {
+        ClosingRequested?.Invoke();
+    }
+
+    private async Task LoadSettings()
+    {
+        Settings = await _settingsService.GetMutableSettingsCopy();
     }
 }

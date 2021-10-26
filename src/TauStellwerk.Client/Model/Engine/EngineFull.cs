@@ -8,15 +8,23 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
 
-public class EngineFull : NotifyingModelBase
+public partial class EngineFull : ObservableObject
 {
+    [ObservableProperty]
     private string _name;
+
+    [ObservableProperty]
     private bool _isHidden;
+
+    [ObservableProperty]
     private ushort _address;
+
+    [ObservableProperty]
     private int _topSpeed;
 
     public EngineFull(EngineFullDto engine)
@@ -43,12 +51,6 @@ public class EngineFull : NotifyingModelBase
 
     public int Id { get; }
 
-    public string Name
-    {
-        get => _name;
-        set => SetAndNotifyIfChanged(ref _name, value);
-    }
-
     public ObservableCollection<string> Tags { get; }
 
     public ImmutableList<ImageDto> Images { get; }
@@ -57,25 +59,7 @@ public class EngineFull : NotifyingModelBase
 
     public DateTime Created { get; }
 
-    public bool IsHidden
-    {
-        get => _isHidden;
-        set => _isHidden = value;
-    }
-
     public ObservableCollection<FunctionDto> Functions { get; }
-
-    public ushort Address
-    {
-        get => _address;
-        set => _address = value;
-    }
-
-    public int TopSpeed
-    {
-        get => _topSpeed;
-        set => _topSpeed = value;
-    }
 
     public static EngineFull? Create(EngineFullDto? engineDto)
     {
