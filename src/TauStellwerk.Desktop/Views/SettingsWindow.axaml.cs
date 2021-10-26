@@ -17,6 +17,8 @@ public class SettingsWindow : Window
     public SettingsWindow(SettingsViewModel vm)
     {
         DataContext = vm;
+        vm.ClosingRequested += Close;
+
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();

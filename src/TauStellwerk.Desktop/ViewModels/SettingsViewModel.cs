@@ -6,6 +6,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
@@ -25,16 +26,29 @@ public partial class SettingsViewModel : ViewModelBase
         _ = LoadSettings();
     }
 
-    public async Task LoadSettings()
-    {
-        Settings = await _settingsService.GetMutableSettingsCopy();
-    }
+    public delegate void HandleClosingRequested();
 
-    public async Task SaveSettings()
+    public event HandleClosingRequested? ClosingRequested;
+
+    [ICommand]
+    public async Task Save()
     {
         if (_settings != null)
         {
             await _settingsService.SetSettings(_settings);
         }
+
+        ClosingRequested?.Invoke();
+    }
+
+    [ICommand]
+    public void Cancel()
+    {
+        ClosingRequested?.Invoke();
+    }
+
+    private async Task LoadSettings()
+    {
+        Settings = await _settingsService.GetMutableSettingsCopy();
     }
 }
