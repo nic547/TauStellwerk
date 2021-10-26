@@ -7,18 +7,22 @@
         x:Class="TauStellwerk.Desktop.Views.SettingsWindow"
         Icon="/Assets/tauStellwerk.ico"
         Title="Settings"
-		Width="600">
+        Width="600">
     <Design.DataContext>
-        <viewModels:SettingsViewModel/>
+        <viewModels:SettingsViewModel />
     </Design.DataContext>
     <StackPanel>
-        <Label Content="Username"/>
-        <TextBox Text="{Binding Settings.Username, Mode=TwoWay, FallbackValue={}}"/>
-        <Label Content="Server address"/>
-        <TextBox Text="{Binding Settings.ServerAddress, Mode=TwoWay, FallbackValue={}}"/>
-		<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-			<Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2"/>
-			<Button Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2"/>
-		</StackPanel>
-  </StackPanel>
+        <StackPanel ToolTip.Tip="The username that will be shown to other users." Margin="2">
+            <Label Content="Username" />
+            <TextBox Text="{Binding Settings.Username, Mode=TwoWay, FallbackValue={}}" />
+        </StackPanel>
+        <StackPanel ToolTip.Tip="Address of the TauStellwerk server the application should connect to." Margin="2">
+            <Label Content="Server address" />
+            <TextBox Text="{Binding Settings.ServerAddress, Mode=TwoWay, FallbackValue={}}" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+            <Button Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+        </StackPanel>
+    </StackPanel>
 </Window>
