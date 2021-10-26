@@ -21,7 +21,7 @@ namespace TauStellwerk.Desktop
         {
             var vm = new EngineControlViewModel(engine);
             var window = new EngineControlWindow(vm);
-            window.Show(TryGetMainWindow());
+            ShowWindowCenterOwner(window, TryGetMainWindow(), 0.5);
         }
 
         public void ShowSettingsView(object? source = null)
@@ -52,7 +52,7 @@ namespace TauStellwerk.Desktop
         {
             var vm = new EngineEditViewModel(engine);
             var window = new EngineEditWindow(vm);
-            window.Show(TryGetAssociatedWindow(source));
+            ShowWindowCenterOwner(window, TryGetAssociatedWindow(source), 0.5);
         }
 
         public void ShowEngineSelectionView(object? source = null)
@@ -84,6 +84,19 @@ namespace TauStellwerk.Desktop
         {
             var appLifetime = Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
             return appLifetime?.MainWindow;
+        }
+
+        private static void ShowWindowCenterOwner(Window window, Window? parent, double widthMultiplier = 1d)
+        {
+            if (parent == null)
+            {
+                window.Show();
+                return;
+            }
+
+            window.Width = parent.ClientSize.Width * widthMultiplier;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show(parent);
         }
     }
 }

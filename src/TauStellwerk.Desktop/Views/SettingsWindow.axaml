@@ -6,7 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.SettingsWindow"
         Icon="/Assets/tauStellwerk.ico"
-        Title="SettingsWindow">
+        Title="Settings"
+		Width="600">
     <Design.DataContext>
         <viewModels:SettingsViewModel/>
     </Design.DataContext>
