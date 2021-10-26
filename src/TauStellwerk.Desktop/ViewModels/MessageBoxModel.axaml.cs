@@ -4,7 +4,6 @@
 // </copyright>
 
 using Avalonia.Controls;
-using ReactiveUI;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
@@ -16,13 +15,13 @@ public class MessageBoxModel : ViewModelBase
     public string Title
     {
         get => _title;
-        set => this.RaiseAndSetIfChanged(ref _title, value);
+        set => SetProperty(ref _title, value);
     }
 
     public string Message
     {
         get => _message;
-        set => this.RaiseAndSetIfChanged(ref _message, value);
+        set => SetProperty(ref _message, value);
     }
 
     public static void Close(Window window)

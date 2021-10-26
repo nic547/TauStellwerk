@@ -4,7 +4,6 @@
 // </copyright>
 
 using Avalonia;
-using Avalonia.ReactiveUI;
 using Splat;
 using TauStellwerk.Client;
 using TauStellwerk.Client.Services;
@@ -33,6 +32,5 @@ public static class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace()
-            .UseReactiveUI();
+            .LogToTrace();
 }

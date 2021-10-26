@@ -5,21 +5,24 @@
 
 using System;
 using System.ComponentModel;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
-using ReactiveUI;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels.Engine;
 
-public class EngineControlViewModel : ViewModelBase
+public partial class EngineControlViewModel : ViewModelBase
 {
     private readonly EngineService _engineService;
+
+    [ObservableProperty]
     private bool _isDrivingForward = true;
+
+    [ObservableProperty]
     private int _throttle;
 
     public EngineControlViewModel(EngineFull engine, EngineService? engineService = null)
@@ -28,13 +31,7 @@ public class EngineControlViewModel : ViewModelBase
 
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
-        EmergencyStopCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleEStop);
-        ChangeDirectionCommand = ReactiveCommand.CreateFromTask<string, Unit>(HandleDirectionChange);
-        FunctionCommand = ReactiveCommand.CreateFromTask<ToggleButton, Unit>(HandleFunction);
-
-        this.WhenAnyValue(v => v.Throttle)
-            .Select(x => _ = HandleThrottleChange(x))
-            .Subscribe();
+        PropertyChanged += HandlePropertyChanged;
     }
 
     public EngineControlViewModel()
@@ -47,24 +44,6 @@ public class EngineControlViewModel : ViewModelBase
 
     public EngineFull Engine { get; }
 
-    public int Throttle
-    {
-        get => _throttle;
-        set => this.RaiseAndSetIfChanged(ref _throttle, value);
-    }
-
-    public bool IsDrivingForward
-    {
-        get => _isDrivingForward;
-        set => this.RaiseAndSetIfChanged(ref _isDrivingForward, value);
-    }
-
-    public ReactiveCommand<Unit, Unit> EmergencyStopCommand { get; }
-
-    public ReactiveCommand<string, Unit> ChangeDirectionCommand { get; }
-
-    public ReactiveCommand<ToggleButton, Unit> FunctionCommand { get; }
-
     public void OnClosing(object? sender, CancelEventArgs e)
     {
         _ = _engineService.ReleaseEngine(Engine.Id);
@@ -75,7 +54,18 @@ public class EngineControlViewModel : ViewModelBase
         await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward);
     }
 
-    private async Task<Unit> HandleDirectionChange(string shouldBeDrivingForward)
+    private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        switch (args.PropertyName)
+        {
+            case nameof(Throttle):
+                _ = HandleThrottleChange(Throttle);
+                break;
+        }
+    }
+
+    [ICommand]
+    private async Task ChangeDirection(string shouldBeDrivingForward)
     {
         IsDrivingForward = bool.Parse(shouldBeDrivingForward);
 
@@ -89,11 +79,10 @@ public class EngineControlViewModel : ViewModelBase
         {
             Throttle = 0;
         }
-
-        return Unit.Default;
     }
 
-    private async Task<Unit> HandleFunction(ToggleButton button)
+    [ICommand]
+    private async Task Function(ToggleButton button)
     {
         var functionNumber = (byte)(button.Tag ?? throw new InvalidOperationException());
         if (button.IsChecked == null)
@@ -102,14 +91,12 @@ public class EngineControlViewModel : ViewModelBase
         }
 
         await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked);
-
-        return Unit.Default;
     }
 
-    private async Task<Unit> HandleEStop(Unit arg)
+    [ICommand]
+    private async Task EmergencyStop()
     {
         Throttle = 0;
         await _engineService.SetEStop(Engine.Id);
-        return Unit.Default;
     }
 }

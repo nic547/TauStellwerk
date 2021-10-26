@@ -5,7 +5,7 @@
     <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\TauStellwerk.Client.xml</DocumentationFile>
     <Nullable>enable</Nullable>
-    <NoWarn>1701;1702;1591;SA1601</NoWarn>
+    <NoWarn>1701;1702;1591;SA1601;SA1633</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -5,14 +5,14 @@
 
 using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
 using JetBrains.Annotations;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
 namespace TauStellwerk.Desktop.Views.Engine;
 
-public class EngineSelectionWindow : ReactiveWindow<EngineSelectionViewModel>
+public class EngineSelectionWindow : Window
 {
     public EngineSelectionWindow(EngineSelectionViewModel vm)
     {

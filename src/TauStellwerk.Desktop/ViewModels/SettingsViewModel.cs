@@ -5,28 +5,24 @@
 
 using System;
 using System.Threading.Tasks;
-using ReactiveUI;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public class SettingsViewModel : ViewModelBase
+public partial class SettingsViewModel : ViewModelBase
 {
     private readonly SettingsService _settingsService;
+
+    [ObservableProperty]
     private MutableSettings? _settings;
 
     public SettingsViewModel(SettingsService? settingsService = null)
     {
         _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
         _ = LoadSettings();
-    }
-
-    public MutableSettings? Settings
-    {
-        get => _settings;
-        set => this.RaiseAndSetIfChanged(ref _settings, value);
     }
 
     public async Task LoadSettings()

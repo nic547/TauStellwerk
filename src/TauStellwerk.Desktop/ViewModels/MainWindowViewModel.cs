@@ -4,9 +4,8 @@
 // </copyright>
 
 using System;
-using System.Reactive;
 using System.Threading.Tasks;
-using ReactiveUI;
+using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client;
@@ -15,7 +14,7 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly SettingsService _settingsService;
     private readonly StatusService _statusService;
@@ -35,21 +34,12 @@ public class MainWindowViewModel : ViewModelBase
         {
             StopButtonState.SetStatus(_statusService.LastKnownStatus);
         }
-
-        StopButtonCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(HandleStopButton);
-        OpenEngineListCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenEngineList);
-        OpenSettingsCommand = ReactiveCommand.Create<Unit, Unit>(HandleOpenSettings);
     }
 
     public StopButtonState StopButtonState { get; } = new();
 
-    public ReactiveCommand<Unit, Unit> StopButtonCommand { get; }
-
-    public ReactiveCommand<Unit, Unit> OpenEngineListCommand { get; }
-
-    public ReactiveCommand<Unit, Unit> OpenSettingsCommand { get; }
-
-    private async Task<Unit> HandleStopButton(Unit param)
+    [ICommand]
+    private async Task StopButton()
     {
         var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
         var username = (await _settingsService.GetSettings()).Username;
@@ -60,18 +50,17 @@ public class MainWindowViewModel : ViewModelBase
         };
 
         await _statusService.SetStatus(status);
-        return Unit.Default;
     }
 
-    private Unit HandleOpenEngineList(Unit param)
+    [ICommand]
+    private void OpenEngineList()
     {
         _viewService.ShowEngineSelectionView(this);
-        return Unit.Default;
     }
 
-    private Unit HandleOpenSettings(Unit param)
+    [ICommand]
+    private void OpenSettings()
     {
         _viewService.ShowSettingsView(this);
-        return Unit.Default;
     }
 }

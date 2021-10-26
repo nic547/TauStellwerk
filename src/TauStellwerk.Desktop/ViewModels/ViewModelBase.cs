@@ -3,10 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using ReactiveUI;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public class ViewModelBase : ReactiveObject
+public class ViewModelBase : ObservableObject
 {
 }
