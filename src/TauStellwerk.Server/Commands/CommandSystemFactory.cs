@@ -16,12 +16,12 @@ namespace TauStellwerk.Commands;
 /// </summary>
 public static class CommandSystemFactory
 {
-    private static readonly List<Type> _commandStations = new()
+    private static readonly List<(Type Type, Func<IConfiguration, CommandSystemBase> Constructor)> _commandStations = new()
     {
-        typeof(NullCommandSystem),
-        typeof(ConsoleCommandSystem),
-        typeof(EsuCommandStation),
-        typeof(DccExSerialSystem),
+        (typeof(NullCommandSystem), (x) => new NullCommandSystem(x)),
+        (typeof(ConsoleCommandSystem), (x) => new ConsoleCommandSystem(x)),
+        (typeof(EsuCommandStation), (x) => new EsuCommandStation(x)),
+        (typeof(DccExSerialSystem), (x) => new DccExSerialSystem(x)),
     };
 
     /// <summary>
@@ -31,18 +31,17 @@ public static class CommandSystemFactory
     /// <returns>A CommandSystemBase. Default is the ConsoleCommandSystem.</returns>
     public static CommandSystemBase FromConfig(IConfiguration config)
     {
-        var setting = config["CommandSystem:Type"];
+        var systemSetting = config["CommandSystem:Type"];
 
         foreach (var system in _commandStations)
         {
-            if (string.Equals(setting, system.Name, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(systemSetting, system.Type.Name, StringComparison.InvariantCultureIgnoreCase))
             {
-                var systemInstance = Activator.CreateInstance(system, config) as CommandSystemBase;
-                return systemInstance ?? new ConsoleCommandSystem(config);
+                return system.Constructor.Invoke(config);
             }
         }
 
-        ConsoleService.PrintError($"Could not find CommandSystem \"{setting}\", continuing with default (ConsoleCommandSystem)");
+        ConsoleService.PrintError($"Could not find CommandSystem \"{systemSetting}\", continuing with default (ConsoleCommandSystem)");
         return new ConsoleCommandSystem(config);
     }
 }
