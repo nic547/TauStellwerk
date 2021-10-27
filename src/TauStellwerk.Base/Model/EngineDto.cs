@@ -14,9 +14,9 @@ public class EngineDto
 
     public string Name { get; set; } = string.Empty;
 
-    public List<string> Tags { get; init; } = new List<string>();
+    public List<string> Tags { get; set; } = new List<string>();
 
-    public List<ImageDto> Images { get; init; } = new();
+    public List<ImageDto> Images { get; set; } = new();
 
     public DateTime LastUsed { get; set; }
 

@@ -8,6 +8,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TauStellwerk.Client.Model;
+using TauStellwerk.WebClient;
 
 namespace TauStellwerk.Client.Services;
 
@@ -46,7 +47,7 @@ public class SettingsService : ISettingsService
         _immutableSettings = _settings.GetImmutableCopy();
 
         await using var stream = File.Open(FileName, FileMode.Create);
-        await JsonSerializer.SerializeAsync(stream, mutableSettings);
+        await JsonSerializer.SerializeAsync(stream, mutableSettings, SettingsJsonContext.Default.MutableSettings);
 
         SettingsChanged?.Invoke(_immutableSettings);
     }
@@ -65,7 +66,7 @@ public class SettingsService : ISettingsService
         try
         {
             await using var stream = File.OpenRead(FileName);
-            var potentialSettings = await JsonSerializer.DeserializeAsync<MutableSettings>(stream);
+            var potentialSettings = await JsonSerializer.DeserializeAsync(stream, SettingsJsonContext.Default.MutableSettings);
             if (potentialSettings != null)
             {
                 _settings = potentialSettings;

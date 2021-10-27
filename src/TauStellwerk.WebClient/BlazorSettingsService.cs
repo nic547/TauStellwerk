@@ -94,12 +94,12 @@ public class BlazorSettingsService : ISettingsService
     private async Task<MutableSettings?> TryLoadSettings()
     {
         var json = await _runtime.InvokeAsync<string>("getItem", SettingsKey);
-        return JsonSerializer.Deserialize<MutableSettings>(json);
+        return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.MutableSettings);
     }
 
     private async Task SaveSettings(MutableSettings settings)
     {
-        var json = JsonSerializer.Serialize(settings);
+        var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.MutableSettings);
         await _runtime.InvokeVoidAsync("setItem", SettingsKey, json);
     }
 }

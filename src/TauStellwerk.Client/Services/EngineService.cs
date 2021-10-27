@@ -7,10 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Util;
@@ -23,11 +22,6 @@ public class EngineService
 
     private readonly IHttpClientService _service;
     private readonly Dictionary<int, CoalescingLimiter<(int, int, bool)>> _activeEngines = new();
-    private readonly JsonSerializerOptions _serializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        Converters = { new JsonStringEnumConverter() },
-    };
 
     public EngineService(IHttpClientService httpClientService)
     {
@@ -39,7 +33,7 @@ public class EngineService
         var client = await _service.GetHttpClient();
         var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}");
         var responseString = await response.Content.ReadAsStringAsync();
-        var engines = JsonSerializer.Deserialize<EngineDto[]>(responseString, _serializerOptions) ?? System.Array.Empty<EngineDto>();
+        var engines = JsonSerializer.Deserialize(responseString, TauJsonContext.Default.EngineDtoArray) ?? Array.Empty<EngineDto>();
 
         return engines;
     }
@@ -55,7 +49,7 @@ public class EngineService
             var response = await engineTask;
             var json = await response.Content.ReadAsStringAsync();
             _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMilliseconds));
-            var dto = JsonSerializer.Deserialize<EngineFullDto>(json, _serializerOptions);
+            var dto = JsonSerializer.Deserialize(json, TauJsonContext.Default.EngineFullDto);
             return EngineFull.Create(dto);
         }
 
@@ -98,7 +92,7 @@ public class EngineService
     {
         var client = await _service.GetHttpClient();
         var engineDto = engine.ToDto();
-        await client.PostAsync("/engine", JsonContent.Create(engineDto, typeof(EngineFullDto), null, _serializerOptions));
+        await client.PostAsync("/engine", new StringContent(JsonSerializer.Serialize(engineDto, TauJsonContext.Default.EngineFullDto)));
     }
 
     private async Task SendSpeed((int Id, int Speed, bool Forward) arg)

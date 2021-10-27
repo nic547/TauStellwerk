@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Services;
@@ -34,7 +35,7 @@ public class StatusService
     public async Task SetStatus(Status status)
     {
         var client = await _service.GetHttpClient();
-        var json = JsonSerializer.Serialize(status);
+        var json = JsonSerializer.Serialize(status, TauJsonContext.Default.Status);
         StatusChanged?.Invoke(status);
         LastKnownStatus = status;
         _ = await client.PostAsync("/status", new StringContent(json, Encoding.UTF8, "text/json"));
@@ -59,6 +60,6 @@ public class StatusService
         var uri = lastState == null ? "/status" : $"/status?lastKnownStatus={lastState}";
         var response = await client.GetAsync(uri, CancellationToken);
         var responseContent = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<Status>(responseContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        return JsonSerializer.Deserialize(responseContent, TauJsonContext.Default.Status);
     }
 }
