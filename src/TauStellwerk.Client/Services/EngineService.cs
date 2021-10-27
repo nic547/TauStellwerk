@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TauStellwerk.Base;
@@ -92,7 +93,7 @@ public class EngineService
     {
         var client = await _service.GetHttpClient();
         var engineDto = engine.ToDto();
-        await client.PostAsync("/engine", new StringContent(JsonSerializer.Serialize(engineDto, TauJsonContext.Default.EngineFullDto)));
+        await client.PostAsync("/engine", new StringContent(JsonSerializer.Serialize(engineDto, TauJsonContext.Default.EngineFullDto), Encoding.UTF8, "text/json"));
     }
 
     private async Task SendSpeed((int Id, int Speed, bool Forward) arg)
