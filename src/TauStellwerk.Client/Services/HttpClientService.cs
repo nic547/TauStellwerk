@@ -5,9 +5,11 @@
 
 using System;
 using System.Net.Http;
-using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Services;
 
@@ -69,9 +71,13 @@ public class HttpClientService : IHttpClientService
         if (string.IsNullOrEmpty(_sessionId))
         {
             var username = (await _settingsService.GetSettings()).Username;
+
             var response = await client.PostAsync(
                 "/session",
-                JsonContent.Create(username));
+                new StringContent(
+                    JsonSerializer.Serialize(username, TauJsonContext.Default.String),
+                    Encoding.UTF8,
+                    "text/json"));
             _sessionId = await response.Content.ReadAsStringAsync();
 
             _sessionTimer.Enabled = true;

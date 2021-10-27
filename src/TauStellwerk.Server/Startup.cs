@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.IO;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TauStellwerk.Base;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
 using TauStellwerk.Services;
@@ -46,7 +46,7 @@ public class Startup
     {
         services.AddControllers().AddJsonOptions(opts =>
         {
-            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            opts.JsonSerializerOptions.AddContext<TauJsonContext>();
         });
 
         services.AddControllersWithViews();

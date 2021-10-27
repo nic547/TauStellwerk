@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Linq;
 using System.Text.Json;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,35 +26,6 @@ namespace TauStellwerk.Database.Tests
             var resultEngine = JsonSerializer.Deserialize<Engine>(json);
 
             resultEngine.Should().BeEquivalentTo(expectedEngine);
-        }
-
-        /// <summary>
-        /// Test that tags of a cloned engine do not have reference equality.
-        /// </summary>
-        [Test]
-        public void ClonedTagsAreNotReferenceEqual()
-        {
-            var e1 = new Engine();
-            var testTag = new Tag(0, "testtag");
-            e1.Tags.Add(testTag);
-
-            Assert.True(ReferenceEquals(e1.Tags.First(), testTag));
-
-            var e2 = e1.DeepClone();
-
-            Assert.False(ReferenceEquals(e1.Tags.Single(), e2.Tags.Single()));
-        }
-
-        /// <summary>
-        /// Test that the dcc functions of cloned engine objects do not have reference equality.
-        /// </summary>
-        [Test]
-        public void ClonedFunctionsAreNotReferenceEqual()
-        {
-            var original = TestDataHelper.CreateTestEngine();
-            var clone = original.DeepClone();
-
-            Assert.False(ReferenceEquals(clone.Functions.First(), original.Functions.First()));
         }
     }
 }

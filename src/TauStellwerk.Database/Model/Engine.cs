@@ -7,9 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
@@ -73,18 +71,6 @@ public class Engine
     public DateTime Created { get; set; } = DateTime.Now;
 
     public bool IsHidden { get; set; }
-
-    /// <summary>
-    /// Create a deep copy of this object.
-    /// </summary>
-    /// <returns>The copy.</returns>
-    public Engine DeepClone()
-    {
-        // Probably not the fastest way for a deep clone, but very simple.
-        var json = JsonSerializer.Serialize(this);
-        var clonedObject = JsonSerializer.Deserialize<Engine>(json);
-        return clonedObject ?? throw new InvalidDataException("Serialized object could not be deserialized.");
-    }
 
     public override string ToString()
     {

@@ -9,7 +9,7 @@ namespace TauStellwerk.Base.Model;
 
 public class EngineFullDto : EngineDto
 {
-    public List<FunctionDto> Functions { get; init; } = new();
+    public List<FunctionDto> Functions { get; set; } = new();
 
     public ushort Address { get; set; }
 
