@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +17,7 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Server.IntegrationTests
 {
-    public class BasicIntegrationTest : IDisposable
+    public class BasicIntegrationTest
     {
         private readonly WebApplicationFactory<Startup> _factory;
 
@@ -27,9 +26,15 @@ namespace TauStellwerk.Server.IntegrationTests
             _factory = new CustomWebApplicationFactory<Startup>();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            File.Delete("StwDatabase.db");
+        }
+
         [Test]
         [Category("long-running")]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
+        public async Task CanCreateAndLoadEngines()
         {
             var client = _factory.CreateClient();
             var mock = new Mock<IHttpClientService>(MockBehavior.Strict);
@@ -50,13 +55,6 @@ namespace TauStellwerk.Server.IntegrationTests
             }
 
             engines.Should().HaveCount(100);
-        }
-
-        public void Dispose()
-        {
-            File.Delete("StwDatabase.db");
-            _factory.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }
