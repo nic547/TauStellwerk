@@ -1,35 +1,42 @@
 # TauStellwerk
-A collection of Software cantered around "Teppichbahning" ("Carpet Railroading"), temporary model railways with changing layouts, users, devices and trains.
+A collection of Software cantered around "Teppichbahning" ("Carpet Railroading"), temporary model railways with changing layouts, users, devices and trains with little automation.
 The end-goal is a simple user interface, fast setup, solid handling of multiple users and supporting most platforms.
-No support for automatization or feedback modules is planned at this point in time.
+Currently the project consists of a server application with a included web-based client as well as a sperate desktop client, all based on .NET.
+
+If you have any questions, feedback or any other comments, feel free to open a issue or pm me(nic547#2614) on discord.
 
 ![Screenshot of the web app](DesktopWebappScreenshot.png)
 
 ## Current State
-The software is still in a very experimental state. If you're interested in using this project, you should understand that things will break.
-Currently only the ESU Command Station (ECoS) is supported.
-
-## Important Notes
-- This is just a hobbyist's project. I guarantee absolutely nothing.
-- Restrict network access to the server. Do not use a public Wi-Fi and do not make the server accessible from the internet.
+The software is still in a very experimental state. Currently only the ESU Command Station (ECoS) is supported.
+If you're interested in using this project, you should understand that things might break. 
 
 ## Overview
-Currently only the "ESU Command Station" (ECoS) is supported. Support for other Command Stations is blocked by a lack of Hardware.
+
+Currently the whole project is based on the .NET 6 Release Candidate.
+No ready-to-use builds of the project are provided yet.
+
+#### MacOS/iOS
+Using the cross-platform .NET software framework does mean that the TauStellwerk-Software should run on MacOS/iOS. Unfortunately  I do not have access to either OS, so I cannot support either OS.
 
 ### Webserver
-The Webserver runs on .NET, currently Version 5.0. It should be able to run on Windows, GNU/Linux and MacOS and supports both x86 and ARM processors.
-The TauStellwerk server uses a SQLite-database to keep it's data.
+Core of the TauStellwerk software is the TauStellwerk.Server component. It handles communication between the CommandStation and the clients. Can, for example, be run on a Raspberry Pi.
 
-There's no user authentication, as managing user accounts does not align with the goals of this project. Instead Users can freely chose a username and access control should happen on a network level.
+For the sake of simplicity, there are no "accounts". Any user can choose whatever username he desires. Access control has be done by restricting access to the server. 
 
-For the optional image processing the server relies on the ImageMagick suite. It is not included and should be installed separately if desired. Both IMv6 and IMv7 are supported, as many Linux distributions still only provide the older version in their repos.
+For the optional image processing the server relies on the ImageMagick application. It is not included and should be installed separately if desired. Both IMv6 and IMv7 are supported.
 
 ### Webapp
-The Webapp is a Blazor WebAssembly Application. It's best regarded as a "lite" version of the fully featured "native" applications.
+The Webapp is based on Blazor WebAssembly and should run on any recent version of the commonly used Browsers. Generally the application is tested with current versions of Chrome, Firefox and Edge. It's expected that the webapp will not necessarily have feature-parity with the dedicated applications and be more of a "lite" version.
+
+### Desktop Application
+Uses .NET and AvaloniaUI. Connects to the TauStellwerk.Server. Tested on Linux and Windows.
+
+### Mobile App
+Not started yet. Should be using .NET MAUI. Currently waiting until we get closer to the release of MAUI.
 
 ## Licences
-- Unless noted otherwise, this project is licensed under the GNU GPLv3, see [here](/LICENSE) for more details.
+Unless noted otherwise, this project is licensed under the GNU GPLv3, see [here](/LICENSE) for more details.
 
-## Next steps:
-- Mobile App using MAUI (depends on the Release of .NET 6)
-- Switches
+## Contributing
+All contributions are welcome. As I'm currently the sole user and developer, documentation isn't a huge focus for me, so feel free approach me with any potential questions.
