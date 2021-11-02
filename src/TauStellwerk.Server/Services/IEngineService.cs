@@ -6,8 +6,8 @@
 #nullable enable
 
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using FluentResults;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
@@ -17,15 +17,15 @@ namespace TauStellwerk.Services;
 
 public interface IEngineService
 {
-    Task<bool> AcquireEngine(Session session, Engine engine);
+    Task<Result> AcquireEngine(Session session, Engine engine);
 
-    Task<bool> ReleaseEngine(Session session, int engineId);
+    Task<Result> ReleaseEngine(Session session, int engineId);
 
-    Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldDriveForward);
+    Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldDriveForward);
 
-    Task<bool> SetEngineEStop(Session session, int engineId);
+    Task<Result> SetEngineEStop(Session session, int engineId);
 
-    Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
+    Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
 }
 
 public class EngineService : IEngineService
@@ -40,13 +40,13 @@ public class EngineService : IEngineService
         sessionService.SessionTimeout += HandleSessionTimeout;
     }
 
-    public async Task<bool> AcquireEngine(Session session, Engine engine)
+    public async Task<Result> AcquireEngine(Session session, Engine engine)
     {
-        var result = _activeEngines.TryAdd(engine.Id, new ActiveEngine(session, engine));
-        if (!result)
+        var serviceSuccess = _activeEngines.TryAdd(engine.Id, new ActiveEngine(session, engine));
+        if (!serviceSuccess)
         {
             ConsoleService.PrintMessage($"{session} tried acquiring {engine}, but engine is already acquired.");
-            return result;
+            return Result.Fail("Engine already in use");
         }
 
         var systemResult = await _commandSystem.TryAcquireEngine(engine);
@@ -55,86 +55,94 @@ public class EngineService : IEngineService
         {
             ConsoleService.PrintWarning($"{session} tried acquiring {engine}, but ICommandSystem returned false");
             _activeEngines.TryRemove(engine.Id, out _);
-            return false;
+            return Result.Fail("Engine already in use");
         }
 
         ConsoleService.PrintMessage($"{session} acquired {engine}");
 
-        return true;
+        return Result.Ok();
     }
 
-    public async Task<bool> ReleaseEngine(Session session, int engineId)
+    public async Task<Result> ReleaseEngine(Session session, int engineId)
     {
-        if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
+        var activeEngineResult = TryGetActiveEngine(engineId, session);
+        if (activeEngineResult.IsFailed)
         {
-            return false;
+            return activeEngineResult.ToResult();
         }
+
+        var activeEngine = activeEngineResult.Value;
 
         _activeEngines.TryRemove(engineId, out _);
         ConsoleService.PrintMessage($"{session} released {activeEngine.Engine}");
 
-        return await _commandSystem.TryReleaseEngine(activeEngine.Engine);
+        var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngine.Engine);
+        return Result.OkIf(systemReleaseSuccess, "CommandSystem could not release engine");
     }
 
-    public async Task<bool> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)
+    public async Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)
     {
-        if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
+        var activeEngineResult = TryGetActiveEngine(engineId, session);
+        if (activeEngineResult.IsFailed)
         {
-            return false;
+            return activeEngineResult.ToResult();
         }
+
+        var activeEngine = activeEngineResult.Value;
 
         var hasBeenDrivingForward = activeEngine.IsDrivingForward;
         shouldBeDrivingForwards ??= hasBeenDrivingForward;
         activeEngine.IsDrivingForward = (bool)shouldBeDrivingForwards;
 
         await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, hasBeenDrivingForward, (bool)shouldBeDrivingForwards);
-        return true;
+        return Result.Ok();
     }
 
-    public async Task<bool> SetEngineEStop(Session session, int engineId)
+    public async Task<Result> SetEngineEStop(Session session, int engineId)
     {
-        if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
+        var activeEngineResult = TryGetActiveEngine(engineId, session);
+        if (activeEngineResult.IsFailed)
         {
-            return false;
+            return activeEngineResult.ToResult();
         }
+
+        var activeEngine = activeEngineResult.Value;
 
         var hasBeenDrivingForward = activeEngine.IsDrivingForward;
         await _commandSystem.HandleEngineEStop(activeEngine.Engine, hasBeenDrivingForward);
-        return true;
+        return Result.Ok();
     }
 
-    public async Task<bool> SetEngineFunction(Session session, int engineId, int functionNumber, bool on)
+    public async Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, bool on)
     {
-        if (!IsValidEngineId(engineId, out var activeEngine, session) || !IsCorrectSession(session, activeEngine))
+        var activeEngineResult = TryGetActiveEngine(engineId, session);
+        if (activeEngineResult.IsFailed)
         {
-            return false;
+            return activeEngineResult.ToResult();
         }
+
+        var activeEngine = activeEngineResult.Value;
 
         await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, on);
-        return true;
+        return Result.Ok();
     }
 
-    private static bool IsCorrectSession(Session session, ActiveEngine? activeEngine)
+    private Result<ActiveEngine> TryGetActiveEngine(int engineId, Session session)
     {
-        if (activeEngine?.Session != session)
-        {
-            ConsoleService.PrintWarning($"{session} tried releasing {activeEngine?.Engine}, but has wrong session");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool IsValidEngineId(int engineId, [NotNullWhen(true)] out ActiveEngine? activeEngine, Session session)
-    {
-        _activeEngines.TryGetValue(engineId, out activeEngine);
+        _activeEngines.TryGetValue(engineId, out var activeEngine);
         if (activeEngine == null)
         {
             ConsoleService.PrintMessage($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
-            return false;
+            return Result.Fail($"No engine with id {engineId} was found");
         }
 
-        return true;
+        if (activeEngine?.Session != session)
+        {
+            ConsoleService.PrintWarning($"{session} tried something with {activeEngine?.Engine}, but has wrong session");
+            return Result.Fail("Wrong session");
+        }
+
+        return Result.Ok(activeEngine);
     }
 
     private void HandleSessionTimeout(Session session)

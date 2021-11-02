@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
@@ -27,8 +28,9 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            var success = await service.AcquireEngine(session, _engine);
-            Assert.True(success);
+            var result = await service.AcquireEngine(session, _engine);
+
+            Assert.That(result.IsSuccess);
         }
 
         [Test]
@@ -38,7 +40,9 @@ namespace TauStellwerk.Test.Services
             mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(false);
             var (service, session) = PrepareEngineService(mock);
 
-            Assert.False(await service.AcquireEngine(session, _engine));
+            var result = await service.AcquireEngine(session, _engine);
+
+            result.Should().BeFailure(string.Empty);
         }
 
         [Test]
@@ -46,8 +50,11 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.True(await service.AcquireEngine(session, _engine));
-            Assert.False(await service.AcquireEngine(session, _engine));
+            var firstResult = await service.AcquireEngine(session, _engine);
+            var secondResult = await service.AcquireEngine(session, _engine);
+
+            firstResult.Should().BeSuccess();
+            secondResult.Should().BeFailure();
         }
 
         [Test]
@@ -55,8 +62,11 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.True(await service.AcquireEngine(session, _engine));
-            Assert.True(await service.ReleaseEngine(session, _engine.Id));
+            var acquireResult = await service.AcquireEngine(session, _engine);
+            var releaseResult = await service.ReleaseEngine(session, _engine.Id);
+
+            acquireResult.Should().BeSuccess();
+            releaseResult.Should().BeSuccess();
         }
 
         [Test]
@@ -64,9 +74,12 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.True(await service.AcquireEngine(session, _engine));
-            Assert.True(await service.ReleaseEngine(session, _engine.Id));
-            Assert.False(await service.ReleaseEngine(session, _engine.Id));
+            _ = await service.AcquireEngine(session, _engine);
+            var firstRelease = await service.ReleaseEngine(session, _engine.Id);
+            var secondRelease = await service.ReleaseEngine(session, _engine.Id);
+
+            firstRelease.Should().BeSuccess();
+            secondRelease.Should().BeFailure();
         }
 
         [Test]
@@ -81,9 +94,11 @@ namespace TauStellwerk.Test.Services
                 UserName = "Different Session",
             };
 
-            Assert.True(await service.AcquireEngine(session, _engine));
-            Assert.False(await service.ReleaseEngine(session2, _engine.Id));
-            Assert.True(await service.ReleaseEngine(session, _engine.Id));
+            var acquireResult = await service.AcquireEngine(session, _engine);
+            var releaseResult = await service.ReleaseEngine(session2, _engine.Id);
+
+            acquireResult.Should().BeSuccess();
+            releaseResult.Should().BeFailure();
         }
 
         [Test]
@@ -91,9 +106,13 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.True(await service.AcquireEngine(session, _engine));
-            Assert.True(await service.ReleaseEngine(session, _engine.Id));
-            Assert.True(await service.AcquireEngine(session, _engine));
+            var acquireResult = await service.AcquireEngine(session, _engine);
+            var releaseResult = await service.ReleaseEngine(session, _engine.Id);
+            var reacquireResult = await service.AcquireEngine(session, _engine);
+
+            acquireResult.Should().BeSuccess();
+            releaseResult.Should().BeSuccess();
+            reacquireResult.Should().BeSuccess();
         }
 
         [Test]
@@ -101,7 +120,9 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.False(await service.SetEngineSpeed(session, 1, 100, null));
+            var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
+
+            speedResult.Should().BeFailure();
         }
 
         [Test]
@@ -109,8 +130,10 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            await service.AcquireEngine(session, _engine);
-            Assert.True(await service.SetEngineSpeed(session, 1, 100, null));
+            _ = await service.AcquireEngine(session, _engine);
+            var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
+
+            speedResult.Should().BeSuccess();
         }
 
         [Test]
@@ -120,7 +143,9 @@ namespace TauStellwerk.Test.Services
             var session2 = new Session();
 
             await service.AcquireEngine(session, _engine);
-            Assert.False(await service.SetEngineSpeed(session2, 1, 100, null));
+            var speedResult = await service.SetEngineSpeed(session2, 1, 100, null);
+
+            speedResult.Should().BeFailure();
         }
 
         [Test]
@@ -128,7 +153,9 @@ namespace TauStellwerk.Test.Services
         {
             var (service, session) = PrepareEngineService();
 
-            Assert.False(await service.SetEngineFunction(session, 1, 2, false));
+            var functionResult = await service.SetEngineFunction(session, 1, 2, false);
+
+            functionResult.Should().BeFailure();
         }
 
         [Test]
@@ -137,7 +164,9 @@ namespace TauStellwerk.Test.Services
             var (service, session) = PrepareEngineService();
 
             await service.AcquireEngine(session, _engine);
-            Assert.True(await service.SetEngineFunction(session, 1, 0, true));
+            var functionResult = await service.SetEngineFunction(session, 1, 0, true);
+
+            functionResult.Should().BeSuccess();
         }
 
         [Test]
@@ -147,7 +176,9 @@ namespace TauStellwerk.Test.Services
             var session2 = new Session();
 
             await service.AcquireEngine(session, _engine);
-            Assert.False(await service.SetEngineFunction(session2, 1, 10, true));
+            var functionResult = await service.SetEngineFunction(session2, 1, 10, true);
+
+            functionResult.Should().BeFailure();
         }
 
         private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
