@@ -29,10 +29,10 @@ public class EngineService
         _service = httpClientService;
     }
 
-    public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true)
+    public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
         var client = await _service.GetHttpClient();
-        var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}");
+        var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}&showHiddenEngines={showHidden}");
         var responseString = await response.Content.ReadAsStringAsync();
         var engines = JsonSerializer.Deserialize(responseString, TauJsonContext.Default.EngineDtoArray) ?? Array.Empty<EngineDto>();
 

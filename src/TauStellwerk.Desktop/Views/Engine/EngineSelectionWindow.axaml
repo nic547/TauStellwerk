@@ -20,6 +20,7 @@
                   SelectedItem="{Binding CurrentEngineSortMode}"/>
         <ComboBox Items="{Binding EngineSortDirections}"
                   SelectedItem="{Binding CurrentEngineSortDirection}"/>
+        <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
       </StackPanel>
       <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
         <Button Command="{Binding ScrollPages}" 

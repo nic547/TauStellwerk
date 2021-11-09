@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using FluentResults;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -101,23 +102,23 @@ namespace TauStellwerk.Test.ControllerTests.EngineControllerTests
             mock.Setup(e => e.AcquireEngine(
                     It.IsAny<Session>(),
                     It.IsAny<Engine>()))
-                .ReturnsAsync(returns);
+                .ReturnsAsync(returns ? Result.Ok() : Result.Fail(string.Empty));
             mock.Setup(e => e.ReleaseEngine(
                     It.IsAny<Session>(),
                     It.IsAny<int>()))
-                .ReturnsAsync(returns);
+                .ReturnsAsync(returns ? Result.Ok() : Result.Fail(string.Empty));
             mock.Setup(e => e.SetEngineFunction(
                     It.IsAny<Session>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     It.IsAny<bool>()))
-                .ReturnsAsync(returns);
+                .ReturnsAsync(returns ? Result.Ok() : Result.Fail(string.Empty));
             mock.Setup(e => e.SetEngineSpeed(
                     It.IsAny<Session>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     It.IsAny<bool?>()))
-                .ReturnsAsync(returns);
+                .ReturnsAsync(returns ? Result.Ok() : Result.Fail(string.Empty));
             return mock.Object;
         }
 

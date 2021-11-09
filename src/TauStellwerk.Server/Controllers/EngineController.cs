@@ -61,7 +61,7 @@ public class EngineController : Controller
             .Include(x => x.Images)
             .Include(x => x.Tags)
             .SingleOrDefaultAsync(x => x.Id == id)
-            .ContinueWith(x => x?.Result?.ToEngineFullDto());
+            .ContinueWith(x => x.Result?.ToEngineFullDto());
     }
 
     /// <summary>
@@ -187,7 +187,8 @@ public class EngineController : Controller
             return StatusCode(403);
         }
 
-        if (await _engineService.SetEngineSpeed(session, id, speed, forward))
+        var speedResult = await _engineService.SetEngineSpeed(session, id, speed, forward);
+        if (speedResult.IsSuccess)
         {
             return Ok();
         }
@@ -207,7 +208,8 @@ public class EngineController : Controller
             return StatusCode(403);
         }
 
-        if (await _engineService.SetEngineEStop(session, id))
+        var estopResult = await _engineService.SetEngineEStop(session, id);
+        if (estopResult.IsSuccess)
         {
             return Ok();
         }
@@ -236,7 +238,8 @@ public class EngineController : Controller
             return StatusCode(403);
         }
 
-        if (await _engineService.SetEngineFunction(session, id, functionNumber, state == "on"))
+        var functionResult = await _engineService.SetEngineFunction(session, id, functionNumber, state == "on");
+        if (functionResult.IsSuccess)
         {
             return Ok();
         }
@@ -276,7 +279,7 @@ public class EngineController : Controller
 
         var result = await _engineService.AcquireEngine(session, engine);
 
-        if (!result)
+        if (result.IsFailed)
         {
             return StatusCode(423);
         }
@@ -302,11 +305,13 @@ public class EngineController : Controller
             return StatusCode(403);
         }
 
-        if (!await _engineService.ReleaseEngine(session, id))
+        var releaseTask = await _engineService.ReleaseEngine(session, id);
+
+        if (releaseTask.IsSuccess)
         {
-            return BadRequest();
+            return Ok();
         }
 
-        return Ok();
+        return BadRequest();
     }
 }
