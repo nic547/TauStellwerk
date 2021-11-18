@@ -6,6 +6,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using TauStellwerk.Base;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
+using TauStellwerk.Hub;
 using TauStellwerk.Services;
 
 namespace TauStellwerk;
@@ -58,7 +60,7 @@ public class Startup
 
         services.AddSingleton(new SessionService());
         services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
-        services.AddSingleton(p => new StatusService(p.GetRequiredService<CommandSystemBase>()));
+        services.AddSingleton(p => new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>()));
         services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
 
         services.AddHostedService(p => p.GetRequiredService<SessionService>());
@@ -112,7 +114,7 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
-            endpoints.MapHub<TauHub>("/hub");
+            endpoints.MapHub<Hub.TauHub>("/hub");
         });
     }
 
