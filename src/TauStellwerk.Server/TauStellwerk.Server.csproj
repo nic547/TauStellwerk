@@ -6,7 +6,7 @@
     <DocumentationFile>.\bin\TauStellwerk.Server.xml</DocumentationFile>
     <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
     <Nullable>enable</Nullable>
-	<NoWarn>1701;1702;1591</NoWarn>
+	<NoWarn>1701;1702;1591;SA1601</NoWarn>
 	<RootNamespace>TauStellwerk</RootNamespace>
   </PropertyGroup>
 

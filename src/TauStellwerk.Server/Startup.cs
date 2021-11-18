@@ -51,6 +51,7 @@ public class Startup
 
         services.AddControllersWithViews();
         services.AddRazorPages();
+        services.AddSignalR();
 
         services.AddDbContext<StwDbContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("Database")));
@@ -111,6 +112,7 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
+            endpoints.MapHub<TauHub>("/hub");
         });
     }
 

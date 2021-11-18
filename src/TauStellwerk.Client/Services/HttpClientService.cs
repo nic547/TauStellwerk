@@ -4,24 +4,22 @@
 // </copyright>
 
 using System;
+using System.IO;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
-using TauStellwerk.Base;
+using Microsoft.AspNetCore.SignalR.Client;
+using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Services;
 
-public class HttpClientService : IHttpClientService
+public class HttpClientService : IConnectionService
 {
     private readonly ISettingsService _settingsService;
 
-    private readonly Timer _sessionTimer;
+    private HubConnection? _hubConnection;
 
-    private string _sessionId = string.Empty;
-
-    private HttpClient? _httpClient;
+    private Timer _sessionTimer;
 
     public HttpClientService(ISettingsService settingsService)
     {
@@ -32,63 +30,61 @@ public class HttpClientService : IHttpClientService
         _sessionTimer.AutoReset = true;
     }
 
-    public async Task<HttpClient> GetHttpClient()
+    public async Task<HubConnection> GetHubConnection()
     {
-        if (_httpClient != null)
+        if (_hubConnection != null)
         {
-            return _httpClient;
-        }
-
-        var handler = new HttpClientHandler();
-
-        try
-        {
-            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-        }
-        catch (NotSupportedException)
-        {
-            // Not all platforms support the certificate handling, for example Blazor WebAssembly doesn't.
-            // Luckily the invalid certificates are handled by the browser in that case.
+            return _hubConnection;
         }
 
         var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
+        var hubPath = new Uri(baseAddress, "/hub");
+        Console.WriteLine(hubPath);
 
-        _httpClient = new HttpClient(handler)
+        _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
         {
-            BaseAddress = baseAddress,
-        };
+            IgnoreInvalidCerts(opts);
+        }).Build();
 
-        var sessionId = await GetSessionId(_httpClient);
+        var username = (await _settingsService.GetSettings()).Username;
 
-        _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("session-id", sessionId);
+        await _hubConnection.StartAsync();
+        await _hubConnection.InvokeAsync("RegisterUser", arg1: username);
 
-        return _httpClient;
+        _sessionTimer.Start();
+
+        return _hubConnection;
     }
 
-    private async Task<string> GetSessionId(HttpClient client)
+    private static void IgnoreInvalidCerts(Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions opts)
     {
-        if (string.IsNullOrEmpty(_sessionId))
+        opts.HttpMessageHandlerFactory = (handler) =>
         {
-            var username = (await _settingsService.GetSettings()).Username;
+            if (handler is HttpClientHandler clientHandler)
+            {
+                try
+                {
+                    clientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                    clientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+                }
+                catch (NotSupportedException)
+                {
+                    // Not all platforms support the certificate handling, for example Blazor WebAssembly doesn't.
+                    // Luckily the invalid certificates are handled by the browser in that case.
+                }
+            }
 
-            var response = await client.PostAsync(
-                "/session",
-                new StringContent(
-                    JsonSerializer.Serialize(username, TauJsonContext.Default.String),
-                    Encoding.UTF8,
-                    "text/json"));
-            _sessionId = await response.Content.ReadAsStringAsync();
+            return handler;
+        };
+    }
 
-            _sessionTimer.Enabled = true;
+    private void KeepSessionAlive(object? sender, ElapsedEventArgs e)
+    {
+        if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
+        {
+            return;
         }
 
-        return _sessionId;
-    }
-
-    private async void KeepSessionAlive(object? source, ElapsedEventArgs e)
-    {
-        var client = await GetHttpClient();
-        _ = await client.PutAsync("/session", new StringContent(string.Empty));
+        _hubConnection.InvokeAsync("SendHeartbeat");
     }
 }
