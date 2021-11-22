@@ -12,8 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using TauStellwerk.Base;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
 using TauStellwerk.Hub;
@@ -46,12 +44,6 @@ public class Startup
     /// <param name="services">IDK.</param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers().AddJsonOptions(opts =>
-        {
-            opts.JsonSerializerOptions.AddContext<TauJsonContext>();
-        });
-
-        services.AddControllersWithViews();
         services.AddRazorPages();
         services.AddSignalR();
 
@@ -60,20 +52,14 @@ public class Startup
 
         services.AddSingleton(new SessionService());
         services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
-        services.AddSingleton(p => new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>()));
-        services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
+        services.AddSingleton(p =>
+            new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>()));
+        services.AddSingleton<IEngineService>(p =>
+            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
 
         services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>()));
 
         services.AddHostedService(p => p.GetRequiredService<SessionService>());
-
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "TauStellwerk API", Version = "v1" });
-
-            var filePath = Path.Combine(System.AppContext.BaseDirectory, "TauStellwerk.Server.xml");
-            c.IncludeXmlComments(filePath);
-        });
     }
 
     /// <summary>
@@ -87,13 +73,6 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseWebAssemblyDebugging();
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TauStellwerk API V1");
-            });
         }
 
         app.UseDefaultFiles();
@@ -116,7 +95,7 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
-            endpoints.MapHub<Hub.TauHub>("/hub");
+            endpoints.MapHub<TauHub>("/hub");
         });
     }
 
