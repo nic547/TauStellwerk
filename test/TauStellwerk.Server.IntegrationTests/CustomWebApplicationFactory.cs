@@ -6,17 +6,16 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 
-namespace TauStellwerk.Server.IntegrationTests
+namespace TauStellwerk.Server.IntegrationTests;
+
+public class CustomWebApplicationFactory<T> : WebApplicationFactory<T>
+    where T : class
 {
-    public class CustomWebApplicationFactory<T> : WebApplicationFactory<T>
-        where T : class
+    protected override IHost CreateHost(IHostBuilder builder)
     {
-        protected override IHost CreateHost(IHostBuilder builder)
-        {
-            return base.CreateHost(builder)
-                .MigrateDatabase()
-                .LoadEngines()
-                .SetupImages();
-        }
+        return base.CreateHost(builder)
+            .MigrateDatabase()
+            .LoadEngines()
+            .SetupImages();
     }
 }

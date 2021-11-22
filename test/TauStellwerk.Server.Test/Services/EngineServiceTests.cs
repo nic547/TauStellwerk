@@ -14,190 +14,189 @@ using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Services;
 
-namespace TauStellwerk.Test.Services
+namespace TauStellwerk.Test.Services;
+
+public class EngineServiceTests
 {
-    public class EngineServiceTests
+    private readonly Engine _engine = new()
     {
-        private readonly Engine _engine = new()
+        Id = 1,
+    };
+
+    [Test]
+    public async Task CanAcquireEngineTest()
+    {
+        var (service, session) = PrepareEngineService();
+
+        var result = await service.AcquireEngine(session, _engine);
+
+        Assert.That(result.IsSuccess);
+    }
+
+    [Test]
+    public async Task CannotAcquireEngineTest()
+    {
+        var mock = GetAlwaysTrueMock();
+        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(false);
+        var (service, session) = PrepareEngineService(mock);
+
+        var result = await service.AcquireEngine(session, _engine);
+
+        result.Should().BeFailure(string.Empty);
+    }
+
+    [Test]
+    public async Task CannotAcquireEngineTwice()
+    {
+        var (service, session) = PrepareEngineService();
+
+        var firstResult = await service.AcquireEngine(session, _engine);
+        var secondResult = await service.AcquireEngine(session, _engine);
+
+        firstResult.Should().BeSuccess();
+        secondResult.Should().BeFailure();
+    }
+
+    [Test]
+    public async Task CanReleaseAcquiredEngine()
+    {
+        var (service, session) = PrepareEngineService();
+
+        var acquireResult = await service.AcquireEngine(session, _engine);
+        var releaseResult = await service.ReleaseEngine(session, _engine.Id);
+
+        acquireResult.Should().BeSuccess();
+        releaseResult.Should().BeSuccess();
+    }
+
+    [Test]
+    public async Task CannotReleaseEngineTwice()
+    {
+        var (service, session) = PrepareEngineService();
+
+        _ = await service.AcquireEngine(session, _engine);
+        var firstRelease = await service.ReleaseEngine(session, _engine.Id);
+        var secondRelease = await service.ReleaseEngine(session, _engine.Id);
+
+        firstRelease.Should().BeSuccess();
+        secondRelease.Should().BeFailure();
+    }
+
+    [Test]
+    public async Task DifferentSessionCannotRelease()
+    {
+        var (service, session) = PrepareEngineService();
+
+        var session2 = new Session
         {
-            Id = 1,
+            IsActive = true,
+            LastContact = DateTime.Now,
+            UserName = "Different Session",
         };
 
-        [Test]
-        public async Task CanAcquireEngineTest()
-        {
-            var (service, session) = PrepareEngineService();
+        var acquireResult = await service.AcquireEngine(session, _engine);
+        var releaseResult = await service.ReleaseEngine(session2, _engine.Id);
 
-            var result = await service.AcquireEngine(session, _engine);
+        acquireResult.Should().BeSuccess();
+        releaseResult.Should().BeFailure();
+    }
 
-            Assert.That(result.IsSuccess);
-        }
+    [Test]
+    public async Task CanAcquireReleasedEngine()
+    {
+        var (service, session) = PrepareEngineService();
 
-        [Test]
-        public async Task CannotAcquireEngineTest()
-        {
-            var mock = GetAlwaysTrueMock();
-            mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(false);
-            var (service, session) = PrepareEngineService(mock);
+        var acquireResult = await service.AcquireEngine(session, _engine);
+        var releaseResult = await service.ReleaseEngine(session, _engine.Id);
+        var reacquireResult = await service.AcquireEngine(session, _engine);
 
-            var result = await service.AcquireEngine(session, _engine);
+        acquireResult.Should().BeSuccess();
+        releaseResult.Should().BeSuccess();
+        reacquireResult.Should().BeSuccess();
+    }
 
-            result.Should().BeFailure(string.Empty);
-        }
+    [Test]
+    public async Task CannotSetSpeedIfNotAcquired()
+    {
+        var (service, session) = PrepareEngineService();
 
-        [Test]
-        public async Task CannotAcquireEngineTwice()
-        {
-            var (service, session) = PrepareEngineService();
+        var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
 
-            var firstResult = await service.AcquireEngine(session, _engine);
-            var secondResult = await service.AcquireEngine(session, _engine);
+        speedResult.Should().BeFailure();
+    }
 
-            firstResult.Should().BeSuccess();
-            secondResult.Should().BeFailure();
-        }
+    [Test]
+    public async Task CanSetSpeedIfAcquired()
+    {
+        var (service, session) = PrepareEngineService();
 
-        [Test]
-        public async Task CanReleaseAcquiredEngine()
-        {
-            var (service, session) = PrepareEngineService();
+        _ = await service.AcquireEngine(session, _engine);
+        var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
 
-            var acquireResult = await service.AcquireEngine(session, _engine);
-            var releaseResult = await service.ReleaseEngine(session, _engine.Id);
+        speedResult.Should().BeSuccess();
+    }
 
-            acquireResult.Should().BeSuccess();
-            releaseResult.Should().BeSuccess();
-        }
+    [Test]
+    public async Task CannotSetSpeedWithInvalidSession()
+    {
+        var (service, session) = PrepareEngineService();
+        var session2 = new Session();
 
-        [Test]
-        public async Task CannotReleaseEngineTwice()
-        {
-            var (service, session) = PrepareEngineService();
+        await service.AcquireEngine(session, _engine);
+        var speedResult = await service.SetEngineSpeed(session2, 1, 100, null);
 
-            _ = await service.AcquireEngine(session, _engine);
-            var firstRelease = await service.ReleaseEngine(session, _engine.Id);
-            var secondRelease = await service.ReleaseEngine(session, _engine.Id);
+        speedResult.Should().BeFailure();
+    }
 
-            firstRelease.Should().BeSuccess();
-            secondRelease.Should().BeFailure();
-        }
+    [Test]
+    public async Task CannotSetFunctionIfNotAcquired()
+    {
+        var (service, session) = PrepareEngineService();
 
-        [Test]
-        public async Task DifferentSessionCannotRelease()
-        {
-            var (service, session) = PrepareEngineService();
+        var functionResult = await service.SetEngineFunction(session, 1, 2, false);
 
-            var session2 = new Session
-            {
-                IsActive = true,
-                LastContact = DateTime.Now,
-                UserName = "Different Session",
-            };
+        functionResult.Should().BeFailure();
+    }
 
-            var acquireResult = await service.AcquireEngine(session, _engine);
-            var releaseResult = await service.ReleaseEngine(session2, _engine.Id);
+    [Test]
+    public async Task CanSetFunctionIfAcquired()
+    {
+        var (service, session) = PrepareEngineService();
 
-            acquireResult.Should().BeSuccess();
-            releaseResult.Should().BeFailure();
-        }
+        await service.AcquireEngine(session, _engine);
+        var functionResult = await service.SetEngineFunction(session, 1, 0, true);
 
-        [Test]
-        public async Task CanAcquireReleasedEngine()
-        {
-            var (service, session) = PrepareEngineService();
+        functionResult.Should().BeSuccess();
+    }
 
-            var acquireResult = await service.AcquireEngine(session, _engine);
-            var releaseResult = await service.ReleaseEngine(session, _engine.Id);
-            var reacquireResult = await service.AcquireEngine(session, _engine);
+    [Test]
+    public async Task CannotSetFunctionWithInvalidSession()
+    {
+        var (service, session) = PrepareEngineService();
+        var session2 = new Session();
 
-            acquireResult.Should().BeSuccess();
-            releaseResult.Should().BeSuccess();
-            reacquireResult.Should().BeSuccess();
-        }
+        await service.AcquireEngine(session, _engine);
+        var functionResult = await service.SetEngineFunction(session2, 1, 10, true);
 
-        [Test]
-        public async Task CannotSetSpeedIfNotAcquired()
-        {
-            var (service, session) = PrepareEngineService();
+        functionResult.Should().BeFailure();
+    }
 
-            var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
+    private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
+    {
+        var sessionService = new SessionService();
+        var session = sessionService.CreateSession("TEST", "TEST", "sessionId");
+        mock ??= GetAlwaysTrueMock();
+        EngineService engineService = new(mock.Object, sessionService);
+        return (engineService, session);
+    }
 
-            speedResult.Should().BeFailure();
-        }
+    private static Mock<CommandSystemBase> GetAlwaysTrueMock()
+    {
+        var configMock = new Mock<IConfiguration>();
+        var mock = new Mock<CommandSystemBase>(configMock.Object);
+        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
+        mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>()).Result).Returns(true);
 
-        [Test]
-        public async Task CanSetSpeedIfAcquired()
-        {
-            var (service, session) = PrepareEngineService();
-
-            _ = await service.AcquireEngine(session, _engine);
-            var speedResult = await service.SetEngineSpeed(session, 1, 100, null);
-
-            speedResult.Should().BeSuccess();
-        }
-
-        [Test]
-        public async Task CannotSetSpeedWithInvalidSession()
-        {
-            var (service, session) = PrepareEngineService();
-            var session2 = new Session();
-
-            await service.AcquireEngine(session, _engine);
-            var speedResult = await service.SetEngineSpeed(session2, 1, 100, null);
-
-            speedResult.Should().BeFailure();
-        }
-
-        [Test]
-        public async Task CannotSetFunctionIfNotAcquired()
-        {
-            var (service, session) = PrepareEngineService();
-
-            var functionResult = await service.SetEngineFunction(session, 1, 2, false);
-
-            functionResult.Should().BeFailure();
-        }
-
-        [Test]
-        public async Task CanSetFunctionIfAcquired()
-        {
-            var (service, session) = PrepareEngineService();
-
-            await service.AcquireEngine(session, _engine);
-            var functionResult = await service.SetEngineFunction(session, 1, 0, true);
-
-            functionResult.Should().BeSuccess();
-        }
-
-        [Test]
-        public async Task CannotSetFunctionWithInvalidSession()
-        {
-            var (service, session) = PrepareEngineService();
-            var session2 = new Session();
-
-            await service.AcquireEngine(session, _engine);
-            var functionResult = await service.SetEngineFunction(session2, 1, 10, true);
-
-            functionResult.Should().BeFailure();
-        }
-
-        private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
-        {
-            var sessionService = new SessionService();
-            var session = sessionService.CreateSession("TEST", "TEST");
-            mock ??= GetAlwaysTrueMock();
-            EngineService engineService = new(mock.Object, sessionService);
-            return (engineService, session);
-        }
-
-        private static Mock<CommandSystemBase> GetAlwaysTrueMock()
-        {
-            var configMock = new Mock<IConfiguration>();
-            var mock = new Mock<CommandSystemBase>(configMock.Object);
-            mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
-            mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>()).Result).Returns(true);
-
-            return mock;
-        }
+        return mock;
     }
 }

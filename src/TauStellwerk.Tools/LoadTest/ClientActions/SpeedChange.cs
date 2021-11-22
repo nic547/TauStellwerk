@@ -8,31 +8,30 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Tools.LoadTest.ClientActions
+namespace TauStellwerk.Tools.LoadTest.ClientActions;
+
+/// <summary>
+/// Simulates sending a new Speed for an engine.
+/// </summary>
+[UsedImplicitly]
+public class SpeedChange : ClientActionBase
 {
-    /// <summary>
-    /// Simulates sending a new Speed for an engine.
-    /// </summary>
-    [UsedImplicitly]
-    public class SpeedChange : ClientActionBase
+    /// <inheritdoc/>
+    public override int Interval => Random.Next(190, 210);
+
+    /// <inheritdoc/>
+    public override async Task Initialize(EngineService engineService, LoadTestOptions options, int id, Random random)
     {
-        /// <inheritdoc/>
-        public override int Interval => Random.Next(190, 210);
+        await base.Initialize(engineService, options, id, random);
+    }
 
-        /// <inheritdoc/>
-        public override async Task Initialize(EngineService engineService, LoadTestOptions options, int id,  Random random)
-        {
-            await base.Initialize(engineService, options, id, random);
-        }
+    /// <inheritdoc/>
+    public override async Task<int> PerformRequest()
+    {
+        int newSpeed = Random.Next(0, 128);
+        var startTime = DateTime.Now;
 
-        /// <inheritdoc/>
-        public override async Task<int> PerformRequest()
-        {
-            int newSpeed = Random.Next(0, 128);
-            var startTime = DateTime.Now;
-
-            await EngineService.SetSpeed(Id, newSpeed, true);
-            return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
-        }
+        await EngineService.SetSpeed(Id, newSpeed, true);
+        return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
     }
 }

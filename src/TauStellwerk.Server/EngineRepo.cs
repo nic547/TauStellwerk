@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base.Model;
-using FluentResults;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
@@ -46,7 +46,7 @@ public class EngineRepo
         return Result.Ok(engine);
     }
 
-    internal async Task<Result<Engine>> GetEngine(int id)
+    public async Task<Result<Engine>> GetEngine(int id)
     {
         var engine = await _dbContext.Engines
             .AsNoTracking()

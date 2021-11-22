@@ -15,9 +15,9 @@ public class HttpClientService : IConnectionService
 {
     private readonly ISettingsService _settingsService;
 
-    private HubConnection? _hubConnection;
-
     private readonly Timer _sessionTimer;
+
+    private HubConnection? _hubConnection;
 
     public HttpClientService(ISettingsService settingsService)
     {

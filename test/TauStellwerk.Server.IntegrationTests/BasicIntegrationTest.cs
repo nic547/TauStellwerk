@@ -7,21 +7,20 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
 
-namespace TauStellwerk.Server.IntegrationTests
+namespace TauStellwerk.Server.IntegrationTests;
+
+public class BasicIntegrationTest
 {
-    public class BasicIntegrationTest
+    private readonly WebApplicationFactory<Startup> _factory;
+
+    public BasicIntegrationTest()
     {
-        private readonly WebApplicationFactory<Startup> _factory;
+        _factory = new CustomWebApplicationFactory<Startup>();
+    }
 
-        public BasicIntegrationTest()
-        {
-            _factory = new CustomWebApplicationFactory<Startup>();
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            File.Delete("StwDatabase.db");
-        }
+    [SetUp]
+    public void SetUp()
+    {
+        File.Delete("StwDatabase.db");
     }
 }
