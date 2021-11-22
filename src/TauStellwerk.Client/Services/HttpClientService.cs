@@ -4,12 +4,10 @@
 // </copyright>
 
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.AspNetCore.SignalR.Client;
-using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Services;
 
@@ -19,7 +17,7 @@ public class HttpClientService : IConnectionService
 
     private HubConnection? _hubConnection;
 
-    private Timer _sessionTimer;
+    private readonly Timer _sessionTimer;
 
     public HttpClientService(ISettingsService settingsService)
     {

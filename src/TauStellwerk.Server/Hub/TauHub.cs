@@ -11,10 +11,14 @@ public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
 {
     private readonly SessionService _sessionService;
     private readonly StatusService _statusService;
+    private readonly IEngineService _engineService;
+    private readonly EngineRepo _engineRepo;
 
-    public TauHub(SessionService sessionService, StatusService statusService)
+    public TauHub(SessionService sessionService, StatusService statusService, IEngineService engineService, EngineRepo engineRepo)
     {
         _sessionService = sessionService;
         _statusService = statusService;
+        _engineService = engineService;
+        _engineRepo = engineRepo;
     }
 }

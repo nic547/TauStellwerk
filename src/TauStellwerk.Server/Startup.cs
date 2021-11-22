@@ -63,6 +63,8 @@ public class Startup
         services.AddSingleton(p => new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>()));
         services.AddSingleton<IEngineService>(p => new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
 
+        services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>()));
+
         services.AddHostedService(p => p.GetRequiredService<SessionService>());
 
         services.AddSwaggerGen(c =>

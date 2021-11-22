@@ -77,7 +77,7 @@ public class EngineService : IEngineService
         ConsoleService.PrintMessage($"{session} released {activeEngine.Engine}");
 
         var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngine.Engine);
-        return Result.OkIf(systemReleaseSuccess, "CommandSystem could not release engine");
+        return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
     }
 
     public async Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)

@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Hub;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
     public Status GetStatus()

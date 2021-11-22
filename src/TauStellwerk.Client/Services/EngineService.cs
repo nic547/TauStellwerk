@@ -5,12 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using TauStellwerk.Base;
+using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Util;
@@ -31,37 +27,29 @@ public class EngineService
 
     public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
-        // var client = await _service.GetHttpClient();
-        // var response = await client.GetAsync($"/engine/list?page={page}&sortBy={sorting}&sortDescending={sortDescending}&showHiddenEngines={showHidden}");
-        // var responseString = await response.Content.ReadAsStringAsync();
-        // var engines = JsonSerializer.Deserialize(responseString, TauJsonContext.Default.EngineDtoArray) ?? Array.Empty<EngineDto>();
+        var connection = await _service.GetHubConnection();
 
-        return Array.Empty<EngineDto>();
+        return await connection.InvokeAsync<IReadOnlyList<EngineDto>>("GetEngines", page, sorting, sortDescending, showHidden);
     }
 
     public async Task<EngineFull?> AcquireEngine(int id)
     {
-        // var client = await _service.GetHttpClient();
-        // var engineTask = client.GetAsync($"/engine/{id}");
-        // var acquireResult = await client.PostAsync($"/engine/{id}/acquire", new StringContent(string.Empty));
+        var connection = await _service.GetHubConnection();
+        var result = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AcquireEngine", id);
 
-        // if (acquireResult.StatusCode == HttpStatusCode.OK)
-        // {
-        //     var response = await engineTask;
-        //     var json = await response.Content.ReadAsStringAsync();
-        //     _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMilliseconds));
-        //     var dto = JsonSerializer.Deserialize(json, TauJsonContext.Default.EngineFullDto);
-        //     return EngineFull.Create(dto);
-        // }
+        if (result.Success)
+        {
+            _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMilliseconds));
+        }
 
-        return null;
+        return EngineFull.Create(result.Value);
     }
 
     public async Task ReleaseEngine(int id)
     {
         _activeEngines.Remove(id);
-        var client = await _service.GetHubConnection();
-        //await client.PostAsync($"/engine/{id}/release", new StringContent(string.Empty));
+        var connection = await _service.GetHubConnection();
+        await connection.SendAsync("ReleaseEngine", id);
     }
 
     public async Task SetSpeed(int id, int speed, bool forward)
@@ -77,30 +65,27 @@ public class EngineService
 
     public async Task SetEStop(int id)
     {
-        var client = await _service.GetHubConnection();
-        // await client.PostAsync($"/engine/{id}/estop", new StringContent(string.Empty));
+        var connection = await _service.GetHubConnection();
+        await connection.SendAsync("SetEngineEStop", id);
     }
 
     public async Task SetFunction(int id, byte function, bool on)
     {
-        var client = await _service.GetHubConnection();
-        var path = $"/engine/{id}/function/{function}/{(on ? "on" : "off")}";
-
-        // await client.PostAsync(path, new StringContent(string.Empty));
+        var connection = await _service.GetHubConnection();
+        await connection.SendAsync("SetEngineFunction", id, function, on);
     }
 
     public async Task AddOrUpdateEngine(EngineFull engine)
     {
-        var client = await _service.GetHubConnection();
         var engineDto = engine.ToDto();
-        // await client.PostAsync("/engine", new StringContent(JsonSerializer.Serialize(engineDto, TauJsonContext.Default.EngineFullDto), Encoding.UTF8, "text/json"));
+        var connection = await _service.GetHubConnection();
+        await connection.SendAsync("AddOrUpdateEngine", engineDto);
     }
 
     private async Task SendSpeed((int Id, int Speed, bool Forward) arg)
     {
         var (id, speed, forward) = arg;
-        var client = await _service.GetHubConnection();
-        var path = $"/engine/{id}/speed/{speed}?forward={forward}";
-        // await client.PostAsync(path, new StringContent(string.Empty));
+        var connection = await _service.GetHubConnection();
+        await connection.SendAsync("SetEngineSpeed", id, speed, forward);
     }
 }
