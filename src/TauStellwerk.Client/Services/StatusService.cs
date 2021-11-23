@@ -11,11 +11,11 @@ namespace TauStellwerk.Client.Services;
 
 public class StatusService
 {
-    private readonly HttpClientService _service;
+    private readonly ConnectionService _service;
 
-    public StatusService(HttpClientService httpClientService)
+    public StatusService(ConnectionService connectionService)
     {
-        _service = httpClientService;
+        _service = connectionService;
         _ = Init();
     }
 

@@ -18,7 +18,7 @@ public static class Program
     public static void Main(string[] args)
     {
         Locator.CurrentMutable.RegisterConstant(new SettingsService(), typeof(SettingsService));
-        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(HttpClientService));
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientHttpService(), typeof(ConnectionService));
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientEngineService(), typeof(EngineService));
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
         Locator.CurrentMutable.RegisterConstant<IViewService>(new AvaloniaViewService());

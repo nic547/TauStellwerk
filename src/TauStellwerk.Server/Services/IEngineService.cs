@@ -136,9 +136,9 @@ public class EngineService : IEngineService
             return Result.Fail($"No engine with id {engineId} was found");
         }
 
-        if (activeEngine?.Session != session)
+        if (activeEngine.Session != session)
         {
-            ConsoleService.PrintWarning($"{session} tried something with {activeEngine?.Engine}, but has wrong session");
+            ConsoleService.PrintWarning($"{session} tried something with {activeEngine.Engine}, but has wrong session");
             return Result.Fail("Wrong session");
         }
 

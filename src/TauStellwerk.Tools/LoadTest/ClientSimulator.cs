@@ -41,7 +41,7 @@ public class ClientSimulator
     {
         var random = new Random();
         var settingsService = new LoadGeneratorSettingsService(options, random);
-        var httpService = new HttpClientService(settingsService);
+        var httpService = new ConnectionService(settingsService);
         var engineService = new EngineService(httpService);
 
         await engineService.AcquireEngine(id);

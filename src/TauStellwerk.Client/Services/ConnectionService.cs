@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpClientService.cs" company="Dominic Ritz">
+﻿// <copyright file="ConnectionService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TauStellwerk.Client.Services;
 
-public class HttpClientService : IConnectionService
+public class ConnectionService : IConnectionService
 {
     private readonly ISettingsService _settingsService;
 
@@ -19,7 +19,7 @@ public class HttpClientService : IConnectionService
 
     private HubConnection? _hubConnection;
 
-    public HttpClientService(ISettingsService settingsService)
+    public ConnectionService(ISettingsService settingsService)
     {
         _settingsService = settingsService;
 
@@ -39,15 +39,12 @@ public class HttpClientService : IConnectionService
         var hubPath = new Uri(baseAddress, "/hub");
         Console.WriteLine(hubPath);
 
-        _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
-        {
-            IgnoreInvalidCerts(opts);
-        }).Build();
+        _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, IgnoreInvalidCerts).Build();
 
         var username = (await _settingsService.GetSettings()).Username;
 
         await _hubConnection.StartAsync();
-        await _hubConnection.InvokeAsync("RegisterUser", arg1: username);
+        await _hubConnection.InvokeAsync("RegisterUser", username);
 
         _sessionTimer.Start();
 

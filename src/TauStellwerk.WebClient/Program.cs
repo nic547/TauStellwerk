@@ -23,9 +23,9 @@ public class Program
         builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
         builder.Services.AddScoped<ISettingsService>(sp => new BlazorSettingsService(builder.HostEnvironment.BaseAddress, sp.GetRequiredService<IJSRuntime>()));
-        builder.Services.AddScoped(provider => new HttpClientService(provider.GetRequiredService<ISettingsService>()));
-        builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<HttpClientService>()));
-        builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<HttpClientService>()));
+        builder.Services.AddScoped(provider => new ConnectionService(provider.GetRequiredService<ISettingsService>()));
+        builder.Services.AddScoped(provider => new StatusService(provider.GetRequiredService<ConnectionService>()));
+        builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<ConnectionService>()));
 
         builder.Services.AddScoped(_ => new ModalManager());
         builder.Services.AddScoped(_ => new AppState());
