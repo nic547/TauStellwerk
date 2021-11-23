@@ -1,12 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.WebClient
+namespace TauStellwerk.WebClient;
+
+[JsonSourceGenerationOptions(
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(MutableSettings))]
+public partial class SettingsJsonContext : JsonSerializerContext
 {
-    [JsonSourceGenerationOptions(
-        PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-    [JsonSerializable(typeof(MutableSettings))]
-    public partial class SettingsJsonContext : JsonSerializerContext
-    {
-    }
 }

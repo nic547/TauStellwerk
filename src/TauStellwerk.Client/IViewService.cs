@@ -5,18 +5,17 @@
 
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.Client
+namespace TauStellwerk.Client;
+
+public interface IViewService
 {
-    public interface IViewService
-    {
-        public void ShowEngineSelectionView(object? source = null);
+    public void ShowEngineSelectionView(object? source = null);
 
-        public void ShowEngineEditView(EngineFull engine, object? source = null);
+    public void ShowEngineEditView(EngineFull engine, object? source = null);
 
-        public void ShowEngineControlView(EngineFull engine, object? source = null);
+    public void ShowEngineControlView(EngineFull engine, object? source = null);
 
-        public void ShowSettingsView(object? source);
+    public void ShowSettingsView(object? source);
 
-        public void ShowMessageBox(string title, string message, object? source = null);
-    }
+    public void ShowMessageBox(string title, string message, object? source = null);
 }

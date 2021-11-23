@@ -7,7 +7,6 @@
 
 using System;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Web;
 
 namespace TauStellwerk.Base.Model;
@@ -17,19 +16,9 @@ namespace TauStellwerk.Base.Model;
 /// </summary>
 public class Session
 {
-    private const int SessionBytes = 32;
-
     private readonly string? _userAgent;
     private readonly string? _sessionId;
     private string? _userName;
-
-    public Session()
-    {
-        var rng = RandomNumberGenerator.Create();
-        var bytes = new byte[SessionBytes];
-        rng.GetBytes(bytes);
-        _sessionId = Convert.ToBase64String(bytes);
-    }
 
     public string UserName
     {
@@ -48,6 +37,7 @@ public class Session
     public string SessionId
     {
         get => _sessionId ?? string.Empty;
+        init => _sessionId = HttpUtility.HtmlEncode(value);
     }
 
     public bool IsActive { get; set; } = true;

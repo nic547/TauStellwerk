@@ -8,24 +8,23 @@ using FluentAssertions;
 using NUnit.Framework;
 using TauStellwerk.Database.Model;
 
-namespace TauStellwerk.Database.Tests
+namespace TauStellwerk.Database.Tests;
+
+/// <summary>
+/// Contains tests related to <see cref="Engine"/>.
+/// </summary>
+public class EngineTests
 {
     /// <summary>
-    /// Contains tests related to <see cref="Engine"/>.
+    /// Test that after serializing and deserializing via json the "new" engine object has the same values as the "old" one.
     /// </summary>
-    public class EngineTests
+    [Test]
+    public void EnginesMatchAfterJson()
     {
-        /// <summary>
-        /// Test that after serializing and deserializing via json the "new" engine object has the same values as the "old" one.
-        /// </summary>
-        [Test]
-        public void EnginesMatchAfterJson()
-        {
-            var expectedEngine = TestDataHelper.CreateTestEngine();
-            var json = JsonSerializer.Serialize(expectedEngine);
-            var resultEngine = JsonSerializer.Deserialize<Engine>(json);
+        var expectedEngine = TestDataHelper.CreateTestEngine();
+        var json = JsonSerializer.Serialize(expectedEngine);
+        var resultEngine = JsonSerializer.Deserialize<Engine>(json);
 
-            resultEngine.Should().BeEquivalentTo(expectedEngine);
-        }
+        resultEngine.Should().BeEquivalentTo(expectedEngine);
     }
 }

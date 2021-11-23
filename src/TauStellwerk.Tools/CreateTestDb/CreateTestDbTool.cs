@@ -9,28 +9,27 @@ using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 
-namespace TauStellwerk.Tools.CreateTestDb
+namespace TauStellwerk.Tools.CreateTestDb;
+
+public static class CreateTestDbTool
 {
-    public static class CreateTestDbTool
+    public static async Task Run(CreateTestDbOptions options)
     {
-        public static async Task Run(CreateTestDbOptions options)
+        var contextOptions =
+            new DbContextOptionsBuilder<StwDbContext>().UseSqlite($"Filename={options.Filename};cache=shared");
+        var context = new StwDbContext(contextOptions.Options);
+        await context.Database.MigrateAsync();
+
+        var engineList = EngineDtoGenerator.GetEngineFullDtos(options.Count);
+
+        foreach (var engineDto in engineList)
         {
-            var contextOptions =
-                new DbContextOptionsBuilder<StwDbContext>().UseSqlite($"Filename={options.Filename};cache=shared");
-            var context = new StwDbContext(contextOptions.Options);
-            await context.Database.MigrateAsync();
+            var engine = new Engine();
+            await engine.UpdateWith(engineDto, context);
+            context.Add(engine);
+            await context.SaveChangesAsync();
 
-            var engineList = EngineDtoGenerator.GetEngineFullDtos(options.Count);
-
-            foreach (var engineDto in engineList)
-            {
-                var engine = new Engine();
-                await engine.UpdateWith(engineDto, context);
-                context.Add(engine);
-                await context.SaveChangesAsync();
-
-                Console.WriteLine($"Created engine {engine.Name}");
-            }
+            Console.WriteLine($"Created engine {engine.Name}");
         }
     }
 }

@@ -8,39 +8,38 @@ using System.Threading.Tasks;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Tools.LoadTest
+namespace TauStellwerk.Tools.LoadTest;
+
+public class LoadGeneratorSettingsService : ISettingsService
 {
-    public class LoadGeneratorSettingsService : ISettingsService
+    private readonly ImmutableSettings _settings;
+
+    public LoadGeneratorSettingsService(LoadTestOptions options, Random random)
     {
-        private readonly ImmutableSettings _settings;
+        _settings = new ImmutableSettings(
+            $"Random User {random.Next(999_999)}",
+            options.Uri.ToString(),
+            "ThisIsNotATheme");
+    }
 
-        public LoadGeneratorSettingsService(LoadTestOptions options, Random random)
-        {
-            _settings = new ImmutableSettings(
-                $"Random User {random.Next(999_999)}",
-                options.Uri.ToString(),
-                "ThisIsNotATheme");
-        }
+    public event ISettingsService.SettingsChange SettingsChanged
+    {
+        add { }
+        remove { }
+    }
 
-        public event ISettingsService.SettingsChange SettingsChanged
-        {
-            add { }
-            remove { }
-        }
+    public Task<ImmutableSettings> GetSettings()
+    {
+        return Task.FromResult(_settings);
+    }
 
-        public Task<ImmutableSettings> GetSettings()
-        {
-            return Task.FromResult(_settings);
-        }
+    public Task<MutableSettings> GetMutableSettingsCopy()
+    {
+        throw new InvalidOperationException("Cannot edit settings for the load generator");
+    }
 
-        public Task<MutableSettings> GetMutableSettingsCopy()
-        {
-            throw new InvalidOperationException("Cannot edit settings for the load generator");
-        }
-
-        public Task SetSettings(MutableSettings mutableSettings)
-        {
-            throw new InvalidOperationException("Cannot edit settings for the load generator");
-        }
+    public Task SetSettings(MutableSettings mutableSettings)
+    {
+        throw new InvalidOperationException("Cannot edit settings for the load generator");
     }
 }

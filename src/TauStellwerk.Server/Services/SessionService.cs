@@ -37,13 +37,14 @@ public class SessionService : BackgroundService
 
     public event SessionTimeoutHandler? SessionTimeout;
 
-    public Session CreateSession(string username, string? userAgent)
+    public Session CreateSession(string username, string? userAgent, string sessionId)
     {
         var session = new Session
         {
             UserAgent = userAgent ?? string.Empty,
             UserName = username,
             LastContact = _now.GetNow(),
+            SessionId = sessionId,
         };
         _sessions.TryAdd(session.SessionId, session);
         ConsoleService.PrintMessage($"{session} created new session");

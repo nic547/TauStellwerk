@@ -16,19 +16,19 @@ public static class SplatFactory
 {
     public static EngineService CreateClientEngineService()
     {
-        var httpService = Locator.Current.GetService<HttpClientService>() ?? throw new InvalidOperationException();
+        var httpService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
         return new EngineService(httpService);
     }
 
     public static StatusService CreateClientStatusService()
     {
-        var httpService = Locator.Current.GetService<HttpClientService>() ?? throw new InvalidOperationException();
+        var httpService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
         return new StatusService(httpService);
     }
 
-    public static HttpClientService CreateClientHttpService()
+    public static ConnectionService CreateClientHttpService()
     {
         var settingService = Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
-        return new HttpClientService(settingService);
+        return new ConnectionService(settingService);
     }
 }

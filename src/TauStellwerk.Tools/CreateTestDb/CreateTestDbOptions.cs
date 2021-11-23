@@ -5,15 +5,14 @@
 
 using CommandLine;
 
-namespace TauStellwerk.Tools.CreateTestDb
-{
-    [Verb("create-test-db", HelpText = "Creates a datbase with random test data")]
-    public record CreateTestDbOptions
-    {
-        [Option('f', "filename", Required = true, HelpText = "The filename of the database file that is created.")]
-        public string Filename { get; init; } = string.Empty;
+namespace TauStellwerk.Tools.CreateTestDb;
 
-        [Option('c', "count", Required = false, Default = 100, HelpText = "How many engines should be generated.")]
-        public int Count { get; init; }
-    }
+[Verb("create-test-db", HelpText = "Creates a datbase with random test data")]
+public record CreateTestDbOptions
+{
+    [Option('f', "filename", Required = true, HelpText = "The filename of the database file that is created.")]
+    public string Filename { get; init; } = string.Empty;
+
+    [Option('c', "count", Required = false, Default = 100, HelpText = "How many engines should be generated.")]
+    public int Count { get; init; }
 }

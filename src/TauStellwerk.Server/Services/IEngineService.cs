@@ -77,7 +77,7 @@ public class EngineService : IEngineService
         ConsoleService.PrintMessage($"{session} released {activeEngine.Engine}");
 
         var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngine.Engine);
-        return Result.OkIf(systemReleaseSuccess, "CommandSystem could not release engine");
+        return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
     }
 
     public async Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)
@@ -136,9 +136,9 @@ public class EngineService : IEngineService
             return Result.Fail($"No engine with id {engineId} was found");
         }
 
-        if (activeEngine?.Session != session)
+        if (activeEngine.Session != session)
         {
-            ConsoleService.PrintWarning($"{session} tried something with {activeEngine?.Engine}, but has wrong session");
+            ConsoleService.PrintWarning($"{session} tried something with {activeEngine.Engine}, but has wrong session");
             return Result.Fail("Wrong session");
         }
 
