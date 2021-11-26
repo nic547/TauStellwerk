@@ -56,7 +56,7 @@
         set
         {
             _throttle = value;
-            _ = _engineService.SetSpeed(Engine.Id, _throttle, _forward);
+            _ = _engineService.SetSpeed(Engine.Id, _throttle, _forward ? Direction.Forwards : Direction.Backwards);
         }
     }
 

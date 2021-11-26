@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
 
@@ -26,35 +27,35 @@ public class ConsoleCommandSystem : CommandSystemBase
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+    public override Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {
         ConsoleService.PrintMessage($"{engine} has been emergency-stopped");
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    public override Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
     {
-        ConsoleService.PrintMessage($"{engine} function {functionNumber} has been turned {(on ? "on" : "off")}");
+        ConsoleService.PrintMessage($"{engine} function {functionNumber} has been turned {state}");
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
+    public override Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
-        if (hasBeenDrivingForward == shouldBeDrivingForward)
+        if (priorDirection == newDirection)
         {
             ConsoleService.PrintMessage($"{engine} speed  has been set to {speed}");
         }
         else
         {
-            ConsoleService.PrintMessage($"{engine} speed  has been set to {speed} and is now driving {(shouldBeDrivingForward ? "forwards" : "backwards")}");
+            ConsoleService.PrintMessage($"{engine} speed  has been set to {speed} and is now driving {newDirection}");
         }
 
         return Task.CompletedTask;
     }
 
-    public override Task HandleSystemStatus(bool shouldBeRunning)
+    public override Task HandleSystemStatus(State state)
     {
-        ConsoleService.PrintMessage($"System was {(shouldBeRunning ? "started" : "stopped")}");
+        ConsoleService.PrintMessage($"System was {(state == State.On ? "started" : "stopped")}");
         return Task.CompletedTask;
     }
 }

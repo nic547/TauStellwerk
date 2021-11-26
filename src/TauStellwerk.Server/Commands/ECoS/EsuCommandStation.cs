@@ -10,6 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
@@ -88,16 +89,16 @@ public class EsuCommandStation : CommandSystemBase
         }
     }
 
-    public override async Task HandleSystemStatus(bool shouldBeRunning)
+    public override async Task HandleSystemStatus(State state)
     {
-        await _connectionHandler.SendCommandAsync($"set(1,{(shouldBeRunning ? "go" : "stop")})");
+        await _connectionHandler.SendCommandAsync($"set(1,{(state == State.On ? "go" : "stop")})");
     }
 
-    public override async Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
+    public override async Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
         var ecosData = CheckForEcosData(engine);
-        Task directionTask = hasBeenDrivingForward != shouldBeDrivingForward
-            ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{(shouldBeDrivingForward ? "0" : "1")}])")
+        Task directionTask = priorDirection != newDirection
+            ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{(newDirection == Direction.Forwards ? "0" : "1")}])")
             : Task.CompletedTask;
 
         var speedTask = _connectionHandler.SendCommandAsync($"set({ecosData.Id},speed[{speed}])");
@@ -106,17 +107,17 @@ public class EsuCommandStation : CommandSystemBase
         await speedTask;
     }
 
-    public override async Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForward)
+    public override async Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {
         var ecosData = CheckForEcosData(engine);
         await _connectionHandler.SendCommandAsync($"set({ecosData.Id},stop)");
     }
 
     /// <inheritdoc/>
-    public override async Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    public override async Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
     {
         var engineData = CheckForEcosData(engine);
-        await _connectionHandler.SendCommandAsync($"set({engineData.Id},func[{functionNumber},{(on ? "1" : "0")}])");
+        await _connectionHandler.SendCommandAsync($"set({engineData.Id},func[{functionNumber},{(state == State.On ? "1" : "0")}])");
     }
 
     /// <inheritdoc/>
@@ -151,13 +152,13 @@ public class EsuCommandStation : CommandSystemBase
     {
         if (message.Contains("status[GO]"))
         {
-            OnStatusChange(true);
+            OnStatusChange(State.On);
             return;
         }
 
         if (message.Contains("status[STOP]"))
         {
-            OnStatusChange(false);
+            OnStatusChange(State.Off);
         }
     }
 

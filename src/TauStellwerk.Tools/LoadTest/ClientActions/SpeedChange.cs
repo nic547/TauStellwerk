@@ -6,6 +6,7 @@
 using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Tools.LoadTest.ClientActions;
@@ -31,7 +32,7 @@ public class SpeedChange : ClientActionBase
         int newSpeed = Random.Next(0, 128);
         var startTime = DateTime.Now;
 
-        await EngineService.SetSpeed(Id, newSpeed, true);
+        await EngineService.SetSpeed(Id, newSpeed, Direction.Forwards);
         return (int)Math.Round((DateTime.Now - startTime).TotalMilliseconds);
     }
 }

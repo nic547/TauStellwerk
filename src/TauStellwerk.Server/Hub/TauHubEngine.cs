@@ -46,7 +46,7 @@ public partial class TauHub
         return await _engineService.ReleaseEngine(session, id);
     }
 
-    public async Task<Result> SetEngineSpeed(int id, int speed, bool? forwards)
+    public async Task<Result> SetEngineSpeed(int id, int speed, Direction? direction)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -55,7 +55,7 @@ public partial class TauHub
             return Result.Fail("Session not found");
         }
 
-        return await _engineService.SetEngineSpeed(session, id, speed, forwards);
+        return await _engineService.SetEngineSpeed(session, id, speed, direction);
     }
 
     public async Task<Result> SetEngineEStop(int id)
@@ -70,7 +70,7 @@ public partial class TauHub
         return await _engineService.SetEngineEStop(session, id);
     }
 
-    public async Task<Result> SetEngineFunction(int id, int number, bool on)
+    public async Task<Result> SetEngineFunction(int id, int number, State state)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -79,7 +79,7 @@ public partial class TauHub
             return Result.Fail("Session not found");
         }
 
-        return await _engineService.SetEngineFunction(session, id, number, on);
+        return await _engineService.SetEngineFunction(session, id, number, state);
     }
 
     public async Task<Result<EngineFullDto>> GetEngine(int id)

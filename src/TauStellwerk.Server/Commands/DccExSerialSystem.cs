@@ -6,6 +6,7 @@
 using System.IO.Ports;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
 
@@ -43,27 +44,27 @@ public class DccExSerialSystem : CommandSystemBase
         });
     }
 
-    public override Task HandleSystemStatus(bool shouldBeRunning)
+    public override Task HandleSystemStatus(State state)
     {
-        _serialPort.WriteLine(shouldBeRunning ? "<1>" : "<0>");
+        _serialPort.WriteLine(state == State.On ? "<1>" : "<0>");
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards)
+    public override Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
-        _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(shouldBeDrivingForwards ? 1 : 0)}>");
+        _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(newDirection == Direction.Forwards ? 1 : 0)}>");
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+    public override Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {
-        _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(hasBeenDrivingForwards ? 1 : 0)}>");
+        _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(priorDirection == Direction.Forwards ? 1 : 0)}>");
         return Task.CompletedTask;
     }
 
-    public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    public override Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
     {
-        _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(on ? "1" : "0")}>");
+        _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(state == State.On ? "1" : "0")}>");
         return Task.CompletedTask;
     }
 

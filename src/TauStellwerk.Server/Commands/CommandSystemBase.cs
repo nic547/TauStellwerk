@@ -7,6 +7,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 
@@ -23,24 +24,24 @@ public abstract class CommandSystemBase
         Config = configuration;
     }
 
-    public delegate void StatusChangeHandler(bool isRunning);
+    public delegate void StatusChangeHandler(State state);
 
     public event StatusChangeHandler? StatusChanged;
 
     protected IConfiguration Config { get; }
 
-    public abstract Task HandleSystemStatus(bool shouldBeRunning);
+    public abstract Task HandleSystemStatus(State desiredState);
 
-    public abstract Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForwards, bool shouldBeDrivingForwards);
+    public abstract Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection);
 
-    public abstract Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards);
+    public abstract Task HandleEngineEStop(Engine engine, Direction priorDirection);
 
-    public abstract Task HandleEngineFunction(Engine engine, byte functionNumber, bool on);
+    public abstract Task HandleEngineFunction(Engine engine, byte functionNumber, State state);
 
     /// <summary>
     /// Load engines from the command system. Will do nothing if the system doesn't know about engines.
     /// </summary>
-    /// <param name="context"><see cref="TauStellwerk.Database.StwDbContext"/> to compare/insert engines.</param>
+    /// <param name="context"><see cref="StwDbContext"/> to compare/insert engines.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public virtual Task LoadEnginesFromSystem(StwDbContext context)
     {
@@ -70,13 +71,13 @@ public abstract class CommandSystemBase
     }
 
     /// <summary>
-    /// Ensure that the initial command system state is loaded and trigger <see cref="OnStatusChange(bool)"/>.
+    /// Ensure that the initial command system state is loaded and trigger <see cref="OnStatusChange"/>.
     /// </summary>
-    /// <returns>A task representing the asynchronus operation.</returns>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public abstract Task CheckState();
 
-    protected void OnStatusChange(bool isRunning)
+    protected void OnStatusChange(State state)
     {
-        StatusChanged?.Invoke(isRunning);
+        StatusChanged?.Invoke(state);
     }
 }

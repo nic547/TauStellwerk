@@ -13,14 +13,14 @@ namespace TauStellwerk.Hub;
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
-    public Status GetStatus()
+    public SystemStatus GetStatus()
     {
         return _statusService.CheckStatus();
     }
 
-    public async Task SetStatus(Status status)
+    public async Task SetStatus(SystemStatus systemStatus)
     {
-        await _statusService.HandleStatusCommand(status.IsRunning, status.LastActionUsername);
-        await Clients.Others.SendAsync("HandleStatusChange", status);
+        await _statusService.HandleStatusCommand(systemStatus.State, systemStatus.LastActionUsername);
+        await Clients.Others.SendAsync("HandleStatusChange", systemStatus);
     }
 }

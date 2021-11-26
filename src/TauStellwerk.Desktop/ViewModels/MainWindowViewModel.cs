@@ -41,11 +41,11 @@ public partial class MainWindowViewModel : ViewModelBase
     [ICommand]
     private async Task StopButton()
     {
-        var isCurrentlyRunning = _statusService.LastKnownStatus?.IsRunning;
+        var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
         var username = (await _settingsService.GetSettings()).Username;
-        var status = new Status()
+        var status = new SystemStatus()
         {
-            IsRunning = !isCurrentlyRunning ?? true,
+            State = isCurrentlyRunning == State.Off ? State.Off : State.On,
             LastActionUsername = username,
         };
 

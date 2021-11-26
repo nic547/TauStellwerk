@@ -10,6 +10,7 @@ using Avalonia.Controls.Primitives;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -51,7 +52,7 @@ public partial class EngineControlViewModel : ViewModelBase
 
     private async Task HandleThrottleChange(int throttle)
     {
-        await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward);
+        await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward ? Direction.Forwards : Direction.Backwards);
     }
 
     private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
@@ -90,7 +91,7 @@ public partial class EngineControlViewModel : ViewModelBase
             throw new InvalidOperationException();
         }
 
-        await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked);
+        await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked ? State.On : State.Off);
     }
 
     [ICommand]
