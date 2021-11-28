@@ -29,6 +29,7 @@ public partial class TauHub
             return Result.Fail("Engine not found");
         }
 
+        await _engineRepo.UpdateLastUsed(id);
         var acquireResult = await _engineService.AcquireEngine(session, engineResult.Value);
 
         return acquireResult.IsSuccess ? Result.Ok(engineResult.Value.ToEngineFullDto()) : acquireResult;
