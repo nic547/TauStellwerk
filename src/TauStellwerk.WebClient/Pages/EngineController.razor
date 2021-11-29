@@ -21,11 +21,11 @@
         <img src="img/noImageImage.png" alt="Engine image"/>
     </picture>
     <label class="ec-grid-slider has-100percent-height">
+        <!-- orient="vertical" is for firefox -->
         <input type="range" orient="vertical" min="0" max="126" @bind-value="Throttle" @bind-value:event="oninput" />
-    </label><!-- orient="vertical" is for firefox -->
+    </label>
     <div class="ec-grid-direction center">
         <button class="bold" disabled="@(!_forward)" @onclick="ChangeDirection">&lt;</button>
-        <button class="bold" @onclick="EStop" title="Emergency stop this engine.">E</button>
         <button class="bold" disabled="@(_forward)" @onclick="ChangeDirection" >&gt;</button>
     </div>
     <output class="ec-grid-speed center">@Throttle</output>
@@ -38,17 +38,20 @@
                 />
         }
     </div>
+    <div class="ec-grid-estop center">
+        <button class="bold estop-button" @onclick="EStop" title="Emergency stop this engine.">Emergency Stop</button>
+    </div>
 </div>
 
 @code {
     private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
+    [Parameter]
+    public EngineFull Engine { get; init; } = null!;
+
     private int _throttle = 0;
 
     private bool _forward  = true;
-
-    [Parameter]
-    public EngineFull Engine { get; init; } = null!;
 
     private int Throttle
     {
