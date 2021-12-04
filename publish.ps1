@@ -1,6 +1,6 @@
 param($dotnet='dotnet')
 
-$customargs="-c Release /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link --self-contained"
+$customargs="-c Release --self-contained /p:DebugSymbols=false /p:DebugType=None  /p:EnableCompressionInSingleFile=true"
 $rids="linux-x64","linux-musl-x64","linux-arm64","linux-musl-arm64","win-x64","win-arm64"
 
 if (Test-Path ./publish){

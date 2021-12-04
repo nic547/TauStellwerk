@@ -3,7 +3,7 @@ set -e
 
 dotnet=${1:-dotnet}
 
-customargs="-c Release --self-contained /p:DebugSymbols=false /p:DebugType=None /p:TrimMode=link"
+customargs="-c Release --self-contained /p:DebugSymbols=false /p:DebugType=None /p:EnableCompressionInSingleFile=true"
 rids=("linux-x64" "linux-musl-x64" "linux-arm64" "linux-musl-arm64" "win-x64" "win-arm64")
 
 BLUE='\033[1;34m'
