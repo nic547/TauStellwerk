@@ -19,36 +19,36 @@ public class StatusService
         _ = Init();
     }
 
-    public delegate void StatusChangeHandler(Status status);
+    public delegate void StatusChangeHandler(SystemStatus systemStatus);
 
     public event StatusChangeHandler? StatusChanged;
 
-    public Status? LastKnownStatus { get; private set; }
+    public SystemStatus? LastKnownStatus { get; private set; }
 
-    public async Task SetStatus(Status status)
+    public async Task SetStatus(SystemStatus systemStatus)
     {
         var client = await _service.GetHubConnection();
-        await client.SendAsync("SetStatus", status);
-        StatusChanged?.Invoke(status);
-        LastKnownStatus = status;
+        await client.SendAsync("SetStatus", systemStatus);
+        StatusChanged?.Invoke(systemStatus);
+        LastKnownStatus = systemStatus;
 
-        // var json = JsonSerializer.Serialize(status, TauJsonContext.Default.Status);
-        // StatusChanged?.Invoke(status);
-        // LastKnownStatus = status;
-        // _ = await client.PostAsync("/status", new StringContent(json, Encoding.UTF8, "text/json"));
+        // var json = JsonSerializer.Serialize(systemStatus, TauJsonContext.Default.SystemStatus);
+        // StatusChanged?.Invoke(systemStatus);
+        // LastKnownStatus = systemStatus;
+        // _ = await client.PostAsync("/systemStatus", new StringContent(json, Encoding.UTF8, "text/json"));
     }
 
     private async Task Init()
     {
         var connection = await _service.GetHubConnection();
-        connection.On<Status>("HandleStatusChange", HandleStatusChange);
-        var currentStatus = await connection.InvokeAsync<Status>("GetStatus");
+        connection.On<SystemStatus>("HandleStatusChange", HandleStatusChange);
+        var currentStatus = await connection.InvokeAsync<SystemStatus>("GetStatus");
         HandleStatusChange(currentStatus);
     }
 
-    private void HandleStatusChange(Status newStatus)
+    private void HandleStatusChange(SystemStatus newSystemStatus)
     {
-        LastKnownStatus = newStatus;
-        StatusChanged?.Invoke(newStatus);
+        LastKnownStatus = newSystemStatus;
+        StatusChanged?.Invoke(newSystemStatus);
     }
 }

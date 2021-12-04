@@ -1,0 +1,9 @@
+﻿.ec-grid-estop {
+    grid-area: estop;
+    width: 100%;
+}
+
+.estop-button {
+    padding-left: 20px;
+    padding-right: 20px;
+}

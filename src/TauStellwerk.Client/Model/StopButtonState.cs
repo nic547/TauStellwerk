@@ -74,11 +74,11 @@ public class StopButtonState : INotifyPropertyChanged
 
     public State CurrentState { get; private set; } = State.Unknown;
 
-    public void SetStatus(Status status)
+    public void SetStatus(SystemStatus systemStatus)
     {
         _lockingTimer.Stop();
-        _lastActionUsername = status.LastActionUsername;
-        if (status.IsRunning)
+        _lastActionUsername = systemStatus.LastActionUsername;
+        if (systemStatus.State == Base.Model.State.On)
         {
             CurrentState = State.Running;
         }

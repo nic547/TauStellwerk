@@ -11,7 +11,7 @@ namespace TauStellwerk.Base;
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(EngineDto[]))]
 [JsonSerializable(typeof(EngineFullDto))]
-[JsonSerializable(typeof(Status))]
+[JsonSerializable(typeof(SystemStatus))]
 [JsonSerializable(typeof(string))]
 public partial class TauJsonContext : JsonSerializerContext
 {

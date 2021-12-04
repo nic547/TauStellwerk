@@ -17,7 +17,7 @@ public class StatusService
     private readonly CommandSystemBase _system;
     private readonly IHubContext<TauHub> _hubContext;
 
-    private bool _isRunning;
+    private State _isRunning;
     private string _lastActionUsername = "SYSTEM";
 
     public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext)
@@ -29,32 +29,32 @@ public class StatusService
         _system.CheckState();
     }
 
-    public Status CheckStatus()
+    public SystemStatus CheckStatus()
     {
-        return new() { IsRunning = _isRunning, LastActionUsername = _lastActionUsername };
+        return new() { State = _isRunning, LastActionUsername = _lastActionUsername };
     }
 
-    public async Task HandleStatusCommand(bool shouldBeRunning, string username)
+    public async Task HandleStatusCommand(State state, string username)
     {
-        var task = _system.HandleSystemStatus(shouldBeRunning);
+        var task = _system.HandleSystemStatus(state);
 
-        _isRunning = shouldBeRunning;
+        _isRunning = state;
         _lastActionUsername = username;
 
         await task;
     }
 
-    private void HandleStatusEvent(bool isRunning)
+    private void HandleStatusEvent(State state)
     {
-        _isRunning = isRunning;
+        _isRunning = state;
         _lastActionUsername = "SYSTEM";
-        ConsoleService.PrintMessage($"SYSTEM {(isRunning ? "started" : "stopped")} the TauStellwerk");
+        ConsoleService.PrintMessage($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
 
-        Status status = new()
+        SystemStatus systemStatus = new()
         {
-            IsRunning = _isRunning,
+            State = _isRunning,
             LastActionUsername = _lastActionUsername,
         };
-        _hubContext.Clients.All.SendAsync("HandleStatusChange", status);
+        _hubContext.Clients.All.SendAsync("HandleStatusChange", systemStatus);
     }
 }

@@ -134,6 +134,13 @@ public class EngineRepo
         return Result.Ok(engineDto);
     }
 
+    public async Task UpdateLastUsed(int id)
+    {
+        var engine = await _dbContext.Engines.SingleAsync(e => e.Id == id);
+        engine.LastUsed = DateTime.Now;
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<Result> Delete(int id)
     {
         var engine = await _dbContext.Engines

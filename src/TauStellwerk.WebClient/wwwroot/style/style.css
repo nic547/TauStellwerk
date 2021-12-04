@@ -57,9 +57,10 @@
 		"image image"
 		"slider functions"
 		"direction functions"
-		"speed functions";
-	grid-template-columns: 6em auto;
-	grid-template-rows: 2.5em calc(var(--engine-controller-width) / 2 ) auto 2.5em 2.5em;
+		"speed functions"
+		"estop estop";
+	grid-template-columns: 4em auto;
+	grid-template-rows: 2.5em calc(var(--engine-controller-width) / 2 ) auto 2.5em 2.5em 2.5em;
 	align-items: center;
 }
 
@@ -84,7 +85,7 @@
 
 .ec-grid-slider > input {
 	-webkit-appearance: slider-vertical; /* Ensures the throttle is display vertical in Chrome and Edge (Chrome) */
-	width: 6em;
+	width: 4em;
 	height: 98%
 }
 

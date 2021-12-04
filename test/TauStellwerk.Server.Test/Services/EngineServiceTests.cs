@@ -153,7 +153,7 @@ public class EngineServiceTests
     {
         var (service, session) = PrepareEngineService();
 
-        var functionResult = await service.SetEngineFunction(session, 1, 2, false);
+        var functionResult = await service.SetEngineFunction(session, 1, 2, State.Off);
 
         functionResult.Should().BeFailure();
     }
@@ -164,7 +164,7 @@ public class EngineServiceTests
         var (service, session) = PrepareEngineService();
 
         await service.AcquireEngine(session, _engine);
-        var functionResult = await service.SetEngineFunction(session, 1, 0, true);
+        var functionResult = await service.SetEngineFunction(session, 1, 0, State.On);
 
         functionResult.Should().BeSuccess();
     }
@@ -176,7 +176,7 @@ public class EngineServiceTests
         var session2 = new Session();
 
         await service.AcquireEngine(session, _engine);
-        var functionResult = await service.SetEngineFunction(session2, 1, 10, true);
+        var functionResult = await service.SetEngineFunction(session2, 1, 10, State.On);
 
         functionResult.Should().BeFailure();
     }

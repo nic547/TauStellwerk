@@ -21,11 +21,11 @@ public interface IEngineService
 
     Task<Result> ReleaseEngine(Session session, int engineId);
 
-    Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldDriveForward);
+    Task<Result> SetEngineSpeed(Session session, int engineId, int speed, Direction? newDirection);
 
     Task<Result> SetEngineEStop(Session session, int engineId);
 
-    Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, bool on);
+    Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, State state);
 }
 
 public class EngineService : IEngineService
@@ -80,7 +80,7 @@ public class EngineService : IEngineService
         return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
     }
 
-    public async Task<Result> SetEngineSpeed(Session session, int engineId, int speed, bool? shouldBeDrivingForwards)
+    public async Task<Result> SetEngineSpeed(Session session, int engineId, int speed, Direction? newDirection)
     {
         var activeEngineResult = TryGetActiveEngine(engineId, session);
         if (activeEngineResult.IsFailed)
@@ -90,11 +90,10 @@ public class EngineService : IEngineService
 
         var activeEngine = activeEngineResult.Value;
 
-        var hasBeenDrivingForward = activeEngine.IsDrivingForward;
-        shouldBeDrivingForwards ??= hasBeenDrivingForward;
-        activeEngine.IsDrivingForward = (bool)shouldBeDrivingForwards;
+        var priorDirection = activeEngine.Direction;
+        activeEngine.Direction = newDirection ?? priorDirection;
 
-        await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, hasBeenDrivingForward, (bool)shouldBeDrivingForwards);
+        await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, priorDirection, activeEngine.Direction);
         return Result.Ok();
     }
 
@@ -108,12 +107,11 @@ public class EngineService : IEngineService
 
         var activeEngine = activeEngineResult.Value;
 
-        var hasBeenDrivingForward = activeEngine.IsDrivingForward;
-        await _commandSystem.HandleEngineEStop(activeEngine.Engine, hasBeenDrivingForward);
+        await _commandSystem.HandleEngineEStop(activeEngine.Engine, activeEngine.Direction);
         return Result.Ok();
     }
 
-    public async Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, bool on)
+    public async Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, State state)
     {
         var activeEngineResult = TryGetActiveEngine(engineId, session);
         if (activeEngineResult.IsFailed)
@@ -123,7 +121,7 @@ public class EngineService : IEngineService
 
         var activeEngine = activeEngineResult.Value;
 
-        await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, on);
+        await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, state);
         return Result.Ok();
     }
 
@@ -169,6 +167,6 @@ public class EngineService : IEngineService
 
         public Engine Engine { get; }
 
-        public bool IsDrivingForward { get; set; } = true;
+        public Direction Direction { get; set; } = Direction.Forwards;
     }
 }

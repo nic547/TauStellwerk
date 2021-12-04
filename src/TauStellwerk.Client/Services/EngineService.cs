@@ -18,7 +18,7 @@ public class EngineService
     private const double TimeoutMilliseconds = 100;
 
     private readonly IConnectionService _service;
-    private readonly Dictionary<int, CoalescingLimiter<(int, int, bool)>> _activeEngines = new();
+    private readonly Dictionary<int, CoalescingLimiter<(int, int, Direction)>> _activeEngines = new();
 
     public EngineService(IConnectionService httpClientService)
     {
@@ -39,7 +39,7 @@ public class EngineService
 
         if (result.Success)
         {
-            _activeEngines.Add(id, new CoalescingLimiter<(int, int, bool)>(SendSpeed, TimeoutMilliseconds));
+            _activeEngines.Add(id, new CoalescingLimiter<(int, int, Direction)>(SendSpeed, TimeoutMilliseconds));
         }
 
         return EngineFull.Create(result.Value);
@@ -52,7 +52,7 @@ public class EngineService
         await connection.SendAsync("ReleaseEngine", id);
     }
 
-    public async Task SetSpeed(int id, int speed, bool forward)
+    public async Task SetSpeed(int id, int speed, Direction direction)
     {
         _ = _activeEngines.TryGetValue(id, out var limiter);
         if (limiter == null)
@@ -60,7 +60,7 @@ public class EngineService
             throw new InvalidOperationException();
         }
 
-        await limiter.Execute((id, speed, forward));
+        await limiter.Execute((id, speed, direction));
     }
 
     public async Task SetEStop(int id)
@@ -69,10 +69,10 @@ public class EngineService
         await connection.SendAsync("SetEngineEStop", id);
     }
 
-    public async Task SetFunction(int id, byte function, bool on)
+    public async Task SetFunction(int id, byte function, State state)
     {
         var connection = await _service.GetHubConnection();
-        await connection.SendAsync("SetEngineFunction", id, function, on);
+        await connection.SendAsync("SetEngineFunction", id, function, state);
     }
 
     public async Task AddOrUpdateEngine(EngineFull engine)
@@ -82,10 +82,10 @@ public class EngineService
         await connection.SendAsync("AddOrUpdateEngine", engineDto);
     }
 
-    private async Task SendSpeed((int Id, int Speed, bool Forward) arg)
+    private async Task SendSpeed((int Id, int Speed, Direction Direction) arg)
     {
-        var (id, speed, forward) = arg;
+        var (id, speed, direction) = arg;
         var connection = await _service.GetHubConnection();
-        await connection.SendAsync("SetEngineSpeed", id, speed, forward);
+        await connection.SendAsync("SetEngineSpeed", id, speed, direction);
     }
 }

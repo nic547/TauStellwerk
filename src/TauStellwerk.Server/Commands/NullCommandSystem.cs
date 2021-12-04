@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database.Model;
 
 namespace TauStellwerk.Commands;
@@ -20,25 +21,25 @@ public class NullCommandSystem : CommandSystemBase
     }
 
     /// <inheritdoc/>
-    public override Task HandleEngineEStop(Engine engine, bool hasBeenDrivingForwards)
+    public override Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {
         return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public override Task HandleEngineFunction(Engine engine, byte functionNumber, bool on)
+    public override Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
     {
         return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public override Task HandleSystemStatus(bool shouldBeRunning)
+    public override Task HandleSystemStatus(State state)
     {
         return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public override Task HandleEngineSpeed(Engine engine, short speed, bool hasBeenDrivingForward, bool shouldBeDrivingForward)
+    public override Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
         return Task.CompletedTask;
     }

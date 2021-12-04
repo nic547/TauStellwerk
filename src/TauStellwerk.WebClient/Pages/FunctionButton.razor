@@ -22,7 +22,7 @@
         private void ToggleFunction()
         {
             IsOn = !IsOn;
-            _ = _engineService.SetFunction(EngineId, Function.Number, IsOn);
+            _ = _engineService.SetFunction(EngineId, Function.Number, IsOn ? State.On : State.Off);
             StateHasChanged();
         }
 }
