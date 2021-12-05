@@ -14,11 +14,27 @@ namespace TauStellwerk.Desktop.Views.Engine;
 
 public class EngineSelectionWindow : Window
 {
+    public static readonly StyledProperty<int> ColumnsProperty = AvaloniaProperty.Register<EngineSelectionWindow, int>(nameof(Columns));
+
     public EngineSelectionWindow(EngineSelectionViewModel vm)
     {
         DataContext = vm;
         vm.ClosingRequested += Close;
         InitializeComponent();
+
+        var engineList = this.FindControl<ListBox>("EngineList");
+
+        engineList.LayoutUpdated += (_, _) =>
+        {
+            Columns = Width switch
+            {
+                < 768 => 1,
+                < 992 => 2,
+                < 1400 => 4,
+                _ => 5,
+            };
+        };
+
 #if DEBUG
         this.AttachDevTools();
 #endif
@@ -29,6 +45,12 @@ public class EngineSelectionWindow : Window
     public EngineSelectionWindow()
     {
         // https://github.com/AvaloniaUI/Avalonia/issues/2593
+    }
+
+    public int Columns
+    {
+        get { return GetValue(ColumnsProperty); }
+        set { SetValue(ColumnsProperty, value); }
     }
 
     private void InitializeComponent()
