@@ -7,7 +7,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Avalonia;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
@@ -23,10 +22,6 @@ public partial class EngineSelectionViewModel : ViewModelBase
 
     private readonly EngineService _engineService;
     private readonly IViewService _viewService;
-
-    [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(Columns))]
-    private Size _windowSize;
 
     [ObservableProperty]
     private bool _showHiddenEngines;
@@ -58,20 +53,6 @@ public partial class EngineSelectionViewModel : ViewModelBase
     public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
 
     public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
-
-    public int Columns
-    {
-        get
-        {
-            return WindowSize.Width switch
-            {
-                < 768 => 1,
-                < 992 => 2,
-                < 1400 => 4,
-                _ => 5,
-            };
-        }
-    }
 
     public ObservableCollection<EngineDto> Engines { get; } = new();
 

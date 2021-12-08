@@ -34,10 +34,10 @@
                 IsEnabled="{Binding CanScrollForwards}"
                 Content="&gt;"/>
       </StackPanel>
-      <ListBox Items="{Binding Engines}">
+      <ListBox Items="{Binding Engines}" Name="EngineList">
         <ListBox.ItemsPanel>
           <ItemsPanelTemplate>
-            <UniformGrid Columns="{Binding Columns}"/>
+            <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
