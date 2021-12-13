@@ -25,7 +25,7 @@
         </span>
     }</article>
 @code {
-       private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
+    private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
     [Parameter]
     public EngineDto? Engine { get; init; }
@@ -40,7 +40,11 @@
         if (engine != null)
         {
             _appState.ActiveEngines.Add(engine);
+            _modalManager.IsEngineSelectionVisible = false;
         }
-        _modalManager.IsEngineSelectionVisible = false;
+        else
+        {
+            _appState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
+        }
     }
 }

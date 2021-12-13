@@ -4,11 +4,29 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.WebClient;
 
-public class AppState
+[ObservableObject]
+public partial class AppState
 {
+    private ModalManager _modalManager;
+
+    [ObservableProperty]
+    private string _messageBoxText = string.Empty;
+
+    public AppState(ModalManager modalManager)
+    {
+        _modalManager = modalManager;
+    }
+
     public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
+
+    public void ShowMessageBox(string text)
+    {
+        MessageBoxText = text;
+        _modalManager.IsMessageBoxVisible = true;
+    }
 }

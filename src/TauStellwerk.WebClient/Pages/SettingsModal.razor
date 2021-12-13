@@ -4,7 +4,7 @@
 
 @inject ModalManager _modalManager
 @inject ISettingsService _settingsService
-<div class="modal @_modalManager.SettingsModalClass">
+<div class="modal @(_modalManager.IsSettingsModalVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content">
         <EditForm Model="typeof(MutableSettings)">
             <div class="form-group" title="The username that will be shown to other users.">

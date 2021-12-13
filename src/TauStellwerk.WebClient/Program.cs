@@ -28,7 +28,7 @@ public class Program
         builder.Services.AddScoped(provider => new EngineService(provider.GetRequiredService<ConnectionService>()));
 
         builder.Services.AddScoped(_ => new ModalManager());
-        builder.Services.AddScoped(_ => new AppState());
+        builder.Services.AddScoped(provider => new AppState(provider.GetRequiredService<ModalManager>()));
 
         await builder.Build().RunAsync();
     }
