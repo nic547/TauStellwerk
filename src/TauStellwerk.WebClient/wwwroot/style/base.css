@@ -45,7 +45,7 @@ button:disabled {
     filter: brightness(var(--disabled-filter-value));
 }
  
-output, input, label {
+output, input, label, select {
     font-size: 1em;
 }
 
