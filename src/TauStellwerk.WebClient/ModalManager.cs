@@ -22,4 +22,7 @@ public partial class ModalManager
 
     [ObservableProperty]
     private bool _isMessageBoxVisible;
+
+    [ObservableProperty]
+    private bool _isEngineEditModalVisible;
 }

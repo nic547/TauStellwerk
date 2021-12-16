@@ -43,6 +43,19 @@
     flex-direction: row;
 }
 
+.is-flex-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-filler { 
+    flex: 1 1 auto;
+}
+
+.justify-flex-end{
+    justify-content: flex-end;
+}
+
 .can-scroll-y{
     overflow-y: auto;
 }
@@ -105,8 +118,10 @@
     max-height: calc(100% - 110px);
 }
 .modal-header, .modal-footer {
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .modal-body {

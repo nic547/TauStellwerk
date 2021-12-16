@@ -17,6 +17,9 @@ public partial class AppState
     [ObservableProperty]
     private string _messageBoxText = string.Empty;
 
+    [ObservableProperty]
+    private EngineFull _selectedEngine = new EngineFull();
+
     public AppState(ModalManager modalManager)
     {
         _modalManager = modalManager;

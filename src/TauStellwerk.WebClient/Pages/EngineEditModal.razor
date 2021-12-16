@@ -1,0 +1,66 @@
+﻿@using System.ComponentModel
+@using TauStellwerk.Client.Model
+@using TauStellwerk.Client.Services
+@inject ModalManager _modalManager
+@inject AppState _appState
+@inject EngineService _engineService
+
+<div class="modal @(_modalManager.IsEngineEditModalVisible ? "active-modal" : "inactive-modal")">
+    <div class="modal-content">
+        <EditForm Model="Engine">
+            <div class="form-group" title="Name of the engine">
+                <label for="NameInput">Name:</label>
+                <input type="text" id="NameInput" @bind="@_appState.SelectedEngine.Name" />
+            </div>
+            <div class="form-group" title="DCC Address of the engine">
+                <label for="AddressInput">Address: </label>
+                <input type="number" id="AddressInput" @bind="@Engine.Address" />
+            </div>
+            <div class="form-group" title="Top speed of the engine">
+                <label for="SpeedInput">Top speed: </label>
+                <input type="number" min="0" id="SpeedInput" step="5" @bind="@Engine.TopSpeed" />
+            </div>
+            <div class="form-group" title="Top speed of the engine">
+                <label for="HiddenSwitch">Hidden: </label>
+                <input type="checkbox" id="HiddenSwitch" @bind="@Engine.IsHidden" />
+            </div>
+            <div class="is-flex-horizontal justify-flex-end">
+                <button @onclick="Close" class="button-secondary">Cancel</button>
+                <button @onclick="Save">Save</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+@code {
+    private EngineFull Engine => _appState.SelectedEngine;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _modalManager.PropertyChanged += HandleModalManagerNotification;
+    }
+
+    private void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName != nameof(_modalManager.IsEngineEditModalVisible))
+        {
+            return;
+        }
+
+        StateHasChanged();
+    }
+
+    private async void Close()
+    {
+        await _engineService.ReleaseEngine(Engine.Id);
+        _modalManager.IsEngineEditModalVisible = false;
+    }
+
+    private async Task Save()
+    {
+        await _engineService.AddOrUpdateEngine(Engine);
+        await _engineService.ReleaseEngine(Engine.Id);
+        _modalManager.IsEngineEditModalVisible = false;
+    }
+}

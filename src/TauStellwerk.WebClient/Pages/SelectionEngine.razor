@@ -5,42 +5,57 @@
 @inject EngineService _engineService
 @inject ModalManager _modalManager
 
-<article class="is-clickable has-shadow" @onclick="SelectEngine" >
-    @if (Engine != null)
-    {
-        <header>@Engine.Name</header>
-        <picture class="selection-image">
+<article class="is-clickable has-shadow is-flex-vertical">
+    <header>@Engine.Name</header>
+    <picture class="selection-image">
         @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))
-            {
+        {
             var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
             <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
-            }
+        }
         <img src="img/noImageImage.png" alt="Engine image" />
-        </picture>
-        <span class="tags">
-            @foreach (var tag in Engine.Tags)
-            {
-                <button class="button-secondary" >@tag</button>
-            }
-        </span>
-    }</article>
+    </picture>
+    <span class="tags">
+        @foreach (var tag in Engine.Tags)
+        {
+            <button class="button-secondary">@tag</button>
+        }
+    </span>
+    <div class="flex-filler"/>
+    <div class="is-flex-horizontal justify-flex-end">
+        <button @onclick="EditEngine">Edit</button>
+        <button @onclick="ControlEngine">Control</button>
+    </div>
+
+</article>
 @code {
     private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
+    [EditorRequired]
     [Parameter]
-    public EngineDto? Engine { get; init; }
+    public EngineDto Engine { get; init; } = null!;
 
-    private async void SelectEngine()
+    private async void ControlEngine()
     {
-        if (Engine == null)
-        {
-            throw new InvalidOperationException();
-        }
         var engine = await _engineService.AcquireEngine(Engine.Id);
         if (engine != null)
         {
             _appState.ActiveEngines.Add(engine);
             _modalManager.IsEngineSelectionVisible = false;
+        }
+        else
+        {
+            _appState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
+        }
+    }
+
+    private async void EditEngine()
+    {
+        var engine = await _engineService.AcquireEngine(Engine.Id);
+        if (engine != null)
+        {
+            _appState.SelectedEngine = engine;
+            _modalManager.IsEngineEditModalVisible = true;
         }
         else
         {
