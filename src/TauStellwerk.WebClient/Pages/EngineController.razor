@@ -3,14 +3,16 @@
 @using System.Formats.Asn1
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
+@using TauStellwerk.WebClient.Pages
 
 @inject AppState _appState
 @inject EngineService _engineService;
 
 <div class="box is-engine-controller has-shadow">
-    <div class="ec-grid-header">
-        <span class="is-pulled-left">@Engine.Name</span>
-        <button class="is-pulled-right bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
+    <div class="ec-grid-header is-flex-horizontal align-baseline">
+        <span>@Engine.Name</span>
+        <span class="flex-filler"/>
+        <button class="bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
     </div>
     <picture class="ec-grid-image">
         @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))

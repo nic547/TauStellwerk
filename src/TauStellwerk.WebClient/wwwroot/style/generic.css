@@ -56,6 +56,10 @@
     justify-content: flex-end;
 }
 
+.align-baseline {
+    align-items: baseline;
+}
+
 .can-scroll-y{
     overflow-y: auto;
 }
