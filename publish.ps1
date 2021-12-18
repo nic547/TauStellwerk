@@ -9,6 +9,12 @@ if (Test-Path ./publish){
 Invoke-Expression "$dotnet clean /p:PublishSingleFile=false -c Release"
 
 foreach ($rid in $rids){
+    
+    # /bin and /obj folders need to be removed because the WebClient might not work otherwise
+    # https://github.com/dotnet/aspnetcore/issues/38552
+    Remove-Item ./src/*/bin -force -recurse
+    Remove-Item ./src/*/obj -force -recurse
+    
     Write-Host "--- Building $rid ---" -ForegroundColor Blue
     Invoke-Expression "$dotnet publish ./src/TauStellwerk.Server/ -r $rid -o ./publish/$rid $customargs"
 
