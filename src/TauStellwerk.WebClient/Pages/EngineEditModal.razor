@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel
+@using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
 @inject ModalManager _modalManager
@@ -9,7 +10,7 @@
     <div class="modal-content">
         <EditForm Model="Engine">
             <div class="form-group" title="Name of the engine">
-                <label for="NameInput">Name:</label>
+                <label for="NameInput">Name: </label>
                 <input type="text" id="NameInput" @bind="@_appState.SelectedEngine.Name" />
             </div>
             <div class="form-group" title="DCC Address of the engine">
@@ -24,6 +25,35 @@
                 <label for="HiddenSwitch">Hidden: </label>
                 <input type="checkbox" id="HiddenSwitch" @bind="@Engine.IsHidden" />
             </div>
+            <div class="form-group">
+                <label>Tags: </label>
+                <div class="tags">
+                    @foreach(var tag in Engine.Tags)
+                    {
+                        <span class="button-secondary is-clickable" 
+                        title="Remove this tag"
+                        @onclick="() => RemoveTag(tag)"
+                        >@tag X</span>
+                    }
+                </div>
+                <div>
+                    <input type="text" @bind="NewTagInput" placeholder="New tag"/>
+                    <button @onclick="AddTag">Add Tag</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Functions: </label>
+                <div>
+                @foreach(var function in Engine.Functions)
+                {
+                    <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
+                }
+                </div>
+                <div class="is-flex-horizontal">
+                    <button @onclick="RemoveFunction">Remove Function</button>
+                    <button @onclick="AddFunction">Add Function</button>
+                </div>
+            </div>
             <div class="is-flex-horizontal justify-flex-end">
                 <button @onclick="Close" class="button-secondary">Cancel</button>
                 <button @onclick="Save">Save</button>
@@ -33,6 +63,8 @@
 </div>
 @code {
     private EngineFull Engine => _appState.SelectedEngine;
+
+    private string NewTagInput { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,6 +80,7 @@
             return;
         }
 
+        NewTagInput = string.Empty;
         StateHasChanged();
     }
 
@@ -63,4 +96,32 @@
         await _engineService.ReleaseEngine(Engine.Id);
         _modalManager.IsEngineEditModalVisible = false;
     }
-}
+
+    private void RemoveTag(string tag)
+    {
+        Engine.Tags.Remove(tag);
+    }
+
+    private void AddTag()
+    {
+        if (!string.IsNullOrEmpty(NewTagInput))
+        {
+            Engine.Tags.Add(NewTagInput);
+        }
+    }
+
+    private void AddFunction()
+    {
+        byte functionNumber = (byte)(Engine.Functions.LastOrDefault()?.Number + 1 ?? 0);
+        Engine.Functions.Add(new FunctionDto(functionNumber, string.Empty));
+    }
+
+    private void RemoveFunction()
+    {
+        if (Engine.Functions.Count == 0)
+        {
+            return;
+        } 
+        Engine.Functions.RemoveAt(Engine.Functions.Count - 1);
+    }
+} 

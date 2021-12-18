@@ -108,6 +108,7 @@
     --modal-side-margin: max(20px, calc((100vw - 1024px) / 2));
     margin-left: var(--modal-side-margin);
     margin-right: var(--modal-side-margin);
+    max-height: calc(100% - 110px);
 }
 
 .modal-content-fullwidth {
@@ -138,7 +139,7 @@
 .has-shadow {
     box-shadow: 0 0 8px var(--shadow-color);
 }
-.tags > button {
+.tags > * {
     display: inline-block;
     margin: 2px;
     padding: 2px 4px;
