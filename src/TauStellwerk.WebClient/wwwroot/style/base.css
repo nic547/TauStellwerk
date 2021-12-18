@@ -30,6 +30,7 @@ button {
     border-width: 3px;
     border-style: solid;
     padding: 5px;
+    margin: 1px 2px;
     font-size: 1em;
     cursor: pointer;
     background-color: var(--primary-color);
@@ -45,7 +46,7 @@ button:disabled {
     filter: brightness(var(--disabled-filter-value));
 }
  
-output, input, label {
+output, input, label, select {
     font-size: 1em;
 }
 

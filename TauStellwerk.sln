@@ -40,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Client", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.WebClient", "src\TauStellwerk.WebClient\TauStellwerk.WebClient.csproj", "{138BD039-6D6E-44A0-9550-B431803376B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Server.IntegrationTests", "test\TauStellwerk.Server.IntegrationTests\TauStellwerk.Server.IntegrationTests.csproj", "{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Server.IntegrationTests", "test\TauStellwerk.Server.IntegrationTests\TauStellwerk.Server.IntegrationTests.csproj", "{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

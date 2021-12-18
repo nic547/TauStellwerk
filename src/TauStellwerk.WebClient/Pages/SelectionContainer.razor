@@ -5,10 +5,9 @@
 @inject ModalManager _modalManager
 @inject EngineService _engineService
 
-<div id="EngineSelectionModal" class="modal @_modalManager.EngineSelectionClass">
+<div id="EngineSelectionModal" class="modal @(_modalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content-fullwidth">
         <div class="modal-header">
-            <header></header>
             <select @onchange="SortingChanged">
                 @foreach(var sortingOption in Enum.GetValues<SortEnginesBy>())
                     {
@@ -19,6 +18,7 @@
                 <option>DESC</option>
                 <option>ASC</option>
             </select>
+            <span class="flex-filler"/>
             <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
         </div>
         <div class="can-scroll-y modal-body">

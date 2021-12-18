@@ -15,6 +15,10 @@ $dotnet clean /p:PublishSingleFile=false -c Release
 for rid in ${rids[@]}
 
 do
+
+rm -rf ./src/*/bin
+rm -rf ./src/*/obj
+
 echo -e "$BLUE --- Building $rid --- $NC"
 $dotnet publish ./src/TauStellwerk.Server/ -r $rid -o ./publish/$rid $customargs
 
