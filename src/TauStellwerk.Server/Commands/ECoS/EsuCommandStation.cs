@@ -43,8 +43,8 @@ public class EsuCommandStation : CommandSystemBase
     {
         try
         {
-            var result = await _connectionHandler.SendCommandAsync("queryObjects(10, name, protocol)");
-            var ecosEngines = ECoSMessageDecoder.DecodeEngineListMessage(result);
+            var result = await _connectionHandler.SendCommandAsync("queryObjects(10,name,protocol)");
+            var ecosEngines = ECoSMessageDecoder.DecodeEngineListMessage(result.Content);
 
             foreach (var (id, name, protocol) in ecosEngines)
             {
@@ -148,15 +148,15 @@ public class EsuCommandStation : CommandSystemBase
         return engine.ECoSEngineData;
     }
 
-    private void HandleStatusEvent(string message)
+    private void HandleStatusEvent(ECoSMessage message)
     {
-        if (message.Contains("status[GO]"))
+        if (message.Content.Contains("status[GO]"))
         {
             OnStatusChange(State.On);
             return;
         }
 
-        if (message.Contains("status[STOP]"))
+        if (message.Content.Contains("status[STOP]"))
         {
             OnStatusChange(State.Off);
         }
@@ -167,7 +167,7 @@ public class EsuCommandStation : CommandSystemBase
         var ecosData = CheckForEcosData(engine);
 
         var response = await _connectionHandler.SendCommandAsync($"get({ecosData.Id},funcdesc)");
-        var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response);
+        var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response.Content);
 
         var dccFunctions = new List<DccFunction>();
 
