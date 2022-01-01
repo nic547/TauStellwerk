@@ -59,7 +59,7 @@
 		"direction functions"
 		"speed functions"
 		"estop estop";
-	grid-template-columns: 4em auto;
+	grid-template-columns: 4.5em auto;
 	grid-template-rows: 2.5em calc(var(--engine-controller-width) / 2 + 6px) auto 2.5em 2.5em 2.5em;
 	align-items: center;
 }
