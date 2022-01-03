@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TauStellwerk.Client.Services;
@@ -17,11 +18,15 @@ public class ConnectionService : IConnectionService
 
     private readonly Timer _sessionTimer;
 
+    private readonly HubConnection? _injectedConnection;
+
     private HubConnection? _hubConnection;
 
-    public ConnectionService(ISettingsService settingsService)
+    public ConnectionService(ISettingsService settingsService, HubConnection? hubConnection = null)
     {
         _settingsService = settingsService;
+
+        _injectedConnection = hubConnection;
 
         _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
         _sessionTimer.Elapsed += KeepSessionAlive;
@@ -35,11 +40,18 @@ public class ConnectionService : IConnectionService
             return _hubConnection;
         }
 
-        var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
-        var hubPath = new Uri(baseAddress, "/hub");
-        Console.WriteLine(hubPath);
+        if (_injectedConnection != null)
+        {
+            _hubConnection = _injectedConnection;
+        }
+        else
+        {
+            var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
+            var hubPath = new Uri(baseAddress, "/hub");
+            Console.WriteLine(hubPath);
 
-        _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, IgnoreInvalidCerts).Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, IgnoreInvalidCerts).Build();
+        }
 
         var username = (await _settingsService.GetSettings()).Username;
 
@@ -51,7 +63,7 @@ public class ConnectionService : IConnectionService
         return _hubConnection;
     }
 
-    private static void IgnoreInvalidCerts(Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions opts)
+    private static void IgnoreInvalidCerts(HttpConnectionOptions opts)
     {
         opts.HttpMessageHandlerFactory = (handler) =>
         {

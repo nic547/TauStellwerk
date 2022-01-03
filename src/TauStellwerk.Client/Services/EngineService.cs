@@ -75,11 +75,14 @@ public class EngineService
         await connection.SendAsync("SetEngineFunction", id, function, state);
     }
 
-    public async Task AddOrUpdateEngine(EngineFull engine)
+    public async Task<EngineFullDto> AddOrUpdateEngine(EngineFull engine)
     {
         var engineDto = engine.ToDto();
         var connection = await _service.GetHubConnection();
-        await connection.SendAsync("AddOrUpdateEngine", engineDto);
+        var updatedEngine = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AddOrUpdateEngine", engineDto);
+
+        // TODO: Handle Error instead of throwing.
+        return updatedEngine.Value ?? throw new InvalidOperationException();
     }
 
     private async Task SendSpeed((int Id, int Speed, Direction Direction) arg)

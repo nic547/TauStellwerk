@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="StwDatabase.db" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 

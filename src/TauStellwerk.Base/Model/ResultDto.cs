@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using FluentResults;
 
 namespace TauStellwerk.Base.Model;
@@ -25,7 +26,7 @@ public class ResultDto<T>
 
     public static implicit operator ResultDto<T>(Result<T> result)
     {
-        return new ResultDto<T>(result.ValueOrDefault, result.IsSuccess, result.Errors.ToString());
+        return new ResultDto<T>(result.ValueOrDefault, result.IsSuccess, string.Join(' ', result.Errors.Select(e => e.Message)));
     }
 
     public static implicit operator ResultDto<T>(Result result)
@@ -35,6 +36,6 @@ public class ResultDto<T>
             throw new InvalidOperationException();
         }
 
-        return new ResultDto<T>(default, false, result.Errors.ToString());
+        return new ResultDto<T>(default, false, string.Join(' ', result.Errors.Select(e => e.Message)));
     }
 }

@@ -94,9 +94,9 @@ public partial class TauHub
         return list;
     }
 
-    public async Task AddOrUpdateEngine(EngineFullDto engine)
+    public async Task<ResultDto<EngineFullDto>> AddOrUpdateEngine(EngineFullDto engine)
     {
-        await _engineRepo.UpdateOrAdd(engine);
+        return await _engineRepo.UpdateOrAdd(engine);
     }
 
     public async Task DeleteEngine(int id)
