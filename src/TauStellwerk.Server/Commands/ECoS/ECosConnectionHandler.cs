@@ -79,13 +79,15 @@ public class ECosConnectionHandler
 
         List<string> lines = new();
 
+        int totalLength = 0;
         while (true)
         {
             var readBytes = await stream.ReadAsync(buffer, bufferStartPosition, BufferSize - bufferStartPosition);
-            var totalLength = bufferStartPosition + readBytes;
+            totalLength += readBytes;
 
             var (newLines, newLength) = FindLines(buffer, totalLength);
             lines.AddRange(newLines);
+            bufferStartPosition = newLength;
             totalLength = newLength;
 
             lines = HandleReceivedLines(lines);

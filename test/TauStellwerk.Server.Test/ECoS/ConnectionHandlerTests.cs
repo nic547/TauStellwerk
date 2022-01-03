@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -55,11 +57,12 @@ public class ConnectionHandlerTests
     {
         var task = _connectionHandler.SendCommandAsync("set(1016,func[0,1])");
         await _tcpListener.Send("<REPLY set(1016,func[0,1])>\r\n");
+        await _tcpListener.Send("ä\r\n");
         await _tcpListener.Send("<END 0 (OK)>\r\n");
         var result = await task;
 
         result.Command.Should().Be("set(1016,func[0,1])");
-        result.Content.Should().Be(string.Empty);
+        result.Content.Should().Be("ä\r\n");
         result.ErrorCode.Should().Be(0);
         result.ErrorMessage.Should().Be("(OK)");
     }
@@ -70,6 +73,7 @@ public class ConnectionHandlerTests
         var task = _connectionHandler.SendCommandAsync("set(1,1)");
         await _tcpListener.Send("<REPLY set(1,1)>\r\n");
         await _tcpListener.Send(new byte[] { 0b110_00011 });
+        await Task.Delay(100); // Ensure the incomplete byte was actually read.
         await _tcpListener.Send(new byte[] { 0b101_00100, 0b0000_1101, 0b0000_1010 });
         await _tcpListener.Send("<END 0 (OK)>\r\n");
         var result = await task;
