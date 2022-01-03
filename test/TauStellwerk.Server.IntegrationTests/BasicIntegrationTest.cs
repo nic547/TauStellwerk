@@ -4,9 +4,7 @@
 // </copyright>
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -33,7 +31,7 @@ public class BasicIntegrationTest
     [Category("long-running")]
     public async Task CanCreateAndLoadEngines()
     {
-        var engineService = new EngineService(await CreateConnectionService());
+        var engineService = new EngineService(CreateConnectionService());
 
         var enginesToInsert = Tools.CreateTestDb.EngineDtoGenerator.GetEngineFullDtos(100);
         foreach (var engine in enginesToInsert)
@@ -55,7 +53,7 @@ public class BasicIntegrationTest
     [Category("long-running")]
     public async Task CanCreateAndControlEngine()
     {
-        var engineService = new EngineService(await CreateConnectionService());
+        var engineService = new EngineService(CreateConnectionService());
 
         var engineToInsert = Tools.CreateTestDb.EngineDtoGenerator.GetEngineDto();
         var engine = await engineService.AddOrUpdateEngine(new EngineFull(engineToInsert));
@@ -69,7 +67,7 @@ public class BasicIntegrationTest
         Assert.Pass();
     }
 
-    private async Task<IConnectionService> CreateConnectionService()
+    private IConnectionService CreateConnectionService()
     {
         var settingService = new Mock<ISettingsService>(MockBehavior.Strict);
 

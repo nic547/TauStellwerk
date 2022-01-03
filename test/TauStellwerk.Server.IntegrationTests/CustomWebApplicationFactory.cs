@@ -4,13 +4,10 @@
 // </copyright>
 
 using System;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TauStellwerk.Database;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Server.IntegrationTests;
 
@@ -30,7 +27,7 @@ public static class HostExtensions
 {
     public static IHost CreateDatabase(this IHost host)
     {
-        var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+        var serviceScopeFactory = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
 
         using var scope = serviceScopeFactory.CreateScope();
 
