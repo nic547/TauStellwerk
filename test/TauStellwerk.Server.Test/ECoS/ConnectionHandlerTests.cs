@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentResults.Extensions.FluentAssertions;
 using NUnit.Framework;
 using TauStellwerk.Commands.ECoS;
 
@@ -46,7 +47,8 @@ public class ConnectionHandlerTests
         var result = await task;
         var receivedCommand = Encoding.UTF8.GetString(_tcpListener.Data.ToArray());
 
-        result.ErrorCode.Should().Be(0);
+        result.Should().BeSuccess();
+        result.Value.ErrorCode.Should().Be(0);
         receivedCommand.Should().BeEquivalentTo(command);
     }
 
@@ -59,10 +61,12 @@ public class ConnectionHandlerTests
         await _tcpListener.Send("<END 0 (OK)>\r\n");
         var result = await task;
 
-        result.Command.Should().Be("set(1016,func[0,1])");
-        result.Content.Should().Be("ä\r\n");
-        result.ErrorCode.Should().Be(0);
-        result.ErrorMessage.Should().Be("(OK)");
+        result.Should().BeSuccess();
+        var response = result.Value;
+        response.Command.Should().Be("set(1016,func[0,1])");
+        response.Content.Should().Be("ä");
+        response.ErrorCode.Should().Be(0);
+        response.ErrorMessage.Should().Be("(OK)");
     }
 
     [Test]
@@ -71,12 +75,33 @@ public class ConnectionHandlerTests
         var task = _connectionHandler.SendCommandAsync("set(1,1)");
         await _tcpListener.Send("<REPLY set(1,1)>\r\n");
         await _tcpListener.Send(new byte[] { 0b110_00011 });
-        await Task.Delay(100); // Ensure the incomplete byte was actually read.
+        await Task.Delay(50); // Ensure the incomplete byte was actually read.
         await _tcpListener.Send(new byte[] { 0b101_00100, 0b0000_1101, 0b0000_1010 });
         await _tcpListener.Send("<END 0 (OK)>\r\n");
         var result = await task;
 
-        result.Content.Should().Be("ä\r\n");
+        result.Value.Content.Should().Be("ä");
+    }
+
+    [Test]
+    public async Task ResponseSplitLineEndTest()
+    {
+        var task = _connectionHandler.SendCommandAsync("set(1016,func[0,1])");
+        await _tcpListener.Send("<REPLY set(1016,func[0,1])>");
+        await Task.Delay(50);
+        await _tcpListener.Send("\r");
+        await Task.Delay(50);
+        await _tcpListener.Send("\n");
+        await Task.Delay(50);
+        await _tcpListener.Send("<END 0 (OK)>\r\n");
+        var result = await task;
+
+        result.Should().BeSuccess();
+        var response = result.Value;
+        response.Command.Should().Be("set(1016,func[0,1])");
+        response.Content.Should().Be(string.Empty);
+        response.ErrorCode.Should().Be(0);
+        response.ErrorMessage.Should().Be("(OK)");
     }
 
     private class TestTcpListener

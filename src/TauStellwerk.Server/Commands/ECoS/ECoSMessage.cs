@@ -10,7 +10,7 @@ public record ECoSMessage
         var firstLine = message.First().Split(' ');
         var lastLine = message.Last().Split(' ');
         var messageLines = message.Skip(1).SkipLast(1);
-        Content = string.Join(string.Empty, messageLines);
+        Content = string.Join("/r/n", messageLines);
 
         Type = firstLine[0].TrimStart('<');
         Command = string.Join(string.Empty, firstLine[1..]).TrimEnd('>', '\r', '\n');
