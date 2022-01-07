@@ -19,8 +19,6 @@ public class EngineImage
 
     public string Filename { get; set; } = string.Empty;
 
-    public bool IsGenerated { get; set; }
-
     public int Width { get; set; }
 
     public ImageDto ToImageDto()

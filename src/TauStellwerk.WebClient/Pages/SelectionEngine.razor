@@ -8,10 +8,10 @@
 <article class="is-clickable has-shadow is-flex-vertical">
     <header>@Engine.Name</header>
     <picture class="selection-image">
-        @foreach (var imageset in Engine.Images.GroupBy(e => e.Type))
+        @foreach (var imageset in Engine.Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
         {
             var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
-            <source sizes="@Sizes" srcset="@srcset" type="@imageset.Key">
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
         }
         <img src="img/noImageImage.png" alt="Engine image" />
     </picture>
