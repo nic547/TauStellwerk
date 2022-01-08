@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -87,6 +88,7 @@ public class Startup
         {
             FileProvider = new PhysicalFileProvider(Path.GetFullPath(Configuration["generatedImageDirectory"])),
             RequestPath = "/images",
+            ContentTypeProvider = GetContentTypeProvider(),
         });
 
         app.UseRouting();
@@ -97,6 +99,15 @@ public class Startup
             endpoints.MapRazorPages();
             endpoints.MapHub<TauHub>("/hub");
         });
+    }
+
+    private static IContentTypeProvider GetContentTypeProvider()
+    {
+        var provider = new FileExtensionContentTypeProvider();
+
+        provider.Mappings.Add(".avif", "image/avif");
+
+        return provider;
     }
 
     private void EnsureContentDirectoriesExist()

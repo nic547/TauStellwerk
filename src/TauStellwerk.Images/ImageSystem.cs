@@ -3,11 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NetVips;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Util;
@@ -16,13 +18,27 @@ namespace TauStellwerk.Images;
 
 public class ImageSystem
 {
-    private readonly (string Prefix, int Size)[] _downScaleValues = { ("full_", 100), ("half_", 50), ("quarter_", 25) };
-
     private readonly StwDbContext _context;
 
     private readonly string _userPath;
 
     private readonly string _generatedPath;
+
+    private readonly List<ImageOptions> _imageOptions = new()
+    {
+        // Quality settings determined experimentally.
+        new WebpOptions(1, "_100", 65, 6),
+        new WebpOptions(0.5, "_050", 65, 6),
+        new WebpOptions(0.25, "_025", 70, 6),
+
+        // Quality settings derived from webp values, using https://www.industrialempathy.com/posts/avif-webp-quality-settings/
+        new JpegOptions(1, "_100", 60),
+        new JpegOptions(0.5, "_050", 60),
+        new JpegOptions(0.25, "_025", 70),
+        new AvifOptions(1, "_100", 50, 6),
+        new AvifOptions(0.5, "_050", 50, 6),
+        new AvifOptions(0.25, "_025", 55, 6),
+    };
 
     public ImageSystem(StwDbContext context, string userPath, string generatedPath)
     {
@@ -31,115 +47,89 @@ public class ImageSystem
         _context = context;
     }
 
-    /// <summary>
-    /// Gets list containing additional arguments that should be passed to IM, per format and per Size.
-    /// </summary>
-    private List<(string Format, int Scaling, string Arguments)> AdditionalArguments { get; } = new()
-    {
-        ("WEBP", 025, "-quality 70 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
-        ("WEBP", 050, "-quality 65 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
-        ("WEBP", 100, "-quality 65 -define webp:image-hint=photo -define webp:method=6 -define webp:auto-filter=true -strip"),
-    };
-
-    public static async Task<bool> HasMagickAvailable()
-    {
-        var magick = await MagickBase.GetInstance();
-        if (magick.GetType() == typeof(MagickNop))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     public async void RunImageSetup()
     {
-        if (!await HasMagickAvailable())
-        {
-            return;
-        }
-
-        await CheckForMissingImageWidth();
         await CreateDownScaledImages();
-    }
-
-    private async Task CheckForMissingImageWidth()
-    {
-        var magick = await MagickBase.GetInstance();
-        var imagesMissingWidth = await _context.EngineImages.Where(i => i.Width == 0).ToListAsync();
-
-        foreach (var image in imagesMissingWidth)
-        {
-            string path = image.IsGenerated ? _generatedPath : _userPath;
-            var width = await magick.GetImageWidth(Path.Combine(path, image.Filename));
-            if (width != 0)
-            {
-                image.Width = width;
-            }
-            else
-            {
-                ConsoleService.PrintWarning($"Image {image.Filename} has no width and width couldn't be determined.");
-            }
-        }
-
-        await _context.SaveChangesAsync();
     }
 
     private async Task CreateDownScaledImages()
     {
         foreach (var engine in _context.Engines.Include(e => e.Images))
         {
-            if (engine.Images.Count == _downScaleValues.Length)
-            {
-                continue;
-            }
-
             var file = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
+
             if (file == null)
             {
                 continue;
             }
 
-            foreach (var (prefix, size) in _downScaleValues)
+            var sourceImageTimestamp = File.GetLastWriteTime(file);
+
+            var updatedImages = 0;
+
+            foreach (var options in _imageOptions)
             {
-                var newImage = await DownscaleImage(Path.Combine(_userPath, file), prefix, size);
-                if (newImage != null)
+                var filename = $"{engine.Id}{options.Suffix}{options.FileEnding}";
+                var existingImage = Directory.EnumerateFiles(_generatedPath, options.GetFilename(engine.Id)).SingleOrDefault();
+                DateTime existingImageTimestamp = DateTime.MaxValue;
+
+                if (existingImage != null)
                 {
-                    engine.Images.Add(
-                        new EngineImage
-                        {
-                            Filename = newImage.Value.Filename,
-                            IsGenerated = true,
-                            Width = newImage.Value.Width,
-                        });
-                    await _context.SaveChangesAsync();
+                    existingImageTimestamp = File.GetLastWriteTime(existingImage);
                 }
+
+                if (engine.LastImageUpdate == null || existingImageTimestamp > engine.LastImageUpdate || sourceImageTimestamp > engine.LastImageUpdate)
+                {
+                    var width = await DownscaleImage(file, engine.Id, options);
+                    updatedImages++;
+
+                    var existingEntry = engine.Images.SingleOrDefault(i => i.Filename == options.GetFilename(engine.Id));
+                    if (existingEntry is null)
+                    {
+                        engine.Images.Add(new EngineImage
+                        {
+                            Filename = filename,
+                            Width = width,
+                        });
+                    }
+                    else
+                    {
+                        existingEntry.Width = width;
+                    }
+                }
+            }
+
+            if (updatedImages != 0)
+            {
+                engine.LastImageUpdate = DateTime.Now;
+                await _context.SaveChangesAsync();
+                ConsoleService.PrintHighlightedMessage($"Updated {updatedImages} images for '{engine}'");
             }
         }
     }
 
-    private async Task<(string Filename, int Width)?> DownscaleImage(string inputFilePath, string prefix, int size)
+    private Task<int> DownscaleImage(string inputFilePath, int id, ImageOptions options)
     {
-        var magick = await MagickBase.GetInstance();
+        using var image = Image.NewFromFile(inputFilePath);
+        using var smallerImage = image.Resize(options.Scale);
 
-        var newFileName = prefix + Path.GetFileName(inputFilePath);
-        var newFilePath = Path.Combine(_generatedPath, newFileName);
-        var fileExtension = Path.GetExtension(newFileName).Remove(0, 1).ToUpperInvariant();
-
-        var (format, scaling, arguments) = AdditionalArguments.SingleOrDefault(t => t.Format == fileExtension && t.Scaling == size);
-        var success = await magick.Resize(inputFilePath, newFilePath, size, arguments);
-        if (!success)
+        var outputFileName = options.GetFilename(id);
+        var outputFilePath = $"{_generatedPath}/{outputFileName}";
+        switch (options)
         {
-            ConsoleService.PrintError($"Failed to downscale {Path.GetFileName(inputFilePath)}");
-            return null;
+            case WebpOptions webpOptions:
+                smallerImage.Webpsave(outputFilePath, webpOptions.Quality, effort: webpOptions.Effort, strip: true);
+                break;
+
+            case JpegOptions jpegOptions:
+                smallerImage.Jpegsave(outputFilePath, jpegOptions.Quality, strip: true);
+                break;
+
+            case AvifOptions avifOptions:
+                smallerImage.Heifsave(outputFilePath, avifOptions.Quality, effort: avifOptions.Effort, strip: true, compression: avifOptions.HeifCompression);
+                break;
         }
 
-        var width = await magick.GetImageWidth(newFilePath);
-        if (width == 0)
-        {
-            ConsoleService.PrintError($"{newFileName}'s size could not be determined.");
-        }
-
-        return (newFileName, width);
+        return Task.FromResult(smallerImage.Width);
     }
 }

@@ -64,7 +64,7 @@ public class AvaloniaViewService : IViewService
 
     private static Window? TryGetAssociatedWindow(object? source)
     {
-        if (Application.Current.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime appLifetime)
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime appLifetime)
         {
             return null;
         }
@@ -82,7 +82,7 @@ public class AvaloniaViewService : IViewService
 
     private static Window? TryGetMainWindow()
     {
-        var appLifetime = Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+        var appLifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
         return appLifetime?.MainWindow;
     }
 

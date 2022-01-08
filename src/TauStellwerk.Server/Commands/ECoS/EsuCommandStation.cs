@@ -43,8 +43,8 @@ public class EsuCommandStation : CommandSystemBase
     {
         try
         {
-            var result = await _connectionHandler.SendCommandAsync("queryObjects(10, name, protocol)");
-            var ecosEngines = ECoSMessageDecoder.DecodeEngineListMessage(result);
+            var result = await _connectionHandler.SendCommandAsync("queryObjects(10,name,protocol)");
+            var ecosEngines = ECoSMessageDecoder.DecodeEngineListMessage(result.Value.Content);
 
             foreach (var (id, name, protocol) in ecosEngines)
             {
@@ -132,31 +132,31 @@ public class EsuCommandStation : CommandSystemBase
         return Task.FromResult(true);
     }
 
-    public async override Task CheckState()
+    public override async Task CheckState()
     {
         var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");
-        HandleStatusEvent(statusMessage);
+        HandleStatusEvent(statusMessage.Value);
     }
 
     private static ECoSEngineData CheckForEcosData(Engine engine)
     {
         if (engine.ECoSEngineData == null)
         {
-            throw new ArgumentException("ECoS-ICommandStation cannot handle engines without ECoS-Data");
+            throw new ArgumentException("ECoS-CommandStation cannot handle engines without ECoS-Data");
         }
 
         return engine.ECoSEngineData;
     }
 
-    private void HandleStatusEvent(string message)
+    private void HandleStatusEvent(ECoSMessage message)
     {
-        if (message.Contains("status[GO]"))
+        if (message.Content.Contains("status[GO]"))
         {
             OnStatusChange(State.On);
             return;
         }
 
-        if (message.Contains("status[STOP]"))
+        if (message.Content.Contains("status[STOP]"))
         {
             OnStatusChange(State.Off);
         }
@@ -167,7 +167,7 @@ public class EsuCommandStation : CommandSystemBase
         var ecosData = CheckForEcosData(engine);
 
         var response = await _connectionHandler.SendCommandAsync($"get({ecosData.Id},funcdesc)");
-        var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response);
+        var functions = ECoSMessageDecoder.DecodeFuncdescMessage(response.Value.Content);
 
         var dccFunctions = new List<DccFunction>();
 

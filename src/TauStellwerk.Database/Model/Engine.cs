@@ -64,6 +64,8 @@ public class Engine
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ECoSEngineData? ECoSEngineData { get; init; }
 
+    public DateTime? LastImageUpdate { get; set; }
+
     public List<EngineImage> Images { get; init; } = new();
 
     public DateTime LastUsed { get; set; }
