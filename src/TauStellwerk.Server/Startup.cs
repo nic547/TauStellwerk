@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using TauStellwerk.Base;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
 using TauStellwerk.Hub;
@@ -46,7 +47,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddRazorPages();
-        services.AddSignalR();
+        services.AddSignalR()
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
 
         services.AddDbContext<StwDbContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("Database")));
