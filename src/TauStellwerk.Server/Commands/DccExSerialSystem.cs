@@ -24,7 +24,6 @@ public class DccExSerialSystem : CommandSystemBase
         _logger = logger;
         logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
-        // TODO #131
         _serialPort = new SerialPort
         {
             PortName = Config["CommandSystem:SerialPort"],
