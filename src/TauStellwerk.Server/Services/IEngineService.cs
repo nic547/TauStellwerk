@@ -8,10 +8,10 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Services;
 
@@ -31,12 +31,14 @@ public interface IEngineService
 public class EngineService : IEngineService
 {
     private readonly CommandSystemBase _commandSystem;
+    private readonly ILogger _logger;
 
     private readonly ConcurrentDictionary<int, ActiveEngine> _activeEngines = new();
 
-    public EngineService(CommandSystemBase commandSystem, SessionService sessionService)
+    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger)
     {
         _commandSystem = commandSystem;
+        _logger = logger;
         sessionService.SessionTimeout += HandleSessionTimeout;
     }
 
@@ -45,7 +47,7 @@ public class EngineService : IEngineService
         var serviceSuccess = _activeEngines.TryAdd(engine.Id, new ActiveEngine(session, engine));
         if (!serviceSuccess)
         {
-            ConsoleService.PrintMessage($"{session} tried acquiring {engine}, but engine is already acquired.");
+            _logger.LogDebug($"{session} tried acquiring {engine}, but engine is already acquired.");
             return Result.Fail("Engine already in use");
         }
 
@@ -53,12 +55,12 @@ public class EngineService : IEngineService
 
         if (systemResult == false)
         {
-            ConsoleService.PrintWarning($"{session} tried acquiring {engine}, but ICommandSystem returned false");
+            _logger.LogWarning($"{session} tried acquiring {engine}, but the command system returned false");
             _activeEngines.TryRemove(engine.Id, out _);
             return Result.Fail("Engine already in use");
         }
 
-        ConsoleService.PrintMessage($"{session} acquired {engine}");
+        _logger.LogInformation($"{session} acquired {engine}");
 
         return Result.Ok();
     }
@@ -74,7 +76,7 @@ public class EngineService : IEngineService
         var activeEngine = activeEngineResult.Value;
 
         _activeEngines.TryRemove(engineId, out _);
-        ConsoleService.PrintMessage($"{session} released {activeEngine.Engine}");
+        _logger.LogInformation($"{session} released {activeEngine.Engine}");
 
         var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngine.Engine);
         return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
@@ -130,13 +132,13 @@ public class EngineService : IEngineService
         _activeEngines.TryGetValue(engineId, out var activeEngine);
         if (activeEngine == null)
         {
-            ConsoleService.PrintMessage($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
+            _logger.LogWarning($"{session} tried commanding engine with id {engineId}, but no such engine is active.");
             return Result.Fail($"No engine with id {engineId} was found");
         }
 
         if (activeEngine.Session != session)
         {
-            ConsoleService.PrintWarning($"{session} tried something with {activeEngine.Engine}, but has wrong session");
+            _logger.LogWarning($"{session} tried something with {activeEngine.Engine}, but has wrong session");
             return Result.Fail("Wrong session");
         }
 
@@ -150,7 +152,7 @@ public class EngineService : IEngineService
             if (active.Session == session)
             {
                 _activeEngines.TryRemove(active.Engine.Id, out var _);
-                ConsoleService.PrintWarning($"Released {active.Engine} because {session.UserName} timed out!");
+                _logger.LogWarning($"Released {active.Engine} because {session.UserName} timed out!");
             }
         }
     }

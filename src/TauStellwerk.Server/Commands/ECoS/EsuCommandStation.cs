@@ -10,10 +10,10 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Commands.ECoS;
 
@@ -22,18 +22,21 @@ namespace TauStellwerk.Commands.ECoS;
 /// </summary>
 public class EsuCommandStation : CommandSystemBase
 {
+    private readonly ILogger<CommandSystemBase> _logger;
     private readonly ECosConnectionHandler _connectionHandler;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EsuCommandStation"/> class.
     /// </summary>
     /// <param name="config">IConfiguration to use.</param>
-    public EsuCommandStation(IConfiguration config)
+    /// <param name="logger">ILogger to use.</param>
+    public EsuCommandStation(IConfiguration config, ILogger<CommandSystemBase> logger)
         : base(config)
     {
+        _logger = logger;
         string ipAddress = Config["CommandSystem:IP"];
         var port = int.Parse(Config["commandSystem:Port"]);
-        _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port);
+        _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port, logger);
 
         _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
     }
@@ -70,7 +73,7 @@ public class EsuCommandStation : CommandSystemBase
                         },
                     };
 
-                    ConsoleService.PrintHighlightedMessage($"Loaded new engine from ECoS: {engine}");
+                    _logger.LogInformationHighlighted($"Loaded new engine from ECoS: {engine}");
                     await context.Engines.AddAsync(engine);
                 }
 
@@ -85,7 +88,7 @@ public class EsuCommandStation : CommandSystemBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            System.Console.WriteLine(e.Message);
         }
     }
 

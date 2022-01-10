@@ -3,23 +3,26 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.IO.Ports;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Database.Model;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Commands;
 
 public class DccExSerialSystem : CommandSystemBase
 {
+    private readonly ILogger<CommandSystemBase> _logger;
     private readonly SerialPort _serialPort;
 
-    public DccExSerialSystem(IConfiguration configuration)
+    public DccExSerialSystem(IConfiguration configuration, ILogger<CommandSystemBase> logger)
         : base(configuration)
     {
-        ConsoleService.PrintWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+        _logger = logger;
+        logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
         // TODO #131
         _serialPort = new SerialPort
@@ -39,7 +42,7 @@ public class DccExSerialSystem : CommandSystemBase
         {
             while (true)
             {
-                ConsoleService.PrintMessage(_serialPort.ReadLine());
+                Console.WriteLine(_serialPort.ReadLine());
             }
         });
     }

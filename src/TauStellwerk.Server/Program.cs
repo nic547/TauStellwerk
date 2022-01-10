@@ -11,10 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
 using TauStellwerk.Images;
-using TauStellwerk.Util;
 
 namespace TauStellwerk;
 
@@ -23,6 +24,11 @@ public static class Program
     public static void Main(string[] args)
     {
         CreateHostBuilder(args)
+            .ConfigureLogging(config =>
+            {
+                config.AddConsole(options => options.FormatterName = nameof(CustomLogFormatter))
+                    .AddConsoleFormatter<CustomLogFormatter, SimpleConsoleFormatterOptions>();
+            })
             .Build()
             .MigrateDatabase()
             .LoadEngines()
@@ -46,17 +52,18 @@ public static class Program
         using var scope = serviceScopeFactory.CreateScope();
 
         var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger<Startup>>(); // Wrong class - but Program doesn't seem to work.
         var dbContext = services.GetRequiredService<StwDbContext>();
 
         if (dbContext.Database.GetPendingMigrations().Any())
         {
-            ConsoleService.PrintHighlightedMessage("Applying database migrations.");
+            logger.LogInformationHighlighted("Applying database migrations.");
             dbContext.Database.Migrate();
-            ConsoleService.PrintHighlightedMessage("Database migrations applied.");
+            logger.LogInformationHighlighted("Database migrations applied.");
         }
         else
         {
-            ConsoleService.PrintMessage("No database migrations necessary.");
+            logger.LogInformation("No database migrations necessary.");
         }
 
         return host;
@@ -83,8 +90,11 @@ public static class Program
         var services = scope.ServiceProvider;
 
         var config = services.GetRequiredService<IConfiguration>();
+        var logger = services.GetRequiredService<ILogger<ImageSystem>>();
+
         var system = new ImageSystem(
             services.GetRequiredService<StwDbContext>(),
+            logger,
             config["originalImageDirectory"],
             config["generatedImageDirectory"]);
         _ = Task.Run(system.RunImageSetup);

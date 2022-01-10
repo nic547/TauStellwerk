@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Util;
 
@@ -27,9 +28,11 @@ public class SessionService : BackgroundService
 
     private readonly ConcurrentDictionary<string, Session> _sessions = new();
     private readonly INowProvider _now;
+    private readonly ILogger<SessionService> _logger;
 
-    public SessionService(INowProvider? now = null)
+    public SessionService(ILogger<SessionService> logger, INowProvider? now = null)
     {
+        _logger = logger;
         _now = now ?? new NowProvider();
     }
 
@@ -47,7 +50,7 @@ public class SessionService : BackgroundService
             SessionId = sessionId,
         };
         _sessions.TryAdd(session.SessionId, session);
-        ConsoleService.PrintMessage($"{session} created new session");
+        _logger.LogDebug($"{session} created new session");
         return session;
     }
 
@@ -56,7 +59,7 @@ public class SessionService : BackgroundService
         var session = TryGetSession(sessionId);
         if (session == null)
         {
-            Console.WriteLine($"Update for non-existant session:{sessionId}");
+            _logger.LogWarning($"Update for non-existant session:{sessionId}");
             return false;
         }
 
@@ -72,7 +75,7 @@ public class SessionService : BackgroundService
             throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
         }
 
-        ConsoleService.PrintMessage($"{session} renamed to {newUsername}");
+        _logger.LogDebug($"{session} renamed to {newUsername}");
         session.UserName = newUsername;
     }
 
@@ -101,17 +104,17 @@ public class SessionService : BackgroundService
                 case > TimeoutInactive when session.IsActive:
                     session.IsActive = false;
                     SessionTimeout?.Invoke(session);
-                    ConsoleService.PrintMessage($"{session} has been marked as inactive.");
+                    _logger.LogDebug($"{session} has been marked as inactive.");
                     break;
 
                 case < TimeoutInactive when !session.IsActive:
                     session.IsActive = true;
-                    ConsoleService.PrintMessage($"{session} has been reactivated.");
+                    _logger.LogDebug($"{session} has been reactivated.");
                     break;
 
                 case > TimeoutDeletion:
                     _sessions.TryRemove(session.SessionId, out _);
-                    ConsoleService.PrintMessage($"{session} has been deleted after {Math.Round(idle)} seconds");
+                    _logger.LogInformation($"{session} has been deleted after {Math.Round(idle)} seconds");
                     break;
             }
         }
@@ -120,9 +123,9 @@ public class SessionService : BackgroundService
     /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        ConsoleService.PrintMessage("SessionService is starting.");
+        _logger.LogDebug("SessionService is starting.");
 
-        stoppingToken.Register(() => Console.WriteLine("SessionService is stopping."));
+        stoppingToken.Register(() => System.Console.WriteLine("SessionService is stopping."));
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -131,6 +134,6 @@ public class SessionService : BackgroundService
             await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
         }
 
-        ConsoleService.PrintMessage("SessionService background task is stopping.");
+        _logger.LogDebug("SessionService background task is stopping.");
     }
 }

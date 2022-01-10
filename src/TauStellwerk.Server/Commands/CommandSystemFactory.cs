@@ -6,8 +6,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Commands.ECoS;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Commands;
 
@@ -16,20 +16,15 @@ namespace TauStellwerk.Commands;
 /// </summary>
 public static class CommandSystemFactory
 {
-    private static readonly List<(Type Type, Func<IConfiguration, CommandSystemBase> Constructor)> _commandStations = new()
+    private static readonly List<(Type Type, Func<IConfiguration, ILogger<CommandSystemBase>, CommandSystemBase> Constructor)> _commandStations = new()
     {
-        (typeof(NullCommandSystem), (x) => new NullCommandSystem(x)),
-        (typeof(ConsoleCommandSystem), (x) => new ConsoleCommandSystem(x)),
-        (typeof(EsuCommandStation), (x) => new EsuCommandStation(x)),
-        (typeof(DccExSerialSystem), (x) => new DccExSerialSystem(x)),
+        (typeof(NullCommandSystem), (config, _) => new NullCommandSystem(config)),
+        (typeof(ConsoleCommandSystem), (config, _) => new ConsoleCommandSystem(config)),
+        (typeof(EsuCommandStation), (config, logger) => new EsuCommandStation(config, logger)),
+        (typeof(DccExSerialSystem), (config, logger) => new DccExSerialSystem(config, logger)),
     };
 
-    /// <summary>
-    /// Create a instance of a class that implements <see cref="CommandSystemBase"/>.
-    /// </summary>
-    /// <param name="config">Config that might contain a setting for the CommandSystemBase.</param>
-    /// <returns>A CommandSystemBase. Default is the ConsoleCommandSystem.</returns>
-    public static CommandSystemBase FromConfig(IConfiguration config)
+    public static CommandSystemBase FromConfig(IConfiguration config, ILogger<CommandSystemBase> logger)
     {
         var systemSetting = config["CommandSystem:Type"];
 
@@ -37,11 +32,11 @@ public static class CommandSystemFactory
         {
             if (string.Equals(systemSetting, system.Type.Name, StringComparison.InvariantCultureIgnoreCase))
             {
-                return system.Constructor.Invoke(config);
+                return system.Constructor.Invoke(config, logger);
             }
         }
 
-        ConsoleService.PrintError($"Could not find CommandSystem \"{systemSetting}\", continuing with default (ConsoleCommandSystem)");
+        logger.LogError($"Could not find CommandSystem \"{systemSetting}\", continuing with default (ConsoleCommandSystem)");
         return new ConsoleCommandSystem(config);
     }
 }

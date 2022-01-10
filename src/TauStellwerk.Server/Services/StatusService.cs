@@ -5,10 +5,10 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Hub;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Services;
 
@@ -16,14 +16,16 @@ public class StatusService
 {
     private readonly CommandSystemBase _system;
     private readonly IHubContext<TauHub> _hubContext;
+    private readonly ILogger<StatusService> _logger;
 
     private State _isRunning;
     private string _lastActionUsername = "SYSTEM";
 
-    public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext)
+    public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext, ILogger<StatusService> logger)
     {
         _system = system;
         _hubContext = hubContext;
+        _logger = logger;
 
         _system.StatusChanged += HandleStatusEvent;
         _system.CheckState();
@@ -48,7 +50,7 @@ public class StatusService
     {
         _isRunning = state;
         _lastActionUsername = "SYSTEM";
-        ConsoleService.PrintMessage($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
+        _logger.LogInformation($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
 
         SystemStatus systemStatus = new()
         {

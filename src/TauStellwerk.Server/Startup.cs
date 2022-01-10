@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
@@ -46,6 +47,7 @@ public class Startup
     /// <param name="services">IDK.</param>
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddLogging();
         services.AddRazorPages();
         services.AddSignalR()
             .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
@@ -53,14 +55,14 @@ public class Startup
         services.AddDbContext<StwDbContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("Database")));
 
-        services.AddSingleton(new SessionService());
-        services.AddSingleton(CommandSystemFactory.FromConfig(Configuration));
+        services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
+        services.AddSingleton(p => CommandSystemFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandSystemBase>>()));
         services.AddSingleton(p =>
-            new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>()));
+            new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>(), p.GetRequiredService<ILogger<StatusService>>()));
         services.AddSingleton<IEngineService>(p =>
-            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>()));
+            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>()));
 
-        services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>()));
+        services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
 
         services.AddHostedService(p => p.GetRequiredService<SessionService>());
     }

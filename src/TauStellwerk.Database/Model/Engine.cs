@@ -76,7 +76,7 @@ public class Engine
 
     public override string ToString()
     {
-        return Name;
+        return $"'{Name}'";
     }
 
     public EngineDto ToEngineDto()
