@@ -9,10 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
-using TauStellwerk.Util;
 
 namespace TauStellwerk;
 
@@ -21,10 +21,12 @@ public class EngineRepo
     private const int ResultsPerPage = 20;
 
     private readonly StwDbContext _dbContext;
+    private readonly ILogger<EngineRepo> _logger;
 
-    public EngineRepo(StwDbContext dbContext)
+    public EngineRepo(StwDbContext dbContext, ILogger<EngineRepo> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     public async Task<Result<EngineFullDto>> GetEngineFullDto(int id)
@@ -125,7 +127,7 @@ public class EngineRepo
         }
         catch (Exception e)
         {
-            ConsoleService.PrintError($"Exception while updating engine: {e.GetType()}");
+            _logger.LogError($"Exception while updating engine: {e.GetType()}");
             return Result.Fail("Could not update engine");
         }
 

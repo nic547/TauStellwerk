@@ -5,6 +5,8 @@
 
 using System;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using TauStellwerk.Services;
 using TauStellwerk.Util;
@@ -17,7 +19,7 @@ public class SessionServiceTests
     public void SessionWithRegularUpdatesIsNotInactive()
     {
         var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(nowProvider);
+        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
         var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
 
         for (var i = 0; i < 10; i++)
@@ -34,7 +36,7 @@ public class SessionServiceTests
     public void SessionWithoutUpdateIsInactive()
     {
         var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(nowProvider);
+        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
         var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
 
         nowProvider.DateTime += TimeSpan.FromSeconds(100);
@@ -47,7 +49,7 @@ public class SessionServiceTests
     public void SessionCanBeReactivated()
     {
         var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(nowProvider);
+        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
         var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
 
         nowProvider.DateTime += TimeSpan.FromSeconds(100);
@@ -65,7 +67,7 @@ public class SessionServiceTests
     public void OldSessionsGetRemoved()
     {
         var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(nowProvider);
+        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
         var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
 
         nowProvider.DateTime += TimeSpan.FromHours(2);
@@ -73,6 +75,11 @@ public class SessionServiceTests
         sessionService.CheckLastContacts();
 
         sessionService.TryGetSession(session.SessionId).Should().BeNull();
+    }
+
+    private static ILogger<SessionService> GetLoggerMock()
+    {
+        return new Mock<ILogger<SessionService>>().Object;
     }
 
     private class StaticTimeProvider : INowProvider

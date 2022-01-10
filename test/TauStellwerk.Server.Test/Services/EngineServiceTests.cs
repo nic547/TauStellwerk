@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base.Model;
@@ -183,10 +184,14 @@ public class EngineServiceTests
 
     private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
     {
-        var sessionService = new SessionService();
+        var logger = new Mock<ILogger<SessionService>>();
+
+        var sessionService = new SessionService(logger.Object);
         var session = sessionService.CreateSession("TEST", "TEST", "sessionId");
         mock ??= GetAlwaysTrueMock();
-        EngineService engineService = new(mock.Object, sessionService);
+        var loggerMock = new Mock<ILogger<EngineService>>();
+
+        EngineService engineService = new(mock.Object, sessionService, loggerMock.Object);
         return (engineService, session);
     }
 

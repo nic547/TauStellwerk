@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Commands.ECoS;
@@ -24,6 +25,8 @@ namespace TauStellwerk.Commands.ECoS;
 public class ECosConnectionHandler
 {
     private const int BufferSize = 8192; // Assumption: An ECoS doesn't send lines longer than this size.
+
+    private readonly ILogger<CommandSystemBase> _logger;
 
     private readonly MultiDictionary<string, Action<ECoSMessage>> _events = new();
     private readonly MultiDictionary<string, TaskCompletionSource<ECoSMessage>> _sentCommands = new();
@@ -37,8 +40,10 @@ public class ECosConnectionHandler
     /// </summary>
     /// <param name="address">IP of the ECoS.</param>
     /// <param name="port">Port the ECoS listens on.</param>
-    public ECosConnectionHandler(IPAddress address, int port)
+    /// <param name="logger">The ILogger to use.</param>
+    public ECosConnectionHandler(IPAddress address, int port, ILogger<CommandSystemBase> logger)
     {
+        _logger = logger;
         _client.Connect(address, port);
         Task.Run(ReceiveData);
     }
@@ -61,6 +66,7 @@ public class ECosConnectionHandler
             return Result.Ok(await tcs.Task);
         }
 
+        _logger.LogCritical("ECoSCommandSystem could not send message - ECoS might be overloaded.");
         return Result.Fail("Couldn't acquire lock - ECoS might be overloaded");
     }
 
@@ -122,7 +128,7 @@ public class ECosConnectionHandler
                 }
                 else
                 {
-                    Console.WriteLine($"Received reply for {message.Command}, but command was not located. Message:{message}");
+                    _logger.LogError($"Received reply for {message.Command}, but command was not located. Message:{message}");
                 }
 
                 break;

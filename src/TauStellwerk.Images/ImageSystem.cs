@@ -9,16 +9,17 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NetVips;
 using TauStellwerk.Database;
 using TauStellwerk.Database.Model;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Images;
 
 public class ImageSystem
 {
     private readonly StwDbContext _context;
+    private readonly ILogger<ImageSystem> _logger;
 
     private readonly string _userPath;
 
@@ -40,11 +41,12 @@ public class ImageSystem
         new AvifOptions(0.25, "_025", 55, 6),
     };
 
-    public ImageSystem(StwDbContext context, string userPath, string generatedPath)
+    public ImageSystem(StwDbContext context, ILogger<ImageSystem> logger, string userPath, string generatedPath)
     {
         _userPath = userPath;
         _generatedPath = generatedPath;
         _context = context;
+        _logger = logger;
     }
 
     public async void RunImageSetup()
@@ -103,7 +105,7 @@ public class ImageSystem
             {
                 engine.LastImageUpdate = DateTime.Now;
                 await _context.SaveChangesAsync();
-                ConsoleService.PrintHighlightedMessage($"Updated {updatedImages} images for '{engine}'");
+                _logger.LogInformation($"Updated {updatedImages} images for {engine}");
             }
         }
     }
