@@ -1,5 +1,6 @@
 ﻿@using TauStellwerk.Client.Services
 @using TauStellwerk.Base.Model
+@using System.Collections.Immutable
 
 @inject AppState _appState
 @inject EngineService _engineService
@@ -7,14 +8,7 @@
 
 <article class="is-clickable has-shadow is-flex-vertical">
     <header>@Engine.Name</header>
-    <picture class="selection-image">
-        @foreach (var imageset in Engine.Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
-        {
-            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
-            <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
-        }
-        <img src="img/noImageImage.png" alt="Engine image" />
-    </picture>
+    <EnginePicture Class="selection-image" Images="Engine.Images.ToImmutableList()" Sizes="Sizes"/>
     <span class="tags">
         @foreach (var tag in Engine.Tags)
         {
