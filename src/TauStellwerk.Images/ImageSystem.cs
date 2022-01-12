@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,9 +37,9 @@ public class ImageSystem
         new JpegOptions(1, "_100", 60),
         new JpegOptions(0.5, "_050", 60),
         new JpegOptions(0.25, "_025", 70),
-        new AvifOptions(1, "_100", 50, 6),
-        new AvifOptions(0.5, "_050", 50, 6),
-        new AvifOptions(0.25, "_025", 55, 6),
+        new AvifOptions(1, "_100", 50, 9),
+        new AvifOptions(0.5, "_050", 50, 9),
+        new AvifOptions(0.25, "_025", 55, 9),
     };
 
     public ImageSystem(StwDbContext context, ILogger<ImageSystem> logger, string userPath, string generatedPath)
@@ -56,8 +57,15 @@ public class ImageSystem
 
     private async Task CreateDownScaledImages()
     {
+        var totalStopwatch = new Stopwatch();
+        totalStopwatch.Start();
+        var totalImages = 0;
+
         foreach (var engine in _context.Engines.Include(e => e.Images))
         {
+            var engineStopwatch = new Stopwatch();
+            engineStopwatch.Start();
+
             var file = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
 
             if (file == null)
@@ -105,8 +113,18 @@ public class ImageSystem
             {
                 engine.LastImageUpdate = DateTime.Now;
                 await _context.SaveChangesAsync();
-                _logger.LogInformation($"Updated {updatedImages} images for {engine}");
+                engineStopwatch.Stop();
+                var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
+                _logger.LogInformation($"Updated {updatedImages} images for {engine} in {elapsedSeconds}s");
+                totalImages += updatedImages;
             }
+        }
+
+        if (totalImages > 0)
+        {
+            totalStopwatch.Stop();
+            var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
+            _logger.LogInformation($"Updated a total of {totalImages} images in {elapsedSeconds} seconds");
         }
     }
 
