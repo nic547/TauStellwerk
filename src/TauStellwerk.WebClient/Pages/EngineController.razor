@@ -3,7 +3,9 @@
 @using System.Formats.Asn1
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
+@using TauStellwerk.Client.Model.Engine
 @using TauStellwerk.WebClient.Pages
+@using System.ComponentModel
 
 @inject AppState _appState
 @inject EngineService _engineService;
@@ -12,7 +14,7 @@
     <div class="ec-grid-header is-flex-horizontal align-baseline">
         <span>@Engine.Name</span>
         <span class="flex-filler"/>
-        <button class="bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
+        <button class="bold button-secondary" @onclick="RemoveEngine ">X</button>
     </div>
     <picture class="ec-grid-image">
         @foreach (var imageset in Engine.Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
@@ -24,13 +26,13 @@
     </picture>
     <label class="ec-grid-slider has-100percent-height">
         <!-- orient="vertical" is for firefox -->
-        <input type="range" orient="vertical" min="0" max="126" @bind-value="Throttle" @bind-value:event="oninput" />
+        <input type="range" orient="vertical" min="0" max="126" value="@Engine.Throttle" @oninput="SetSpeed" />
     </label>
     <div class="ec-grid-direction center">
-        <button class="bold" disabled="@(!_forward)" @onclick="ChangeDirection">&lt;</button>
-        <button class="bold" disabled="@(_forward)" @onclick="ChangeDirection" >&gt;</button>
+        <button class="bold" disabled="@(Engine.Direction == Direction.Backwards)" @onclick="ChangeDirection">&lt;</button>
+        <button class="bold" disabled="@(Engine.Direction == Direction.Forwards)" @onclick="ChangeDirection" >&gt;</button>
     </div>
-    <output class="ec-grid-speed center">@Throttle</output>
+    <output class="ec-grid-speed center">@Engine.Throttle</output>
     <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
         @foreach (var function in Engine.Functions.OrderBy(e => e.Number))
         {
@@ -41,7 +43,7 @@
         }
     </div>
     <div class="ec-grid-estop center">
-        <button class="bold estop-button" @onclick="EStop" title="Emergency stop this engine.">Emergency Stop</button>
+        <button class="bold estop-button" @onclick="EStop" title="Emergency stop this activeEngine.">Emergency Stop</button>
     </div>
 </div>
 
@@ -49,34 +51,23 @@
     private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
     [Parameter]
-    public EngineFull Engine { get; init; } = null!;
-
-    private int _throttle = 0;
-
-    private bool _forward  = true;
-
-    private int Throttle
-    {
-        get => _throttle;
-        set
-        {
-            _throttle = value;
-            _ = _engineService.SetSpeed(Engine.Id, _throttle, _forward ? Direction.Forwards : Direction.Backwards);
-        }
-    }
+    public ActiveEngine Engine { get; init; } = null!;
 
     private void ChangeDirection()
     {
-        _forward = !_forward;
-        Throttle = 0;
-        StateHasChanged();
+        if (Engine.Direction == Direction.Forwards)
+        {
+            _ = _engineService.SetSpeed(Engine, 0, Direction.Backwards);
+        }
+        else
+        {
+            _ = _engineService.SetSpeed(Engine, 0, Direction.Forwards);
+        }
     }
 
     private void EStop()
     {
-        _ = _engineService.SetEStop(Engine.Id);
-        _throttle = 0;
-        StateHasChanged();
+        _ = _engineService.SetEStop(Engine);
     }
 
     private void RemoveEngine()
@@ -84,4 +75,11 @@
         _appState.ActiveEngines.Remove(Engine);
         _ = _engineService.ReleaseEngine(Engine.Id);
     }
+
+    private void SetSpeed(ChangeEventArgs obj)
+    {
+        var throttle = int.Parse(obj.Value as string ?? throw new InvalidOperationException());
+        _ = _engineService.SetSpeed(Engine, throttle, Engine.Direction);
+    }
+
 }

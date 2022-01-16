@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
+using TauStellwerk.Client.Model.Engine;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Client.Services;
@@ -32,7 +33,7 @@ public class EngineService
         return await connection.InvokeAsync<IReadOnlyList<EngineDto>>("GetEngines", page, sorting, sortDescending, showHidden);
     }
 
-    public async Task<EngineFull?> AcquireEngine(int id)
+    public async Task<ActiveEngine?> AcquireEngine(int id)
     {
         var connection = await _service.GetHubConnection();
         var result = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AcquireEngine", id);
@@ -42,7 +43,7 @@ public class EngineService
             _activeEngines.Add(id, new CoalescingLimiter<(int, int, Direction)>(SendSpeed, TimeoutMilliseconds));
         }
 
-        return EngineFull.Create(result.Value);
+        return ActiveEngine.Create(result.Value);
     }
 
     public async Task ReleaseEngine(int id)
@@ -63,10 +64,23 @@ public class EngineService
         await limiter.Execute((id, speed, direction));
     }
 
+    public async Task SetSpeed(ActiveEngine activeEngine, int speed, Direction direction)
+    {
+        activeEngine.Direction = direction;
+        activeEngine.Throttle = speed;
+        await SetSpeed(activeEngine.Id, speed, direction);
+    }
+
     public async Task SetEStop(int id)
     {
         var connection = await _service.GetHubConnection();
         await connection.SendAsync("SetEngineEStop", id);
+    }
+
+    public async Task SetEStop(ActiveEngine activeEngine)
+    {
+        activeEngine.Throttle = 0;
+        await SetEStop(activeEngine.Id);
     }
 
     public async Task SetFunction(int id, byte function, State state)
