@@ -1,0 +1,29 @@
+﻿@using TauStellwerk.Base.Model
+@using System.Collections.Immutable
+<picture class="@Class">
+    @if (!HasErrorOccurredYet)
+    {
+        @foreach (var imageset in Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
+        {
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
+        }
+    }
+    <img @onerror="() => { HasErrorOccurredYet = true; }" src="img/noImageImage.png" alt="Engine image"/>
+</picture>
+
+@code {
+
+    private bool HasErrorOccurredYet = false;
+
+    [Parameter]
+    [EditorRequired]
+    public ImmutableList<ImageDto> Images { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public string Sizes { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+}

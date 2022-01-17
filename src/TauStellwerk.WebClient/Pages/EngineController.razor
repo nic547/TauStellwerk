@@ -14,14 +14,7 @@
         <span class="flex-filler"/>
         <button class="bold button-secondary" @onclick="() => RemoveEngine() ">X</button>
     </div>
-    <picture class="ec-grid-image">
-        @foreach (var imageset in Engine.Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
-        {
-            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
-            <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
-        }
-        <img src="img/noImageImage.png" alt="Engine image"/>
-    </picture>
+    <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes"/>
     <label class="ec-grid-slider has-100percent-height">
         <!-- orient="vertical" is for firefox -->
         <input type="range" orient="vertical" min="0" max="126" @bind-value="Throttle" @bind-value:event="oninput" />
