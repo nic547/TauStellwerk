@@ -44,7 +44,11 @@ public class ECosConnectionHandler
     public ECosConnectionHandler(IPAddress address, int port, ILogger<CommandSystemBase> logger)
     {
         _logger = logger;
-        _client.Connect(address, port);
+        if (TryOpenConnection(address, port).IsFailed)
+        {
+            throw new Exception("Cannot establish connection to ECoS");
+        }
+
         Task.Run(ReceiveData);
     }
 
@@ -81,6 +85,27 @@ public class ECosConnectionHandler
     {
         await SendCommandAsync(command);
         _events.Add(eventName, action);
+    }
+
+    private Result TryOpenConnection(IPAddress address, int port)
+    {
+        var tries = 0;
+        while (tries < 10)
+        {
+            try
+            {
+                _client.Connect(address, port);
+                return Result.Ok();
+            }
+            catch (Exception)
+            {
+                tries++;
+                Thread.Sleep(2000);
+            }
+        }
+
+        _logger.LogCritical($"Failed to establish connection to ECoS at {address}:{port}");
+        return Result.Fail("Failed to establish connection to ECoS");
     }
 
     private async void ReceiveData()
