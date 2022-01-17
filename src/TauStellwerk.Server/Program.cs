@@ -24,6 +24,7 @@ public static class Program
     public static void Main(string[] args)
     {
         CreateHostBuilder(args)
+            .UseSystemd() // This shouldn't do anything on non-systemd systems.
             .ConfigureLogging(config =>
             {
                 config.AddConsole(options => options.FormatterName = nameof(CustomLogFormatter))
