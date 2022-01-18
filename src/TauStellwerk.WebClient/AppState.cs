@@ -6,7 +6,6 @@
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using TauStellwerk.Client.Model;
-using TauStellwerk.Client.Model.Engine;
 
 namespace TauStellwerk.WebClient;
 
@@ -26,7 +25,7 @@ public partial class AppState
         _modalManager = modalManager;
     }
 
-    public ObservableCollection<ActiveEngine> ActiveEngines { get; } = new();
+    public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
 
     public void ShowMessageBox(string text)
     {

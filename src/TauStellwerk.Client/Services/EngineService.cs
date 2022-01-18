@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
-using TauStellwerk.Client.Model.Engine;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Client.Services;
@@ -33,7 +32,7 @@ public class EngineService
         return await connection.InvokeAsync<IReadOnlyList<EngineDto>>("GetEngines", page, sorting, sortDescending, showHidden);
     }
 
-    public async Task<ActiveEngine?> AcquireEngine(int id)
+    public async Task<EngineFull?> AcquireEngine(int id)
     {
         var connection = await _service.GetHubConnection();
         var result = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AcquireEngine", id);
@@ -43,7 +42,7 @@ public class EngineService
             _activeEngines.Add(id, new CoalescingLimiter<(int, int, Direction)>(SendSpeed, TimeoutMilliseconds));
         }
 
-        return ActiveEngine.Create(result.Value);
+        return EngineFull.Create(result.Value);
     }
 
     public async Task ReleaseEngine(int id)
@@ -64,7 +63,7 @@ public class EngineService
         await limiter.Execute((id, speed, direction));
     }
 
-    public async Task SetSpeed(ActiveEngine activeEngine, int speed, Direction direction)
+    public async Task SetSpeed(EngineFull activeEngine, int speed, Direction direction)
     {
         activeEngine.Direction = direction;
         activeEngine.Throttle = speed;
@@ -77,7 +76,7 @@ public class EngineService
         await connection.SendAsync("SetEngineEStop", id);
     }
 
-    public async Task SetEStop(ActiveEngine activeEngine)
+    public async Task SetEStop(EngineFull activeEngine)
     {
         activeEngine.Throttle = 0;
         await SetEStop(activeEngine.Id);
@@ -87,6 +86,21 @@ public class EngineService
     {
         var connection = await _service.GetHubConnection();
         await connection.SendAsync("SetEngineFunction", id, function, state);
+    }
+
+    public async Task ToggleFunction(EngineFull engine, Function function)
+    {
+        var connection = await _service.GetHubConnection();
+        if (function.State == State.Off)
+        {
+            await connection.SendAsync("SetEngineFunction", engine.Id, function.Number, State.On);
+            function.State = State.On;
+        }
+        else
+        {
+            await connection.SendAsync("SetEngineFunction", engine.Id, function.Number, State.Off);
+            function.State = State.Off;
+        }
     }
 
     public async Task<EngineFullDto> AddOrUpdateEngine(EngineFull engine)

@@ -1,5 +1,6 @@
 ﻿@using TauStellwerk.Client.Services
 @using TauStellwerk.Base.Model
+@using TauStellwerk.Client.Model
 
 @inject EngineService _engineService;
 
@@ -10,19 +11,17 @@
 
 @code {
     [Parameter]
-    public FunctionDto Function { get; set; } = null!;
-    
+    [EditorRequired]
+    public Function Function { get; set; } = null!;
+
     [Parameter]
-    public int EngineId { get; set; }
+    [EditorRequired]
+    public EngineFull Engine { get; set; } = null!;
 
-    private bool IsOn { get; set; }
+    private string BackgroundClass => Function.State == State.On ? "button-secondary-toggled" : "button-secondary";
 
-    private string BackgroundClass => IsOn ? "button-secondary-toggled" : "button-secondary";
-
-        private void ToggleFunction()
+        private async Task ToggleFunction()
         {
-            IsOn = !IsOn;
-            _ = _engineService.SetFunction(EngineId, Function.Number, IsOn ? State.On : State.Off);
-            StateHasChanged();
+            await _engineService.ToggleFunction(Engine, Function);
         }
 }

@@ -3,7 +3,6 @@
 @using System.Formats.Asn1
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
-@using TauStellwerk.Client.Model.Engine
 @using TauStellwerk.WebClient.Pages
 @using System.ComponentModel
 
@@ -37,7 +36,7 @@
         @foreach (var function in Engine.Functions.OrderBy(e => e.Number))
         {
             <FunctionButton
-                EngineId=Engine.Id
+                Engine=Engine
                 Function=function
                 />
         }
@@ -51,7 +50,7 @@
     private const string Sizes = "(min-width: 769px) 50vw,(min-width: 1216px) 25vw,(min-width: 1408px) 20vw,100vw";
 
     [Parameter]
-    public ActiveEngine Engine { get; init; } = null!;
+    public EngineFull Engine { get; init; } = null!;
 
     private void ChangeDirection()
     {

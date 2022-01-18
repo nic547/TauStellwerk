@@ -14,4 +14,8 @@ public class EngineFullDto : EngineDto
     public ushort Address { get; set; }
 
     public int TopSpeed { get; set; }
+
+    public int Throttle { get; set; }
+
+    public Direction Direction { get; set; }
 }
