@@ -6,7 +6,7 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
 
-public class Function: ObservableObject
+public class Function : ObservableObject
 {
     private string _name;
     private State _state = State.Off;
@@ -24,7 +24,6 @@ public class Function: ObservableObject
     }
 
     public byte Number { get; }
-
 
     public string Name
     {

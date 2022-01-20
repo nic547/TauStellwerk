@@ -32,7 +32,7 @@ public partial class TauHub
         await _engineRepo.UpdateLastUsed(id);
         var acquireResult = await _engineService.AcquireEngine(session, engineResult.Value);
 
-        return acquireResult.IsSuccess ? Result.Ok(engineResult.Value.ToEngineFullDto()) : acquireResult;
+        return acquireResult;
     }
 
     public async Task<Result> ReleaseEngine(int id)
