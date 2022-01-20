@@ -34,8 +34,14 @@ public class Function : ObservableObject
     public State State
     {
         get => _state;
-        internal set => SetProperty(ref _state, value);
+        internal set
+        {
+            SetProperty(ref _state, value);
+            OnPropertyChanged(nameof(IsOn));
+        }
     }
+
+    public bool IsOn => State == State.On;
 
     public static ObservableCollection<Function> FromFunctionDtoList(IList<FunctionDto> functions)
     {
