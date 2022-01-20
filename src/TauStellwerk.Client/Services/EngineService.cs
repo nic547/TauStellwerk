@@ -63,16 +63,44 @@ public class EngineService
         await limiter.Execute((id, speed, direction));
     }
 
+    public async Task SetSpeed(EngineFull activeEngine, int speed, Direction direction)
+    {
+        activeEngine.Direction = direction;
+        activeEngine.Throttle = speed;
+        await SetSpeed(activeEngine.Id, speed, direction);
+    }
+
     public async Task SetEStop(int id)
     {
         var connection = await _service.GetHubConnection();
         await connection.SendAsync("SetEngineEStop", id);
     }
 
+    public async Task SetEStop(EngineFull activeEngine)
+    {
+        activeEngine.Throttle = 0;
+        await SetEStop(activeEngine.Id);
+    }
+
     public async Task SetFunction(int id, byte function, State state)
     {
         var connection = await _service.GetHubConnection();
         await connection.SendAsync("SetEngineFunction", id, function, state);
+    }
+
+    public async Task ToggleFunction(EngineFull engine, Function function)
+    {
+        var connection = await _service.GetHubConnection();
+        if (function.State == State.Off)
+        {
+            await connection.SendAsync("SetEngineFunction", engine.Id, function.Number, State.On);
+            function.State = State.On;
+        }
+        else
+        {
+            await connection.SendAsync("SetEngineFunction", engine.Id, function.Number, State.Off);
+            function.State = State.Off;
+        }
     }
 
     public async Task<EngineFullDto> AddOrUpdateEngine(EngineFull engine)

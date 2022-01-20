@@ -29,6 +29,8 @@ public partial class EngineControlViewModel : ViewModelBase
     public EngineControlViewModel(EngineFull engine, EngineService? engineService = null)
     {
         Engine = engine;
+        _throttle = engine.Throttle;
+        IsDrivingForward = engine.Direction == Direction.Forwards;
 
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
@@ -85,13 +87,8 @@ public partial class EngineControlViewModel : ViewModelBase
     [ICommand]
     private async Task Function(ToggleButton button)
     {
-        var functionNumber = (byte)(button.Tag ?? throw new InvalidOperationException());
-        if (button.IsChecked == null)
-        {
-            throw new InvalidOperationException();
-        }
-
-        await _engineService.SetFunction(Engine.Id, functionNumber, (bool)button.IsChecked ? State.On : State.Off);
+        var function = (Function)(button.Tag ?? throw new InvalidOperationException());
+        await _engineService.ToggleFunction(Engine, function);
     }
 
     [ICommand]

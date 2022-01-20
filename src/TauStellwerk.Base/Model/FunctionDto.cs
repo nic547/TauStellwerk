@@ -23,5 +23,7 @@ public class FunctionDto
     /// </summary>
     public string Name { get; set; }
 
+    public State State { get; set; } = State.Off;
+
     public override string ToString() => $"F{Number} - {Name}";
 }

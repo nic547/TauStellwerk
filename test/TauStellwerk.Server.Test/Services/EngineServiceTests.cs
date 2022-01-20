@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
 using TauStellwerk.Services;
+using TauStellwerk.Services.EngineService;
 
 namespace TauStellwerk.Test.Services;
 
@@ -22,6 +24,9 @@ public class EngineServiceTests
     private readonly Engine _engine = new()
     {
         Id = 1,
+        Functions = new List<DccFunction>{
+            new(0, "Light"),
+            },
     };
 
     [Test]

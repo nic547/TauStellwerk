@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -75,7 +74,7 @@ public partial class EngineEditViewModel : ViewModelBase
         var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
         lastFunctionNumber++;
         lastFunctionNumber ??= 0;
-        Engine.Functions.Add(new FunctionDto((byte)lastFunctionNumber, string.Empty));
+        Engine.Functions.Add(new Function((byte)lastFunctionNumber, string.Empty));
     }
 
     [ICommand]

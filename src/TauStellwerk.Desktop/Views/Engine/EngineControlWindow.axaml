@@ -42,7 +42,8 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <ToggleButton Content="{Binding }"
-                                          Tag="{Binding Number}"
+                                          Tag="{Binding}"
+                                          IsChecked="{Binding IsOn}"
                                           Command="{Binding Path=DataContext.FunctionCommand ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
                                           CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
                         </DataTemplate>

@@ -26,6 +26,8 @@ public partial class EngineFull : ObservableObject
 
     [ObservableProperty]
     private int _topSpeed;
+    private Direction _direction;
+    private int _throttle;
 
     public EngineFull(EngineFullDto engine)
     {
@@ -36,9 +38,11 @@ public partial class EngineFull : ObservableObject
         LastUsed = engine.LastUsed;
         Created = engine.Created;
         _isHidden = engine.IsHidden;
-        Functions = new ObservableCollection<FunctionDto>(engine.Functions.OrderBy(x => x.Number));
+        Functions = new ObservableCollection<Function>(Function.FromFunctionDtoList(engine.Functions.OrderBy(x => x.Number).ToList()));
         _address = engine.Address;
         _topSpeed = engine.TopSpeed;
+        _throttle = engine.Throttle;
+        _direction = engine.Direction;
     }
 
     public EngineFull()
@@ -59,7 +63,19 @@ public partial class EngineFull : ObservableObject
 
     public DateTime Created { get; }
 
-    public ObservableCollection<FunctionDto> Functions { get; }
+    public ObservableCollection<Function> Functions { get; }
+
+    public Direction Direction
+    {
+        get => _direction;
+        internal set => SetProperty(ref _direction, value);
+    }
+
+    public int Throttle
+    {
+        get => _throttle;
+        internal set => SetProperty(ref _throttle, value);
+    }
 
     public static EngineFull? Create(EngineFullDto? engineDto)
     {
@@ -73,11 +89,12 @@ public partial class EngineFull : ObservableObject
 
     public EngineFullDto ToDto()
     {
-        return new()
+        return new EngineFullDto
         {
             Address = Address,
             Created = Created,
-            Functions = Functions.ToList(),
+
+            Functions = Function.ToFunctionDtoList(Functions),
             Id = Id,
             Images = Images.ToList(),
             IsHidden = IsHidden,

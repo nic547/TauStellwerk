@@ -113,7 +113,7 @@
     private void AddFunction()
     {
         byte functionNumber = (byte)(Engine.Functions.LastOrDefault()?.Number + 1 ?? 0);
-        Engine.Functions.Add(new FunctionDto(functionNumber, string.Empty));
+        Engine.Functions.Add(new Function(functionNumber, string.Empty));
     }
 
     private void RemoveFunction()
