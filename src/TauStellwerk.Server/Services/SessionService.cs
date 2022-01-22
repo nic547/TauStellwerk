@@ -46,7 +46,7 @@ public class SessionService : BackgroundService
         {
             UserAgent = userAgent ?? string.Empty,
             UserName = username,
-            LastContact = _now.GetNow(),
+            LastContact = _now.GetUtcNow(),
             SessionId = sessionId,
         };
         _sessions.TryAdd(session.SessionId, session);
@@ -63,7 +63,7 @@ public class SessionService : BackgroundService
             return false;
         }
 
-        session.LastContact = _now.GetNow();
+        session.LastContact = _now.GetUtcNow();
         return true;
     }
 
@@ -98,7 +98,7 @@ public class SessionService : BackgroundService
     {
         foreach (var session in _sessions.Values)
         {
-            var idle = (_now.GetNow() - session.LastContact).TotalSeconds;
+            var idle = (_now.GetUtcNow() - session.LastContact).TotalSeconds;
             switch (idle)
             {
                 case > TimeoutInactive when session.IsActive:

@@ -9,13 +9,13 @@ namespace TauStellwerk.Util;
 
 public interface INowProvider
 {
-    public DateTime GetNow();
+    public DateTime GetUtcNow();
 }
 
 public class NowProvider : INowProvider
 {
-    public DateTime GetNow()
+    public DateTime GetUtcNow()
     {
-        return DateTime.Now;
+        return DateTime.UtcNow;
     }
 }

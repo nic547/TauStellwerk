@@ -24,9 +24,10 @@ public class EngineServiceTests
     private readonly Engine _engine = new()
     {
         Id = 1,
-        Functions = new List<DccFunction>{
+        Functions = new List<DccFunction>
+        {
             new(0, "Light"),
-            },
+        },
     };
 
     [Test]
@@ -96,7 +97,7 @@ public class EngineServiceTests
         var session2 = new Session
         {
             IsActive = true,
-            LastContact = DateTime.Now,
+            LastContact = DateTime.UtcNow,
             UserName = "Different Session",
         };
 

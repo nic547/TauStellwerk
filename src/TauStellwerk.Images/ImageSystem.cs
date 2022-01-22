@@ -119,7 +119,7 @@ public class ImageSystem
 
             if (!createdImages.IsEmpty)
             {
-                engine.LastImageUpdate = DateTime.Now;
+                engine.LastImageUpdate = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
                 engineStopwatch.Stop();

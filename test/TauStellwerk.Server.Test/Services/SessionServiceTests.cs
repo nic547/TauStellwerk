@@ -84,9 +84,9 @@ public class SessionServiceTests
 
     private class StaticTimeProvider : INowProvider
     {
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public DateTime DateTime { get; set; } = DateTime.UtcNow;
 
-        public DateTime GetNow()
+        public DateTime GetUtcNow()
         {
             return DateTime;
         }
