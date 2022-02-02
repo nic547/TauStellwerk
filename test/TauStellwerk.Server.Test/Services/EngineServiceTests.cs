@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentResults.Extensions.FluentAssertions;
@@ -94,12 +93,7 @@ public class EngineServiceTests
     {
         var (service, session) = PrepareEngineService();
 
-        var session2 = new Session
-        {
-            IsActive = true,
-            LastContact = DateTime.UtcNow,
-            UserName = "Different Session",
-        };
+        var session2 = new Session("differentConnection", "TestUser");
 
         var acquireResult = await service.AcquireEngine(session, _engine);
         var releaseResult = await service.ReleaseEngine(session2, _engine.Id);
@@ -147,7 +141,7 @@ public class EngineServiceTests
     public async Task CannotSetSpeedWithInvalidSession()
     {
         var (service, session) = PrepareEngineService();
-        var session2 = new Session();
+        var session2 = new Session("connnnectioniiiiidd", "TestUser");
 
         await service.AcquireEngine(session, _engine);
         var speedResult = await service.SetEngineSpeed(session2, 1, 100, null);
@@ -180,7 +174,7 @@ public class EngineServiceTests
     public async Task CannotSetFunctionWithInvalidSession()
     {
         var (service, session) = PrepareEngineService();
-        var session2 = new Session();
+        var session2 = new Session("almostanId", "TestUser");
 
         await service.AcquireEngine(session, _engine);
         var functionResult = await service.SetEngineFunction(session2, 1, 10, State.On);
@@ -193,7 +187,8 @@ public class EngineServiceTests
         var logger = new Mock<ILogger<SessionService>>();
 
         var sessionService = new SessionService(logger.Object);
-        var session = sessionService.CreateSession("TEST", "TEST", "sessionId");
+        var session = new Session("ConnectionId", "TestUser");
+        sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
         var loggerMock = new Mock<ILogger<EngineService>>();
 

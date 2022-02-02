@@ -64,8 +64,6 @@ public class Startup
             new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>()));
 
         services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
-
-        services.AddHostedService(p => p.GetRequiredService<SessionService>());
     }
 
     /// <summary>

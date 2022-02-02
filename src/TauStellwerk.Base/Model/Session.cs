@@ -5,9 +5,7 @@
 
 #nullable enable
 
-using System;
-using System.Linq;
-using System.Web;
+using TauStellwerk.Util;
 
 namespace TauStellwerk.Base.Model;
 
@@ -16,35 +14,19 @@ namespace TauStellwerk.Base.Model;
 /// </summary>
 public class Session
 {
-    private readonly string? _userAgent;
-    private readonly string? _sessionId;
-    private string? _userName;
-
-    public string UserName
+    public Session(string connectionId, string username)
     {
-        get => _userName ?? string.Empty;
-        set => _userName = HttpUtility.HtmlEncode(value);
+        ConnectionId = connectionId;
+        UserName = username;
     }
 
-    public string UserAgent
-    {
-        get => _userAgent ?? string.Empty;
-        init => _userAgent = HttpUtility.HtmlEncode(value);
-    }
+    public string UserName { get; set; }
 
-    public DateTime LastContact { get; set; }
-
-    public string SessionId
-    {
-        get => _sessionId ?? string.Empty;
-        init => _sessionId = HttpUtility.HtmlEncode(value);
-    }
-
-    public bool IsActive { get; set; } = true;
+    public string ConnectionId { get; }
 
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{new string(_sessionId?.Take(8).ToArray())}:{_userName}";
+        return $"'{ConnectionId.Left(8)}':'{UserName}'";
     }
 }

@@ -7,11 +7,6 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Util;
@@ -21,50 +16,52 @@ namespace TauStellwerk.Services;
 /// <summary>
 /// Service that keeps track of users.
 /// </summary>
-public class SessionService : BackgroundService
+public class SessionService
 {
-    private const int TimeoutInactive = 60;
-    private const int TimeoutDeletion = 3600;
-
     private readonly ConcurrentDictionary<string, Session> _sessions = new();
-    private readonly INowProvider _now;
     private readonly ILogger<SessionService> _logger;
 
-    public SessionService(ILogger<SessionService> logger, INowProvider? now = null)
+    public SessionService(ILogger<SessionService> logger)
     {
         _logger = logger;
-        _now = now ?? new NowProvider();
     }
 
     public delegate void SessionTimeoutHandler(Session session);
 
     public event SessionTimeoutHandler? SessionTimeout;
 
-    public Session CreateSession(string username, string? userAgent, string sessionId)
+    public Session? TryGetSession(string connectionId)
     {
-        var session = new Session
-        {
-            UserAgent = userAgent ?? string.Empty,
-            UserName = username,
-            LastContact = _now.GetUtcNow(),
-            SessionId = sessionId,
-        };
-        _sessions.TryAdd(session.SessionId, session);
-        _logger.LogDebug($"{session} created new session");
-        return session;
+        _sessions.TryGetValue(connectionId, out var value);
+        return value;
     }
 
-    public bool TryUpdateSessionLastContact(string sessionId)
+    public void HandleConnected(string connectionId, string username)
     {
-        var session = TryGetSession(sessionId);
-        if (session == null)
+        var session = new Session(connectionId, username);
+        _sessions.TryAdd(connectionId, session);
+        _logger.LogInformation($"{session} connected.");
+    }
+
+    public void HandleDisconnected(string connectionId, Exception? exception)
+    {
+        _sessions.TryRemove(connectionId, out var connection);
+        if (connection is null)
         {
-            _logger.LogWarning($"Update for non-existant session:{sessionId}");
-            return false;
+            _logger.LogError($"Connection:'{connectionId.Left(8)}' has disconnected, but SessionService had no active session for it.");
+            return;
         }
 
-        session.LastContact = _now.GetUtcNow();
-        return true;
+        if (exception is not null)
+        {
+            _logger.LogWarning($"{connection} disconnected with a {exception}");
+        }
+        else
+        {
+            _logger.LogInformation($"{connection} disconnected");
+        }
+
+        SessionTimeout?.Invoke(connection);
     }
 
     public void RenameSessionUser(string sessionId, string newUsername)
@@ -75,65 +72,7 @@ public class SessionService : BackgroundService
             throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
         }
 
-        _logger.LogDebug($"{session} renamed to {newUsername}");
+        _logger.LogInformation($"{session} has been renamed to {newUsername}");
         session.UserName = newUsername;
-    }
-
-    public Session? TryGetSession(string sessionId)
-    {
-        _sessions.TryGetValue(sessionId, out var value);
-        return value;
-    }
-
-    /// <summary>
-    /// Get a list of all active users.
-    /// </summary>
-    /// <returns>The list of active users.</returns>
-    public IReadOnlyList<Session> GetSessions()
-    {
-        return _sessions.Values.ToList();
-    }
-
-    public void CheckLastContacts()
-    {
-        foreach (var session in _sessions.Values)
-        {
-            var idle = (_now.GetUtcNow() - session.LastContact).TotalSeconds;
-            switch (idle)
-            {
-                case > TimeoutInactive when session.IsActive:
-                    session.IsActive = false;
-                    SessionTimeout?.Invoke(session);
-                    _logger.LogDebug($"{session} has been marked as inactive.");
-                    break;
-
-                case < TimeoutInactive when !session.IsActive:
-                    session.IsActive = true;
-                    _logger.LogDebug($"{session} has been reactivated.");
-                    break;
-
-                case > TimeoutDeletion:
-                    _sessions.TryRemove(session.SessionId, out _);
-                    _logger.LogInformation($"{session} has been deleted after {Math.Round(idle)} seconds");
-                    break;
-            }
-        }
-    }
-
-    /// <inheritdoc/>
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        _logger.LogDebug("SessionService is starting.");
-
-        stoppingToken.Register(() => System.Console.WriteLine("SessionService is stopping."));
-
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            CheckLastContacts();
-
-            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-        }
-
-        _logger.LogDebug("SessionService background task is stopping.");
     }
 }
