@@ -66,7 +66,7 @@ public class CoalescingLimiterTests
 
         public Task Method(T param)
         {
-            MethodCalls.Add((param, DateTime.Now));
+            MethodCalls.Add((param, DateTime.UtcNow));
             return Task.CompletedTask;
         }
     }

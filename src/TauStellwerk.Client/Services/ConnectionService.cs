@@ -6,7 +6,6 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Timers;
 using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -15,8 +14,6 @@ namespace TauStellwerk.Client.Services;
 public class ConnectionService : IConnectionService
 {
     private readonly ISettingsService _settingsService;
-
-    private readonly Timer _sessionTimer;
 
     private readonly HubConnection? _injectedConnection;
 
@@ -27,10 +24,6 @@ public class ConnectionService : IConnectionService
         _settingsService = settingsService;
 
         _injectedConnection = hubConnection;
-
-        _sessionTimer = new Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
-        _sessionTimer.Elapsed += KeepSessionAlive;
-        _sessionTimer.AutoReset = true;
     }
 
     public async Task<HubConnection> GetHubConnection()
@@ -40,25 +33,30 @@ public class ConnectionService : IConnectionService
             return _hubConnection;
         }
 
+        var settings = await _settingsService.GetSettings();
+
         if (_injectedConnection != null)
         {
             _hubConnection = _injectedConnection;
         }
         else
         {
-            var baseAddress = new Uri((await _settingsService.GetSettings()).ServerAddress);
+            var baseAddress = new Uri(settings.ServerAddress);
             var hubPath = new Uri(baseAddress, "/hub");
             Console.WriteLine(hubPath);
 
-            _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, IgnoreInvalidCerts).Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
+            {
+                IgnoreInvalidCerts(opts);
+
+                // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
+                opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
+            }).Build();
         }
 
         var username = (await _settingsService.GetSettings()).Username;
 
         await _hubConnection.StartAsync();
-        await _hubConnection.InvokeAsync("RegisterUser", username);
-
-        _sessionTimer.Start();
 
         return _hubConnection;
     }
@@ -83,15 +81,5 @@ public class ConnectionService : IConnectionService
 
             return handler;
         };
-    }
-
-    private void KeepSessionAlive(object? sender, ElapsedEventArgs e)
-    {
-        if (_hubConnection == null || _hubConnection.State != HubConnectionState.Connected)
-        {
-            return;
-        }
-
-        _hubConnection.InvokeAsync("SendHeartbeat");
     }
 }

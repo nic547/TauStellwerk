@@ -70,7 +70,7 @@ public class Engine
 
     public DateTime LastUsed { get; set; }
 
-    public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.UtcNow;
 
     public bool IsHidden { get; set; }
 

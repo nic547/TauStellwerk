@@ -139,7 +139,7 @@ public class EngineRepo
     public async Task UpdateLastUsed(int id)
     {
         var engine = await _dbContext.Engines.SingleAsync(e => e.Id == id);
-        engine.LastUsed = DateTime.Now;
+        engine.LastUsed = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
     }
 

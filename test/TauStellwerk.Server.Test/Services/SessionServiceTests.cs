@@ -9,86 +9,72 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Services;
-using TauStellwerk.Util;
 
 namespace TauStellwerk.Test.Services;
 
 public class SessionServiceTests
 {
     [Test]
-    public void SessionWithRegularUpdatesIsNotInactive()
+    public void SessionIsCreatedOnConnecting()
     {
-        var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
-        var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
+        var sessionService = new SessionService(GetLoggerMock().Object);
+        sessionService.HandleConnected("Foo", "Alice");
 
-        for (var i = 0; i < 10; i++)
-        {
-            nowProvider.DateTime += TimeSpan.FromSeconds(15);
-            sessionService.CheckLastContacts();
-            sessionService.TryUpdateSessionLastContact(session.SessionId);
-        }
+        var session = sessionService.TryGetSession("Foo");
 
-        session.IsActive.Should().BeTrue();
+        session.Should().NotBeNull();
+        session?.UserName.Should().Be("Alice");
     }
 
     [Test]
-    public void SessionWithoutUpdateIsInactive()
+    public void SessionIsRemovedOnDisconnecting()
     {
-        var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
-        var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
+        var sessionService = new SessionService(GetLoggerMock().Object);
+        sessionService.HandleConnected("Foo", "Alice");
+        sessionService.HandleDisconnected("Foo", null);
 
-        nowProvider.DateTime += TimeSpan.FromSeconds(100);
-        sessionService.CheckLastContacts();
+        var session = sessionService.TryGetSession("Foo");
 
-        session.IsActive.Should().BeFalse();
+        session.Should().BeNull();
     }
 
     [Test]
-    public void SessionCanBeReactivated()
+    public void CreatingSessionIsLogged()
     {
-        var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
-        var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
+        var loggerMock = GetLoggerMock();
+        SessionService sessionService = new(loggerMock.Object);
 
-        nowProvider.DateTime += TimeSpan.FromSeconds(100);
-        sessionService.CheckLastContacts();
+        sessionService.HandleConnected("Foo", "Bob");
 
-        session.IsActive.Should().BeFalse();
-
-        sessionService.TryUpdateSessionLastContact(session.SessionId);
-        sessionService.CheckLastContacts();
-
-        session.IsActive.Should().BeTrue();
+        VerifyLoggerWasUsed(loggerMock, "Bob");
     }
 
     [Test]
-    public void OldSessionsGetRemoved()
+    public void DisconnectingWithExceptionIsLogged()
     {
-        var nowProvider = new StaticTimeProvider();
-        var sessionService = new SessionService(GetLoggerMock(), nowProvider);
-        var session = sessionService.CreateSession("TESTUSER", "testthing", "sessionId");
+        var loggerMock = GetLoggerMock();
+        SessionService sessionService = new(loggerMock.Object);
 
-        nowProvider.DateTime += TimeSpan.FromHours(2);
-        sessionService.CheckLastContacts();
-        sessionService.CheckLastContacts();
+        sessionService.HandleConnected("Foo", "Bob");
+        sessionService.HandleDisconnected("Foo", new InvalidOperationException("Test"));
 
-        sessionService.TryGetSession(session.SessionId).Should().BeNull();
+        VerifyLoggerWasUsed(loggerMock, "InvalidOperationException");
     }
 
-    private static ILogger<SessionService> GetLoggerMock()
+    private static Mock<ILogger<SessionService>> GetLoggerMock()
     {
-        return new Mock<ILogger<SessionService>>().Object;
+        return new Mock<ILogger<SessionService>>();
     }
 
-    private class StaticTimeProvider : INowProvider
+    private static void VerifyLoggerWasUsed(Mock<ILogger<SessionService>> mock, string? shouldContain = null)
     {
-        public DateTime DateTime { get; set; } = DateTime.Now;
-
-        public DateTime GetNow()
-        {
-            return DateTime;
-        }
+        mock.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(shouldContain ?? string.Empty)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
     }
 }

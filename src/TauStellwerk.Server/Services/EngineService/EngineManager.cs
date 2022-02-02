@@ -89,7 +89,7 @@ public class EngineManager
                 if (engine != null)
                 {
                     _inactiveEngineStates.TryAdd(engine.Engine.Id, engine.State);
-                    _logger.LogWarning($"Released {active.Engine} because {session.UserName} timed out!");
+                    _logger.LogWarning($"Released {active.Engine} because {session.UserName} disconnected!");
                 }
             }
         }
