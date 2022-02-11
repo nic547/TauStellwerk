@@ -18,6 +18,8 @@
                 <option>DESC</option>
                 <option>ASC</option>
             </select>
+            <input id="ShowHiddenCheckbox" type="checkbox" @onchange="ShowHiddenCheckboxChanged"/>
+            <label>Show Hidden</label>
             <span class="flex-filler"/>
             <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
         </div>
@@ -30,21 +32,23 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="bold" disabled="@_cannotMoveBackward" @onclick="() => {_ = ChangePage(-1);}">&lt;</button>
-            <button class="bold" disabled="@_cannotMoveForward" @onclick="() => {_ = ChangePage(+1);}" >&gt;</button>
+            <button class="bold" disabled="@CannotMoveBackward" @onclick="() => {_ = ChangePage(-1);}">&lt;</button>
+            <output>@_currentPage</output>
+            <button class="bold" disabled="@CannotMoveForward" @onclick="() => {_ = ChangePage(+1);}" >&gt;</button>
         </div>
     </div>
 </div>
 @code {
     private readonly List<EngineDto> _engines = new();
 
-    private bool _cannotMoveForward => !_engines.Any();
-    private bool _cannotMoveBackward => _currentPage <= 0;
+    private bool CannotMoveForward => !_engines.Any();
+    private bool CannotMoveBackward => _currentPage <= 0;
 
     private int _currentPage = 0;
 
     private string _currentSorting = "LastUsed";
     private bool _isSortedDescending = true;
+    private bool _showHidden = false;
 
     protected override void OnInitialized()
     {
@@ -83,6 +87,13 @@
         await ChangePage(int.MinValue);
     }
 
+    private async void ShowHiddenCheckboxChanged(ChangeEventArgs eventArgs)
+    {
+        var checkboxValue = eventArgs.Value as bool?;
+        _showHidden = checkboxValue ?? false;
+        await ChangePage(int.MinValue);
+    }
+
     private async Task ChangePage(int change)
     {
         _currentPage += change;
@@ -90,11 +101,12 @@
         _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
         var engines = await _engineService.GetEngines(
-            page: _currentPage,
-            sorting: sortEnum, 
-            sortDescending: _isSortedDescending);
-        
-            _engines.Clear();
+            _currentPage,
+            sortEnum,
+            _isSortedDescending,
+            _showHidden);
+
+        _engines.Clear();
         _engines.AddRange(engines);
 
         StateHasChanged();
