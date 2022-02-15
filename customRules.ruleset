@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Custom ruleset for the TauStellwerk Software" ToolsVersion="16.0">
+<RuleSet Name="Custom ruleset for the TauStellwerk Software" ToolsVersion="17.0">
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
     <Rule Id="CS1591" Action="None" />
   </Rules>
@@ -9,7 +9,6 @@
     <Rule Id="SA1600" Action="None" />
     <Rule Id="SA1601" Action="None" />
     <Rule Id="SA1602" Action="None" />
-    <Rule Id="SA1633" Action="None" /> <!-- https://github.com/nic547/TauStellwerk/issues/181 -->
     <Rule Id="SX1101" Action="Warning" />
     <Rule Id="SX1309" Action="Warning" />
   </Rules>

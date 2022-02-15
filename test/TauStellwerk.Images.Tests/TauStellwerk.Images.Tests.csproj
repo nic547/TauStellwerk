@@ -4,7 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <RootNamespace>TauStellwerk.Images.Tests</RootNamespace>
-        <NoWarn>1701;1702;1591</NoWarn>
         <DocumentationFile>.\bin\TauStellwerk.Images.Tests.xml</DocumentationFile>
         <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
         <Nullable>enable</Nullable>
