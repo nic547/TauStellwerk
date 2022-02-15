@@ -5,7 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client;

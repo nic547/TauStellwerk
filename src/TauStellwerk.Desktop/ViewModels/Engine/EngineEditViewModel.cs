@@ -6,8 +6,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;

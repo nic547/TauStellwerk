@@ -90,7 +90,7 @@ public class ImageSystem
 
                 if (existingImage != null)
                 {
-                    existingImageTimestamp = File.GetLastWriteTime(existingImage);
+                    existingImageTimestamp = File.GetLastWriteTimeUtc(existingImage);
                 }
 
                 if (engine.LastImageUpdate == null || existingImageTimestamp > engine.LastImageUpdate || sourceImageTimestamp > engine.LastImageUpdate)

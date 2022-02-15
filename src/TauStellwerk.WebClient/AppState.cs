@@ -4,7 +4,7 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.WebClient;

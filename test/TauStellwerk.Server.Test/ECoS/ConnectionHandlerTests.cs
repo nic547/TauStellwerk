@@ -1,4 +1,9 @@
-﻿using System;
+﻿// <copyright file="ConnectionHandlerTests.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -49,6 +54,7 @@ public class ConnectionHandlerTests
         var task = _connectionHandler.SendCommandAsync(command);
         await _tcpListener.Send(response);
         var result = await task;
+        await Task.Delay(10);
         var receivedCommand = Encoding.UTF8.GetString(_tcpListener.Data.ToArray());
 
         result.Should().BeSuccess();
