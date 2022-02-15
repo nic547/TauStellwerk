@@ -38,7 +38,7 @@ public static class ECoSMessageDecoder
 
     public static IEnumerable<(int Id, string Name, string Protocol)> DecodeEngineListMessage(string message)
     {
-        var lines = message.Split('\n');
+        var lines = message.Split("\r\n");
 
         foreach (var line in lines)
         {

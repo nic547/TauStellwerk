@@ -54,6 +54,7 @@ public class ConnectionHandlerTests
         var task = _connectionHandler.SendCommandAsync(command);
         await _tcpListener.Send(response);
         var result = await task;
+        await Task.Delay(10);
         var receivedCommand = Encoding.UTF8.GetString(_tcpListener.Data.ToArray());
 
         result.Should().BeSuccess();
