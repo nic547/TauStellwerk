@@ -10,12 +10,12 @@
         <engine:EngineControlViewModel/>
     </Design.DataContext>
     <Grid
-          ColumnDefinitions="80 *"
-          RowDefinitions="auto auto * auto auto"
+          ColumnDefinitions="56 *"
+          RowDefinitions="auto auto * auto auto auto"
           VerticalAlignment="Stretch"
           Margin="5">
         <Label Content="{Binding Engine.Name, FallbackValue={}}"
-               Grid.ColumnSpan="2"/>
+               Grid.ColumnSpan="2" Padding="2"/>
         <Image Grid.Column="1" Grid.Row="1"
                Source="../../Assets/noImageImage.png"
                Stretch="Uniform"
@@ -29,12 +29,11 @@
                 Minimum="0"
                 Value="{Binding Throttle}"/>
 		<StackPanel Grid.Column="0" Grid.Row="3"
-                    Orientation="Horizontal">
+                    Orientation="Horizontal" HorizontalAlignment="Center">
 			<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="false"/>
-			<Button Content="E" Command="{Binding EmergencyStopCommand}" ToolTip.Tip="Emergency Stop - Quickly stops engine skipping any simulated monumentum"/>
 			<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="true"/>
 		</StackPanel>
-        <Label Grid.Column="0" Grid.Row="4"
+        <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center"
                Content="{Binding Throttle}"/>
         <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3">
             <StackPanel>
@@ -51,5 +50,11 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+		<Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
+                Margin="2"
+                HorizontalAlignment="Center"
+                Content="     Emergency Stop     " 
+                ToolTip.Tip="Quickly stops an engine and not simulating momentum." 
+                Command="{Binding EmergencyStopCommand}"/>
     </Grid>
 </Window>
