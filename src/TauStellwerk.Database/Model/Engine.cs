@@ -56,7 +56,7 @@ public class Engine
     public List<DccFunction> Functions { get; init; } = new();
 
     /// <summary>
-    /// Gets a list of strings that describe an engine. These might be alternative names, manufacturers, the owner etc, basically
+    /// Gets a list of strings that describe an engineOverview. These might be alternative names, manufacturers, the owner etc, basically
     /// everything one might search for if the exact name is unknown.
     /// </summary>
     public List<Tag> Tags { get; init; } = new();
@@ -79,9 +79,9 @@ public class Engine
         return $"'{Name}'";
     }
 
-    public EngineDto ToEngineDto()
+    public EngineOverviewDto ToEngineDto()
     {
-        return new EngineDto()
+        return new EngineOverviewDto()
         {
             Id = Id,
             Name = Name,

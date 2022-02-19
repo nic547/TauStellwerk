@@ -3,9 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,14 +10,8 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
 
-public partial class EngineFull : ObservableObject
+public partial class EngineFull : EngineOverview
 {
-    [ObservableProperty]
-    private string _name;
-
-    [ObservableProperty]
-    private bool _isHidden;
-
     [ObservableProperty]
     private ushort _address;
 
@@ -30,38 +21,21 @@ public partial class EngineFull : ObservableObject
     private int _throttle;
 
     public EngineFull(EngineFullDto engine)
+        : base(engine)
     {
-        Id = engine.Id;
-        _name = engine.Name;
-        Tags = new ObservableCollection<string>(engine.Tags);
-        Images = engine.Images.ToImmutableList();
-        LastUsed = engine.LastUsed;
-        Created = engine.Created;
-        _isHidden = engine.IsHidden;
+        Name = engine.Name;
         Functions = new ObservableCollection<Function>(Function.FromFunctionDtoList(engine.Functions.OrderBy(x => x.Number).ToList()));
-        _address = engine.Address;
-        _topSpeed = engine.TopSpeed;
-        _throttle = engine.Throttle;
-        _direction = engine.Direction;
+        Address = engine.Address;
+        TopSpeed = engine.TopSpeed;
+        Throttle = engine.Throttle;
+        Direction = engine.Direction;
     }
 
     public EngineFull()
+        : base()
     {
-        _name = string.Empty;
-        Tags = new();
-        Images = new List<ImageDto>().ToImmutableList();
         Functions = new();
     }
-
-    public int Id { get; }
-
-    public ObservableCollection<string> Tags { get; }
-
-    public ImmutableList<ImageDto> Images { get; }
-
-    public DateTime LastUsed { get; }
-
-    public DateTime Created { get; }
 
     public ObservableCollection<Function> Functions { get; }
 
@@ -96,7 +70,7 @@ public partial class EngineFull : ObservableObject
 
             Functions = Function.ToFunctionDtoList(Functions),
             Id = Id,
-            Images = Images.ToList(),
+            Images = EngineImage.ToDtos(Images),
             IsHidden = IsHidden,
             LastUsed = LastUsed,
             Name = Name,

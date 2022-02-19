@@ -88,7 +88,7 @@ public partial class TauHub
         return await _engineRepo.GetEngineFullDto(id);
     }
 
-    public async Task<IList<EngineDto>> GetEngines(
+    public async Task<IList<EngineOverviewDto>> GetEngines(
         int page,
         SortEnginesBy sorting = SortEnginesBy.LastUsed,
         bool sortDescending = true,

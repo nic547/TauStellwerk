@@ -5,11 +5,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Util;
+using EngineOverview = TauStellwerk.Client.Model.EngineOverview;
 
 namespace TauStellwerk.Client.Services;
 
@@ -25,11 +27,12 @@ public class EngineService
         _service = httpClientService;
     }
 
-    public async Task<IReadOnlyList<EngineDto>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
+    public async Task<IReadOnlyList<EngineOverview>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
         var connection = await _service.GetHubConnection();
 
-        return await connection.InvokeAsync<IReadOnlyList<EngineDto>>("GetEngines", page, sorting, sortDescending, showHidden);
+        var engines = await connection.InvokeAsync<IReadOnlyList<EngineOverviewDto>>("GetEngines", page, sorting, sortDescending, showHidden);
+        return engines.Select(e => new EngineOverview(e)).ToList();
     }
 
     public async Task<EngineFull?> AcquireEngine(int id)

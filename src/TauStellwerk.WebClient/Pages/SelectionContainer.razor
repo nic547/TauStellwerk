@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel
 @using TauStellwerk.Base.Model
+@using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
 @using TauStellwerk.Util
 @inject ModalManager _modalManager
@@ -39,7 +40,7 @@
     </div>
 </div>
 @code {
-    private readonly List<EngineDto> _engines = new();
+    private readonly List<EngineOverview> _engines = new();
 
     private bool CannotMoveForward => !_engines.Any();
     private bool CannotMoveBackward => _currentPage <= 0;

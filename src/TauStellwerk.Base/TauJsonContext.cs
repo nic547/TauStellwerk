@@ -9,7 +9,7 @@ using TauStellwerk.Base.Model;
 namespace TauStellwerk.Base;
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-[JsonSerializable(typeof(EngineDto[]))]
+[JsonSerializable(typeof(EngineOverviewDto[]))]
 [JsonSerializable(typeof(EngineFullDto))]
 [JsonSerializable(typeof(SystemStatus))]
 [JsonSerializable(typeof(string))]
