@@ -60,7 +60,7 @@ public class EngineManager
         if (activeEngine.Session != session)
         {
             _logger.LogError($"{session} tried accessing {activeEngine.Engine}");
-            return Result.Fail("Wrong sessios for engine given.");
+            return Result.Fail("Wrong session for engine given.");
         }
 
         return Result.Ok(activeEngine);
