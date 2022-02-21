@@ -76,7 +76,7 @@ public abstract class CommandSystemBase
     /// <returns>A task representing the asynchronous operation.</returns>
     public abstract Task CheckState();
 
-    protected void OnStatusChange(State state)
+    protected virtual void OnStatusChange(State state)
     {
         StatusChanged?.Invoke(state);
     }
