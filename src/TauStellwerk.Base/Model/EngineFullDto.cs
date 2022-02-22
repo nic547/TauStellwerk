@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace TauStellwerk.Base.Model;
 
-public class EngineFullDto : EngineDto
+public class EngineFullDto : EngineOverviewDto
 {
     public List<FunctionDto> Functions { get; set; } = new();
 

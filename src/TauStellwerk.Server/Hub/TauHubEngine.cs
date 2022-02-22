@@ -35,7 +35,7 @@ public partial class TauHub
         return acquireResult;
     }
 
-    public async Task<Result> ReleaseEngine(int id)
+    public async Task<ResultDto> ReleaseEngine(int id)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -47,7 +47,7 @@ public partial class TauHub
         return await _engineService.ReleaseEngine(session, id);
     }
 
-    public async Task<Result> SetEngineSpeed(int id, int speed, Direction? direction)
+    public async Task<ResultDto> SetEngineSpeed(int id, int speed, Direction? direction)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -59,7 +59,7 @@ public partial class TauHub
         return await _engineService.SetEngineSpeed(session, id, speed, direction);
     }
 
-    public async Task<Result> SetEngineEStop(int id)
+    public async Task<ResultDto> SetEngineEStop(int id)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -71,7 +71,7 @@ public partial class TauHub
         return await _engineService.SetEngineEStop(session, id);
     }
 
-    public async Task<Result> SetEngineFunction(int id, int number, State state)
+    public async Task<ResultDto> SetEngineFunction(int id, int number, State state)
     {
         var session = _sessionService.TryGetSession(Context.ConnectionId);
 
@@ -88,7 +88,11 @@ public partial class TauHub
         return await _engineRepo.GetEngineFullDto(id);
     }
 
-    public async Task<IList<EngineDto>> GetEngines(int page, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
+    public async Task<IList<EngineOverviewDto>> GetEngines(
+        int page,
+        SortEnginesBy sorting = SortEnginesBy.LastUsed,
+        bool sortDescending = true,
+        bool showHidden = false)
     {
         var list = await _engineRepo.GetEngineList(page, showHidden, sorting, sortDescending);
         return list;
@@ -96,11 +100,45 @@ public partial class TauHub
 
     public async Task<ResultDto<EngineFullDto>> AddOrUpdateEngine(EngineFullDto engine)
     {
+        if (engine.Id is not 0)
+        {
+            var session = _sessionService.TryGetSession(Context.ConnectionId);
+            if (session is null)
+            {
+                return Result.Fail("No session found!");
+            }
+
+            var result = _engineService.IsEngineAcquiredBySession(session, engine.Id);
+            if (result.IsFailed)
+            {
+                return result;
+            }
+        }
+
         return await _engineRepo.UpdateOrAdd(engine);
     }
 
-    public async Task DeleteEngine(int id)
+    public async Task<ResultDto> DeleteEngine(int id)
     {
-        await _engineRepo.Delete(id);
+        var session = _sessionService.TryGetSession(Context.ConnectionId);
+        if (session is null)
+        {
+            return Result.Fail("No session found!");
+        }
+
+        var result = _engineService.IsEngineAcquiredBySession(session, id);
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
+        var deleteResult = await _engineRepo.Delete(id);
+        if (deleteResult.IsFailed)
+        {
+            return deleteResult;
+        }
+
+        await _engineService.ReleaseEngine(session, id);
+        return Result.Ok();
     }
 }

@@ -67,7 +67,7 @@ public class EngineRepo
         return Result.Ok(engine);
     }
 
-    public async Task<IList<EngineDto>> GetEngineList(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
+    public async Task<IList<EngineOverviewDto>> GetEngineList(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
     {
         var query = _dbContext.Engines
             .AsNoTracking()
@@ -127,8 +127,8 @@ public class EngineRepo
         }
         catch (Exception e)
         {
-            _logger.LogError($"Exception while updating engine: {e.GetType()}");
-            return Result.Fail("Could not update engine");
+            _logger.LogError($"Exception while updating engineOverview: {e.GetType()}");
+            return Result.Fail("Could not update engineOverview");
         }
 
         engineDto.Id = engine.Id;

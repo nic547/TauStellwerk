@@ -39,3 +39,21 @@ public class ResultDto<T>
         return new ResultDto<T>(default, false, string.Join(' ', result.Errors.Select(e => e.Message)));
     }
 }
+
+public class ResultDto
+{
+    public ResultDto(bool success, string? error)
+    {
+        Success = success;
+        Error = error;
+    }
+
+    public string? Error { get; }
+
+    public bool Success { get; }
+
+    public static implicit operator ResultDto(Result result)
+    {
+        return new ResultDto(result.IsSuccess, string.Join(' ', result.Errors.Select(e => e.Message)));
+    }
+}

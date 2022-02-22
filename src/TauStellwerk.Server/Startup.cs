@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Base;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database;
 using TauStellwerk.Hub;
@@ -102,6 +104,9 @@ public class Startup
             endpoints.MapRazorPages();
             endpoints.MapHub<TauHub>("/hub");
         });
+
+        var appLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+        appLifetime.ApplicationStopping.Register(() => Shutdown(app.ApplicationServices));
     }
 
     private static IContentTypeProvider GetContentTypeProvider()
@@ -111,6 +116,12 @@ public class Startup
         provider.Mappings.Add(".avif", "image/avif");
 
         return provider;
+    }
+
+    private static void Shutdown(IServiceProvider sp)
+    {
+        var commandSystem = sp.GetRequiredService<CommandSystemBase>();
+        commandSystem.HandleSystemStatus(State.Off).Wait();
     }
 
     private void EnsureContentDirectoriesExist()

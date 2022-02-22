@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.IO.Ports;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +16,8 @@ public class DccExSerialSystem : CommandSystemBase
 {
     private readonly ILogger<CommandSystemBase> _logger;
     private readonly SerialPort _serialPort;
+
+    private State? _currentState;
 
     public DccExSerialSystem(IConfiguration configuration, ILogger<CommandSystemBase> logger)
         : base(configuration)
@@ -41,13 +42,40 @@ public class DccExSerialSystem : CommandSystemBase
         {
             while (true)
             {
-                Console.WriteLine(_serialPort.ReadLine());
+                var line = _serialPort.ReadLine();
+
+                if (line == "<p0>")
+                {
+                    OnStatusChange(State.Off);
+                }
+
+                if (line == "<p1>")
+                {
+                    OnStatusChange(State.On);
+                }
+
+                if (line.StartsWith("<* MAIN TRACK POWER RESET"))
+                {
+                    OnStatusChange(State.On);
+                }
+
+                if (line.StartsWith("<* MAIN TRACK POWER OVERLOAD"))
+                {
+                    var timeout = int.Parse(line.Split(' ')[^2][8..]);
+
+                    // Dcc++ EX uses incremental back-off, starting with 20ms and 40ms. Those two are ignored to not create unnecessary noise.
+                    if (timeout > 40)
+                    {
+                        OnStatusChange(State.Off);
+                    }
+                }
             }
         });
     }
 
     public override Task HandleSystemStatus(State state)
     {
+        _currentState = state;
         _serialPort.WriteLine(state == State.On ? "<1>" : "<0>");
         return Task.CompletedTask;
     }
@@ -72,7 +100,17 @@ public class DccExSerialSystem : CommandSystemBase
 
     public override Task CheckState()
     {
-        // TODO #130
-        throw new System.NotImplementedException();
+        _serialPort.WriteLine("<s>");
+        return Task.CompletedTask;
+    }
+
+    protected override void OnStatusChange(State state)
+    {
+        // Only actually notify of state changes when they aren't known yet.
+        if (state != _currentState)
+        {
+            _currentState = state;
+            base.OnStatusChange(state);
+        }
     }
 }

@@ -108,4 +108,9 @@ public class EngineService : IEngineService
         activeEngine.State.FunctionStates[functionNumber] = state;
         return Result.Ok();
     }
+
+    public Result IsEngineAcquiredBySession(Session session, int engineId)
+    {
+        return _manager.GetActiveEngine(engineId, session).ToResult();
+    }
 }

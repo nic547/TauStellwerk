@@ -21,7 +21,7 @@ public class AvaloniaViewService : IViewService
     {
         var vm = new EngineControlViewModel(engine);
         var window = new EngineControlWindow(vm);
-        ShowWindowCenterOwner(window, TryGetMainWindow(), 0.5);
+        ShowWindowCenterOwner(window, TryGetMainWindow(), 0.33);
     }
 
     public void ShowSettingsView(object? source = null)

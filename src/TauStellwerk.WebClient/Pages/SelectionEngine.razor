@@ -1,14 +1,15 @@
 ﻿@using TauStellwerk.Client.Services
 @using TauStellwerk.Base.Model
 @using System.Collections.Immutable
+@using TauStellwerk.Client.Model
 
 @inject AppState _appState
 @inject EngineService _engineService
 @inject ModalManager _modalManager
 
-<article class="is-clickable has-shadow is-flex-vertical">
+<article class="has-shadow is-flex-vertical">
     <header>@Engine.Name</header>
-    <EnginePicture Class="selection-image" Images="Engine.Images.ToImmutableList()" Sizes="Sizes"/>
+    <EnginePicture Class="selection-image" Images="Engine.Images" Sizes="Sizes"/>
     <span class="tags">
         @foreach (var tag in Engine.Tags)
         {
@@ -27,7 +28,7 @@
 
     [EditorRequired]
     [Parameter]
-    public EngineDto Engine { get; init; } = null!;
+    public EngineOverview Engine { get; init; } = null!;
 
     private async void ControlEngine()
     {

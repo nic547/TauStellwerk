@@ -1,5 +1,6 @@
 ﻿@using TauStellwerk.Base.Model
 @using System.Collections.Immutable
+@using TauStellwerk.Client.Model
 <picture class="@Class">
     @if (!HasErrorOccurredYet)
     {
@@ -18,7 +19,7 @@
 
     [Parameter]
     [EditorRequired]
-    public ImmutableList<ImageDto> Images { get; set; } = null!;
+    public ImmutableList<EngineImage> Images { get; set; } = null!;
 
     [Parameter]
     [EditorRequired]

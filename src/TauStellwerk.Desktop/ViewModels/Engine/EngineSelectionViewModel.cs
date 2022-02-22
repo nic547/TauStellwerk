@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels.Engine;
@@ -54,7 +55,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
 
     public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
 
-    public ObservableCollection<EngineDto> Engines { get; } = new();
+    public ObservableCollection<EngineOverview> Engines { get; } = new();
 
     public bool CanScrollForwards => Engines.Count == EnginesPerPage;
 

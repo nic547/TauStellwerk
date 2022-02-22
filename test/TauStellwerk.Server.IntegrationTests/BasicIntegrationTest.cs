@@ -39,7 +39,7 @@ public class BasicIntegrationTest
             await engineService.AddOrUpdateEngine(new EngineFull(engine));
         }
 
-        List<EngineDto> engines = new();
+        List<EngineOverview> engines = new();
 
         foreach (var i in Enumerable.Range(0, 6))
         {
