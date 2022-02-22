@@ -13,8 +13,23 @@ public partial class TauHub
 {
     public override Task OnConnectedAsync()
     {
-        // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
-        var username = Context.GetHttpContext()?.Request.Query["access_token"].ToString() ?? "'unnamed'";
+        // The username is sent as AccessToken because it seemed like the easiest way to get SignalR to pass it along.
+        // The AccessToken is can be sent via Query oder Header, depending on the Client.
+        var username = "unnamed";
+
+        var usernameFromQuery = Context.GetHttpContext()?.Request.Query["access_token"].ToString();
+        var usernameFromHeader = Context.GetHttpContext()?.Request.Headers["Authorization"].ToString();
+
+        if (!string.IsNullOrEmpty(usernameFromQuery))
+        {
+            username = usernameFromQuery;
+        }
+
+        if (!string.IsNullOrEmpty(usernameFromHeader))
+        {
+            username = usernameFromHeader;
+        }
+
         _sessionService.HandleConnected(Context.ConnectionId, username);
         return base.OnConnectedAsync();
     }
