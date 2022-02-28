@@ -3,9 +3,9 @@
 @using System.Collections.Immutable
 @using TauStellwerk.Client.Model
 
-@inject AppState _appState
-@inject EngineService _engineService
-@inject ModalManager _modalManager
+@inject AppState AppState
+@inject EngineService EngineService
+@inject ModalManager ModalManager
 
 <article class="has-shadow is-flex-vertical">
     <header>@Engine.Name</header>
@@ -16,7 +16,7 @@
             <button class="button-secondary">@tag</button>
         }
     </span>
-    <div class="flex-filler"/>
+    <div class="flex-filler"></div>
     <div class="is-flex-horizontal justify-flex-end">
         <button @onclick="EditEngine">Edit</button>
         <button @onclick="ControlEngine">Control</button>
@@ -32,29 +32,29 @@
 
     private async void ControlEngine()
     {
-        var engine = await _engineService.AcquireEngine(Engine.Id);
+        var engine = await EngineService.AcquireEngine(Engine.Id);
         if (engine != null)
         {
-            _appState.ActiveEngines.Add(engine);
-            _modalManager.IsEngineSelectionVisible = false;
+            AppState.ActiveEngines.Add(engine);
+            ModalManager.IsEngineSelectionVisible = false;
         }
         else
         {
-            _appState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
+            AppState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
         }
     }
 
     private async void EditEngine()
     {
-        var engine = await _engineService.AcquireEngine(Engine.Id);
+        var engine = await EngineService.AcquireEngine(Engine.Id);
         if (engine != null)
         {
-            _appState.SelectedEngine = engine;
-            _modalManager.IsEngineEditModalVisible = true;
+            AppState.SelectedEngine = engine;
+            ModalManager.IsEngineEditModalVisible = true;
         }
         else
         {
-            _appState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
+            AppState.ShowMessageBox("Could not acquire engine. It might be in use by someone else");
         }
     }
 }

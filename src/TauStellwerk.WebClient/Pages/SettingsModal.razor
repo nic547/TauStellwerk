@@ -2,9 +2,9 @@
 @using TauStellwerk.Client.Model
 @using System.ComponentModel
 
-@inject ModalManager _modalManager
-@inject ISettingsService _settingsService
-<div class="modal @(_modalManager.IsSettingsModalVisible ? "active-modal" : "inactive-modal")">
+@inject ModalManager ModalManager
+@inject ISettingsService SettingsService
+<div class="modal @(ModalManager.IsSettingsModalVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content">
         <EditForm Model="typeof(MutableSettings)">
             <div class="form-group" title="The username that will be shown to other users.">
@@ -30,19 +30,19 @@
     {
         await base.OnInitializedAsync();
 
-        _modalManager.PropertyChanged += HandleModalManagerNotification;
+        ModalManager.PropertyChanged += HandleModalManagerNotification;
     }
 
     private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName != nameof(_modalManager.IsSettingsModalVisible))
+        if (args.PropertyName != nameof(ModalManager.IsSettingsModalVisible))
         {
             return;
         }
 
-        if (_modalManager.IsSettingsModalVisible)
+        if (ModalManager.IsSettingsModalVisible)
         {
-            _settings = await _settingsService.GetMutableSettingsCopy();
+            _settings = await SettingsService.GetMutableSettingsCopy();
         }
 
         StateHasChanged();
@@ -50,12 +50,12 @@
 
     private void SaveAndClose()
     {
-        _settingsService.SetSettings(_settings);
-        _modalManager.IsSettingsModalVisible = false;
+        SettingsService.SetSettings(_settings);
+        ModalManager.IsSettingsModalVisible = false;
     }
 
     private void CloseWithoutSaving()
     {
-        _modalManager.IsSettingsModalVisible = false;
+        ModalManager.IsSettingsModalVisible = false;
     }
 }

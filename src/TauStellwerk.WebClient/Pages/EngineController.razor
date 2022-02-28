@@ -6,14 +6,14 @@
 @using TauStellwerk.WebClient.Pages
 @using System.ComponentModel
 
-@inject AppState _appState
-@inject EngineService _engineService;
+@inject AppState AppState
+@inject EngineService EngineService;
 
 <div class="box is-engine-controller has-shadow">
     <div class="ec-grid-header is-flex-horizontal align-baseline">
         <span>@Engine.Name</span>
-        <span class="flex-filler"/>
-        <button class="bold button-secondary" @onclick="RemoveEngine ">X</button>
+        <span class="flex-filler"></span>
+        <button class="bold button-secondary" @onclick="RemoveEngine">X</button>
     </div>
     <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes"/>
     <label class="ec-grid-slider has-100percent-height">
@@ -49,29 +49,29 @@
     {
         if (Engine.Direction == Direction.Forwards)
         {
-            _ = _engineService.SetSpeed(Engine, 0, Direction.Backwards);
+            _ = EngineService.SetSpeed(Engine, 0, Direction.Backwards);
         }
         else
         {
-            _ = _engineService.SetSpeed(Engine, 0, Direction.Forwards);
+            _ = EngineService.SetSpeed(Engine, 0, Direction.Forwards);
         }
     }
 
     private void EStop()
     {
-        _ = _engineService.SetEStop(Engine);
+        _ = EngineService.SetEStop(Engine);
     }
 
     private void RemoveEngine()
     {
-        _appState.ActiveEngines.Remove(Engine);
-        _ = _engineService.ReleaseEngine(Engine.Id);
+        AppState.ActiveEngines.Remove(Engine);
+        _ = EngineService.ReleaseEngine(Engine.Id);
     }
 
     private void SetSpeed(ChangeEventArgs obj)
     {
         var throttle = int.Parse(obj.Value as string ?? throw new InvalidOperationException());
-        _ = _engineService.SetSpeed(Engine, throttle, Engine.Direction);
+        _ = EngineService.SetSpeed(Engine, throttle, Engine.Direction);
     }
 
 }

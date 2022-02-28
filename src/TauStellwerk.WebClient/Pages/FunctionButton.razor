@@ -2,7 +2,7 @@
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
 
-@inject EngineService _engineService;
+@inject EngineService EngineService;
 
 <button class="button is-fullwidth has-left-text @BackgroundClass"
         @onclick="ToggleFunction">
@@ -22,6 +22,6 @@
 
         private async Task ToggleFunction()
         {
-            await _engineService.ToggleFunction(Engine, Function);
+            await EngineService.ToggleFunction(Engine, Function);
         }
 }

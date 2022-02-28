@@ -3,8 +3,8 @@
 @using TauStellwerk.Base.Model
 
 
-@inject StatusService _statusService;
-@inject ISettingsService _settingsService;
+@inject StatusService StatusService;
+@inject ISettingsService SettingsService;
 
 
 <div id="StopButton" disabled="@_state.ShouldBeDisabled" @onclick="StopButtonClick" class="@_state.CurrentState">
@@ -18,18 +18,18 @@
 
     protected override void OnInitialized()
     {
-        if (_statusService == null)
+        if (StatusService == null)
         {
             throw new InvalidOperationException("No StatusService was provided to StopButton!");
         }
 
         _state!.PropertyChanged += (_, _) => StateHasChanged();
 
-        _statusService.StatusChanged += s => _state.SetStatus(s);
+        StatusService.StatusChanged += s => _state.SetStatus(s);
 
-        if (_statusService.LastKnownStatus != null)
+        if (StatusService.LastKnownStatus != null)
         {
-            _state.SetStatus(_statusService.LastKnownStatus);
+            _state.SetStatus(StatusService.LastKnownStatus);
         }
     }
 
@@ -39,14 +39,14 @@
         {
             return;
         }
-        var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
-        var username = (await _settingsService.GetSettings()).Username;
+        var isCurrentlyRunning = StatusService.LastKnownStatus?.State;
+        var username = (await SettingsService.GetSettings()).Username;
         var status = new SystemStatus()
         {
             State = isCurrentlyRunning == State.Off ? State.On : State.Off,
             LastActionUsername = username,
         };
 
-        await _statusService.SetStatus(status);
+        await StatusService.SetStatus(status);
     }
 }
