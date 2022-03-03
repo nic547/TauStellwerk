@@ -10,10 +10,14 @@
     <engine:EngineEditViewModel/>
   </Design.DataContext>
   <DockPanel>
-    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="5">
-      <Button Content="Cancel" Command="{Binding CancelCommand}"/>
-      <Button Content="Save" Command="{Binding SaveCommand}"/>
-    </StackPanel>
+    <DockPanel DockPanel.Dock="Bottom" Margin="5" LastChildFill="False">
+      <Button Content="Delete" Command="{Binding DeleteCommand}"
+              DockPanel.Dock="Left"/>
+      <Button Content="Cancel" Command="{Binding CancelCommand}"
+              DockPanel.Dock="Right"/>
+      <Button Content="Save" Command="{Binding SaveCommand}"
+              DockPanel.Dock="Right"/>
+    </DockPanel>
     <ScrollViewer>
       <StackPanel Margin="5">
         <Label Content="Name"/>

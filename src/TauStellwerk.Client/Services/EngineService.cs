@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Util;
-using EngineOverview = TauStellwerk.Client.Model.EngineOverview;
 
 namespace TauStellwerk.Client.Services;
 
@@ -114,6 +113,18 @@ public class EngineService
 
         // TODO: Handle Error instead of throwing.
         return updatedEngine.Value ?? throw new InvalidOperationException();
+    }
+
+    public async Task<ResultDto> TryDeleteEngine(EngineFull engine)
+    {
+        if (engine.Id == 0)
+        {
+            return new ResultDto(false, "Engine does not exist yet");
+        }
+
+        var connection = await _service.GetHubConnection();
+        _activeEngines.Remove(engine.Id);
+        return await connection.InvokeAsync<ResultDto>("TryDeleteEngine", engine.Id);
     }
 
     private async Task SendSpeed((int Id, int Speed, Direction Direction) arg)
