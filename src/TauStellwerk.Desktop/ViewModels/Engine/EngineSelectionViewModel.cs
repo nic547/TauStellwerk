@@ -128,4 +128,11 @@ public partial class EngineSelectionViewModel : ViewModelBase
                 this);
         }
     }
+
+    [ICommand]
+    private void CreateEngine()
+    {
+        var engine = new EngineFull();
+        _viewService.ShowEngineEditView(engine, this);
+    }
 }

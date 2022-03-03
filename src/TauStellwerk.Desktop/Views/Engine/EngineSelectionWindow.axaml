@@ -10,60 +10,66 @@
         MinWidth="200"
         MinHeight="200"
         ClientSize="{Binding WindowSize, Mode=OneWayToSource}">
-  <Design.DataContext>
-    <engine:EngineSelectionViewModel/>
-  </Design.DataContext>
-  <Panel Margin="5">
-    <DockPanel LastChildFill="True">
-      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-        <ComboBox Items="{Binding EngineSortModes}"
-                  SelectedItem="{Binding CurrentEngineSortMode}"/>
-        <ComboBox Items="{Binding EngineSortDirections}"
-                  SelectedItem="{Binding CurrentEngineSortDirection}"/>
-        <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
-      </StackPanel>
-      <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-        <Button Command="{Binding ScrollPages}" 
-                CommandParameter="-1" 
-                IsEnabled="{Binding CanScrollBackwards}"
-                Content="&lt;"/>
-        <TextBlock Text="{Binding CurrentPage}"
-                   VerticalAlignment="Center"/>
-        <Button Command="{Binding ScrollPages}" 
-                CommandParameter="1" 
-                IsEnabled="{Binding CanScrollForwards}"
-                Content="&gt;"/>
-      </StackPanel>
-      <ListBox Items="{Binding Engines}" Name="EngineList">
-        <ListBox.ItemsPanel>
-          <ItemsPanelTemplate>
-            <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-          </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <StackPanel MinWidth="200">
-              <Border Background="Red" CornerRadius="4" Padding="4">
-                <TextBlock Text="{Binding Name}"/>
-              </Border>
-              <ItemsRepeater Items="{Binding Tags}">
-                <ItemsRepeater.Layout>
-                  <WrapLayout HorizontalSpacing="6"/>
-                </ItemsRepeater.Layout>
-                <ItemsRepeater.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding}"/>
-                  </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-              </ItemsRepeater>
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-          <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit"/>
-          <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select"/>
-				</StackPanel>
+    <Design.DataContext>
+        <engine:EngineSelectionViewModel/>
+    </Design.DataContext>
+    <Panel Margin="5">
+        <DockPanel LastChildFill="True">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <ComboBox Items="{Binding EngineSortModes}"
+                          SelectedItem="{Binding CurrentEngineSortMode}"/>
+                <ComboBox Items="{Binding EngineSortDirections}"
+                          SelectedItem="{Binding CurrentEngineSortDirection}"/>
+                <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
             </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-    </DockPanel>
-  </Panel>
+            <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+                <Button Command="{Binding ScrollPages}"
+                        DockPanel.Dock="Left"
+                        CommandParameter="-1"
+                        IsEnabled="{Binding CanScrollBackwards}"
+                        Content="&lt;"/>
+                <TextBlock Text="{Binding CurrentPage}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"/>
+                <Button Command="{Binding ScrollPages}"
+                        DockPanel.Dock="Left"
+                        CommandParameter="1"
+                        IsEnabled="{Binding CanScrollForwards}"
+                        Content="&gt;"/>
+                <Button Command="{Binding CreateEngineCommand}"
+                        DockPanel.Dock="Right"
+                        Content="Create New"/>
+            </DockPanel>
+            <ListBox Items="{Binding Engines}" Name="EngineList">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel MinWidth="200">
+                            <Border Background="Red" CornerRadius="4" Padding="4">
+                                <TextBlock Text="{Binding Name}"/>
+                            </Border>
+                            <ItemsRepeater Items="{Binding Tags}">
+                                <ItemsRepeater.Layout>
+                                    <WrapLayout HorizontalSpacing="6"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"/>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit"/>
+                                <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </Panel>
 </Window>
