@@ -44,10 +44,18 @@
             <div class="form-group">
                 <label>Functions: </label>
                 <div>
-                @foreach(var function in Engine.Functions)
-                {
-                    <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
-                }
+                    @if (Engine.Functions.Any())
+                    {
+                        @foreach (var function in Engine.Functions)
+                        {
+                            <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
+                        }
+                    }
+                    else
+                    {
+                        <i>No functions defined</i>
+                    }
+                    
                 </div>
                 <div class="is-flex-horizontal">
                     <button @onclick="RemoveFunction">Remove Function</button>
