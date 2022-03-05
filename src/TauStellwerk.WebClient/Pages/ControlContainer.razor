@@ -1,18 +1,18 @@
 ﻿@using System.Collections.ObjectModel
 
-@inject ModalManager _modalManager
-@inject AppState _appState;
+@inject ModalManager ModalManager
+@inject AppState AppState;
 
 <div id="EngineContainer" class="is-flex-horizontal has-100percent-height">
     <!-- Template for each control block -->
-    @foreach (var engine in _appState.ActiveEngines)
+    @foreach (var engine in AppState.ActiveEngines)
     {
         <EngineController Engine="engine"/>
     }
 
     <!-- "Empty" control panel with Button to open the engine selection dialog. -->
     <div class="is-engine-controller uses-ec-grid has-shadow">
-        <button id="SelectEngineButton" class="has-background-primary covers-full-ec-grid" @onclick="() => _modalManager.IsEngineSelectionVisible = true" >Select Engine</button>
+        <button id="SelectEngineButton" class="has-background-primary covers-full-ec-grid" @onclick="() => ModalManager.IsEngineSelectionVisible = true" >Select Engine</button>
     </div>
 </div>
 
@@ -20,7 +20,7 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _appState.ActiveEngines.CollectionChanged += (_,_) => StateHasChanged();
+        AppState.ActiveEngines.CollectionChanged += (_,_) => StateHasChanged();
     }
 
 }

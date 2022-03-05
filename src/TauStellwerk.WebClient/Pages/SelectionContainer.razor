@@ -3,39 +3,43 @@
 @using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
 @using TauStellwerk.Util
-@inject ModalManager _modalManager
-@inject EngineService _engineService
 
-<div id="EngineSelectionModal" class="modal @(_modalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
+@inject ModalManager ModalManager
+@inject EngineService EngineService
+@inject AppState AppState
+
+<div id="EngineSelectionModal" class="modal @(ModalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content-fullwidth">
         <div class="modal-header">
             <select @onchange="SortingChanged">
-                @foreach(var sortingOption in Enum.GetValues<SortEnginesBy>())
-                    {
-                        <option value="@sortingOption">@sortingOption</option>
-                    }
+                @foreach (var sortingOption in Enum.GetValues<SortEnginesBy>())
+                {
+                    <option value="@sortingOption">@sortingOption</option>
+                }
             </select>
             <select @onchange="SortingDirectionChanged">
                 <option>DESC</option>
                 <option>ASC</option>
             </select>
-            <input id="ShowHiddenCheckbox" type="checkbox" @onchange="ShowHiddenCheckboxChanged"/>
+            <input id="ShowHiddenCheckbox" type="checkbox" @onchange="ShowHiddenCheckboxChanged" />
             <label>Show Hidden</label>
-            <span class="flex-filler"/>
-            <button class="bold button-secondary" @onclick="() => _modalManager.IsEngineSelectionVisible = false">X</button>
+            <span class="flex-filler" />
+            <button class="bold button-secondary" @onclick="() => ModalManager.IsEngineSelectionVisible = false">X</button>
         </div>
         <div class="can-scroll-y modal-body">
             <div id="EngineSelectionContainer" class="selection-grid">
                 @foreach (var engine in _engines)
                 {
-                    <SelectionEngine Engine="engine"/>
+                    <SelectionEngine Engine="engine" />
                 }
             </div>
         </div>
         <div class="modal-footer">
             <button class="bold" disabled="@CannotMoveBackward" @onclick="() => {_ = ChangePage(-1);}">&lt;</button>
             <output>@_currentPage</output>
-            <button class="bold" disabled="@CannotMoveForward" @onclick="() => {_ = ChangePage(+1);}" >&gt;</button>
+            <button class="bold" disabled="@CannotMoveForward" @onclick="() => {_ = ChangePage(+1);}">&gt;</button>
+            <span class="flex-filler"></span>
+            <button class="button-secondary" @onclick="CreateNewEngine">Create New</button>
         </div>
     </div>
 </div>
@@ -54,19 +58,19 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _modalManager.PropertyChanged += HandleModalManagerNotification;
+        ModalManager.PropertyChanged += HandleModalManagerNotification;
     }
 
     private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName != nameof(_modalManager.IsEngineSelectionVisible))
+        if (args.PropertyName != nameof(ModalManager.IsEngineSelectionVisible))
         {
             return;
         }
 
         _engines.Clear();
 
-        if (_modalManager.IsEngineSelectionVisible)
+        if (ModalManager.IsEngineSelectionVisible)
         {
             _currentPage = 0;
             await ChangePage(0);
@@ -101,7 +105,7 @@
 
         _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
-        var engines = await _engineService.GetEngines(
+        var engines = await EngineService.GetEngines(
             _currentPage,
             sortEnum,
             _isSortedDescending,
@@ -111,5 +115,12 @@
         _engines.AddRange(engines);
 
         StateHasChanged();
+    }
+
+    private void CreateNewEngine()
+    {
+        var engine = new EngineFull();
+        AppState.SelectedEngine = engine;
+        ModalManager.IsEngineEditModalVisible = true;
     }
 }

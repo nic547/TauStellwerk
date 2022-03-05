@@ -6,33 +6,38 @@
 @using TauStellwerk.WebClient.Pages
 @using System.ComponentModel
 
-@inject AppState _appState
-@inject EngineService _engineService;
+@inject AppState AppState
+@inject EngineService EngineService;
 
 <div class="box is-engine-controller has-shadow">
     <div class="ec-grid-header is-flex-horizontal align-baseline">
         <span>@Engine.Name</span>
-        <span class="flex-filler"/>
-        <button class="bold button-secondary" @onclick="RemoveEngine ">X</button>
+        <span class="flex-filler"></span>
+        <button class="bold button-secondary" @onclick="RemoveEngine">X</button>
     </div>
-    <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes"/>
+    <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes" />
     <label class="ec-grid-slider has-100percent-height">
         <!-- orient="vertical" is for firefox -->
         <input type="range" orient="vertical" min="0" max="126" value="@Engine.Throttle" @oninput="SetSpeed" />
     </label>
     <div class="ec-grid-direction center">
         <button class="bold" disabled="@(Engine.Direction == Direction.Backwards)" @onclick="ChangeDirection">&lt;</button>
-        <button class="bold" disabled="@(Engine.Direction == Direction.Forwards)" @onclick="ChangeDirection" >&gt;</button>
+        <button class="bold" disabled="@(Engine.Direction == Direction.Forwards)" @onclick="ChangeDirection">&gt;</button>
     </div>
     <output class="ec-grid-speed center">@Engine.Throttle</output>
     <div class="ec-grid-functions can-scroll-y has-100percent-max-height">
-        @foreach (var function in Engine.Functions.OrderBy(e => e.Number))
+        @if (Engine.Functions.Any())
         {
-            <FunctionButton
-                Engine=Engine
-                Function=function
-                />
+            @foreach (var function in Engine.Functions)
+            {
+                <FunctionButton Engine=Engine Function=function />
+            }
         }
+        else
+        {
+            <i>No functions defined</i>
+        }
+
     </div>
     <div class="ec-grid-estop center">
         <button class="bold estop-button" @onclick="EStop" title="Emergency stop this activeEngine.">Emergency Stop</button>
@@ -49,29 +54,29 @@
     {
         if (Engine.Direction == Direction.Forwards)
         {
-            _ = _engineService.SetSpeed(Engine, 0, Direction.Backwards);
+            _ = EngineService.SetSpeed(Engine, 0, Direction.Backwards);
         }
         else
         {
-            _ = _engineService.SetSpeed(Engine, 0, Direction.Forwards);
+            _ = EngineService.SetSpeed(Engine, 0, Direction.Forwards);
         }
     }
 
     private void EStop()
     {
-        _ = _engineService.SetEStop(Engine);
+        _ = EngineService.SetEStop(Engine);
     }
 
     private void RemoveEngine()
     {
-        _appState.ActiveEngines.Remove(Engine);
-        _ = _engineService.ReleaseEngine(Engine.Id);
+        AppState.ActiveEngines.Remove(Engine);
+        _ = EngineService.ReleaseEngine(Engine.Id);
     }
 
     private void SetSpeed(ChangeEventArgs obj)
     {
         var throttle = int.Parse(obj.Value as string ?? throw new InvalidOperationException());
-        _ = _engineService.SetSpeed(Engine, throttle, Engine.Direction);
+        _ = EngineService.SetSpeed(Engine, throttle, Engine.Direction);
     }
 
 }

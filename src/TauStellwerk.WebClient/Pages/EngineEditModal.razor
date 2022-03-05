@@ -44,17 +44,27 @@
             <div class="form-group">
                 <label>Functions: </label>
                 <div>
-                @foreach(var function in Engine.Functions)
-                {
-                    <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
-                }
+                    @if (Engine.Functions.Any())
+                    {
+                        @foreach (var function in Engine.Functions)
+                        {
+                            <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
+                        }
+                    }
+                    else
+                    {
+                        <i>No functions defined</i>
+                    }
+                    
                 </div>
                 <div class="is-flex-horizontal">
                     <button @onclick="RemoveFunction">Remove Function</button>
                     <button @onclick="AddFunction">Add Function</button>
                 </div>
             </div>
-            <div class="is-flex-horizontal justify-flex-end">
+            <div class="modal-footer">
+                <button @onclick="Delete" class="button-secondary">Delete</button>
+                <span class="flex-filler"></span>
                 <button @onclick="Close" class="button-secondary">Cancel</button>
                 <button @onclick="Save">Save</button>
             </div>
@@ -95,6 +105,21 @@
         await _engineService.AddOrUpdateEngine(Engine);
         await _engineService.ReleaseEngine(Engine.Id);
         _modalManager.IsEngineEditModalVisible = false;
+    }
+
+    private async Task Delete()
+    {
+        var result = await _engineService.TryDeleteEngine(Engine);
+        if (result.Success)
+        {
+            _modalManager.IsEngineEditModalVisible = false;
+        }
+        else
+        {
+            _appState.MessageBoxText = $"Failed to delete engine: {result.Error}";
+            _modalManager.IsMessageBoxVisible = true;
+        }
+        
     }
 
     private void RemoveTag(string tag)

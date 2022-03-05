@@ -2,7 +2,7 @@
 @using System.Collections.Immutable
 @using TauStellwerk.Client.Model
 <picture class="@Class">
-    @if (!HasErrorOccurredYet)
+    @if (!_hasErrorOccurredYet)
     {
         @foreach (var imageset in Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
         {
@@ -10,12 +10,12 @@
             <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
         }
     }
-    <img @onerror="() => { HasErrorOccurredYet = true; }" src="img/noImageImage.png" alt="Engine image"/>
+    <img @onerror="() => { _hasErrorOccurredYet = true; }" src="img/noImageImage.png" alt="Engine image"/>
 </picture>
 
 @code {
 
-    private bool HasErrorOccurredYet = false;
+    private bool _hasErrorOccurredYet = false;
 
     [Parameter]
     [EditorRequired]
