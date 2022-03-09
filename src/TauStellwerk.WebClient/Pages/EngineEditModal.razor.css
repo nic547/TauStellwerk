@@ -1,0 +1,9 @@
+.function-container {
+    display: grid;
+    grid-template-columns: 40px minmax(min-content, 300px);
+    margin-top: 2px;
+}
+
+.function-container > label, input {
+    margin: 1px;
+}
