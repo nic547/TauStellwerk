@@ -43,12 +43,13 @@
             </div>
             <div class="form-group">
                 <label>Functions: </label>
-                <div>
+                <div class="function-container">
                     @if (Engine.Functions.Any())
                     {
                         @foreach (var function in Engine.Functions)
                         {
-                            <div><label for="@($"function{function.Number}")">@($"F{function.Number} - ")</label><input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/></div>
+                            <label for="@($"function{function.Number}")">@($"F{function.Number}")</label>
+                            <input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/>
                         }
                     }
                     else
@@ -133,6 +134,7 @@
         {
             Engine.Tags.Add(NewTagInput);
         }
+        NewTagInput = string.Empty;
     }
 
     private void AddFunction()
