@@ -3,8 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
 using FluentResults;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
@@ -19,11 +21,15 @@ public class EngineService : IEngineService
 
     private readonly EngineManager _manager;
 
-    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger)
+    private bool _resetEnginesWithoutState;
+
+    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IConfiguration config)
     {
         _commandSystem = commandSystem;
         _logger = logger;
         _manager = new EngineManager(logger);
+
+        _resetEnginesWithoutState = !string.Equals(config["resetEnginesWithoutState"] ?? "true", "false", StringComparison.InvariantCultureIgnoreCase);
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
     }
@@ -47,7 +53,12 @@ public class EngineService : IEngineService
 
         _logger.LogInformation($"{session} acquired {engine}");
 
-        return Result.Ok(engineManagerResult.Value);
+        if (_resetEnginesWithoutState && engineManagerResult.Value.IsNew)
+        {
+            await ResetEngine(engine);
+        }
+
+        return Result.Ok(engineManagerResult.Value.Engine);
     }
 
     public async Task<Result> ReleaseEngine(Session session, int engineId)
@@ -112,5 +123,14 @@ public class EngineService : IEngineService
     public Result IsEngineAcquiredBySession(Session session, int engineId)
     {
         return _manager.GetActiveEngine(engineId, session).ToResult();
+    }
+
+    private async Task ResetEngine(Engine engine)
+    {
+        await _commandSystem.HandleEngineSpeed(engine, 0, Direction.Backwards, Direction.Forwards);
+        foreach (var function in engine.Functions)
+        {
+            await _commandSystem.HandleEngineFunction(engine, function.Number, State.Off);
+        }
     }
 }

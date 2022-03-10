@@ -63,7 +63,7 @@ public class Startup
         services.AddSingleton(p =>
             new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>(), p.GetRequiredService<ILogger<StatusService>>()));
         services.AddSingleton<IEngineService>(p =>
-            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>()));
+            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>(), Configuration));
 
         services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
     }
