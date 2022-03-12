@@ -28,7 +28,11 @@ public class SessionService
 
     public delegate void SessionTimeoutHandler(Session session);
 
+    public delegate void NoUsersRemainingHandler();
+
     public event SessionTimeoutHandler? SessionTimeout;
+
+    public event NoUsersRemainingHandler? NoUsersRemaining;
 
     public Session? TryGetSession(string connectionId)
     {
@@ -62,6 +66,11 @@ public class SessionService
         }
 
         SessionTimeout?.Invoke(connection);
+
+        if (_sessions.IsEmpty)
+        {
+            NoUsersRemaining?.Invoke();
+        }
     }
 
     public void RenameSessionUser(string sessionId, string newUsername)

@@ -60,8 +60,13 @@ public class Startup
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
         services.AddSingleton(p => CommandSystemFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandSystemBase>>()));
-        services.AddSingleton(p =>
-            new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>(), p.GetRequiredService<ILogger<StatusService>>()));
+        services.AddSingleton(p => new StatusService(
+                p.GetRequiredService<CommandSystemBase>(),
+                p.GetRequiredService<IHubContext<TauHub>>(),
+                p.GetRequiredService<ILogger<StatusService>>(),
+                p.GetRequiredService<SessionService>(),
+                Configuration));
+
         services.AddSingleton<IEngineService>(p =>
             new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>(), Configuration));
 

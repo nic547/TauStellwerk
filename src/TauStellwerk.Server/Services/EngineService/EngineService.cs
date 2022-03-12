@@ -21,7 +21,7 @@ public class EngineService : IEngineService
 
     private readonly EngineManager _manager;
 
-    private bool _resetEnginesWithoutState;
+    private readonly bool _resetEnginesWithoutState;
 
     public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IConfiguration config)
     {
@@ -29,7 +29,7 @@ public class EngineService : IEngineService
         _logger = logger;
         _manager = new EngineManager(logger);
 
-        _resetEnginesWithoutState = !string.Equals(config["resetEnginesWithoutState"] ?? "true", "false", StringComparison.InvariantCultureIgnoreCase);
+        _resetEnginesWithoutState = config.GetValue("ResetEnginesWithoutState", true);
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
     }

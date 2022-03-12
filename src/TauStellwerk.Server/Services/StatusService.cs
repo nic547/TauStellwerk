@@ -5,6 +5,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
@@ -21,11 +22,16 @@ public class StatusService
     private State _isRunning;
     private string _lastActionUsername = "SYSTEM";
 
-    public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext, ILogger<StatusService> logger)
+    public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext, ILogger<StatusService> logger, SessionService sessionService, IConfiguration configuration)
     {
         _system = system;
         _hubContext = hubContext;
         _logger = logger;
+
+        if (configuration.GetValue<bool>("StopOnLastUserDisconnect", true))
+        {
+            sessionService.NoUsersRemaining += async () => await HandleLastUserDisconnected();
+        }
 
         _system.StatusChanged += HandleStatusEvent;
         _system.CheckState();
@@ -44,6 +50,13 @@ public class StatusService
         _lastActionUsername = username;
 
         await task;
+    }
+
+    private async Task HandleLastUserDisconnected()
+    {
+        await HandleStatusCommand(State.Off, "SYSTEM");
+        _logger.LogInformation("Last user disconnected, stopping CommandStation");
+
     }
 
     private void HandleStatusEvent(State state)
