@@ -3,11 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Threading.Tasks;
 using FluentResults;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
@@ -18,18 +17,16 @@ public class EngineService : IEngineService
 {
     private readonly CommandSystemBase _commandSystem;
     private readonly ILogger _logger;
+    private readonly TauStellwerkOptions _options;
 
     private readonly EngineManager _manager;
 
-    private readonly bool _resetEnginesWithoutState;
-
-    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IConfiguration config)
+    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IOptions<TauStellwerkOptions> options)
     {
         _commandSystem = commandSystem;
         _logger = logger;
         _manager = new EngineManager(logger);
-
-        _resetEnginesWithoutState = config.GetValue("ResetEnginesWithoutState", true);
+        _options = options.Value;
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
     }
@@ -53,7 +50,7 @@ public class EngineService : IEngineService
 
         _logger.LogInformation($"{session} acquired {engine}");
 
-        if (_resetEnginesWithoutState && engineManagerResult.Value.IsNew)
+        if (_options.ResetEnginesWithoutState && engineManagerResult.Value.IsNew)
         {
             await ResetEngine(engine);
         }
