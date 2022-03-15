@@ -3,7 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.IO.Ports;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,6 +18,8 @@ public class DccExSerialSystem : CommandSystemBase
 {
     private readonly ILogger<CommandSystemBase> _logger;
     private readonly SerialPort _serialPort;
+
+    private readonly SemaphoreSlim _writeSemaphore = new(1);
 
     private State? _currentState;
 
@@ -73,35 +77,30 @@ public class DccExSerialSystem : CommandSystemBase
         });
     }
 
-    public override Task HandleSystemStatus(State state)
+    public override async Task HandleSystemStatus(State state)
     {
         _currentState = state;
-        _serialPort.WriteLine(state == State.On ? "<1>" : "<0>");
-        return Task.CompletedTask;
+        await Send(state == State.On ? "<1>" : "<0>");
     }
 
-    public override Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
+    public override async Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
-        _serialPort.WriteLine($"<t 1 {engine.Address} {speed} {(newDirection == Direction.Forwards ? 1 : 0)}>");
-        return Task.CompletedTask;
+        await Send($"<t 1 {engine.Address} {speed} {(newDirection == Direction.Forwards ? 1 : 0)}>");
     }
 
-    public override Task HandleEngineEStop(Engine engine, Direction priorDirection)
+    public override async Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {
-        _serialPort.WriteLine($"<t 1 {engine.Address} -1 {(priorDirection == Direction.Forwards ? 1 : 0)}>");
-        return Task.CompletedTask;
+        await Send($"<t 1 {engine.Address} -1 {(priorDirection == Direction.Forwards ? 1 : 0)}>");
     }
 
-    public override Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
+    public override async Task HandleEngineFunction(Engine engine, byte functionNumber, State state)
     {
-        _serialPort.WriteLine($"<F {engine.Address} {functionNumber} {(state == State.On ? "1" : "0")}>");
-        return Task.CompletedTask;
+        await Send($"<F {engine.Address} {functionNumber} {(state == State.On ? "1" : "0")}>");
     }
 
-    public override Task CheckState()
+    public override async Task CheckState()
     {
-        _serialPort.WriteLine("<s>");
-        return Task.CompletedTask;
+        await Send("<s>");
     }
 
     protected override void OnStatusChange(State state)
@@ -112,5 +111,16 @@ public class DccExSerialSystem : CommandSystemBase
             _currentState = state;
             base.OnStatusChange(state);
         }
+    }
+
+    private async Task Send(string message)
+    {
+        if (!await _writeSemaphore.WaitAsync(2_500))
+        {
+            return;
+        }
+
+        _serialPort.WriteLine(message);
+        _writeSemaphore.Release();
     }
 }

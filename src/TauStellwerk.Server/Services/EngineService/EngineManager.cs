@@ -24,13 +24,15 @@ public class EngineManager
         _logger = logger;
     }
 
-    public Result<EngineFullDto> AddActiveEngine(Engine engine, Session session)
+    public Result<(EngineFullDto Engine, bool IsNew)> AddActiveEngine(Engine engine, Session session)
     {
         _inactiveEngineStates.TryGetValue(engine.Id, out var state);
+        var isStateNew = false;
 
         if (state == null || engine.Functions.Count != state.FunctionStates.Count)
         {
             state = new EngineState(engine.Functions.Count);
+            isStateNew = true;
         }
 
         var success = _activeEngines.TryAdd(engine.Id, new ActiveEngine(session, engine, state));
@@ -45,7 +47,7 @@ public class EngineManager
 
         _inactiveEngineStates.TryRemove(engine.Id, out _);
 
-        return Result.Ok(dto);
+        return Result.Ok((dto, isStateNew));
     }
 
     public Result<ActiveEngine> GetActiveEngine(int id, Session session)

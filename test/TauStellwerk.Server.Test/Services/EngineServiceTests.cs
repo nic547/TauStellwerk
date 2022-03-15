@@ -6,8 +6,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentResults.Extensions.FluentAssertions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base.Model;
@@ -191,8 +193,14 @@ public class EngineServiceTests
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
         var loggerMock = new Mock<ILogger<EngineService>>();
+        var configMock = new Mock<IConfiguration>();
 
-        EngineService engineService = new(mock.Object, sessionService, loggerMock.Object);
+        TauStellwerkOptions options = new()
+        {
+            ResetEnginesWithoutState = true,
+        };
+
+        EngineService engineService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
         return (engineService, session);
     }
 

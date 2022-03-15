@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
@@ -51,6 +52,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddLogging();
+        services.Configure<TauStellwerkOptions>(Configuration);
+
         services.AddRazorPages();
         services.AddSignalR()
             .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
@@ -60,10 +63,18 @@ public class Startup
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
         services.AddSingleton(p => CommandSystemFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandSystemBase>>()));
-        services.AddSingleton(p =>
-            new StatusService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<IHubContext<TauHub>>(), p.GetRequiredService<ILogger<StatusService>>()));
-        services.AddSingleton<IEngineService>(p =>
-            new EngineService(p.GetRequiredService<CommandSystemBase>(), p.GetRequiredService<SessionService>(), p.GetRequiredService<ILogger<EngineService>>()));
+        services.AddSingleton(p => new StatusService(
+                p.GetRequiredService<CommandSystemBase>(),
+                p.GetRequiredService<IHubContext<TauHub>>(),
+                p.GetRequiredService<ILogger<StatusService>>(),
+                p.GetRequiredService<SessionService>(),
+                p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
+
+        services.AddSingleton<IEngineService>(p => new EngineService(
+            p.GetRequiredService<CommandSystemBase>(),
+            p.GetRequiredService<SessionService>(),
+            p.GetRequiredService<ILogger<EngineService>>(),
+            p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
         services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
     }

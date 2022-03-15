@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Commands;
 using TauStellwerk.Database.Model;
@@ -16,14 +17,16 @@ public class EngineService : IEngineService
 {
     private readonly CommandSystemBase _commandSystem;
     private readonly ILogger _logger;
+    private readonly TauStellwerkOptions _options;
 
     private readonly EngineManager _manager;
 
-    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger)
+    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IOptions<TauStellwerkOptions> options)
     {
         _commandSystem = commandSystem;
         _logger = logger;
         _manager = new EngineManager(logger);
+        _options = options.Value;
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
     }
@@ -47,7 +50,12 @@ public class EngineService : IEngineService
 
         _logger.LogInformation($"{session} acquired {engine}");
 
-        return Result.Ok(engineManagerResult.Value);
+        if (_options.ResetEnginesWithoutState && engineManagerResult.Value.IsNew)
+        {
+            await ResetEngine(engine);
+        }
+
+        return Result.Ok(engineManagerResult.Value.Engine);
     }
 
     public async Task<Result> ReleaseEngine(Session session, int engineId)
@@ -112,5 +120,14 @@ public class EngineService : IEngineService
     public Result IsEngineAcquiredBySession(Session session, int engineId)
     {
         return _manager.GetActiveEngine(engineId, session).ToResult();
+    }
+
+    private async Task ResetEngine(Engine engine)
+    {
+        await _commandSystem.HandleEngineSpeed(engine, 0, Direction.Backwards, Direction.Forwards);
+        foreach (var function in engine.Functions)
+        {
+            await _commandSystem.HandleEngineFunction(engine, function.Number, State.Off);
+        }
     }
 }
