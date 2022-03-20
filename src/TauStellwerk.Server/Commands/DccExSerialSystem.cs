@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;

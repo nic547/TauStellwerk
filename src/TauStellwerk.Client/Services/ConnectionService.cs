@@ -43,7 +43,6 @@ public class ConnectionService : IConnectionService
         {
             var baseAddress = new Uri(settings.ServerAddress);
             var hubPath = new Uri(baseAddress, "/hub");
-            Console.WriteLine(hubPath);
 
             _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
             {
@@ -53,8 +52,6 @@ public class ConnectionService : IConnectionService
                 opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
             }).Build();
         }
-
-        var username = (await _settingsService.GetSettings()).Username;
 
         await _hubConnection.StartAsync();
 

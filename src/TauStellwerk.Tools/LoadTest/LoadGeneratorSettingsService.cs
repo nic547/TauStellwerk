@@ -18,7 +18,7 @@ public class LoadGeneratorSettingsService : ISettingsService
     {
         _settings = new ImmutableSettings(
             $"Random User {random.Next(999_999)}",
-            options.Uri.ToString(),
+            options.Uri,
             "ThisIsNotATheme");
     }
 
