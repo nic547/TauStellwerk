@@ -20,8 +20,6 @@ public class DccExSerialSystem : CommandSystemBase
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
-    private State? _currentState;
-
     public DccExSerialSystem(IConfiguration configuration, ILogger<CommandSystemBase> logger)
         : base(configuration)
     {
@@ -78,7 +76,6 @@ public class DccExSerialSystem : CommandSystemBase
 
     public override async Task HandleSystemStatus(State state)
     {
-        _currentState = state;
         await Send(state == State.On ? "<1>" : "<0>");
     }
 
@@ -100,16 +97,6 @@ public class DccExSerialSystem : CommandSystemBase
     public override async Task CheckState()
     {
         await Send("<s>");
-    }
-
-    protected override void OnStatusChange(State state)
-    {
-        // Only actually notify of state changes when they aren't known yet.
-        if (state != _currentState)
-        {
-            _currentState = state;
-            base.OnStatusChange(state);
-        }
     }
 
     private async Task Send(string message)
