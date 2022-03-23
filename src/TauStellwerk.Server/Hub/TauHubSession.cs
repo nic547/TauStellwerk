@@ -27,7 +27,7 @@ public partial class TauHub
 
         if (!string.IsNullOrEmpty(usernameFromHeader))
         {
-            username = usernameFromHeader;
+            username = usernameFromHeader[7..]; // Strip "Bearer " from the start of the string
         }
 
         _sessionService.HandleConnected(Context.ConnectionId, username);

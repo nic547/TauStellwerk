@@ -5,7 +5,6 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Model;
@@ -20,7 +19,7 @@ public class StatusService
     private readonly IHubContext<TauHub> _hubContext;
     private readonly ILogger<StatusService> _logger;
 
-    private State _isRunning;
+    private State? _lastKnownState;
     private string _lastActionUsername = "SYSTEM";
 
     public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext, ILogger<StatusService> logger, SessionService sessionService, IOptions<TauStellwerkOptions> options)
@@ -40,14 +39,14 @@ public class StatusService
 
     public SystemStatus CheckStatus()
     {
-        return new() { State = _isRunning, LastActionUsername = _lastActionUsername };
+        return new() { State = _lastKnownState ?? State.Off, LastActionUsername = _lastActionUsername };
     }
 
     public async Task HandleStatusCommand(State state, string username)
     {
         var task = _system.HandleSystemStatus(state);
 
-        _isRunning = state;
+        _lastKnownState = state;
         _lastActionUsername = username;
 
         await task;
@@ -61,13 +60,18 @@ public class StatusService
 
     private void HandleStatusEvent(State state)
     {
-        _isRunning = state;
+        if (_lastKnownState == state)
+        {
+            return;
+        }
+
+        _lastKnownState = state;
         _lastActionUsername = "SYSTEM";
         _logger.LogInformation($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
 
         SystemStatus systemStatus = new()
         {
-            State = _isRunning,
+            State = state,
             LastActionUsername = _lastActionUsername,
         };
         _hubContext.Clients.All.SendAsync("HandleStatusChange", systemStatus);
