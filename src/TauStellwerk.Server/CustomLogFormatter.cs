@@ -80,11 +80,3 @@ public sealed class CustomLogFormatter : ConsoleFormatter
         };
     }
 }
-
-public static class CustomLoggerExtension
-{
-    public static void LogInformationHighlighted(this ILogger logger, string text)
-    {
-        logger.LogInformation($"\x1B[1m\x1B[32m{text}\x1B[39m\x1B[22m");
-    }
-}
