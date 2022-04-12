@@ -44,9 +44,12 @@
     </div>
 </div>
 @code {
+
+    private static readonly int EnginesPerPage = 20;
+    
     private readonly List<EngineOverview> _engines = new();
 
-    private bool CannotMoveForward => !_engines.Any();
+    private bool CannotMoveForward => _engines.Count != EnginesPerPage;
     private bool CannotMoveBackward => _currentPage <= 0;
 
     private int _currentPage = 0;
