@@ -30,7 +30,7 @@
             <div id="EngineSelectionContainer" class="selection-grid">
                 @foreach (var engine in _engines)
                 {
-                    <SelectionEngine Engine="engine" />
+                    <SelectionEngine Engine="engine"/>
                 }
             </div>
         </div>
@@ -44,9 +44,12 @@
     </div>
 </div>
 @code {
+
+    private static readonly int EnginesPerPage = 20;
+    
     private readonly List<EngineOverview> _engines = new();
 
-    private bool CannotMoveForward => !_engines.Any();
+    private bool CannotMoveForward => _engines.Count != EnginesPerPage;
     private bool CannotMoveBackward => _currentPage <= 0;
 
     private int _currentPage = 0;
@@ -102,6 +105,7 @@
     private async Task ChangePage(int change)
     {
         _currentPage += change;
+        _engines.Clear();
 
         _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
@@ -111,9 +115,8 @@
             _isSortedDescending,
             _showHidden);
 
-        _engines.Clear();
+        
         _engines.AddRange(engines);
-
         StateHasChanged();
     }
 

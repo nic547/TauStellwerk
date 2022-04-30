@@ -58,7 +58,7 @@ public class Startup
         services.AddSignalR()
             .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
 
-        services.AddDbContext<StwDbContext>(options =>
+        services.AddDbContextPool<StwDbContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("Database")));
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));

@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -17,16 +18,20 @@ public static class LoadTester
 {
     public static async Task Run(LoadTestOptions options)
     {
-        var simulators = new List<ClientSimulator>();
+        var simulators = new ConcurrentBag<ClientSimulator>();
 
         var actions = GetAvailableClientActions();
 
-        for (var i = 0; i < options.Clients; i++)
+        await Parallel.ForEachAsync(Enumerable.Range(0, options.Clients), async (i, token) =>
         {
             var sim = await ClientSimulator.Create(actions, options, i + 1);
-            sim.Start();
             simulators.Add(sim);
-        }
+        });
+
+        Parallel.ForEach(simulators, (sim) =>
+        {
+            sim.Start();
+        });
 
         await Task.Delay(options.Time * 1000);
 
@@ -44,7 +49,7 @@ public static class LoadTester
         Console.WriteLine($"99th Percentile: {results.Get99ThPercentile()} ms");
     }
 
-    private static CounterDictionary GatherResults(List<ClientSimulator> simulators)
+    private static CounterDictionary GatherResults(IEnumerable<ClientSimulator> simulators)
     {
         var results = new CounterDictionary();
 

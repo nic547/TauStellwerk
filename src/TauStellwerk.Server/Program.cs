@@ -58,9 +58,9 @@ public static class Program
 
         if (dbContext.Database.GetPendingMigrations().Any())
         {
-            logger.LogInformationHighlighted("Applying database migrations.");
+            logger.LogInformation("Applying database migrations.");
             dbContext.Database.Migrate();
-            logger.LogInformationHighlighted("Database migrations applied.");
+            logger.LogInformation("Database migrations applied.");
         }
         else
         {

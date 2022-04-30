@@ -71,12 +71,23 @@ public class ConnectionService : IConnectionService
                 }
                 catch (NotSupportedException)
                 {
-                    // Not all platforms support the certificate handling, for example Blazor WebAssembly doesn't.
-                    // Luckily the invalid certificates are handled by the browser in that case.
+                    // Not supported on a browser, browsers handle this themselves.
                 }
             }
 
             return handler;
         };
+
+        try
+        {
+            opts.WebSocketConfiguration = socket =>
+            {
+                socket.RemoteCertificateValidationCallback = (_, _, _, _) => true;
+            };
+        }
+        catch (PlatformNotSupportedException)
+        {
+            // Not supported on a browser, browsers handle this themselves.
+        }
     }
 }
