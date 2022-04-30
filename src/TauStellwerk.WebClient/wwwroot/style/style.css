@@ -6,9 +6,16 @@
 @media (min-width: 600px) {
 	:root {
 		--engine-controller-width: calc((100vw - 3 * 16px) / 2);
+	}
+}
+
+@media (min-width: 800px) {
+	:root {
 		--engine-selection-width: calc((100vw - 60px - 2 * 16px) / 2);
 	}
 }
+
+
 
 @media (min-width: 1000px) {
 	:root {
@@ -16,10 +23,15 @@
 	}
 }
 
+@media (min-width: 1300px) {
+	:root {
+		--engine-selection-width: calc((100vw - 60px - 4 * 16px) / 4);
+	}
+}
+
 @media (min-width: 1400px) {
 	:root {
 		--engine-controller-width: calc((100vw - 5 * 16px) / 4);
-		--engine-selection-width: calc((100vw - 60px - 4 * 16px) / 4);
 	}
 }
 
@@ -135,19 +147,19 @@ footer {
 	width: var(--engine-selection-width);
 }
 
-@media (min-width: 769px) {
+@media (min-width: 800px) {
 	.selection-grid {
 		grid-template-columns: 1fr 1fr;
 	}
 }
 
-@media (min-width: 1216px) {
+@media (min-width: 1300px) {
 	.selection-grid {
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
 }
 
-@media (min-width: 1408px) {
+@media (min-width: 1800px) {
 	.selection-grid {
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
