@@ -5,7 +5,8 @@ Currently the project consists of a server application with a included web-based
 
 If you have any questions, feedback or any other comments, feel free to open a issue or pm me(nic547#2614) on discord.
 
-![Screenshot of the web app](DesktopWebappScreenshot.png)
+![Screenshot of the web app on a computer](./doc/img/DesktopWebClientScreenshot.png)
+![Screenshot of the webapp on a mobile device](./doc/img/MobileWebClientScreenshot.png)
 
 ## Current State
 The software is still in a very experimental state. Currently only the ESU Command Station (ECoS) is supported.
@@ -13,7 +14,7 @@ If you're interested in using this project, you should understand that things mi
 
 ## Overview
 
-Currently the whole project is based on the .NET 6 Release Candidate.
+Currently the whole project is based on .NET 6.
 No ready-to-use builds of the project are provided yet.
 
 #### MacOS/iOS
@@ -22,9 +23,7 @@ Using the cross-platform .NET software framework does mean that the TauStellwerk
 ### Webserver
 Core of the TauStellwerk software is the TauStellwerk.Server component. It handles communication between the CommandStation and the clients. Can, for example, be run on a Raspberry Pi.
 
-For the sake of simplicity, there are no "accounts". Any user can choose whatever username he desires. Access control has be done by restricting access to the server. 
-
-For the optional image processing the server relies on the ImageMagick application. It is not included and should be installed separately if desired. Both IMv6 and IMv7 are supported.
+For the sake of simplicity, there are no "accounts". Any user can choose whatever username he desires. Access control has be done by restricting access to the server.
 
 ### Webapp
 The Webapp is based on Blazor WebAssembly and should run on any recent version of the commonly used Browsers. Generally the application is tested with current versions of Chrome, Firefox and Edge. It's expected that the webapp will not necessarily have feature-parity with the dedicated applications and be more of a "lite" version.

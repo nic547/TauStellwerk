@@ -17,7 +17,7 @@ A Command system that does nothing.
     "Type":"ConsoleCommandSystem"
 }
 ```
-### EsuCommandStation
+### ECoS
 ```
 "CommandSystem":{
     "Type":"EsuCommandStation",
@@ -25,6 +25,21 @@ A Command system that does nothing.
     "Port": 15471
 }
 ```
+
+### DCC++ EX via serial connection
+
+```
+"CommandSystem": {
+"Type": "DccExSerialSystem",
+"SerialPort": "COM3"
+},
+```
+
+`SerialPort` identifies the USB-to-Serial adapter via which TauStellwerk can communicate 
+with DCC++ Ex. If you installed DCC++ EX on your board yourself, you already had to select it to upload
+the application.
+On Windows such devices are usually called `COMX` (where X is any number), 
+on Linux something like `/dev/ttyACMX` or `/dev/ttyUSBX` (X being any number again).
 
 ## Misc
 
