@@ -7,3 +7,27 @@
     padding-left: 20px;
     padding-right: 20px;
 }
+
+.ec-grid-direction {
+    grid-area: direction;
+    display: flex;
+}
+
+.ec-grid-direction > button {
+    flex: auto;
+}
+
+.ec-grid-slider {
+    grid-area: slider;
+}
+
+.ec-grid-slider > input {
+    -webkit-appearance: slider-vertical; /* Ensures the throttle is display vertical in Chrome and Edge (Chrome) */
+    width: 100%;
+    margin: auto;
+    height: 98%
+}
+
+.ec-grid-speed {
+    grid-area: speed;
+}
