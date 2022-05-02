@@ -124,7 +124,7 @@ public class EngineService
 
         var connection = await _service.GetHubConnection();
         _activeEngines.Remove(engine.Id);
-        return await connection.InvokeAsync<ResultDto>("TryDeleteEngine", engine.Id);
+        return await connection.InvokeAsync<ResultDto>("DeleteEngine", engine.Id);
     }
 
     private async Task SendSpeed((int Id, int Speed, Direction Direction) arg)
