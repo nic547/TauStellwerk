@@ -112,13 +112,15 @@ public class Engine
 
     public async Task UpdateWith(EngineFullDto engineDto, StwDbContext dbContext)
     {
-        Name = HttpUtility.HtmlEncode(engineDto.Name);
+        Name = HttpUtility.HtmlEncode(engineDto.Name).Normalize();
         TopSpeed = engineDto.TopSpeed;
         Address = engineDto.Address;
 
-        Tags.RemoveAll(t => !engineDto.Tags.Contains(t.Name));
+        var incomingTags = engineDto.Tags.Select(t => HttpUtility.HtmlEncode(t.Normalize())).Distinct().ToList();
 
-        var newTags = engineDto.Tags.Where(newTag => Tags.All(existingTag => existingTag.Name != newTag)).ToList();
+        Tags.RemoveAll(t => !incomingTags.Contains(t.Name));
+
+        var newTags = incomingTags.Where(newTag => Tags.All(existingTag => existingTag.Name != newTag)).ToList();
         Tags.AddRange(await Tag.GetTagsFromStrings(newTags, dbContext));
 
         UpdateFunctions(engineDto.Functions);
@@ -134,17 +136,18 @@ public class Engine
 
         foreach (var updateFunction in updateFunctions)
         {
+            var newFunctionName = HttpUtility.HtmlEncode(updateFunction.Name.Normalize());
             var matchingExistingFunction = Functions.SingleOrDefault(f => f.Number == updateFunction.Number);
 
             if (matchingExistingFunction == null)
             {
-                Functions.Add(new DccFunction(updateFunction.Number, updateFunction.Name));
+                Functions.Add(new DccFunction(updateFunction.Number, newFunctionName));
                 continue;
             }
 
-            if (matchingExistingFunction.Name != updateFunction.Name)
+            if (matchingExistingFunction.Name != newFunctionName)
             {
-                matchingExistingFunction.Name = updateFunction.Name;
+                matchingExistingFunction.Name = newFunctionName;
             }
         }
     }
