@@ -86,27 +86,9 @@
 	height: calc(var(--engine-controller-width) / 2);
 }
 
-	.ec-grid-image > img {
-		width: var(--engine-controller-width);
-		height: calc(var(--engine-controller-width) / 2);
-	}
-
-.ec-grid-slider {
-	grid-area: slider;
-}
-
-.ec-grid-slider > input {
-	-webkit-appearance: slider-vertical; /* Ensures the throttle is display vertical in Chrome and Edge (Chrome) */
-	width: 4em;
-	height: 98%
-}
-
-.ec-grid-direction {
-	grid-area: direction;
-}
-
-.ec-grid-speed {
-	grid-area: speed;
+.ec-grid-image > img {
+	width: var(--engine-controller-width);
+	height: calc(var(--engine-controller-width) / 2);
 }
 
 .ec-grid-functions {
