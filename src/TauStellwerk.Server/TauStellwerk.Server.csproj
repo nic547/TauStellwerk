@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <None Remove="StwDatabase.db" />
+    <None Remove="originalImages\**" />
+    <None Remove="generatedImages\**" />
   </ItemGroup>
 
   <ItemGroup>
