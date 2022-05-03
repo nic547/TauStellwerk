@@ -10,7 +10,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base.Model;
 
@@ -112,11 +111,11 @@ public class Engine
 
     public async Task UpdateWith(EngineFullDto engineDto, StwDbContext dbContext)
     {
-        Name = HttpUtility.HtmlEncode(engineDto.Name).Normalize();
+        Name = engineDto.Name.Normalize();
         TopSpeed = engineDto.TopSpeed;
         Address = engineDto.Address;
 
-        var incomingTags = engineDto.Tags.Select(t => HttpUtility.HtmlEncode(t.Normalize())).Distinct().ToList();
+        var incomingTags = engineDto.Tags.Select(t => t.Normalize()).Distinct().ToList();
 
         Tags.RemoveAll(t => !incomingTags.Contains(t.Name));
 
@@ -136,7 +135,7 @@ public class Engine
 
         foreach (var updateFunction in updateFunctions)
         {
-            var newFunctionName = HttpUtility.HtmlEncode(updateFunction.Name.Normalize());
+            var newFunctionName = updateFunction.Name.Normalize();
             var matchingExistingFunction = Functions.SingleOrDefault(f => f.Number == updateFunction.Number);
 
             if (matchingExistingFunction == null)
