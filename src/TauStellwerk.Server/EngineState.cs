@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TauStellwerk.Base.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk;
 
 public class EngineState
 {

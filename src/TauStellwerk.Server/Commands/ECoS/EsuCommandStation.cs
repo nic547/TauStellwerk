@@ -123,18 +123,6 @@ public class EsuCommandStation : CommandSystemBase
         await _connectionHandler.SendCommandAsync($"set({engineData.Id},func[{functionNumber},{(state == State.On ? "1" : "0")}])");
     }
 
-    /// <inheritdoc/>
-    public override Task<bool> TryAcquireEngine(Engine engine)
-    {
-        return Task.FromResult(true);
-    }
-
-    /// <inheritdoc/>
-    public override Task<bool> TryReleaseEngine(Engine engine)
-    {
-        return Task.FromResult(true);
-    }
-
     public override async Task CheckState()
     {
         var statusMessage = await _connectionHandler.SendCommandAsync("get(1,status)");

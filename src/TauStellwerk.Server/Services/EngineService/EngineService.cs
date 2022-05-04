@@ -66,7 +66,7 @@ public class EngineService : IEngineService
             return activeEngineResult.ToResult();
         }
 
-        var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngineResult.Value.Engine);
+        var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngineResult.Value.Engine, activeEngineResult.Value.State);
         return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
     }
 
