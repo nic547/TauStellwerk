@@ -6,7 +6,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentResults.Extensions.FluentAssertions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -209,7 +208,7 @@ public class EngineServiceTests
         var configMock = new Mock<IConfiguration>();
         var mock = new Mock<CommandSystemBase>(configMock.Object);
         mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
-        mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>()).Result).Returns(true);
+        mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>(), It.IsAny<EngineState>()).Result).Returns(true);
 
         return mock;
     }

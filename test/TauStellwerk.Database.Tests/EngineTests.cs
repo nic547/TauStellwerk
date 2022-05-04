@@ -3,9 +3,12 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Database.Model;
 
 namespace TauStellwerk.Database.Tests;
@@ -13,18 +16,29 @@ namespace TauStellwerk.Database.Tests;
 /// <summary>
 /// Contains tests related to <see cref="Engine"/>.
 /// </summary>
-public class EngineTests
+public class EngineTests : ContextTestBase
 {
-    /// <summary>
-    /// Test that after serializing and deserializing via json the "new" engine object has the same values as the "old" one.
-    /// </summary>
     [Test]
-    public void EnginesMatchAfterJson()
+    public async Task EngineTagsAreNormalized()
     {
-        var expectedEngine = TestDataHelper.CreateTestEngine();
-        var json = JsonSerializer.Serialize(expectedEngine);
-        var resultEngine = JsonSerializer.Deserialize<Engine>(json);
+        EngineFullDto dto = new()
+        {
+            Tags = new List<string>
+            {
+                "\x00E4",
+                "\x0061\x0308",
+            },
+        };
 
-        resultEngine.Should().BeEquivalentTo(expectedEngine);
+        Engine engine = new();
+        var context = GetContext();
+
+        await engine.UpdateWith(dto, context);
+        await context.Engines.AddAsync(engine);
+        await context.SaveChangesAsync();
+
+        var tags = await context.Tags.ToListAsync();
+
+        tags.Should().HaveCount(1);
     }
 }

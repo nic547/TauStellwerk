@@ -99,6 +99,23 @@ public class DccExSerialSystem : CommandSystemBase
         await Send("<s>");
     }
 
+    public override async Task<bool> TryReleaseEngine(Engine engine, EngineState state)
+    {
+        if (state.Throttle != 0)
+        {
+            // Forgetting the engine would cause it to stop which might surprise a user.
+            return true;
+        }
+
+        await Send($"<- {engine.Address}>");
+
+        // Forgetting an engine will send it a e-stop without the direction bit set (backwards)
+        // We need to account for this for now
+        // Removal depends on https://github.com/DCC-EX/CommandStation-EX/pull/233 getting merged and making it into a release.
+        state.Direction = Direction.Backwards;
+        return true;
+    }
+
     private async Task Send(string message)
     {
         if (!await _writeSemaphore.WaitAsync(2_500))

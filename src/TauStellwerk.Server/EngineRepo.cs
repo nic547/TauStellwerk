@@ -111,6 +111,7 @@ public class EngineRepo
             engine = await _dbContext.Engines
                 .Include(x => x.Functions)
                 .Include(x => x.Tags)
+                .AsSingleQuery()
                 .SingleOrDefaultAsync(x => x.Id == engineDto.Id);
 
             if (engine == null)
@@ -148,6 +149,7 @@ public class EngineRepo
         var engine = await _dbContext.Engines
             .Include(e => e.Images)
             .Include(e => e.Functions)
+            .AsSingleQuery()
             .SingleOrDefaultAsync(e => e.Id == id);
         if (engine == null)
         {

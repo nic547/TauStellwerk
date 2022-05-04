@@ -64,8 +64,9 @@ public abstract class CommandSystemBase
     /// <see cref="TryAcquireEngine"/> to "acquire" an engine again.
     /// </summary>
     /// <param name="engine">The engine to release.</param>
+    /// <param name="state"><see cref="EngineState"/>representing the current state of the engine.</param>
     /// <returns>A bool indicating whether the operation was successful.</returns>
-    public virtual Task<bool> TryReleaseEngine(Engine engine)
+    public virtual Task<bool> TryReleaseEngine(Engine engine, EngineState state)
     {
         return Task.FromResult(true);
     }
