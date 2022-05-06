@@ -8,25 +8,15 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Database.Model;
 
-/// <summary>
-/// A Function as programmed on the physical dcc decoder in a model engine.
-/// </summary>
 public class DccFunction
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DccFunction"/> class.
-    /// </summary>
-    /// <param name="number"><see cref="Number"/>.</param>
-    /// <param name="name"><see cref="Name"/>.</param>
-    public DccFunction(byte number, string name)
+    public DccFunction(byte number, string name, int duration)
     {
         Number = number;
         Name = name;
+        Duration = duration;
     }
 
-    /// <summary>
-    /// Gets or sets the Id of the Function as per Database.
-    /// </summary>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
@@ -35,13 +25,12 @@ public class DccFunction
     /// </summary>
     public byte Number { get; set; }
 
-    /// <summary>
-    /// Gets or sets the name that this function should have.
-    /// </summary>
     public string Name { get; set; }
+
+    public int Duration { get; set; }
 
     public FunctionDto ToFunctionDto()
     {
-        return new(Number, Name);
+        return new(Number, Name, Duration);
     }
 }

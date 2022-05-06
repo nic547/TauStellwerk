@@ -7,10 +7,11 @@ namespace TauStellwerk.Base.Model;
 
 public class FunctionDto
 {
-    public FunctionDto(byte number, string name)
+    public FunctionDto(byte number, string name, int duration)
     {
         Number = number;
         Name = name;
+        Duration = duration;
     }
 
     /// <summary>
@@ -24,6 +25,11 @@ public class FunctionDto
     public string Name { get; set; }
 
     public State State { get; set; } = State.Off;
+
+    /// <summary>
+    /// Gets or sets the duration of a function in milliseconds. Zero or lower represent latching functions (infinite duration).
+    /// </summary>
+    public int Duration { get; set; } = -1;
 
     public override string ToString() => $"F{Number} - {Name}";
 }

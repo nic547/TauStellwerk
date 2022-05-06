@@ -1,9 +1,19 @@
 .function-container {
     display: grid;
-    grid-template-columns: 40px minmax(min-content, 300px);
+    grid-template-columns: 40px minmax(min-content, 300px) minmax(min-content, 20em);
     margin-top: 2px;
+    align-items: baseline;
 }
 
 .function-container > label, input {
     margin: 1px;
+}
+
+.function-duration {
+    align-items: baseline;
+    margin-left: 5px;
+}
+
+.function-duration > input {
+    width: 6em;
 }

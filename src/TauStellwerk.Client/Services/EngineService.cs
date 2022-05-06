@@ -92,6 +92,12 @@ public class EngineService
 
     public async Task ToggleFunction(EngineFull engine, Function function)
     {
+        if (function.Duration > 0 && function.State == State.On)
+        {
+            // Momentary functions don't need to be "turned off", that's handled by the server.
+            return;
+        }
+
         var connection = await _service.GetHubConnection();
         if (function.State == State.Off)
         {

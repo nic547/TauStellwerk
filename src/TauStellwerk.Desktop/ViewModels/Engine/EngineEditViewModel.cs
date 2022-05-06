@@ -90,7 +90,7 @@ public partial class EngineEditViewModel : ViewModelBase
         var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
         lastFunctionNumber++;
         lastFunctionNumber ??= 0;
-        Engine.Functions.Add(new Function((byte)lastFunctionNumber, string.Empty));
+        Engine.Functions.Add(new Function((byte)lastFunctionNumber, string.Empty, 0));
     }
 
     [ICommand]
