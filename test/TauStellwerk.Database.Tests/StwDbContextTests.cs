@@ -60,7 +60,7 @@ public class StwDbContextTests : ContextTestBase
     [Test]
     public void UpdatePersistsTest()
     {
-        var testFunction = new DccFunction(1, "Headlights");
+        var testFunction = new DccFunction(1, "Headlights", -1);
 
         var originalEngine = TestDataHelper.CreateTestEngine();
         var context = GetContext();

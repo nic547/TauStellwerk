@@ -140,14 +140,12 @@ public class Engine
 
             if (matchingExistingFunction == null)
             {
-                Functions.Add(new DccFunction(updateFunction.Number, newFunctionName));
+                Functions.Add(new DccFunction(updateFunction.Number, newFunctionName, updateFunction.Duration));
                 continue;
             }
 
-            if (matchingExistingFunction.Name != newFunctionName)
-            {
-                matchingExistingFunction.Name = newFunctionName;
-            }
+            matchingExistingFunction.Name = newFunctionName;
+            matchingExistingFunction.Duration = updateFunction.Duration;
         }
     }
 }

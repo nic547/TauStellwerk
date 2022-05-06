@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel
+@using System.Reflection.Metadata.Ecma335
 @using TauStellwerk.Base.Model
 @using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
@@ -50,6 +51,12 @@
                         {
                             <label for="@($"function{function.Number}")">@($"F{function.Number}")</label>
                             <input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/>
+                            <div class="is-flex-horizontal function-duration" title="How long the function takes to complete. Use zero for latching functions.">
+                                <label for="@($"function{function.Number}duration")">  Duration:</label>
+                                <input type="number" step="100" min="0" @bind="function.Duration" id="@($"function{function.Number}duration")"/>
+                                <span>ms</span>
+                            </div>
+                            
                         }
                     }
                     else
@@ -140,7 +147,7 @@
     private void AddFunction()
     {
         byte functionNumber = (byte)(Engine.Functions.LastOrDefault()?.Number + 1 ?? 0);
-        Engine.Functions.Add(new Function(functionNumber, string.Empty));
+        Engine.Functions.Add(new Function(functionNumber, string.Empty, 0));
     }
 
     private void RemoveFunction()

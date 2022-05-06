@@ -59,6 +59,9 @@
                 <TextBlock Text="{Binding Number}" VerticalAlignment="Center"/>
                 <TextBlock Text=" - " VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Name}" MinWidth="200"/>
+                <TextBlock Text="  Duration: " VerticalAlignment="Center"/>
+                <NumericUpDown Value="{Binding Duration}" Minimum="0" Increment="100" VerticalAlignment="Center" Width="140"/>
+                <TextBlock Text=" ms" VerticalAlignment="Center"/>
               </StackPanel>
             </DataTemplate>
           </ItemsRepeater.ItemTemplate>

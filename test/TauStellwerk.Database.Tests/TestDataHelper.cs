@@ -27,7 +27,7 @@ public static class TestDataHelper
             SpeedSteps = 128,
             Functions =
                 {
-                    new DccFunction(0, "Lights"),
+                    new DccFunction(0, "Lights", 0),
                 },
             Images =
                 {

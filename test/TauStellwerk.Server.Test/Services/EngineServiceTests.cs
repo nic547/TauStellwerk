@@ -26,7 +26,7 @@ public class EngineServiceTests
         Id = 1,
         Functions = new List<DccFunction>
         {
-            new(0, "Light"),
+            new(0, "Light", -1),
         },
     };
 

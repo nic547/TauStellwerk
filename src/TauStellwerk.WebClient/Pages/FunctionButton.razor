@@ -6,7 +6,7 @@
 
 <button class="button is-fullwidth has-left-text @BackgroundClass"
         @onclick="ToggleFunction">
-        @Function
+    @Function
 </button>
 
 @code {
@@ -20,8 +20,15 @@
 
     private string BackgroundClass => Function.State == State.On ? "button-secondary-toggled" : "button-secondary";
 
-        private async Task ToggleFunction()
-        {
-            await EngineService.ToggleFunction(Engine, Function);
-        }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Function.PropertyChanged += (_, _) => { StateHasChanged(); };
+
+    }
+
+    private async Task ToggleFunction()
+    {
+        await EngineService.ToggleFunction(Engine, Function);
+    }
 }

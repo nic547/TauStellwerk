@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Linq;
 using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.Extensions.Logging;
@@ -15,17 +16,21 @@ namespace TauStellwerk.Services.EngineService;
 
 public class EngineService : IEngineService
 {
+    private const int CheckMomentaryFunctionsEveryMilliseconds = 100;
+
     private readonly CommandSystemBase _commandSystem;
     private readonly ILogger _logger;
     private readonly TauStellwerkOptions _options;
 
     private readonly EngineManager _manager;
+    private readonly MomentaryFunctionHandler _momentaryFunctionHandler;
 
     public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IOptions<TauStellwerkOptions> options)
     {
         _commandSystem = commandSystem;
         _logger = logger;
         _manager = new EngineManager(logger);
+        _momentaryFunctionHandler = new MomentaryFunctionHandler(commandSystem, CheckMomentaryFunctionsEveryMilliseconds);
         _options = options.Value;
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
@@ -113,7 +118,18 @@ public class EngineService : IEngineService
         var activeEngine = activeEngineResult.Value;
 
         await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, state);
-        activeEngine.State.FunctionStates[functionNumber] = state;
+
+        var currentFunction = activeEngine.Engine.Functions.Single(f => f.Number == functionNumber);
+
+        if (currentFunction.Duration > 0 && state == State.On)
+        {
+            _momentaryFunctionHandler.Add(activeEngine.Engine, currentFunction);
+        }
+        else
+        {
+            activeEngine.State.FunctionStates[functionNumber] = state;
+        }
+
         return Result.Ok();
     }
 

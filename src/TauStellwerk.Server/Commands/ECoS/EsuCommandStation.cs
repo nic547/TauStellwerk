@@ -166,7 +166,7 @@ public class EsuCommandStation : CommandSystemBase
         {
             if (type != 0)
             {
-                dccFunctions.Add(new DccFunction(number, string.Empty));
+                dccFunctions.Add(new DccFunction(number, string.Empty, -1));
             }
         }
 

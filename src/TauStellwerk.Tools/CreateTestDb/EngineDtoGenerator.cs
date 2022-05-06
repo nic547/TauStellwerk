@@ -111,8 +111,8 @@ public static class EngineDtoGenerator
             Created = new DateTime(2020, 1, 1).AddDays(random.Next(0, 364)).AddHours(random.Next(0, 23)).AddMinutes(random.Next(0, 59)).AddSeconds(random.Next(0, 59)),
             Functions = new()
             {
-                new(0, "Headlights"),
-                new(1, "Sound"),
+                new(0, "Headlights", 0),
+                new(1, "Sound", 0),
             },
         };
     }
