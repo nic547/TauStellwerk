@@ -128,7 +128,7 @@ public class EngineRepo
         }
         catch (Exception e)
         {
-            _logger.LogError($"Exception while updating engineOverview: {e.GetType()}");
+            _logger.LogError("Exception while updating engineOverview: {exception}", e);
             return Result.Fail("Could not update engineOverview");
         }
 

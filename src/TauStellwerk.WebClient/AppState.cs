@@ -12,13 +12,13 @@ namespace TauStellwerk.WebClient;
 [ObservableObject]
 public partial class AppState
 {
-    private ModalManager _modalManager;
+    private readonly ModalManager _modalManager;
 
     [ObservableProperty]
     private string _messageBoxText = string.Empty;
 
     [ObservableProperty]
-    private EngineFull _selectedEngine = new EngineFull();
+    private EngineFull _selectedEngine = new();
 
     public AppState(ModalManager modalManager)
     {

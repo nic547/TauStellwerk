@@ -104,7 +104,7 @@ public class ECosConnectionHandler
             }
         }
 
-        _logger.LogCritical($"Failed to establish connection to ECoS at {address}:{port}");
+        _logger.LogCritical("Failed to establish connection to ECoS at {address}:{port}", address, port);
         return Result.Fail("Failed to establish connection to ECoS");
     }
 
@@ -153,7 +153,7 @@ public class ECosConnectionHandler
                 }
                 else
                 {
-                    _logger.LogError($"Received reply for {message.Command}, but command was not located. Message:{message}");
+                    _logger.LogError("Received reply for {command}, but command was not located. Message:{message}", message.Command, message);
                 }
 
                 break;

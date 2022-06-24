@@ -23,7 +23,7 @@ public class MomentaryFunctionHandler
     private readonly List<Entry> _activeFunctions = new();
 
     private readonly SemaphoreSlim _listLock = new(1);
-    private Timer _timer;
+    private readonly Timer _timer;
 
     public MomentaryFunctionHandler(CommandSystemBase commandSystem, int timeBetweenRuns)
     {

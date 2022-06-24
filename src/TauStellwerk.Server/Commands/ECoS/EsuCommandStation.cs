@@ -73,7 +73,7 @@ public class EsuCommandStation : CommandSystemBase
                         },
                     };
 
-                    _logger.LogInformation($"Loaded new engine from ECoS: {engine}");
+                    _logger.LogInformation("Loaded new engine from ECoS: {engine}", engine);
                     await context.Engines.AddAsync(engine);
                 }
 

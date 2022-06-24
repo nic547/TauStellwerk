@@ -61,7 +61,7 @@ public class EngineManager
 
         if (activeEngine.Session != session)
         {
-            _logger.LogError($"{session} tried accessing {activeEngine.Engine}");
+            _logger.LogError("{session} tried accessing {engine}", session, activeEngine.Engine);
             return Result.Fail("Wrong session for engine given.");
         }
 
@@ -81,7 +81,7 @@ public class EngineManager
         _activeEngines.TryRemove(id, out _);
 
         _inactiveEngineStates.TryAdd(id, activeEngine.State);
-        _logger.LogInformation($"{session} released {activeEngine.Engine}");
+        _logger.LogInformation("{session} released {engine}", session, activeEngine.Engine);
 
         return Result.Ok(activeEngine);
     }
@@ -96,7 +96,7 @@ public class EngineManager
                 if (engine != null)
                 {
                     _inactiveEngineStates.TryAdd(engine.Engine.Id, engine.State);
-                    _logger.LogWarning($"Released {active.Engine} because {session.UserName} disconnected!");
+                    _logger.LogWarning("Released {engine} because {userName} disconnected!", active.Engine, session.UserName);
                 }
             }
         }

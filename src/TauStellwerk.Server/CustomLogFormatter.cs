@@ -48,7 +48,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
         }
         else
         {
-            textWriter.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {logLevel}> {message}");
+            textWriter.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} {logLevel}> {message}");
         }
     }
 
@@ -62,7 +62,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
             LogLevel.Warning => $"{DarkYellow}WARN {Reset}",
             LogLevel.Error => $"{Red}ERROR{Reset}",
             LogLevel.Critical => $"{Red}CRIT {Reset}",
-            _ => throw new ArgumentOutOfRangeException(),
+            _ => throw new ArgumentOutOfRangeException(nameof(level)),
         };
     }
 
@@ -76,7 +76,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
             LogLevel.Warning => "<4>",
             LogLevel.Error => "<3>",
             LogLevel.Critical => "<2>",
-            _ => throw new ArgumentOutOfRangeException(),
+            _ => throw new ArgumentOutOfRangeException(nameof(level)),
         };
     }
 }

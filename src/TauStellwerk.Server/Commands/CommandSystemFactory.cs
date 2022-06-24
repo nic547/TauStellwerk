@@ -36,7 +36,7 @@ public static class CommandSystemFactory
             }
         }
 
-        logger.LogError($"Could not find CommandSystem \"{systemSetting}\", continuing with default (ConsoleCommandSystem)");
+        logger.LogError("Could not find CommandSystem \"{systemSetting}\", continuing with default (ConsoleCommandSystem)", systemSetting);
         return new ConsoleCommandSystem(config);
     }
 }

@@ -24,7 +24,7 @@ public class DccExSerialSystem : CommandSystemBase
         : base(configuration)
     {
         _logger = logger;
-        logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+        _logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
 
         _serialPort = new SerialPort
         {

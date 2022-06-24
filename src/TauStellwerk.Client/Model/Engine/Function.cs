@@ -76,8 +76,10 @@ public class Function : ObservableObject
         {
             if (_timer == null)
             {
-                _timer = new Timer();
-                _timer.AutoReset = false;
+                _timer = new Timer
+                {
+                    AutoReset = false,
+                };
                 _timer.Elapsed += (_, _) => { State = State.Off; };
             }
 

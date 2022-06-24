@@ -192,7 +192,6 @@ public class EngineServiceTests
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
         var loggerMock = new Mock<ILogger<EngineService>>();
-        var configMock = new Mock<IConfiguration>();
 
         TauStellwerkOptions options = new()
         {

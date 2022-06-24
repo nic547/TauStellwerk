@@ -67,7 +67,7 @@ public class StatusService
 
         _lastKnownState = state;
         _lastActionUsername = "SYSTEM";
-        _logger.LogInformation($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
+        _logger.LogInformation("SYSTEM {action} the TauStellwerk", state == State.On ? "started" : "stopped");
 
         SystemStatus systemStatus = new()
         {
