@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Services;
+namespace TauStellwerk.Server.Services;
 
 /// <summary>
 /// Service that keeps track of users.

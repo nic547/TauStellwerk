@@ -6,7 +6,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TauStellwerk.Database;
+using TauStellwerk.Server.Database;
 
 namespace TauStellwerk.Server.IntegrationTests;
 

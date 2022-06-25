@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;

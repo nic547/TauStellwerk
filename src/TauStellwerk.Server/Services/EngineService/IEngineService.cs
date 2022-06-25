@@ -7,10 +7,11 @@
 
 using System.Threading.Tasks;
 using FluentResults;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public interface IEngineService
 {

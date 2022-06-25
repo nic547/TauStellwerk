@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Database;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.Database;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk;
+namespace TauStellwerk.Server;
 
 public class EngineRepo
 {

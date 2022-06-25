@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database.Model;
 using Timer = System.Timers.Timer;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class MomentaryFunctionHandler
 {

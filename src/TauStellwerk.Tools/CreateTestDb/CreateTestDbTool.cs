@@ -6,8 +6,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TauStellwerk.Database;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.Database;
+using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Tools.CreateTestDb;
 

@@ -3,10 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using TauStellwerk.Services;
-using TauStellwerk.Services.EngineService;
+using TauStellwerk.Server.Services;
+using TauStellwerk.Server.Services.EngineService;
 
-namespace TauStellwerk.Hub;
+namespace TauStellwerk.Server.Hub;
 
 public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
 {

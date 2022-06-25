@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TauStellwerk;
+namespace TauStellwerk.Server;
 
 public class DefaultConfiguration
 {

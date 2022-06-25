@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
-namespace TauStellwerk.Hub;
+namespace TauStellwerk.Server.Hub;
 
 public partial class TauHub
 {

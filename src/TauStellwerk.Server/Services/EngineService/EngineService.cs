@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class EngineService : IEngineService
 {
