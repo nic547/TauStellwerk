@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
@@ -76,8 +77,10 @@ public class Function : ObservableObject
         {
             if (_timer == null)
             {
-                _timer = new Timer();
-                _timer.AutoReset = false;
+                _timer = new Timer
+                {
+                    AutoReset = false,
+                };
                 _timer.Elapsed += (_, _) => { State = State.Off; };
             }
 

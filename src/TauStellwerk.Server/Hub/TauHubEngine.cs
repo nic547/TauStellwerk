@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using FluentResults;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
 
-namespace TauStellwerk.Hub;
+namespace TauStellwerk.Server.Hub;
 
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub

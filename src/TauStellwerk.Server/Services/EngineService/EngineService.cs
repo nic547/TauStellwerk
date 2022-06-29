@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class EngineService : IEngineService
 {
@@ -48,12 +49,12 @@ public class EngineService : IEngineService
 
         if (systemResult == false)
         {
-            _logger.LogWarning($"{session} tried acquiring {engine}, but the command system returned false");
+            _logger.LogWarning("{session} tried acquiring {engine}, but the command system returned false", session, engine);
             _manager.RemoveActiveEngine(engine.Id, session);
             return Result.Fail("Engine already in use");
         }
 
-        _logger.LogInformation($"{session} acquired {engine}");
+        _logger.LogInformation("{session} acquired {engine}", session, engine);
 
         if (_options.ResetEnginesWithoutState && engineManagerResult.Value.IsNew)
         {

@@ -4,9 +4,9 @@
 // </copyright>
 
 using TauStellwerk.Base.Model;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class ActiveEngine
 {

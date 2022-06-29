@@ -6,10 +6,11 @@
 using System.Collections.Concurrent;
 using FluentResults;
 using Microsoft.Extensions.Logging;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class EngineManager
 {
@@ -61,7 +62,7 @@ public class EngineManager
 
         if (activeEngine.Session != session)
         {
-            _logger.LogError($"{session} tried accessing {activeEngine.Engine}");
+            _logger.LogError("{session} tried accessing {engine}", session, activeEngine.Engine);
             return Result.Fail("Wrong session for engine given.");
         }
 
@@ -81,7 +82,7 @@ public class EngineManager
         _activeEngines.TryRemove(id, out _);
 
         _inactiveEngineStates.TryAdd(id, activeEngine.State);
-        _logger.LogInformation($"{session} released {activeEngine.Engine}");
+        _logger.LogInformation("{session} released {engine}", session, activeEngine.Engine);
 
         return Result.Ok(activeEngine);
     }
@@ -96,7 +97,7 @@ public class EngineManager
                 if (engine != null)
                 {
                     _inactiveEngineStates.TryAdd(engine.Engine.Id, engine.State);
-                    _logger.LogWarning($"Released {active.Engine} because {session.UserName} disconnected!");
+                    _logger.LogWarning("Released {engine} because {userName} disconnected!", active.Engine, session.UserName);
                 }
             }
         }

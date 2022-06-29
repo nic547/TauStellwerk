@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.0-preview1" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.406">
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -28,7 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
-    <ProjectReference Include="..\TauStellwerk.Database\TauStellwerk.Database.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Server\TauStellwerk.Server.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
   </ItemGroup>
 

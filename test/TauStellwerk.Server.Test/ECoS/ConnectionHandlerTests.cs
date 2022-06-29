@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using TauStellwerk.Commands;
-using TauStellwerk.Commands.ECoS;
+using TauStellwerk.Server.CommandStation;
 
 namespace TauStellwerk.Test.ECoS;
 
@@ -160,7 +160,7 @@ public class ConnectionHandlerTests
                 var buffer = new byte[1024];
                 while (_shouldRun)
                 {
-                    var readBytes = await stream.ReadAsync(buffer, 0, 1024);
+                    var readBytes = await stream.ReadAsync(buffer, 0, 1024, CancellationToken.None);
                     Data.AddRange(buffer[0..readBytes]);
                 }
             }

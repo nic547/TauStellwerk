@@ -18,13 +18,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database;
-using TauStellwerk.Hub;
-using TauStellwerk.Services;
-using TauStellwerk.Services.EngineService;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database;
+using TauStellwerk.Server.Hub;
+using TauStellwerk.Server.Services;
+using TauStellwerk.Server.Services.EngineService;
 
-namespace TauStellwerk;
+namespace TauStellwerk.Server;
 
 /// <summary>
 /// Startup class of the WebAPI.

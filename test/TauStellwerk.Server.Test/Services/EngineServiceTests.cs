@@ -12,10 +12,11 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database.Model;
-using TauStellwerk.Services;
-using TauStellwerk.Services.EngineService;
+using TauStellwerk.Server;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Services;
+using TauStellwerk.Server.Services.EngineService;
 
 namespace TauStellwerk.Test.Services;
 
@@ -192,7 +193,6 @@ public class EngineServiceTests
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
         var loggerMock = new Mock<ILogger<EngineService>>();
-        var configMock = new Mock<IConfiguration>();
 
         TauStellwerkOptions options = new()
         {

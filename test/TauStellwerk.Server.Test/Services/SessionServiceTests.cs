@@ -8,7 +8,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using TauStellwerk.Services;
+using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Test.Services;
 

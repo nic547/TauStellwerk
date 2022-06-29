@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Text.Json.Serialization;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Base;

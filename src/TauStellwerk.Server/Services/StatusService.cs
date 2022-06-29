@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Hub;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Hub;
 
-namespace TauStellwerk.Services;
+namespace TauStellwerk.Server.Services;
 
 public class StatusService
 {
@@ -67,7 +67,7 @@ public class StatusService
 
         _lastKnownState = state;
         _lastActionUsername = "SYSTEM";
-        _logger.LogInformation($"SYSTEM {(state == State.On ? "started" : "stopped")} the TauStellwerk");
+        _logger.LogInformation("SYSTEM {action} the TauStellwerk", state == State.On ? "started" : "stopped");
 
         SystemStatus systemStatus = new()
         {

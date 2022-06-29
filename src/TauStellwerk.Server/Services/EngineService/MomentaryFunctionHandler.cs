@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Commands;
-using TauStellwerk.Database.Model;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database.Model;
 using Timer = System.Timers.Timer;
 
-namespace TauStellwerk.Services.EngineService;
+namespace TauStellwerk.Server.Services.EngineService;
 
 public class MomentaryFunctionHandler
 {
@@ -23,7 +23,7 @@ public class MomentaryFunctionHandler
     private readonly List<Entry> _activeFunctions = new();
 
     private readonly SemaphoreSlim _listLock = new(1);
-    private Timer _timer;
+    private readonly Timer _timer;
 
     public MomentaryFunctionHandler(CommandSystemBase commandSystem, int timeBetweenRuns)
     {

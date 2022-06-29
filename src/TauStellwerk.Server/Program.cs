@@ -13,11 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using TauStellwerk.Commands;
-using TauStellwerk.Database;
-using TauStellwerk.Images;
+using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.Database;
+using TauStellwerk.Server.Images;
 
-namespace TauStellwerk;
+namespace TauStellwerk.Server;
 
 public static class Program
 {
