@@ -1,4 +1,4 @@
-﻿// <copyright file="DccExSerialSystem.cs" company="Dominic Ritz">
+﻿// <copyright file="DccExSerialCommandStation.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -13,14 +13,14 @@ using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.CommandStation;
 
-public class DccExSerialSystem : CommandSystemBase
+public class DccExSerialCommandStation : CommandSystemBase
 {
     private readonly ILogger<CommandSystemBase> _logger;
     private readonly SerialPort _serialPort;
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
-    public DccExSerialSystem(IConfiguration configuration, ILogger<CommandSystemBase> logger)
+    public DccExSerialCommandStation(IConfiguration configuration, ILogger<CommandSystemBase> logger)
         : base(configuration)
     {
         _logger = logger;

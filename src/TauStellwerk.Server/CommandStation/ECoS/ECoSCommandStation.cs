@@ -20,17 +20,17 @@ namespace TauStellwerk.Server.CommandStation;
 /// <summary>
 /// Implementation of a <see cref="CommandSystemBase"/> for the ESU Command Station (ECoS).
 /// </summary>
-public class ECoS : CommandSystemBase
+public class ECoSCommandStation : CommandSystemBase
 {
     private readonly ILogger<CommandSystemBase> _logger;
     private readonly ECosConnectionHandler _connectionHandler;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ECoS"/> class.
+    /// Initializes a new instance of the <see cref="ECoSCommandStation"/> class.
     /// </summary>
     /// <param name="config">IConfiguration to use.</param>
     /// <param name="logger">ILogger to use.</param>
-    public ECoS(IConfiguration config, ILogger<CommandSystemBase> logger)
+    public ECoSCommandStation(IConfiguration config, ILogger<CommandSystemBase> logger)
         : base(config)
     {
         _logger = logger;
