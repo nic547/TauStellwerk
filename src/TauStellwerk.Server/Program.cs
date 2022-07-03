@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Images;
 
@@ -77,7 +77,7 @@ public static class Program
 
         var services = scope.ServiceProvider;
         var dbContext = services.GetRequiredService<StwDbContext>();
-        var commandSystem = services.GetRequiredService<CommandSystemBase>();
+        var commandSystem = services.GetRequiredService<CommandStationBase>();
 
         _ = commandSystem.LoadEnginesFromSystem(dbContext);
 

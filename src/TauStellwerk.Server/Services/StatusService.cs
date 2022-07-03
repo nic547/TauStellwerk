@@ -8,23 +8,23 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Hub;
 
 namespace TauStellwerk.Server.Services;
 
 public class StatusService
 {
-    private readonly CommandSystemBase _system;
+    private readonly CommandStationBase _station;
     private readonly IHubContext<TauHub> _hubContext;
     private readonly ILogger<StatusService> _logger;
 
     private State? _lastKnownState;
     private string _lastActionUsername = "SYSTEM";
 
-    public StatusService(CommandSystemBase system, IHubContext<TauHub> hubContext, ILogger<StatusService> logger, SessionService sessionService, IOptions<TauStellwerkOptions> options)
+    public StatusService(CommandStationBase station, IHubContext<TauHub> hubContext, ILogger<StatusService> logger, SessionService sessionService, IOptions<TauStellwerkOptions> options)
     {
-        _system = system;
+        _station = station;
         _hubContext = hubContext;
         _logger = logger;
 
@@ -33,8 +33,8 @@ public class StatusService
             sessionService.NoUsersRemaining += async () => await HandleLastUserDisconnected();
         }
 
-        _system.StatusChanged += HandleStatusEvent;
-        _system.CheckState();
+        _station.StatusChanged += HandleStatusEvent;
+        _station.CheckState();
     }
 
     public SystemStatus CheckStatus()
@@ -44,7 +44,7 @@ public class StatusService
 
     public async Task HandleStatusCommand(State state, string username)
     {
-        var task = _system.HandleSystemStatus(state);
+        var task = _station.HandleSystemStatus(state);
 
         _lastKnownState = state;
         _lastActionUsername = username;

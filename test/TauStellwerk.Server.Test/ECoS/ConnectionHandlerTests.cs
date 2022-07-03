@@ -15,7 +15,7 @@ using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 
 namespace TauStellwerk.Test.ECoS;
 
@@ -32,7 +32,7 @@ public class ConnectionHandlerTests
     [SetUp]
     public async Task SetUp()
     {
-        var logger = new Mock<ILogger<CommandSystemBase>>().Object;
+        var logger = new Mock<ILogger<CommandStationBase>>().Object;
         _tcpListener = new TestTcpListener();
         var listenerTask = _tcpListener.Start();
         _connectionHandler = new ECosConnectionHandler(_ip, Port, logger);

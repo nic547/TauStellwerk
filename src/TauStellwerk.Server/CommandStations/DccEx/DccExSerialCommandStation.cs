@@ -11,20 +11,20 @@ using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
-public class DccExSerialCommandStation : CommandSystemBase
+public class DccExSerialCommandStation : CommandStationBase
 {
-    private readonly ILogger<CommandSystemBase> _logger;
+    private readonly ILogger<CommandStationBase> _logger;
     private readonly SerialPort _serialPort;
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
-    public DccExSerialCommandStation(IConfiguration configuration, ILogger<CommandSystemBase> logger)
+    public DccExSerialCommandStation(IConfiguration configuration, ILogger<CommandStationBase> logger)
         : base(configuration)
     {
         _logger = logger;
-        _logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+        _logger.LogWarning("This CommandStation is work-in-progress and experimental. Things will break!");
 
         _serialPort = new SerialPort
         {

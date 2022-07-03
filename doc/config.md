@@ -1,11 +1,11 @@
 # Configuration
 This document list and describes available configuration options.
 
-## CommandSystems
+## Command Station
 
-Select the CommandSystem that TauStellwerk should interface with and set any command system specific settings.
+Select the command station that TauStellwerk should interface with and set any system specific settings.
 
-### NullCommandSystem
+### NullCommandStation
 ```
 "CommandSystem":{
     "Type":"Null"
@@ -13,12 +13,15 @@ Select the CommandSystem that TauStellwerk should interface with and set any com
 ```
 A Command system that does nothing.
 
-### ConsoleCommandSystem
+### ConsoleCommandStation
 ```
 "CommandSystem":{
     "Type":"Console"
 }
 ```
+
+Prints everything to console. Usefull for development and testing, not usefull otherwise.
+
 ### ECoS
 ```
 "CommandSystem":{

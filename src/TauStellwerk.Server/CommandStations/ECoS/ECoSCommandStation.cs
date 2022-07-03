@@ -15,14 +15,14 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
-/// Implementation of a <see cref="CommandSystemBase"/> for the ESU Command Station (ECoS).
+/// Implementation of a <see cref="CommandStationBase"/> for the ESU Command Station (ECoS).
 /// </summary>
-public class ECoSCommandStation : CommandSystemBase
+public class ECoSCommandStation : CommandStationBase
 {
-    private readonly ILogger<CommandSystemBase> _logger;
+    private readonly ILogger<CommandStationBase> _logger;
     private readonly ECosConnectionHandler _connectionHandler;
 
     /// <summary>
@@ -30,7 +30,7 @@ public class ECoSCommandStation : CommandSystemBase
     /// </summary>
     /// <param name="config">IConfiguration to use.</param>
     /// <param name="logger">ILogger to use.</param>
-    public ECoSCommandStation(IConfiguration config, ILogger<CommandSystemBase> logger)
+    public ECoSCommandStation(IConfiguration config, ILogger<CommandStationBase> logger)
         : base(config)
     {
         _logger = logger;
