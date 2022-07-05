@@ -3,6 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
+        xmlns:root="clr-namespace:TauStellwerk.Desktop"
+        xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineControlWindow"
         Title="EngineControlWindow">
@@ -16,8 +18,8 @@
           Margin="5">
         <Label Content="{Binding Engine.Name, FallbackValue={}}"
                Grid.ColumnSpan="2" Padding="2"/>
-        <Image Grid.Column="1" Grid.Row="1"
-               Source="../../Assets/noImageImage.png"
+        <controls:EngineImageControl Grid.Column="1" Grid.Row="1"
+               EngineImages="{Binding Engine.Images}"
                Stretch="Uniform"
                StretchDirection="Both"/>
         <Slider Orientation="Vertical"

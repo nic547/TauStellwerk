@@ -15,14 +15,14 @@ namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly SettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
 
     [ObservableProperty]
     private MutableSettings? _settings;
 
     public SettingsViewModel(SettingsService? settingsService = null)
     {
-        _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         _ = LoadSettings();
     }
 

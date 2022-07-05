@@ -3,6 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
+        xmlns:root="clr-namespace:TauStellwerk.Desktop"
+        xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineSelectionWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -48,10 +50,11 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel MinWidth="200">
+                        <StackPanel MinWidth="200" Tag="{Binding Id}">
                             <Border Background="Red" CornerRadius="4" Padding="4">
                                 <TextBlock Text="{Binding Name}"/>
                             </Border>
+                            <controls:EngineImageControl EngineImages="{Binding Images}"/>
                             <ItemsRepeater Items="{Binding Tags}">
                                 <ItemsRepeater.Layout>
                                     <WrapLayout HorizontalSpacing="6"/>

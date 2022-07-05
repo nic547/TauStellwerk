@@ -16,13 +16,13 @@ namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly SettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
     private readonly StatusService _statusService;
     private readonly IViewService _viewService;
 
-    public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null, IViewService? viewService = null)
+    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, IViewService? viewService = null)
     {
-        _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
         _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
 

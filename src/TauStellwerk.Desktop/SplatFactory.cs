@@ -28,7 +28,7 @@ public static class SplatFactory
 
     public static ConnectionService CreateClientHttpService()
     {
-        var settingService = Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        var settingService = Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         return new ConnectionService(settingService);
     }
 }

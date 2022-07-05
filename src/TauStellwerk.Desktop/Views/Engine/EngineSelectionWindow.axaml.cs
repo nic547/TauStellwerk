@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop;
 using TauStellwerk.Desktop.ViewModels.Engine;
 
 namespace TauStellwerk.Desktop.Views.Engine;
