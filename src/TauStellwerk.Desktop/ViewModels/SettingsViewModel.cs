@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Avalonia.Themes.Fluent;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -29,6 +30,8 @@ public partial class SettingsViewModel : ViewModelBase
     public delegate void HandleClosingRequested();
 
     public event HandleClosingRequested? ClosingRequested;
+
+    public string[] AvailableThemes { get; } = { FluentThemeMode.Light.ToString(), FluentThemeMode.Dark.ToString() };
 
     [ICommand]
     public async Task Save()

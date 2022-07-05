@@ -20,6 +20,11 @@
             <Label Content="Server address" />
             <TextBox Text="{Binding Settings.ServerAddress, Mode=TwoWay, FallbackValue={}}" />
         </StackPanel>
+        <StackPanel>
+            <Label>Theme</Label>
+            <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" Items="{Binding AvailableThemes}">
+            </ComboBox>
+        </StackPanel>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
             <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
             <Button Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />

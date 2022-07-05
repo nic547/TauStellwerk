@@ -1,8 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:desktop="clr-namespace:TauStellwerk.Desktop"
+             xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
              x:Class="TauStellwerk.Desktop.App">
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme Mode="{Binding ThemeMode}"/>
     </Application.Styles>
 </Application>
