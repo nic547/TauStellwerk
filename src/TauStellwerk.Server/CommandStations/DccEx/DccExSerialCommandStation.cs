@@ -28,7 +28,7 @@ public class DccExSerialCommandStation : CommandStationBase
 
         _serialPort = new SerialPort
         {
-            PortName = Config["CommandSystem:SerialPort"],
+            PortName = Config["CommandStation:SerialPort"],
         };
         _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
         _serialPort.BaudRate = baudRate;

@@ -34,8 +34,8 @@ public class ECoSCommandStation : CommandStationBase
         : base(config)
     {
         _logger = logger;
-        string ipAddress = Config["CommandSystem:IP"];
-        var port = int.Parse(Config["commandSystem:Port"]);
+        string ipAddress = Config["CommandStation:IP"];
+        var port = int.Parse(Config["CommandStation:Port"]);
         _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port, logger);
 
         _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);
