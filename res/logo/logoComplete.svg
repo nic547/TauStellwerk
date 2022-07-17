@@ -1,9 +1,5 @@
 <?xml version="1.0" standalone="no"?>
 <svg width="600" height="200" version="1.1" xmlns="http://www.w3.org/2000/svg">
 	<rect width="600" height="200" fill="#b9ceac"/>
-	<text x="20" y="135" font-size="110" font-family="Inter Semibold" fill="black">τStellwerk</text>
-	<rect width="18" height="4" x="54" y="79" fill="#FFF4D3" />
-	<rect width="18" height="4" x="25" y="79" fill="DarkGray" />
-	<rect width="4" height="18" x="47" y="106" fill="#FF0000" />
-	<rect width="4" height="18" x="47" y="85" fill="#FFF4D3" />
+	<text x="20" y="135" font-size="110" font-family="Noto Sans Medium" fill="black">τStellwerk</text>
 </svg>
