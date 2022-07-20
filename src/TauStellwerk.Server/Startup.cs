@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Hub;
 using TauStellwerk.Server.Services;
@@ -62,16 +62,16 @@ public class Startup
             options.UseSqlite(Configuration.GetConnectionString("Database")));
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
-        services.AddSingleton(p => CommandSystemFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandSystemBase>>()));
+        services.AddSingleton(p => CommandStationFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandStationBase>>()));
         services.AddSingleton(p => new StatusService(
-                p.GetRequiredService<CommandSystemBase>(),
+                p.GetRequiredService<CommandStationBase>(),
                 p.GetRequiredService<IHubContext<TauHub>>(),
                 p.GetRequiredService<ILogger<StatusService>>(),
                 p.GetRequiredService<SessionService>(),
                 p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
         services.AddSingleton<IEngineService>(p => new EngineService(
-            p.GetRequiredService<CommandSystemBase>(),
+            p.GetRequiredService<CommandStationBase>(),
             p.GetRequiredService<SessionService>(),
             p.GetRequiredService<ILogger<EngineService>>(),
             p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
@@ -131,7 +131,7 @@ public class Startup
 
     private static void Shutdown(IServiceProvider sp)
     {
-        var commandSystem = sp.GetRequiredService<CommandSystemBase>();
+        var commandSystem = sp.GetRequiredService<CommandStationBase>();
         commandSystem.HandleSystemStatus(State.Off).Wait();
     }
 

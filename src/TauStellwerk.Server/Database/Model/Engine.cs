@@ -12,7 +12,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Server.Database.Model;
 

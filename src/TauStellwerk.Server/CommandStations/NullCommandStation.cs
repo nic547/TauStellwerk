@@ -1,4 +1,4 @@
-﻿// <copyright file="NullCommandSystem.cs" company="Dominic Ritz">
+﻿// <copyright file="NullCommandStation.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,14 +8,14 @@ using Microsoft.Extensions.Configuration;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
-/// Implements a <see cref="CommandSystemBase"/> that does nothing.
+/// Implements a <see cref="CommandStationBase"/> that does nothing.
 /// </summary>
-public class NullCommandSystem : CommandSystemBase
+public class NullCommandStation : CommandStationBase
 {
-    public NullCommandSystem(IConfiguration config)
+    public NullCommandStation(IConfiguration config)
         : base(config)
     {
     }

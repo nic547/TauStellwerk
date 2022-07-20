@@ -1,4 +1,4 @@
-﻿// <copyright file="DccExSerialSystem.cs" company="Dominic Ritz">
+﻿// <copyright file="DccExSerialCommandStation.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,24 +11,24 @@ using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
-public class DccExSerialSystem : CommandSystemBase
+public class DccExSerialCommandStation : CommandStationBase
 {
-    private readonly ILogger<CommandSystemBase> _logger;
+    private readonly ILogger<CommandStationBase> _logger;
     private readonly SerialPort _serialPort;
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
-    public DccExSerialSystem(IConfiguration configuration, ILogger<CommandSystemBase> logger)
+    public DccExSerialCommandStation(IConfiguration configuration, ILogger<CommandStationBase> logger)
         : base(configuration)
     {
         _logger = logger;
-        _logger.LogWarning("This CommandSystem is work-in-progress and experimental. Things will break!");
+        _logger.LogWarning("This CommandStation is work-in-progress and experimental. Things will break!");
 
         _serialPort = new SerialPort
         {
-            PortName = Config["CommandSystem:SerialPort"],
+            PortName = Config["CommandStation:SerialPort"],
         };
         _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
         _serialPort.BaudRate = baudRate;

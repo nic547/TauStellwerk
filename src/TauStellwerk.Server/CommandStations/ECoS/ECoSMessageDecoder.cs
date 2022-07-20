@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
 /// Provides methods that decode a message from the ECoS into something "more usable".

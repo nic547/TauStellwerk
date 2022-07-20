@@ -1,36 +1,43 @@
 # Configuration
 This document list and describes available configuration options.
 
-## CommandSystems
+## Command Station
 
-### NullCommandSystem
+Select the command station that TauStellwerk should interface with and set any system specific settings.
+
+### NullCommandStation
 ```
 "CommandSystem":{
-    "Type":"NullCommandSystem"
+    "Type":"Null"
 }
 ```
 A Command system that does nothing.
 
-### ConsoleCommandSystem
+### ConsoleCommandStation
 ```
 "CommandSystem":{
-    "Type":"ConsoleCommandSystem"
+    "Type":"Console"
 }
 ```
+
+Prints everything to console. Usefull for development and testing, not usefull otherwise.
+
 ### ECoS
 ```
 "CommandSystem":{
-    "Type":"EsuCommandStation",
+    "Type":"ECoS",
     "IP": "192.168.1.153",
     "Port": 15471
 }
 ```
+(ECoS is not case-sensitive)
+
 
 ### DCC++ EX via serial connection
 
 ```
 "CommandSystem": {
-"Type": "DccExSerialSystem",
+"Type": "DccExSerial",
 "SerialPort": "COM3"
 },
 ```

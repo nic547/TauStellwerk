@@ -1,4 +1,4 @@
-﻿// <copyright file="CommandSystemBase.cs" company="Dominic Ritz">
+﻿// <copyright file="CommandStationBase.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,15 +11,15 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
 /// Interface for implementing communication with a specific command system.
-/// Every implementation needs to be "registered" in <see cref="CommandSystemFactory"/> by hand.
+/// Every implementation needs to be "registered" in <see cref="CommandStationFactory"/> by hand.
 /// </summary>
-public abstract class CommandSystemBase
+public abstract class CommandStationBase
 {
-    protected CommandSystemBase(IConfiguration configuration)
+    protected CommandStationBase(IConfiguration configuration)
     {
         Config = configuration;
     }

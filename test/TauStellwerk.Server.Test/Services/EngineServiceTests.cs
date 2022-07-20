@@ -13,7 +13,7 @@ using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database.Model;
 using TauStellwerk.Server.Services;
 using TauStellwerk.Server.Services.EngineService;
@@ -184,7 +184,7 @@ public class EngineServiceTests
         functionResult.Should().BeFailure();
     }
 
-    private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandSystemBase>? mock = null)
+    private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
     {
         var logger = new Mock<ILogger<SessionService>>();
 
@@ -203,10 +203,10 @@ public class EngineServiceTests
         return (engineService, session);
     }
 
-    private static Mock<CommandSystemBase> GetAlwaysTrueMock()
+    private static Mock<CommandStationBase> GetAlwaysTrueMock()
     {
         var configMock = new Mock<IConfiguration>();
-        var mock = new Mock<CommandSystemBase>(configMock.Object);
+        var mock = new Mock<CommandStationBase>(configMock.Object);
         mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
         mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>(), It.IsAny<EngineState>()).Result).Returns(true);
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="ConsoleCommandSystem.cs" company="Dominic Ritz">
+﻿// <copyright file="ConsoleCommandStation.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -9,15 +9,15 @@ using Microsoft.Extensions.Configuration;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
-/// <see cref="CommandSystemBase"/> that just writes everything to the console.
+/// <see cref="CommandStationBase"/> that just writes everything to the console.
 /// </summary>
-public class ConsoleCommandSystem : CommandSystemBase
+public class ConsoleCommandStation : CommandStationBase
 {
     // ReSharper disable once UnusedParameter.Local
-    public ConsoleCommandSystem(IConfiguration config)
+    public ConsoleCommandStation(IConfiguration config)
         : base(config)
     {
     }

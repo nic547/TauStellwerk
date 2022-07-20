@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.Services.EngineService;
@@ -19,19 +19,19 @@ public class EngineService : IEngineService
 {
     private const int CheckMomentaryFunctionsEveryMilliseconds = 100;
 
-    private readonly CommandSystemBase _commandSystem;
+    private readonly CommandStationBase _commandStation;
     private readonly ILogger _logger;
     private readonly TauStellwerkOptions _options;
 
     private readonly EngineManager _manager;
     private readonly MomentaryFunctionHandler _momentaryFunctionHandler;
 
-    public EngineService(CommandSystemBase commandSystem, SessionService sessionService, ILogger<EngineService> logger, IOptions<TauStellwerkOptions> options)
+    public EngineService(CommandStationBase commandStation, SessionService sessionService, ILogger<EngineService> logger, IOptions<TauStellwerkOptions> options)
     {
-        _commandSystem = commandSystem;
+        _commandStation = commandStation;
         _logger = logger;
         _manager = new EngineManager(logger);
-        _momentaryFunctionHandler = new MomentaryFunctionHandler(commandSystem, CheckMomentaryFunctionsEveryMilliseconds);
+        _momentaryFunctionHandler = new MomentaryFunctionHandler(commandStation, CheckMomentaryFunctionsEveryMilliseconds);
         _options = options.Value;
 
         sessionService.SessionTimeout += _manager.HandleSessionTimeout;
@@ -45,7 +45,7 @@ public class EngineService : IEngineService
             return engineManagerResult.ToResult();
         }
 
-        var systemResult = await _commandSystem.TryAcquireEngine(engine);
+        var systemResult = await _commandStation.TryAcquireEngine(engine);
 
         if (systemResult == false)
         {
@@ -72,7 +72,7 @@ public class EngineService : IEngineService
             return activeEngineResult.ToResult();
         }
 
-        var systemReleaseSuccess = await _commandSystem.TryReleaseEngine(activeEngineResult.Value.Engine, activeEngineResult.Value.State);
+        var systemReleaseSuccess = await _commandStation.TryReleaseEngine(activeEngineResult.Value.Engine, activeEngineResult.Value.State);
         return systemReleaseSuccess ? Result.Ok() : Result.Fail("CommandSystem could not release engine");
     }
 
@@ -89,7 +89,7 @@ public class EngineService : IEngineService
         var priorDirection = activeEngine.State.Direction;
         activeEngine.State.Direction = newDirection ?? priorDirection;
         activeEngine.State.Throttle = speed;
-        await _commandSystem.HandleEngineSpeed(activeEngine.Engine, (short)speed, priorDirection, activeEngine.State.Direction);
+        await _commandStation.HandleEngineSpeed(activeEngine.Engine, (short)speed, priorDirection, activeEngine.State.Direction);
         return Result.Ok();
     }
 
@@ -104,7 +104,7 @@ public class EngineService : IEngineService
         var activeEngine = activeEngineResult.Value;
         activeEngine.State.Throttle = 0;
 
-        await _commandSystem.HandleEngineEStop(activeEngine.Engine, activeEngine.State.Direction);
+        await _commandStation.HandleEngineEStop(activeEngine.Engine, activeEngine.State.Direction);
         return Result.Ok();
     }
 
@@ -118,7 +118,7 @@ public class EngineService : IEngineService
 
         var activeEngine = activeEngineResult.Value;
 
-        await _commandSystem.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, state);
+        await _commandStation.HandleEngineFunction(activeEngine.Engine, (byte)functionNumber, state);
 
         var currentFunction = activeEngine.Engine.Functions.Single(f => f.Number == functionNumber);
 
@@ -141,10 +141,10 @@ public class EngineService : IEngineService
 
     private async Task ResetEngine(Engine engine)
     {
-        await _commandSystem.HandleEngineSpeed(engine, 0, Direction.Backwards, Direction.Forwards);
+        await _commandStation.HandleEngineSpeed(engine, 0, Direction.Backwards, Direction.Forwards);
         foreach (var function in engine.Functions)
         {
-            await _commandSystem.HandleEngineFunction(engine, function.Number, State.Off);
+            await _commandStation.HandleEngineFunction(engine, function.Number, State.Off);
         }
     }
 }

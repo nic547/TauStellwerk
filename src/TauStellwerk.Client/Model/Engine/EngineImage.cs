@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
 public class EngineImage

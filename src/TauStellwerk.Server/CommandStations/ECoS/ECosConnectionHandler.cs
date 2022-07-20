@@ -17,7 +17,7 @@ using FluentResults;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
 /// Handles the connection to the ECoS, including sending and receiving stuff.
@@ -26,7 +26,7 @@ public class ECosConnectionHandler
 {
     private const int BufferSize = 8192; // Assumption: An ECoS doesn't send lines longer than this size.
 
-    private readonly ILogger<CommandSystemBase> _logger;
+    private readonly ILogger<CommandStationBase> _logger;
 
     private readonly MultiDictionary<string, Action<ECoSMessage>> _events = new();
     private readonly MultiDictionary<string, TaskCompletionSource<ECoSMessage>> _sentCommands = new();
@@ -41,7 +41,7 @@ public class ECosConnectionHandler
     /// <param name="address">IP of the ECoS.</param>
     /// <param name="port">Port the ECoS listens on.</param>
     /// <param name="logger">The ILogger to use.</param>
-    public ECosConnectionHandler(IPAddress address, int port, ILogger<CommandSystemBase> logger)
+    public ECosConnectionHandler(IPAddress address, int port, ILogger<CommandStationBase> logger)
     {
         _logger = logger;
         if (TryOpenConnection(address, port).IsFailed)

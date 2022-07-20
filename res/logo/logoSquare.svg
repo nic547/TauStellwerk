@@ -1,9 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="200" height="200" version="1.1" xmlns="http://www.w3.org/2000/svg">
-	<rect width="200" height="200" fill="#b9ceac"/>
-	<text x="30" y="165" font-size="250" font-family="Inter Semibold" fill="black">τ</text>
-	<rect width="30" height="8" x="118" y="37" fill="#FFF4D3" />
-	<rect width="30" height="8" x="45" y="37" fill="DarkGray" />
-	<rect width="8" height="30" x="91" y="105" fill="#FF0000" />
-	<rect width="8" height="30" x="91" y="60" fill="#FFF4D3" />
+<svg width="512" height="512" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<rect width="512" height="512" fill="#b9ceac"/>
+	<text x="100" y="420" font-size="600" font-family="Noto Sans Medium" fill="black">τ</text>
 </svg>

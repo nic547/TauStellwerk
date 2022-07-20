@@ -34,15 +34,7 @@
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\noImageImage.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-  </ItemGroup>
-
+  
   <ItemGroup>
     <None Remove="Views\CustomStyles.xaml" />
   </ItemGroup>

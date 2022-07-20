@@ -1,4 +1,4 @@
-﻿// <copyright file="ECoS.cs" company="Dominic Ritz">
+﻿// <copyright file="ECoSCommandStation.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -15,27 +15,27 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.CommandStation;
+namespace TauStellwerk.Server.CommandStations;
 
 /// <summary>
-/// Implementation of a <see cref="CommandSystemBase"/> for the ESU Command Station (ECoS).
+/// Implementation of a <see cref="CommandStationBase"/> for the ESU Command Station (ECoS).
 /// </summary>
-public class ECoS : CommandSystemBase
+public class ECoSCommandStation : CommandStationBase
 {
-    private readonly ILogger<CommandSystemBase> _logger;
+    private readonly ILogger<CommandStationBase> _logger;
     private readonly ECosConnectionHandler _connectionHandler;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ECoS"/> class.
+    /// Initializes a new instance of the <see cref="ECoSCommandStation"/> class.
     /// </summary>
     /// <param name="config">IConfiguration to use.</param>
     /// <param name="logger">ILogger to use.</param>
-    public ECoS(IConfiguration config, ILogger<CommandSystemBase> logger)
+    public ECoSCommandStation(IConfiguration config, ILogger<CommandStationBase> logger)
         : base(config)
     {
         _logger = logger;
-        string ipAddress = Config["CommandSystem:IP"];
-        var port = int.Parse(Config["commandSystem:Port"]);
+        string ipAddress = Config["CommandStation:IP"];
+        var port = int.Parse(Config["CommandStation:Port"]);
         _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port, logger);
 
         _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);

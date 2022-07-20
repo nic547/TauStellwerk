@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database.Model;
 using Timer = System.Timers.Timer;
 
@@ -17,7 +17,7 @@ namespace TauStellwerk.Server.Services.EngineService;
 
 public class MomentaryFunctionHandler
 {
-    private readonly CommandSystemBase _commandSystem;
+    private readonly CommandStationBase _commandStation;
     private readonly int _timeDecrement;
 
     private readonly List<Entry> _activeFunctions = new();
@@ -25,9 +25,9 @@ public class MomentaryFunctionHandler
     private readonly SemaphoreSlim _listLock = new(1);
     private readonly Timer _timer;
 
-    public MomentaryFunctionHandler(CommandSystemBase commandSystem, int timeBetweenRuns)
+    public MomentaryFunctionHandler(CommandStationBase commandStation, int timeBetweenRuns)
     {
-        _commandSystem = commandSystem;
+        _commandStation = commandStation;
         var timeBetweenRuns1 = timeBetweenRuns;
 
         // Chosen so functions are turned off slighty early - doesn't seem to have an effect on the function, but it's certainly "ready" for the next activation.
@@ -59,7 +59,7 @@ public class MomentaryFunctionHandler
             var entry = _activeFunctions[i];
             if (entry.RemainingDuration < 0)
             {
-                await _commandSystem.HandleEngineFunction(entry.Engine, entry.FunctionNumber, State.Off);
+                await _commandStation.HandleEngineFunction(entry.Engine, entry.FunctionNumber, State.Off);
                 _activeFunctions.RemoveAt(i);
             }
             else

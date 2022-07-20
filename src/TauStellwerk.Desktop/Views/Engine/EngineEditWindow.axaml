@@ -5,6 +5,7 @@
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineEditWindow"
+        Icon="/Assets/tauStellwerk.ico"
         Title="EngineEditWindow">
   <Design.DataContext>
     <engine:EngineEditViewModel/>

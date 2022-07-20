@@ -5,7 +5,7 @@
 
 using System.Linq;
 using NUnit.Framework;
-using TauStellwerk.Server.CommandStation;
+using TauStellwerk.Server.CommandStations;
 
 #nullable enable
 

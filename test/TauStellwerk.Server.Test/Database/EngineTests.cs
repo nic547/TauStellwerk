@@ -9,7 +9,6 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.Database.Tests;

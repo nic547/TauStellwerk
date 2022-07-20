@@ -5,6 +5,8 @@
 
 using System;
 using System.Threading.Tasks;
+using Avalonia.Themes.Fluent;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
@@ -16,13 +18,16 @@ namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly SettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
     private readonly StatusService _statusService;
     private readonly IViewService _viewService;
 
-    public MainWindowViewModel(StatusService? statusService = null, SettingsService? settingsService = null, IViewService? viewService = null)
+    [ObservableProperty]
+    private FluentThemeMode _themeMode;
+
+    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, IViewService? viewService = null)
     {
-        _settingsService = settingsService ?? Locator.Current.GetService<SettingsService>() ?? throw new InvalidOperationException();
+        _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
         _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
 
@@ -34,6 +39,20 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             StopButtonState.SetStatus(_statusService.LastKnownStatus);
         }
+
+        var settings = _settingsService.GetSettings().Result;
+        if (Enum.TryParse<FluentThemeMode>(settings.Theme, out var themeMode))
+        {
+            ThemeMode = themeMode;
+        }
+
+        _settingsService.SettingsChanged += (updatedSetting) =>
+        {
+            if (Enum.TryParse<FluentThemeMode>(updatedSetting.Theme, out var updatedThemeMode))
+            {
+                ThemeMode = updatedThemeMode;
+            }
+        };
     }
 
     public StopButtonState StopButtonState { get; } = new();
