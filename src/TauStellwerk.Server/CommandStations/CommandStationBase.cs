@@ -6,6 +6,7 @@
 #nullable enable
 
 using System.Threading.Tasks;
+using FluentResults;
 using Microsoft.Extensions.Configuration;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database;
@@ -76,6 +77,11 @@ public abstract class CommandStationBase
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     public abstract Task CheckState();
+
+    public virtual Task<Result> HandleTurnout(Turnout turnout, State state)
+    {
+        return Task.FromResult(Result.Fail("CommandSystem doesn't support Turnouts"));
+    }
 
     protected virtual void OnStatusChange(State state)
     {

@@ -20,6 +20,7 @@
         </Button>
         <StackPanel>
             <Button Command="{Binding OpenEngineListCommand}">Select Engine</Button>
+            <Button Command="{Binding OpenTurnoutListCommand}">Turnout List</Button>
             <Button Command="{Binding OpenSettingsCommand}" Content="Settings" />
           </StackPanel>
     </DockPanel>

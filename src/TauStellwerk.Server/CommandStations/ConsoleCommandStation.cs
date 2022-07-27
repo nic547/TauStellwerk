@@ -5,6 +5,8 @@
 
 using System;
 using System.Threading.Tasks;
+using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
@@ -57,5 +59,11 @@ public class ConsoleCommandStation : CommandStationBase
     {
         Console.WriteLine($"System was {(state == State.On ? "started" : "stopped")}");
         return Task.CompletedTask;
+    }
+
+    public override Task<Result> HandleTurnout(Turnout turnout, State state)
+    {
+        Console.WriteLine($"Turnout at address {turnout.Address} was {(state == State.On ? "turned on" : "turned off")}");
+        return Task.FromResult(Result.Ok());
     }
 }

@@ -28,6 +28,8 @@ public class StwDbContext : DbContext
 
     public DbSet<Tag> Tags => Set<Tag>();
 
+    public DbSet<Turnout> Turnouts => Set<Turnout>();
+
     internal class StwDbContextDesignTimeFactory : IDesignTimeDbContextFactory<StwDbContext>
     {
         public StwDbContext CreateDbContext(string[] args)

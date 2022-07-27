@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Threading.Tasks;
+using FluentResults;
 using Microsoft.Extensions.Configuration;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
@@ -47,5 +48,10 @@ public class NullCommandStation : CommandStationBase
     public override Task CheckState()
     {
         return Task.CompletedTask;
+    }
+
+    public override Task<Result> HandleTurnout(Turnout turnout, State state)
+    {
+        return Task.FromResult(Result.Ok());
     }
 }

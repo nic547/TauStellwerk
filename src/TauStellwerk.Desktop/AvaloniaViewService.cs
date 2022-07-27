@@ -12,6 +12,7 @@ using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.ViewModels.Engine;
 using TauStellwerk.Desktop.Views;
 using TauStellwerk.Desktop.Views.Engine;
+using TauStellwerk.Desktop.Views.Turnouts;
 
 namespace TauStellwerk.Desktop;
 
@@ -62,6 +63,25 @@ public class AvaloniaViewService : IViewService
         window.Show(TryGetMainWindow());
     }
 
+    public void ShowTurnoutsWindow(object? source = null)
+    {
+        var vm = new TurnoutsViewModel();
+        var window = new TurnoutsWindow(vm);
+        window.Show(TryGetMainWindow());
+    }
+
+    public void ShowTurnoutEditWindow(Turnout turnout, object? source = null)
+    {
+        var vm = new TurnoutEditViewModel(turnout);
+        var window = new TurnoutEditWindow(vm);
+        window.Show(TryGetAssociatedWindow(source));
+    }
+
+    /// <summary>
+    /// Tries to find the window of a given DataContext.
+    /// </summary>
+    /// <param name="source">The DataContext.</param>
+    /// <returns>The window.</returns>
     private static Window? TryGetAssociatedWindow(object? source)
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime appLifetime)

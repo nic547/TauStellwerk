@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ResultExtension.cs" />
+  </ItemGroup>
+
 </Project>
