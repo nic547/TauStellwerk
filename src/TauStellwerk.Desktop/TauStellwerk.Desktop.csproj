@@ -38,4 +38,11 @@
   <ItemGroup>
     <None Remove="Views\CustomStyles.xaml" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Views\Turnouts\TurnoutsWindow.axaml.cs">
+      <DependentUpon>TurnoutsWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

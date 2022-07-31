@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.CommandStations;
+using TauStellwerk.Server.Dao;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Hub;
 using TauStellwerk.Server.Services;
@@ -76,7 +77,10 @@ public class Startup
             p.GetRequiredService<ILogger<EngineService>>(),
             p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
+        services.AddSingleton<TurnoutService>();
+
         services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
+        services.AddScoped<ITurnoutDao>(p => new TurnoutDao(p.GetRequiredService<StwDbContext>()));
     }
 
     /// <summary>

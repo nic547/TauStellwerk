@@ -10,7 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Client;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -20,16 +19,16 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
     private readonly StatusService _statusService;
-    private readonly IViewService _viewService;
+    private readonly AvaloniaViewService _viewService;
 
     [ObservableProperty]
     private FluentThemeMode _themeMode;
 
-    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, IViewService? viewService = null)
+    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
     {
         _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
 
         _statusService.StatusChanged += (status) =>
         {
@@ -81,5 +80,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private void OpenSettings()
     {
         _viewService.ShowSettingsView(this);
+    }
+
+    [ICommand]
+    private void OpenTurnoutList()
+    {
+        _viewService.ShowTurnoutsWindow(this);
     }
 }

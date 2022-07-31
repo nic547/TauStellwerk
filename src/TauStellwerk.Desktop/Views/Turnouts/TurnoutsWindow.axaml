@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TauStellwerk.Desktop.Views.TurnoutsWindow"
+        Icon="/Assets/tauStellwerk.ico"
+        Title="TauStellwerk.Desktop">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom">
+            <Button Command="{Binding CreateTurnoutCommand}" Content="Create" />
+        </StackPanel>
+        <ListBox Items="{Binding Turnouts}" DataContext="{Binding .}" HorizontalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding Name}" Margin="3" />
+                        <ToggleButton Content="Switch"
+                                      Command="{Binding DataContext.ToggleTurnoutCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                      CommandParameter="{Binding .}" />
+                        <Button Content="Edit"
+                                Command="{Binding DataContext.EditTurnoutCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding .}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
+    <Design.DataContext>
+        <viewModels:TurnoutsViewModel />
+    </Design.DataContext>
+</Window>

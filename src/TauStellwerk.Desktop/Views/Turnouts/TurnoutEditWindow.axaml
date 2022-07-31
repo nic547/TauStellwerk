@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TauStellwerk.Desktop.Views.Turnouts.TurnoutEditWindow"
+        Title="TurnoutEditWindow">
+	<Design.DataContext>
+        <viewModels:TurnoutEditViewModel/>
+    </Design.DataContext>
+    <StackPanel>
+        <StackPanel ToolTip.Tip="Name of the turnout. Can be freely chosen." Margin="2">
+            <Label Content="Name" />
+            <TextBox Text="{Binding Turnout.Name, Mode=TwoWay, FallbackValue={}}" />
+        </StackPanel>
+        <StackPanel ToolTip.Tip="Address of the decoder of the turnout." Margin="2">
+            <Label Content="Address" />
+            <NumericUpDown Text="{Binding Turnout.Address, Mode=TwoWay, FallbackValue={}}" />
+        </StackPanel>
+        <StackPanel ToolTip.Tip="The type of turnout this is.">
+            <Label>Type</Label>
+            <ComboBox SelectedItem="{Binding Turnout.Kind, FallbackValue={}}" Items="{Binding TurnoutKinds}">
+            </ComboBox>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+            <Button Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+        </StackPanel>
+    </StackPanel>
+</Window>

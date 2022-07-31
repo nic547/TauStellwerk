@@ -31,4 +31,10 @@ public static class SplatFactory
         var settingService = Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         return new ConnectionService(settingService);
     }
+
+    public static ITurnoutService CreateTurnoutService()
+    {
+        var connectionService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
+        return new TurnoutService(connectionService);
+    }
 }

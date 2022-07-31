@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TauStellwerk.Server.Database;
 
@@ -10,9 +11,10 @@ using TauStellwerk.Server.Database;
 namespace TauStellwerk.Server.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    partial class StwDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220726102856_Turnouts")]
+    partial class Turnouts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.6");

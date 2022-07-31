@@ -6,6 +6,7 @@
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentResults;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
@@ -114,6 +115,20 @@ public class DccExSerialCommandStation : CommandStationBase
         // Removal depends on https://github.com/DCC-EX/CommandStation-EX/pull/233 getting merged and making it into a release.
         state.Direction = Direction.Backwards;
         return true;
+    }
+
+    public override async Task<Result> HandleTurnout(Turnout turnout, State state)
+    {
+        if (state == State.On)
+        {
+            await Send($"<a {turnout.Address} 1>");
+        }
+        else
+        {
+            await Send($"<a {turnout.Address} 0>");
+        }
+
+        return Result.Ok();
     }
 
     private async Task Send(string message)

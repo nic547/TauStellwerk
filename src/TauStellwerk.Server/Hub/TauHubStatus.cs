@@ -10,7 +10,6 @@ using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Server.Hub;
 
-[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
     public SystemStatus GetStatus()
