@@ -16,7 +16,7 @@
         </StackPanel>
         <StackPanel ToolTip.Tip="Address of the decoder of the turnout." Margin="2">
             <Label Content="Address" />
-            <NumericUpDown Text="{Binding Turnout.Address, Mode=TwoWay, FallbackValue={}}" />
+            <NumericUpDown Value="{Binding Turnout.Address, Mode=TwoWay, FallbackValue={}}" Maximum="2044" Minimum="1" Increment="1" />
         </StackPanel>
         <StackPanel ToolTip.Tip="The type of turnout this is.">
             <Label>Type</Label>
