@@ -63,7 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var username = (await _settingsService.GetSettings()).Username;
         var status = new SystemStatus()
         {
-            State = isCurrentlyRunning == State.Off ? State.Off : State.On,
+            State = isCurrentlyRunning == State.On ? State.Off : State.On,
             LastActionUsername = username,
         };
 
