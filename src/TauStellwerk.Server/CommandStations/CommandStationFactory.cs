@@ -28,7 +28,7 @@ public static class CommandStationFactory
 
     public static CommandStationBase FromConfig(IConfiguration config, ILogger<CommandStationBase> logger)
     {
-        var systemSetting = config["CommandStation:Type"];
+        var systemSetting = RemoveCommandStationSuffix(config["CommandStation:Type"]);
 
         CommandStationEntry? bestMatch = null;
         var bestMatchDistance = int.MaxValue;
@@ -63,13 +63,18 @@ public static class CommandStationFactory
     {
         var name = commandSystemType.Name;
 
-        if (name.EndsWith("CommandStation"))
+        return RemoveCommandStationSuffix(name);
+    }
+
+    private static string RemoveCommandStationSuffix(string input)
+    {
+        if (input.EndsWith("CommandStation"))
         {
             // Remove suffix from string
-            return name[..^14];
+            return input[..^14];
         }
 
-        return name;
+        return input;
     }
 
     private record CommandStationEntry
