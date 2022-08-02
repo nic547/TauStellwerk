@@ -29,6 +29,9 @@ public partial class EngineEditViewModel : ViewModelBase
 
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
         _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
+
+        // Intentionally done once, I don't want the new name to show up until the engine is saved.
+        WindowTitle = $"{engine.Name} - Edit";
     }
 
     public delegate void HandleClosingRequested();
@@ -36,6 +39,8 @@ public partial class EngineEditViewModel : ViewModelBase
     public event HandleClosingRequested? ClosingRequested;
 
     public EngineFull Engine { get; }
+
+    public string WindowTitle { get; init; }
 
     public async void HandleWindowClosing(object? sender, EventArgs e)
     {

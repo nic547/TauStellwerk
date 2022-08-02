@@ -3,12 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
-        xmlns:root="clr-namespace:TauStellwerk.Desktop"
         xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineControlWindow"
+        x:DataType="engine:EngineControlViewModel"
         Icon="/Assets/tauStellwerk.ico"
-        Title="EngineControlWindow">
+        Title="{CompiledBinding WindowTitle}">
     <Design.DataContext>
         <engine:EngineControlViewModel/>
     </Design.DataContext>
@@ -57,7 +57,7 @@
                 Margin="2"
                 HorizontalAlignment="Center"
                 Content="     Emergency Stop     " 
-                ToolTip.Tip="Quickly stops an engine and not simulating momentum." 
+                ToolTip.Tip="Quickly stops an engine without simulating momentum." 
                 Command="{Binding EmergencyStopCommand}"/>
     </Grid>
 </Window>
