@@ -48,7 +48,7 @@ public partial class EngineControlViewModel : ViewModelBase
     }
 
     public EngineFull Engine { get; }
-    
+
     public string WindowTitle { get; }
 
     public void OnClosing(object? sender, CancelEventArgs e)

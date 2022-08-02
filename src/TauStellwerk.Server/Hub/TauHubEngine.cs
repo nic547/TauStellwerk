@@ -24,13 +24,13 @@ public partial class TauHub
             return Result.Fail("Session not found");
         }
 
-        var engineResult = await _engineRepo.GetEngine(id);
+        var engineResult = await _engineDao.GetEngine(id);
         if (!engineResult.IsSuccess)
         {
             return Result.Fail("Engine not found");
         }
 
-        await _engineRepo.UpdateLastUsed(id);
+        await _engineDao.UpdateLastUsed(id);
         var acquireResult = await _engineService.AcquireEngine(session, engineResult.Value);
 
         return acquireResult;
@@ -86,7 +86,7 @@ public partial class TauHub
 
     public async Task<Result<EngineFullDto>> GetEngine(int id)
     {
-        return await _engineRepo.GetEngineFullDto(id);
+        return await _engineDao.GetEngineFullDto(id);
     }
 
     public async Task<IList<EngineOverviewDto>> GetEngines(
@@ -95,7 +95,7 @@ public partial class TauHub
         bool sortDescending = true,
         bool showHidden = false)
     {
-        var list = await _engineRepo.GetEngineList(page, showHidden, sorting, sortDescending);
+        var list = await _engineDao.GetEngineList(page, showHidden, sorting, sortDescending);
         return list;
     }
 
@@ -116,7 +116,7 @@ public partial class TauHub
             }
         }
 
-        return await _engineRepo.UpdateOrAdd(engine);
+        return await _engineDao.UpdateOrAdd(engine);
     }
 
     public async Task<ResultDto> DeleteEngine(int id)
@@ -133,7 +133,7 @@ public partial class TauHub
             return result;
         }
 
-        var deleteResult = await _engineRepo.Delete(id);
+        var deleteResult = await _engineDao.Delete(id);
         if (deleteResult.IsFailed)
         {
             return deleteResult;
