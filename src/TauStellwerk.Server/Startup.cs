@@ -79,7 +79,7 @@ public class Startup
 
         services.AddSingleton<TurnoutService>();
 
-        services.AddScoped(p => new EngineRepo(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineRepo>>()));
+        services.AddScoped(p => new EngineDao(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineDao>>()));
         services.AddScoped<ITurnoutDao>(p => new TurnoutDao(p.GetRequiredService<StwDbContext>()));
     }
 

@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.TurnoutsWindow"
         Icon="/Assets/tauStellwerk.ico"
-        Title="TauStellwerk.Desktop">
+        Title="Turnout List">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom">
             <Button Command="{Binding CreateTurnoutCommand}" Content="Create" />

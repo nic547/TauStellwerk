@@ -35,6 +35,8 @@ public partial class EngineControlViewModel : ViewModelBase
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
 
         PropertyChanged += HandlePropertyChanged;
+
+        WindowTitle = $"{engine.Name} - Control";
     }
 
     public EngineControlViewModel()
@@ -46,6 +48,8 @@ public partial class EngineControlViewModel : ViewModelBase
     }
 
     public EngineFull Engine { get; }
+
+    public string WindowTitle { get; }
 
     public void OnClosing(object? sender, CancelEventArgs e)
     {

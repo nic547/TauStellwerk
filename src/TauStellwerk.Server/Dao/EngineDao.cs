@@ -1,4 +1,4 @@
-﻿// <copyright file="EngineRepo.cs" company="Dominic Ritz">
+﻿// <copyright file="EngineDao.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -15,16 +15,16 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server;
+namespace TauStellwerk.Server.Dao;
 
-public class EngineRepo
+public class EngineDao
 {
     private const int ResultsPerPage = 20;
 
     private readonly StwDbContext _dbContext;
-    private readonly ILogger<EngineRepo> _logger;
+    private readonly ILogger<EngineDao> _logger;
 
-    public EngineRepo(StwDbContext dbContext, ILogger<EngineRepo> logger)
+    public EngineDao(StwDbContext dbContext, ILogger<EngineDao> logger)
     {
         _dbContext = dbContext;
         _logger = logger;

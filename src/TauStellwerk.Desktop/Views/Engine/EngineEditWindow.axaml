@@ -6,7 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.Engine.EngineEditWindow"
         Icon="/Assets/tauStellwerk.ico"
-        Title="EngineEditWindow">
+        Title="{CompiledBinding WindowTitle}"
+        x:DataType="engine:EngineEditViewModel">
   <Design.DataContext>
     <engine:EngineEditViewModel/>
   </Design.DataContext>
