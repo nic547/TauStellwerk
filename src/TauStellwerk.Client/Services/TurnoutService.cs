@@ -3,10 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.AspNetCore.SignalR.Client;
 using TauStellwerk.Base.Dto;

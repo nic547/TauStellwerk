@@ -3,9 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-
 namespace TauStellwerk.Base.Dto;
 
 public class EngineOverviewDto

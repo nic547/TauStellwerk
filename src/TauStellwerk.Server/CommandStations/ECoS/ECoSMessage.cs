@@ -3,9 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace TauStellwerk.Server.CommandStations;
 
 public record ECoSMessage

@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.ComponentModel;
 using System.Timers;
 using JetBrains.Annotations;
@@ -15,7 +14,7 @@ public class StopButtonState : INotifyPropertyChanged
 {
     private const int LockingSeconds = 3;
 
-    private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
+    private readonly System.Timers.Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
     {
         AutoReset = false,
         Enabled = false,

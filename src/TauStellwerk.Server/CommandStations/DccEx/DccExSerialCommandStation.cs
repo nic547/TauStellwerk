@@ -4,11 +4,7 @@
 // </copyright>
 
 using System.IO.Ports;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentResults;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Server.Database.Model;
 

@@ -3,9 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;

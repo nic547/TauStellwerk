@@ -4,7 +4,6 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;

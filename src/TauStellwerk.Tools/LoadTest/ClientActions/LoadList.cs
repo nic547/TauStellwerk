@@ -3,8 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Services;
