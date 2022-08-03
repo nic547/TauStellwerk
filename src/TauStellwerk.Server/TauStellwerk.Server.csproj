@@ -1,16 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\TauStellwerk.Server.xml</DocumentationFile>
     <UserSecretsId>ad9a0063-5acf-4944-92ae-b862ff53e772</UserSecretsId>
-    <Nullable>enable</Nullable>
     <RootNamespace>TauStellwerk.Server</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
   </PropertyGroup>
@@ -19,10 +15,6 @@
     <None Remove="StwDatabase.db" />
     <None Remove="originalImages\**" />
     <None Remove="generatedImages\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 
   <ItemGroup>

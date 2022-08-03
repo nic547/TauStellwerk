@@ -1,16 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\TauStellwerk.Test.xml</DocumentationFile>
     <IsPackable>false</IsPackable>
-    <Nullable>enable</Nullable>
     <RootNamespace>TauStellwerk.Test</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 	
   <ItemGroup>
@@ -33,10 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TauStellwerk.Server\TauStellwerk.Server.csproj" />
     <ProjectReference Include="..\..\src\TauStellwerk.Tools\TauStellwerk.Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 
 </Project>

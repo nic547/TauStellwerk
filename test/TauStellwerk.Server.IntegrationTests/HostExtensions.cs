@@ -14,7 +14,7 @@ public static class HostExtensions
 {
     public static IHost CreateDatabase(this IHost host)
     {
-        var serviceScopeFactory = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+        var serviceScopeFactory = host.Services.GetService(typeof(IServiceScopeFactory)) as IServiceScopeFactory ?? throw new ApplicationException();
 
         using var scope = serviceScopeFactory.CreateScope();
 
