@@ -5,7 +5,7 @@
 
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.Client;
+namespace TauStellwerk.Client.Services;
 
 public interface IViewService
 {

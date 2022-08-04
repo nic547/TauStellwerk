@@ -5,7 +5,7 @@
 
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.Database.Tests;
+namespace TauStellwerk.Test.Database;
 
 /// <summary>
 /// Contains helpers proving sample data for testing stuff.

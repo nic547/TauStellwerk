@@ -7,7 +7,7 @@
 
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Base.Model;
+namespace TauStellwerk.Base;
 
 /// <summary>
 /// A user of the TauStellwerk software. Does not necessarily correspond to actual people.

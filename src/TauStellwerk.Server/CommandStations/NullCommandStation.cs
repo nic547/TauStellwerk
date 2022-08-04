@@ -4,7 +4,7 @@
 // </copyright>
 
 using FluentResults;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.CommandStations;

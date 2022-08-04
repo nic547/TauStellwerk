@@ -4,7 +4,7 @@
 // </copyright>
 
 using System.Collections.Immutable;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 public class EngineImage

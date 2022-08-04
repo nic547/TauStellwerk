@@ -5,7 +5,7 @@
 
 using FluentResults;
 
-namespace TauStellwerk.Base.Dto;
+namespace TauStellwerk.Base;
 
 public class ResultDto
 {

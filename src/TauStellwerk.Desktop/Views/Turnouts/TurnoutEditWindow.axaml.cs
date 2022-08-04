@@ -9,7 +9,7 @@ using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
 using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views.Turnouts;
+namespace TauStellwerk.Desktop.Views;
 public partial class TurnoutEditWindow : Window
 {
     public TurnoutEditWindow(TurnoutEditViewModel vm)

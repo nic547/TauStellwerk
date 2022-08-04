@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
-using TauStellwerk.Base.Model;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Dao;
 using TauStellwerk.Server.Database;

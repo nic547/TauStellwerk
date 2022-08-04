@@ -5,7 +5,7 @@
 
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 

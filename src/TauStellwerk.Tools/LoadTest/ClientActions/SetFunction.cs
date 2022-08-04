@@ -4,7 +4,7 @@
 // </copyright>
 
 using JetBrains.Annotations;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Tools.LoadTest.ClientActions;

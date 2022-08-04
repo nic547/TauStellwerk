@@ -5,8 +5,7 @@
 
 using FluentResults;
 using Microsoft.Extensions.Options;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database.Model;
 

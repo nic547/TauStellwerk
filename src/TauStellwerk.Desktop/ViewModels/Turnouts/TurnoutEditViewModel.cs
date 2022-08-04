@@ -6,7 +6,7 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 

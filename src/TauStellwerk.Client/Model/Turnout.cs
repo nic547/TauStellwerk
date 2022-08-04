@@ -4,8 +4,7 @@
 // </copyright>
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 

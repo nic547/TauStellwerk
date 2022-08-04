@@ -6,8 +6,9 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using TauStellwerk.Server.Database;
 
-namespace TauStellwerk.Server.Database.Tests;
+namespace TauStellwerk.Test.Database;
 
 public class ContextMigrationTests
 {

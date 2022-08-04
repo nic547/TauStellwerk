@@ -6,10 +6,10 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.Database.Tests;
+namespace TauStellwerk.Test.Database;
 
 /// <summary>
 /// Contains tests related to <see cref="Engine"/>.

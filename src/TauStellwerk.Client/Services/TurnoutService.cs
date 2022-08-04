@@ -6,8 +6,7 @@
 using System.Collections.Immutable;
 using FluentResults;
 using Microsoft.AspNetCore.SignalR.Client;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.Client.Services;

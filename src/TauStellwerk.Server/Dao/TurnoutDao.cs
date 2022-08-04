@@ -5,7 +5,7 @@
 
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 

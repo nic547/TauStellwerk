@@ -4,7 +4,7 @@
 // </copyright>
 
 using Microsoft.AspNetCore.SignalR.Client;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Services;
 

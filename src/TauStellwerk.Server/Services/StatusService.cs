@@ -5,7 +5,7 @@
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Hub;
 

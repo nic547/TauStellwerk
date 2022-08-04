@@ -6,7 +6,7 @@
 using System.ComponentModel;
 using System.Timers;
 using JetBrains.Annotations;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
@@ -77,7 +77,7 @@ public class StopButtonState : INotifyPropertyChanged
     {
         _lockingTimer.Stop();
         _lastActionUsername = systemStatus.LastActionUsername;
-        if (systemStatus.State == Base.Model.State.On)
+        if (systemStatus.State == Base.State.On)
         {
             CurrentState = State.Running;
         }

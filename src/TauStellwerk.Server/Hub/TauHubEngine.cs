@@ -5,8 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using FluentResults;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Server.Hub;
 

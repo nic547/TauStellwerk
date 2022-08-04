@@ -7,7 +7,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Server.Database.Model;
 

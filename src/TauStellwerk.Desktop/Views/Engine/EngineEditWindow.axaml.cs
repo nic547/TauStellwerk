@@ -7,9 +7,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
-using TauStellwerk.Desktop.ViewModels.Engine;
+using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views.Engine;
+namespace TauStellwerk.Desktop.Views;
 
 public class EngineEditWindow : Window
 {

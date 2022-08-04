@@ -6,7 +6,7 @@
 #nullable enable
 
 using System.Collections.Concurrent;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Server.Services;

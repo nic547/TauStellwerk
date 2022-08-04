@@ -8,11 +8,11 @@ using Avalonia.Controls.Primitives;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop.ViewModels.Engine;
+namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class EngineControlViewModel : ViewModelBase
 {

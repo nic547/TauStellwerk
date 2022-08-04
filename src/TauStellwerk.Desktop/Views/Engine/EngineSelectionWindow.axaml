@@ -5,15 +5,16 @@
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
         xmlns:root="clr-namespace:TauStellwerk.Desktop"
         xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="TauStellwerk.Desktop.Views.Engine.EngineSelectionWindow"
+        x:Class="TauStellwerk.Desktop.Views.EngineSelectionWindow"
         Icon="/Assets/tauStellwerk.ico"
         Title="Engine List"
         MinWidth="200"
         MinHeight="200"
         ClientSize="{Binding WindowSize, Mode=OneWayToSource}">
     <Design.DataContext>
-        <engine:EngineSelectionViewModel/>
+        <viewModels:EngineSelectionViewModel/>
     </Design.DataContext>
     <Panel Margin="5">
         <DockPanel LastChildFill="True">

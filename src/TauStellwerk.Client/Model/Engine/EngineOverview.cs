@@ -6,7 +6,7 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
