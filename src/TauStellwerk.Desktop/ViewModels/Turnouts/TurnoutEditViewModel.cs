@@ -30,7 +30,7 @@ public partial class TurnoutEditViewModel
 
     public IList<string> TurnoutKinds { get; } = Enum.GetNames(typeof(TurnoutKind));
 
-    [ICommand]
+    [RelayCommand]
     private async Task Save()
     {
         await _turnoutService.AddOrUpdate(Turnout);
@@ -38,7 +38,7 @@ public partial class TurnoutEditViewModel
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void Cancel()
     {
         ClosingRequested?.Invoke();

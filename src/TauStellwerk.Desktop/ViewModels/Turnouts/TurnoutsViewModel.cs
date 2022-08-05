@@ -51,20 +51,20 @@ public partial class TurnoutsViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void CreateTurnout()
     {
         var turnout = new Turnout();
         _viewService.ShowTurnoutEditWindow(turnout, this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void ToggleTurnout(Turnout turnout)
     {
         _turnoutService.ToggleState(turnout);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void EditTurnout(Turnout turnout)
     {
         _viewService.ShowTurnoutEditWindow(turnout, this);

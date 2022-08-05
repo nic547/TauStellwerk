@@ -12,7 +12,7 @@ namespace TauStellwerk.Client.Model;
 public partial class Turnout
 {
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsOn))]
+    [NotifyPropertyChangedFor(nameof(IsOn))]
     private State _state;
 
     [ObservableProperty]

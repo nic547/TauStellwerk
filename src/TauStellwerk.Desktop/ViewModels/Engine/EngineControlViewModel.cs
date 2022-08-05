@@ -69,7 +69,7 @@ public partial class EngineControlViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task ChangeDirection(string shouldBeDrivingForward)
     {
         IsDrivingForward = bool.Parse(shouldBeDrivingForward);
@@ -86,14 +86,14 @@ public partial class EngineControlViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task Function(ToggleButton button)
     {
         var function = (Function)(button.Tag ?? throw new InvalidOperationException());
         await _engineService.ToggleFunction(Engine, function);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task EmergencyStop()
     {
         Throttle = 0;

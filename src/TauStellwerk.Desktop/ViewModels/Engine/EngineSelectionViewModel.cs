@@ -76,7 +76,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task ControlEngine(int id)
     {
         var engine = await _engineService.AcquireEngine(id);
@@ -109,7 +109,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanScrollBackwards));
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task EditEngine(int id)
     {
         var engine = await _engineService.AcquireEngine(id);
@@ -126,7 +126,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void CreateEngine()
     {
         var engine = new EngineFull();

@@ -43,14 +43,14 @@ public partial class EngineEditViewModel : ViewModelBase
         await _engineService.ReleaseEngine(Engine.Id);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task Save()
     {
         await _engineService.AddOrUpdateEngine(Engine);
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task Delete()
     {
         var deleteResult = await _engineService.TryDeleteEngine(Engine);
@@ -63,13 +63,13 @@ public partial class EngineEditViewModel : ViewModelBase
         _viewService.ShowMessageBox("Failed to delete engine", $"Failed to delete engine: {deleteResult.Error}", this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void Cancel()
     {
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddTag()
     {
         if (TagInputText != string.Empty)
@@ -79,13 +79,13 @@ public partial class EngineEditViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void RemoveTag(string tag)
     {
         Engine.Tags.Remove(tag);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddFunction()
     {
         var lastFunctionNumber = Engine.Functions.LastOrDefault()?.Number;
@@ -94,7 +94,7 @@ public partial class EngineEditViewModel : ViewModelBase
         Engine.Functions.Add(new Function((byte)lastFunctionNumber, string.Empty, 0));
     }
 
-    [ICommand]
+    [RelayCommand]
     private void RemoveLastFunction()
     {
         var last = Engine.Functions.LastOrDefault();

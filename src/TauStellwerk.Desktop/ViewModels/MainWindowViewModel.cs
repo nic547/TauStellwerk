@@ -54,7 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public StopButtonState StopButtonState { get; } = new();
 
-    [ICommand]
+    [RelayCommand]
     private async Task StopButton()
     {
         var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
@@ -68,19 +68,19 @@ public partial class MainWindowViewModel : ViewModelBase
         await _statusService.SetStatus(status);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenEngineList()
     {
         _viewService.ShowEngineSelectionView(this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenSettings()
     {
         _viewService.ShowSettingsView(this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenTurnoutList()
     {
         _viewService.ShowTurnoutsWindow(this);

@@ -31,7 +31,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     public string[] AvailableThemes { get; } = { FluentThemeMode.Light.ToString(), FluentThemeMode.Dark.ToString() };
 
-    [ICommand]
+    [RelayCommand]
     public async Task Save()
     {
         if (_settings != null)
@@ -42,7 +42,7 @@ public partial class SettingsViewModel : ViewModelBase
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     public void Cancel()
     {
         ClosingRequested?.Invoke();
