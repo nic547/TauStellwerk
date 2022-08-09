@@ -3,8 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Threading.Tasks;
 using Avalonia.Themes.Fluent;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -33,7 +31,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     public string[] AvailableThemes { get; } = { FluentThemeMode.Light.ToString(), FluentThemeMode.Dark.ToString() };
 
-    [ICommand]
+    [RelayCommand]
     public async Task Save()
     {
         if (_settings != null)
@@ -44,7 +42,7 @@ public partial class SettingsViewModel : ViewModelBase
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     public void Cancel()
     {
         ClosingRequested?.Invoke();

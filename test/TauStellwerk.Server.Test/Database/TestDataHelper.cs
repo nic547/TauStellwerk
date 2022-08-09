@@ -3,10 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
 using TauStellwerk.Server.Database.Model;
 
-namespace TauStellwerk.Server.Database.Tests;
+namespace TauStellwerk.Test.Database;
 
 /// <summary>
 /// Contains helpers proving sample data for testing stuff.

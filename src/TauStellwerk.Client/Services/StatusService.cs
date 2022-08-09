@@ -3,9 +3,8 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Services;
 

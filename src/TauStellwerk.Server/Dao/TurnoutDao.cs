@@ -3,12 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 

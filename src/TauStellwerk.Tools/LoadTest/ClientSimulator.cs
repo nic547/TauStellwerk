@@ -3,14 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Threading.Tasks;
-using System.Timers;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Tools.LoadTest.ClientActions;
 using TauStellwerk.Util;
+using Timer = System.Timers.Timer;
 
 namespace TauStellwerk.Tools.LoadTest;
 

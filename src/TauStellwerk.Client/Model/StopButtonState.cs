@@ -3,11 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.ComponentModel;
 using System.Timers;
 using JetBrains.Annotations;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
@@ -15,7 +14,7 @@ public class StopButtonState : INotifyPropertyChanged
 {
     private const int LockingSeconds = 3;
 
-    private readonly Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
+    private readonly System.Timers.Timer _lockingTimer = new(TimeSpan.FromSeconds(LockingSeconds).TotalMilliseconds)
     {
         AutoReset = false,
         Enabled = false,
@@ -78,7 +77,7 @@ public class StopButtonState : INotifyPropertyChanged
     {
         _lockingTimer.Stop();
         _lastActionUsername = systemStatus.LastActionUsername;
-        if (systemStatus.State == Base.Model.State.On)
+        if (systemStatus.State == Base.State.On)
         {
             CurrentState = State.Running;
         }

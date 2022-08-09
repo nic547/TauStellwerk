@@ -4,8 +4,7 @@
 // </copyright>
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
@@ -13,7 +12,7 @@ namespace TauStellwerk.Client.Model;
 public partial class Turnout
 {
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsOn))]
+    [NotifyPropertyChangedFor(nameof(IsOn))]
     private State _state;
 
     [ObservableProperty]

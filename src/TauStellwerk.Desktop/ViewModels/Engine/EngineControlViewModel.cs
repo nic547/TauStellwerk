@@ -3,18 +3,16 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using Avalonia.Controls.Primitives;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop.ViewModels.Engine;
+namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class EngineControlViewModel : ViewModelBase
 {
@@ -71,7 +69,7 @@ public partial class EngineControlViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task ChangeDirection(string shouldBeDrivingForward)
     {
         IsDrivingForward = bool.Parse(shouldBeDrivingForward);
@@ -88,14 +86,14 @@ public partial class EngineControlViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task Function(ToggleButton button)
     {
         var function = (Function)(button.Tag ?? throw new InvalidOperationException());
         await _engineService.ToggleFunction(Engine, function);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task EmergencyStop()
     {
         Throttle = 0;

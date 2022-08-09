@@ -8,15 +8,15 @@ using System.Timers;
 namespace TauStellwerk.Util;
 
 /// <summary>
-/// Wraps <see cref="Timer"/> and implements <see cref="ITimer"/>.
+/// Wraps <see cref="System.Timers.Timer"/> and implements <see cref="ITimer"/>.
 /// </summary>
 public class TimerWrapper : ITimer
 {
-    private readonly Timer _timer;
+    private readonly System.Timers.Timer _timer;
 
     public TimerWrapper()
     {
-        _timer = new Timer();
+        _timer = new();
         _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args);
     }
 

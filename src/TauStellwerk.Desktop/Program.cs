@@ -5,7 +5,6 @@
 
 using Avalonia;
 using Splat;
-using TauStellwerk.Client;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop;

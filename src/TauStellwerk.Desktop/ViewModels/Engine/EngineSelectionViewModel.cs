@@ -3,19 +3,16 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
-using TauStellwerk.Client;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
-namespace TauStellwerk.Desktop.ViewModels.Engine;
+namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class EngineSelectionViewModel : ViewModelBase
 {
@@ -79,7 +76,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task ControlEngine(int id)
     {
         var engine = await _engineService.AcquireEngine(id);
@@ -112,7 +109,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanScrollBackwards));
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task EditEngine(int id)
     {
         var engine = await _engineService.AcquireEngine(id);
@@ -129,7 +126,7 @@ public partial class EngineSelectionViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void CreateEngine()
     {
         var engine = new EngineFull();

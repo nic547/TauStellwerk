@@ -3,14 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
 using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views.Turnouts;
+namespace TauStellwerk.Desktop.Views;
 public partial class TurnoutEditWindow : Window
 {
     public TurnoutEditWindow(TurnoutEditViewModel vm)

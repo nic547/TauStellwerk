@@ -3,9 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
@@ -94,12 +92,12 @@ public class BlazorSettingsService : ISettingsService
     private async Task<MutableSettings?> TryLoadSettings()
     {
         var json = await _runtime.InvokeAsync<string>("getItem", SettingsKey);
-        return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.MutableSettings);
+        return JsonSerializer.Deserialize(json, Client.SettingsJsonContext.Default.MutableSettings);
     }
 
     private async Task SaveSettings(MutableSettings settings)
     {
-        var json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.MutableSettings);
+        var json = JsonSerializer.Serialize(settings, Client.SettingsJsonContext.Default.MutableSettings);
         await _runtime.InvokeVoidAsync("setItem", SettingsKey, json);
     }
 }

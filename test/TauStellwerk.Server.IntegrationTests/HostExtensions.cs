@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TauStellwerk.Server.Database;
@@ -14,7 +13,7 @@ public static class HostExtensions
 {
     public static IHost CreateDatabase(this IHost host)
     {
-        var serviceScopeFactory = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+        var serviceScopeFactory = host.Services.GetService(typeof(IServiceScopeFactory)) as IServiceScopeFactory ?? throw new ApplicationException();
 
         using var scope = serviceScopeFactory.CreateScope();
 

@@ -5,7 +5,6 @@
 
 #nullable enable
 
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace TauStellwerk.Server.CommandStations;

@@ -1,0 +1,16 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	
+	<ItemGroup>
+    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
+  </ItemGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

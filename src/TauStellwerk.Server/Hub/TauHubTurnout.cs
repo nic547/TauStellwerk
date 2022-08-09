@@ -3,10 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Server.Hub;
 

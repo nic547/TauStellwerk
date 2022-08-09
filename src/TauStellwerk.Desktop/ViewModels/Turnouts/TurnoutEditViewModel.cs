@@ -3,13 +3,10 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -33,7 +30,7 @@ public partial class TurnoutEditViewModel
 
     public IList<string> TurnoutKinds { get; } = Enum.GetNames(typeof(TurnoutKind));
 
-    [ICommand]
+    [RelayCommand]
     private async Task Save()
     {
         await _turnoutService.AddOrUpdate(Turnout);
@@ -41,7 +38,7 @@ public partial class TurnoutEditViewModel
         ClosingRequested?.Invoke();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void Cancel()
     {
         ClosingRequested?.Invoke();

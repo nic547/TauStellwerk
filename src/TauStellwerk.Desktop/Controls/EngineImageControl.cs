@@ -3,13 +3,8 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -25,8 +20,8 @@ namespace TauStellwerk.Desktop.Controls;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "This specific class looks better this way.")]
 public class EngineImageControl : Image
 {
-    public static readonly DirectProperty<EngineImageControl, IImmutableList<EngineImage>> EngineImagesProperty =
-        AvaloniaProperty.RegisterDirect<EngineImageControl, IImmutableList<EngineImage>>(
+    public static readonly DirectProperty<EngineImageControl, IImmutableList<EngineImage>?> EngineImagesProperty =
+        AvaloniaProperty.RegisterDirect<EngineImageControl, IImmutableList<EngineImage>?>(
             nameof(EngineImages),
             i => i.EngineImages,
             (o, v) => o.EngineImages = v);
@@ -42,9 +37,9 @@ public class EngineImageControl : Image
 
     private static HttpClient? _httpClient;
 
-    private IImmutableList<EngineImage> _engineImages = ImmutableList<EngineImage>.Empty;
+    private IImmutableList<EngineImage>? _engineImages;
 
-    public IImmutableList<EngineImage> EngineImages
+    public IImmutableList<EngineImage>? EngineImages
     {
         get => _engineImages;
         set
@@ -66,8 +61,13 @@ public class EngineImageControl : Image
         base.OnInitialized();
     }
 
-    private async Task LoadImages(IImmutableList<EngineImage> images)
+    private async Task LoadImages(IImmutableList<EngineImage>? images)
     {
+        if (images is null)
+        {
+            return;
+        }
+
         var imagePathResult = await DownloadImageToFilesystem(images);
         if (imagePathResult.IsFailed)
         {

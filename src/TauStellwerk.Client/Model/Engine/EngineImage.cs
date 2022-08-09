@@ -3,11 +3,8 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 public class EngineImage

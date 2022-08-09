@@ -1,28 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>.\bin\TauStellwerk.Data.xml</DocumentationFile>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>.\bin\TauStellwerk.Base.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FluentResults" Version="3.8.0" />
+    <PackageReference Include="FluentResults" Version="3.10.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>

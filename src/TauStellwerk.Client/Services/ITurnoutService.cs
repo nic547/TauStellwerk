@@ -4,9 +4,8 @@
 // </copyright>
 
 using System.Collections.Immutable;
-using System.Threading.Tasks;
 using FluentResults;
-using TauStellwerk.Base.Dto;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.Client.Services;

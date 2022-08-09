@@ -3,13 +3,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
+        xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="TauStellwerk.Desktop.Views.Engine.EngineEditWindow"
+        x:Class="TauStellwerk.Desktop.Views.EngineEditWindow"
         Icon="/Assets/tauStellwerk.ico"
         Title="{CompiledBinding WindowTitle}"
-        x:DataType="engine:EngineEditViewModel">
+        x:DataType="viewModels:EngineEditViewModel">
   <Design.DataContext>
-    <engine:EngineEditViewModel/>
+    <viewModels:EngineEditViewModel/>
   </Design.DataContext>
   <DockPanel>
     <DockPanel DockPanel.Dock="Bottom" Margin="5" LastChildFill="False">

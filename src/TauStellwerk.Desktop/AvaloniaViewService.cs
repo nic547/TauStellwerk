@@ -6,13 +6,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using TauStellwerk.Client;
 using TauStellwerk.Client.Model;
+using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.ViewModels;
-using TauStellwerk.Desktop.ViewModels.Engine;
 using TauStellwerk.Desktop.Views;
-using TauStellwerk.Desktop.Views.Engine;
-using TauStellwerk.Desktop.Views.Turnouts;
 
 namespace TauStellwerk.Desktop;
 

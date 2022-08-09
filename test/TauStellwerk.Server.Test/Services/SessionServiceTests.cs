@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;

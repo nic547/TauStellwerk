@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -52,20 +51,20 @@ public partial class TurnoutsViewModel : ViewModelBase
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void CreateTurnout()
     {
         var turnout = new Turnout();
         _viewService.ShowTurnoutEditWindow(turnout, this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void ToggleTurnout(Turnout turnout)
     {
         _turnoutService.ToggleState(turnout);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void EditTurnout(Turnout turnout)
     {
         _viewService.ShowTurnoutEditWindow(turnout, this);

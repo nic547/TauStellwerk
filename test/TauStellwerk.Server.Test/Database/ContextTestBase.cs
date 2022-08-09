@@ -3,12 +3,12 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using TauStellwerk.Server.Database;
 
-namespace TauStellwerk.Server.Database.Tests;
+namespace TauStellwerk.Test.Database;
 public class ContextTestBase
 {
     private string _connectionString = string.Empty;

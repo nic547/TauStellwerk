@@ -3,13 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
-using System.Threading.Tasks;
 using Avalonia.Themes.Fluent;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 
@@ -56,7 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public StopButtonState StopButtonState { get; } = new();
 
-    [ICommand]
+    [RelayCommand]
     private async Task StopButton()
     {
         var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
@@ -70,19 +68,19 @@ public partial class MainWindowViewModel : ViewModelBase
         await _statusService.SetStatus(status);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenEngineList()
     {
         _viewService.ShowEngineSelectionView(this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenSettings()
     {
         _viewService.ShowSettingsView(this);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenTurnoutList()
     {
         _viewService.ShowTurnoutsWindow(this);

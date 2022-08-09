@@ -3,15 +3,13 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
-using TauStellwerk.Desktop;
-using TauStellwerk.Desktop.ViewModels.Engine;
+using TauStellwerk.Desktop.ViewModels;
 
-namespace TauStellwerk.Desktop.Views.Engine;
+namespace TauStellwerk.Desktop.Views;
 
 public class EngineSelectionWindow : Window
 {

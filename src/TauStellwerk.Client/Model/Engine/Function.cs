@@ -3,13 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TauStellwerk.Base.Dto;
-using TauStellwerk.Base.Model;
+using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
@@ -19,7 +15,7 @@ public class Function : ObservableObject
     private int _duration;
     private State _state = State.Off;
 
-    private Timer? _timer;
+    private System.Timers.Timer? _timer;
 
     public Function(byte number, string name, int duration)
     {
@@ -77,7 +73,7 @@ public class Function : ObservableObject
         {
             if (_timer == null)
             {
-                _timer = new Timer
+                _timer = new()
                 {
                     AutoReset = false,
                 };

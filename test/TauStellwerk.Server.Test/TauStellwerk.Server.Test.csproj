@@ -1,16 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>.\bin\TauStellwerk.Test.xml</DocumentationFile>
     <IsPackable>false</IsPackable>
-    <Nullable>enable</Nullable>
     <RootNamespace>TauStellwerk.Test</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 	
   <ItemGroup>
@@ -19,8 +12,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="6.7.0" />
-    <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="1.1.0" />
-    <PackageReference Include="Moq" Version="4.18.1" />
+    <PackageReference Include="FluentResults.Extensions.FluentAssertions" Version="2.1.0" />
+    <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
@@ -33,10 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TauStellwerk.Server\TauStellwerk.Server.csproj" />
     <ProjectReference Include="..\..\src\TauStellwerk.Tools\TauStellwerk.Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
 
 </Project>

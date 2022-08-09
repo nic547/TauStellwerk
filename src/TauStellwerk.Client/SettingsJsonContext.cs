@@ -6,7 +6,7 @@
 using System.Text.Json.Serialization;
 using TauStellwerk.Client.Model;
 
-namespace TauStellwerk.WebClient;
+namespace TauStellwerk.Client;
 
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
