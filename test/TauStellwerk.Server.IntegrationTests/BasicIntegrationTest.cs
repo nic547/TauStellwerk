@@ -40,7 +40,7 @@ public class BasicIntegrationTest
 
         foreach (var i in Enumerable.Range(0, 6))
         {
-            engines.AddRange(await engineService.GetEngines(i, SortEnginesBy.Name, true));
+            engines.AddRange(await engineService.GetEngines(i, SortEnginesBy.Name));
         }
 
         engines.Should().HaveCount(100);
@@ -62,6 +62,33 @@ public class BasicIntegrationTest
         await engineService.ReleaseEngine(engine.Id);
 
         Assert.Pass();
+    }
+
+    [Test]
+    public async Task CanCreateAndToggleTurnout()
+    {
+        var turnoutService = new TurnoutService(CreateConnectionService());
+
+        var turnoutToInsert = new Turnout()
+        {
+            Address = 230,
+            Name = "Test Turnout",
+            Kind = TurnoutKind.SlimLeftTurnout,
+        };
+
+        await turnoutService.AddOrUpdate(turnoutToInsert);
+
+        var turnoutList = await turnoutService.GetList();
+        var turnout = turnoutList[0];
+
+        await turnoutService.ToggleState(turnout);
+        await turnoutService.ToggleState(turnout);
+        await turnoutService.ToggleState(turnout);
+
+        turnout.State.Should().Be(State.On);
+        turnout.Address.Should().Be(230);
+        turnout.Name.Should().Be("Test Turnout");
+        turnout.Kind.Should().Be(TurnoutKind.SlimLeftTurnout);
     }
 
     private IConnectionService CreateConnectionService()
