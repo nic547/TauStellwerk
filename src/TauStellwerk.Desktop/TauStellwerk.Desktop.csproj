@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Desktop.xml</DocumentationFile>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
