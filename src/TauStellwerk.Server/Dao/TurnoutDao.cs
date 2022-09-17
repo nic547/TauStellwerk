@@ -41,7 +41,7 @@ public class TurnoutDao : ITurnoutDao
     public async Task<Result> AddOrUpdate(TurnoutDto dto)
     {
         var turnout = Turnout.FromDto(dto);
-        return await Result.Try(async () =>
+        return await Result.Try(async Task () =>
             {
                 _dbContext.Turnouts.Update(turnout);
                 await _dbContext.SaveChangesAsync();
@@ -51,7 +51,7 @@ public class TurnoutDao : ITurnoutDao
     public async Task<Result> Delete(TurnoutDto dto)
     {
         var turnout = Turnout.FromDto(dto);
-        return await Result.Try(async () =>
+        return await Result.Try(async Task () =>
         {
             _dbContext.Turnouts.Remove(turnout);
             await _dbContext.SaveChangesAsync();
