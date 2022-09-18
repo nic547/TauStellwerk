@@ -97,9 +97,10 @@ public class TurnoutService : ITurnoutService
         return await connection.InvokeAsync<ResultDto>("AddOrUpdateTurnout", turnout.ToDto());
     }
 
-    public Task<ResultDto> Delete(Turnout turnout)
+    public async Task<ResultDto> Delete(Turnout turnout)
     {
-        throw new NotImplementedException();
+        var connection = await _connection.GetHubConnection();
+        return await connection.InvokeAsync<ResultDto>("DeleteTurnout", turnout.ToDto());
     }
 
     private async Task SubscribeToTurnoutEvents()
