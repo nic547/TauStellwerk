@@ -23,6 +23,9 @@ public class Turnout
 
     public TurnoutKind Kind { get; set; }
 
+    [NotMapped]
+    public State State { get; set; }
+
     public static Turnout FromDto(TurnoutDto dto)
     {
         return new Turnout
@@ -44,7 +47,7 @@ public class Turnout
             Address = Address,
             IsInverted = IsInverted,
             Kind = Kind,
-            State = State.Off,
+            State = State,
         };
     }
 }

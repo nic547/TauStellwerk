@@ -28,13 +28,12 @@ public class TurnoutDao : ITurnoutDao
         return turnout is null ? Result.Fail($"Failed to find turnout with id:{id}") : Result.Ok(turnout);
     }
 
-    public async Task<IList<TurnoutDto>> GetTurnouts(int page)
+    public async Task<IReadOnlyList<Turnout>> GetTurnouts(int page)
     {
         return await _dbContext.Turnouts
             .OrderBy(t => t.Id)
             .Skip(page * TurnoutsPerPage)
             .Take(TurnoutsPerPage)
-            .Select(t => t.ToDto())
             .ToListAsync();
     }
 

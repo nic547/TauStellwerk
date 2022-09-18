@@ -35,7 +35,8 @@ public partial class TauHub
 
     public async Task<IList<TurnoutDto>> GetTurnouts(int page)
     {
-        return await _turnoutDao.GetTurnouts(page);
+        var turnouts = await _turnoutDao.GetTurnouts(page);
+        return _turnoutService.GetTurnoutsWithState(turnouts).Select(t => t.ToDto()).ToList();
     }
 
     public async Task<ResultDto> AddOrUpdateTurnout(TurnoutDto dto)

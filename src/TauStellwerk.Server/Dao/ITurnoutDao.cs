@@ -13,7 +13,7 @@ public interface ITurnoutDao
 {
     public Task<Result<Turnout>> GetTurnoutById(int id);
 
-    public Task<IList<TurnoutDto>> GetTurnouts(int page);
+    public Task<IReadOnlyList<Turnout>> GetTurnouts(int page);
 
     public Task<Result> AddOrUpdate(TurnoutDto dto);
 

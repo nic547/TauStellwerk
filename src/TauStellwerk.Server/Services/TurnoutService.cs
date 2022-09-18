@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Collections;
 using FluentResults;
 using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
@@ -13,6 +14,7 @@ namespace TauStellwerk.Server.Services;
 public class TurnoutService
 {
     private readonly CommandStationBase _cs;
+    private readonly BitArray _turnoutStates = new(2048);
 
     public TurnoutService(CommandStationBase cs)
     {
@@ -22,6 +24,17 @@ public class TurnoutService
     public async Task<Result> SetState(Turnout turnout, State state)
     {
         await _cs.HandleTurnout(turnout, state);
+        _turnoutStates[turnout.Address] = state == State.On;
         return Result.Ok();
+    }
+
+    public IReadOnlyList<Turnout> GetTurnoutsWithState(IReadOnlyList<Turnout> turnouts)
+    {
+        foreach (var turnout in turnouts)
+        {
+            turnout.State = _turnoutStates[turnout.Address] ? State.On : State.Off;
+        }
+
+        return turnouts;
     }
 }
