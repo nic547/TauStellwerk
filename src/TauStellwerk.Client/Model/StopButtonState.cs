@@ -73,18 +73,26 @@ public class StopButtonState : INotifyPropertyChanged
 
     public State CurrentState { get; private set; } = State.Unknown;
 
-    public void SetStatus(SystemStatus systemStatus)
+    public void SetStatus(SystemStatus? systemStatus)
     {
         _lockingTimer.Stop();
-        _lastActionUsername = systemStatus.LastActionUsername;
-        if (systemStatus.State == Base.State.On)
+        _lastActionUsername = systemStatus?.LastActionUsername ?? "UNKOWN";
+
+        if (systemStatus is null)
         {
-            CurrentState = State.Running;
+            CurrentState = State.Unknown;
         }
         else
         {
-            CurrentState = State.StoppedLocked;
-            _lockingTimer.Start();
+            if (systemStatus.State == Base.State.On)
+            {
+                CurrentState = State.Running;
+            }
+            else
+            {
+                CurrentState = State.StoppedLocked;
+                _lockingTimer.Start();
+            }
         }
 
         OnPropertyChanged();

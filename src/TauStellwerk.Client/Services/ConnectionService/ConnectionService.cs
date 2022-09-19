@@ -112,7 +112,7 @@ public class ConnectionService : IConnectionService
             await _hubConnection.StartAsync();
             ConnectionChanged?.Invoke(this, _hubConnection);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // TODO #65
         }

@@ -19,9 +19,7 @@ public class StatusService
         _ = Init();
     }
 
-    public delegate void StatusChangeHandler(SystemStatus systemStatus);
-
-    public event StatusChangeHandler? StatusChanged;
+    public event EventHandler<SystemStatus?>? StatusChanged;
 
     public SystemStatus? LastKnownStatus { get; private set; }
 
@@ -29,21 +27,22 @@ public class StatusService
     {
         var client = await _service.GetHubConnection();
         await client.SendAsync("SetStatus", systemStatus);
-        StatusChanged?.Invoke(systemStatus);
+        StatusChanged?.Invoke(this, systemStatus);
         LastKnownStatus = systemStatus;
     }
 
     private async Task Init()
     {
+        HandleStatusChange(null);
         var connection = await _service.GetHubConnection();
         connection.On<SystemStatus>("HandleStatusChange", HandleStatusChange);
         var currentStatus = await connection.InvokeAsync<SystemStatus>("GetStatus");
         HandleStatusChange(currentStatus);
     }
 
-    private void HandleStatusChange(SystemStatus newSystemStatus)
+    private void HandleStatusChange(SystemStatus? newSystemStatus)
     {
         LastKnownStatus = newSystemStatus;
-        StatusChanged?.Invoke(newSystemStatus);
+        StatusChanged?.Invoke(this, newSystemStatus);
     }
 }

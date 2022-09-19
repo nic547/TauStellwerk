@@ -9,7 +9,7 @@
 
 <div id="StopButton" disabled="@_state.ShouldBeDisabled" @onclick="StopButtonClick" class="@_state.CurrentState">
     <span id="StopTitle">@_state.TitleText</span>
-    <br />
+    <br/>
     <span id="StopDetails">@_state.BottomText</span>
 </div>
 
@@ -25,7 +25,7 @@
 
         _state!.PropertyChanged += (_, _) => StateHasChanged();
 
-        StatusService.StatusChanged += s => _state.SetStatus(s);
+        StatusService.StatusChanged += (_, s) => _state.SetStatus(s);
 
         if (StatusService.LastKnownStatus != null)
         {
@@ -49,4 +49,5 @@
 
         await StatusService.SetStatus(status);
     }
+
 }
