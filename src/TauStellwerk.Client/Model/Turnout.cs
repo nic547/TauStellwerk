@@ -31,7 +31,7 @@ public partial class Turnout
     {
     }
 
-    public int Id { get; init; }
+    public int Id { get; }
 
     public int Address { get; set; }
 

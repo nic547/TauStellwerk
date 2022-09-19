@@ -28,20 +28,19 @@ public class TurnoutDao : ITurnoutDao
         return turnout is null ? Result.Fail($"Failed to find turnout with id:{id}") : Result.Ok(turnout);
     }
 
-    public async Task<IList<TurnoutDto>> GetTurnouts(int page)
+    public async Task<IReadOnlyList<Turnout>> GetTurnouts(int page)
     {
         return await _dbContext.Turnouts
             .OrderBy(t => t.Id)
             .Skip(page * TurnoutsPerPage)
             .Take(TurnoutsPerPage)
-            .Select(t => t.ToDto())
             .ToListAsync();
     }
 
     public async Task<Result> AddOrUpdate(TurnoutDto dto)
     {
         var turnout = Turnout.FromDto(dto);
-        return await Result.Try(async () =>
+        return await Result.Try(async Task () =>
             {
                 _dbContext.Turnouts.Update(turnout);
                 await _dbContext.SaveChangesAsync();
@@ -51,7 +50,7 @@ public class TurnoutDao : ITurnoutDao
     public async Task<Result> Delete(TurnoutDto dto)
     {
         var turnout = Turnout.FromDto(dto);
-        return await Result.Try(async () =>
+        return await Result.Try(async Task () =>
         {
             _dbContext.Turnouts.Remove(turnout);
             await _dbContext.SaveChangesAsync();

@@ -13,7 +13,7 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public partial class TurnoutsViewModel : ViewModelBase
+public sealed partial class TurnoutsViewModel : ViewModelBase, IDisposable
 {
     private readonly AvaloniaViewService _viewService;
     private readonly ITurnoutService _turnoutService;
@@ -28,10 +28,25 @@ public partial class TurnoutsViewModel : ViewModelBase
 
         PropertyChanged += HandlePageChange;
 
+        _turnoutService.TurnoutStateChanged += HandleTurnoutStateChanged;
+
         LoadTurnouts();
     }
 
     public ObservableCollection<Turnout> Turnouts { get; set; } = new();
+
+    public void Dispose()
+    {
+        _turnoutService.TurnoutStateChanged -= HandleTurnoutStateChanged;
+    }
+
+    private void HandleTurnoutStateChanged(object? sender, TurnoutStateChangedEventArgs e)
+    {
+        foreach (var turnout in Turnouts.Where(t => t.Address == e.Address))
+        {
+            turnout.State = e.State;
+        }
+    }
 
     private void HandlePageChange(object? sender, PropertyChangedEventArgs e)
     {

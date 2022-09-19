@@ -12,6 +12,8 @@ namespace TauStellwerk.Client.Services;
 
 public interface ITurnoutService
 {
+    public event EventHandler<TurnoutStateChangedEventArgs> TurnoutStateChanged;
+
     public Task<Result> ToggleState(Turnout turnout);
 
     public Task<IImmutableList<Turnout>> GetList(int page = 0);

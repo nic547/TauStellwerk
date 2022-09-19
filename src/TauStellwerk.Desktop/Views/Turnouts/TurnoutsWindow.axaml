@@ -18,7 +18,8 @@
                         <Label Content="{Binding Name}" Margin="3" />
                         <ToggleButton Content="Switch"
                                       Command="{Binding DataContext.ToggleTurnoutCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                      CommandParameter="{Binding .}" />
+                                      CommandParameter="{Binding .}"
+                                      IsChecked="{Binding IsOn}"/>
                         <Button Content="Edit"
                                 Command="{Binding DataContext.EditTurnoutCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding .}" />

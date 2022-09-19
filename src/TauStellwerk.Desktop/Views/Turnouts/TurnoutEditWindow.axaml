@@ -23,9 +23,10 @@
             <ComboBox SelectedItem="{Binding Turnout.Kind, FallbackValue={}}" Items="{Binding TurnoutKinds}">
             </ComboBox>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
-            <Button Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
-        </StackPanel>
+        <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Command="{Binding DeleteCommand}" Content="Delete" MinWidth="100" Margin="2"/>
+            <Button DockPanel.Dock="Right" Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+            <Button DockPanel.Dock="Right" Command="{Binding SaveCommand}" Content="Save" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
+        </DockPanel>
     </StackPanel>
 </Window>

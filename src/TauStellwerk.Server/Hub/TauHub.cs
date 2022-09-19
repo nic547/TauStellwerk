@@ -18,6 +18,7 @@ public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
     private readonly TurnoutService _turnoutService;
     private readonly EngineDao _engineDao;
     private readonly ITurnoutDao _turnoutDao;
+    private readonly ILogger<TauHub> _logger;
 
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
     public TauHub(
@@ -26,7 +27,8 @@ public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
         IEngineService engineService,
         TurnoutService turnoutService,
         EngineDao engineDao,
-        ITurnoutDao turnoutDao)
+        ITurnoutDao turnoutDao,
+        ILogger<TauHub> logger)
     {
         _sessionService = sessionService;
         _statusService = statusService;
@@ -34,5 +36,6 @@ public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
         _turnoutService = turnoutService;
         _engineDao = engineDao;
         _turnoutDao = turnoutDao;
+        _logger = logger;
     }
 }
