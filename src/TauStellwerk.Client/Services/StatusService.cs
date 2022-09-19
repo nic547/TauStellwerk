@@ -15,6 +15,7 @@ public class StatusService
     public StatusService(ConnectionService connectionService)
     {
         _service = connectionService;
+        _service.ConnectionChanged += async (_, _) => await Init();
         _ = Init();
     }
 
@@ -30,11 +31,6 @@ public class StatusService
         await client.SendAsync("SetStatus", systemStatus);
         StatusChanged?.Invoke(systemStatus);
         LastKnownStatus = systemStatus;
-
-        // var json = JsonSerializer.Serialize(systemStatus, TauJsonContext.Default.SystemStatus);
-        // StatusChanged?.Invoke(systemStatus);
-        // LastKnownStatus = systemStatus;
-        // _ = await client.PostAsync("/systemStatus", new StringContent(json, Encoding.UTF8, "text/json"));
     }
 
     private async Task Init()

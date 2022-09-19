@@ -9,5 +9,8 @@ namespace TauStellwerk.Client.Services;
 
 public interface IConnectionService
 {
+
+    public event EventHandler<HubConnection>? ConnectionChanged;
+
     Task<HubConnection> GetHubConnection();
 }
