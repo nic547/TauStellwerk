@@ -3,13 +3,14 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using FluentResults;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace TauStellwerk.Client.Services;
 
 public interface IConnectionService
 {
-    public event EventHandler<HubConnection>? ConnectionChanged;
+    public event EventHandler<HubConnection?>? ConnectionChanged;
 
-    Task<HubConnection> GetHubConnection();
+    Task<HubConnection?> TryGetHubConnection();
 }

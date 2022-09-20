@@ -25,7 +25,12 @@ public class StatusService
 
     public async Task SetStatus(SystemStatus systemStatus)
     {
-        var client = await _service.GetHubConnection();
+        var client = await _service.TryGetHubConnection();
+        if (client is null)
+        {
+            return;
+        }
+
         await client.SendAsync("SetStatus", systemStatus);
         StatusChanged?.Invoke(this, systemStatus);
         LastKnownStatus = systemStatus;
@@ -34,7 +39,12 @@ public class StatusService
     private async Task Init()
     {
         HandleStatusChange(null);
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+        if (connection is null)
+        {
+            return;
+        }
+
         connection.On<SystemStatus>("HandleStatusChange", HandleStatusChange);
         var currentStatus = await connection.InvokeAsync<SystemStatus>("GetStatus");
         HandleStatusChange(currentStatus);

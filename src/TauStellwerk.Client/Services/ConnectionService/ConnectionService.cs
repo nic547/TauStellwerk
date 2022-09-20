@@ -11,37 +11,57 @@ namespace TauStellwerk.Client.Services;
 
 public class ConnectionService : IConnectionService
 {
-    private readonly object _setupLock = new();
+    private readonly SemaphoreSlim _setupSemaphore = new(1);
 
     private readonly ISettingsService _settingsService;
 
-    private readonly HubConnection? _injectedConnection;
     private HubConnection? _hubConnection;
-    private string _lastServerAddress = string.Empty;
 
-    public ConnectionService(ISettingsService settingsService, HubConnection? hubConnection = null)
+    private bool _isConnectionGood;
+    private string _currentServerAddress = string.Empty;
+
+    public ConnectionService(ISettingsService settingsService)
     {
         _settingsService = settingsService;
-        settingsService.SettingsChanged += async (settings) => { await SetUpConnection(settings); };
-
-        _injectedConnection = hubConnection;
+        settingsService.SettingsChanged += HandleSettingsChanged;
     }
 
-    public event EventHandler<HubConnection>? ConnectionChanged;
-
-    public async Task<HubConnection> GetHubConnection()
+    public ConnectionService(ISettingsService settingsService, HubConnection hubConnection)
     {
-        if (_hubConnection != null)
+        _settingsService = settingsService;
+        _hubConnection = hubConnection;
+
+        // Constructor is for injecting HubConnection in a test scenario.
+        // IMHO .Wait()ing is the cleanest way to do this without messing with everything else.
+        _hubConnection.StartAsync().Wait();
+        _isConnectionGood = true;
+    }
+
+    public event EventHandler<HubConnection?>? ConnectionChanged;
+
+    public async Task<HubConnection?> TryGetHubConnection()
+    {
+        await _setupSemaphore.WaitAsync();
+        if (_isConnectionGood && _hubConnection is not null)
         {
+            _setupSemaphore.Release();
             return _hubConnection;
         }
 
         var settings = await _settingsService.GetSettings();
 
-        await SetUpConnection(settings);
+        if (settings.ServerAddress == _currentServerAddress)
+        {
+            _setupSemaphore.Release();
+            return null;
+        }
 
-        return _hubConnection ??
-               throw new NullReferenceException($"Connection is null despite calling {nameof(SetUpConnection)}");
+        _hubConnection = CreateConnection(settings);
+        _currentServerAddress = settings.ServerAddress;
+
+        var connection = await StartConnection();
+        _setupSemaphore.Release();
+        return connection;
     }
 
     private static void IgnoreInvalidCerts(HttpConnectionOptions opts)
@@ -77,44 +97,50 @@ public class ConnectionService : IConnectionService
         }
     }
 
-    private async Task SetUpConnection(ImmutableSettings settings)
+    private async void HandleSettingsChanged(ImmutableSettings settings)
     {
-        lock (_setupLock)
+        if (settings.ServerAddress != _currentServerAddress)
         {
-            if (settings.ServerAddress == _lastServerAddress)
-            {
-                return;
-            }
+            await _setupSemaphore.WaitAsync();
+            _hubConnection = CreateConnection(settings);
+            _ = StartConnection();
+            _setupSemaphore.Release();
+        }
+    }
 
-            _lastServerAddress = settings.ServerAddress;
-
-            if (_injectedConnection != null)
-            {
-                _hubConnection = _injectedConnection;
-            }
-            else
-            {
-                var baseAddress = new Uri(settings.ServerAddress);
-                var hubPath = new Uri(baseAddress, "/hub");
-
-                _hubConnection = new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
-                {
-                    IgnoreInvalidCerts(opts);
-
-                    // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
-                    opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
-                }).Build();
-            }
+    private async Task<HubConnection?> StartConnection()
+    {
+        if (_hubConnection is null)
+        {
+            throw new InvalidOperationException($"{nameof(StartConnection)} was called before a connection existed.");
         }
 
         try
         {
             await _hubConnection.StartAsync();
+            _isConnectionGood = true;
             ConnectionChanged?.Invoke(this, _hubConnection);
+            return _hubConnection;
         }
         catch (Exception)
         {
-            // TODO #65
+            _isConnectionGood = false;
+            ConnectionChanged?.Invoke(this, null);
+            return null;
         }
+    }
+
+    private HubConnection CreateConnection(ImmutableSettings settings)
+    {
+        var baseAddress = new Uri(settings.ServerAddress);
+        var hubPath = new Uri(baseAddress, "/hub");
+
+        return new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
+        {
+            IgnoreInvalidCerts(opts);
+
+            // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
+            opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
+        }).Build();
     }
 }
