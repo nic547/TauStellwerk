@@ -28,7 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
         _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
 
-        _statusService.StatusChanged += (status) =>
+        _statusService.StatusChanged += (_, status) =>
         {
             StopButtonState.SetStatus(status);
         };

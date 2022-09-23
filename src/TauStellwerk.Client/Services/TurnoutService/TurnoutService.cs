@@ -55,7 +55,12 @@ public class TurnoutService : ITurnoutService
 
     public async Task Init()
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return;
+        }
+
         connection.On<int, State>("HandleTurnoutChange", (address, state) =>
         {
             lock (_turnoutEventLock)
@@ -67,7 +72,12 @@ public class TurnoutService : ITurnoutService
 
     public async Task<Result> ToggleState(Turnout turnout)
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return Result.Fail("Failed to establish connection");
+        }
+
         turnout.State = turnout.State == State.On ? State.Off : State.On;
 
         if (turnout.Address != 0)
@@ -85,7 +95,11 @@ public class TurnoutService : ITurnoutService
 
     public async Task<IImmutableList<Turnout>> GetList(int page = 0)
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return default(ImmutableArray<Turnout>);
+        }
 
         var dtos = await connection.InvokeAsync<IList<TurnoutDto>>("GetTurnouts", page);
         return dtos.Select(dto => new Turnout(dto)).ToImmutableList();
@@ -93,25 +107,45 @@ public class TurnoutService : ITurnoutService
 
     public async Task<ResultDto> AddOrUpdate(Turnout turnout)
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return new ResultDto(false, "Failed to establish connection");
+        }
+
         return await connection.InvokeAsync<ResultDto>("AddOrUpdateTurnout", turnout.ToDto());
     }
 
     public async Task<ResultDto> Delete(Turnout turnout)
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return new ResultDto(false, "Failed to establish connection");
+        }
+
         return await connection.InvokeAsync<ResultDto>("DeleteTurnout", turnout.ToDto());
     }
 
     private async Task SubscribeToTurnoutEvents()
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return;
+        }
+
         await connection.InvokeAsync("SubscribeToTurnoutEvents");
     }
 
     private async Task UnsubscribeFromTurnoutEvents()
     {
-        var connection = await _connection.GetHubConnection();
+        var connection = await _connection.TryGetHubConnection();
+        if (connection is null)
+        {
+            return;
+        }
+
         await connection.InvokeAsync("UnsubscribeFromTurnoutEvents");
     }
 }

@@ -24,7 +24,11 @@ public class EngineService
 
     public async Task<IReadOnlyList<EngineOverview>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+        if (connection is null)
+        {
+            return new List<EngineOverview>();
+        }
 
         var engines = await connection.InvokeAsync<IReadOnlyList<EngineOverviewDto>>("GetEngines", page, sorting, sortDescending, showHidden);
         return engines.Select(e => new EngineOverview(e)).ToList();
@@ -32,7 +36,12 @@ public class EngineService
 
     public async Task<EngineFull?> AcquireEngine(int id)
     {
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+        if (connection == null)
+        {
+            return null;
+        }
+
         var result = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AcquireEngine", id);
 
         if (result.Success)
@@ -46,8 +55,11 @@ public class EngineService
     public async Task ReleaseEngine(int id)
     {
         _activeEngines.Remove(id);
-        var connection = await _service.GetHubConnection();
-        await connection.SendAsync("ReleaseEngine", id);
+        var connection = await _service.TryGetHubConnection();
+        if (connection != null)
+        {
+            await connection.SendAsync("ReleaseEngine", id);
+        }
     }
 
     public async Task SetSpeed(int id, int speed, Direction direction)
@@ -70,8 +82,11 @@ public class EngineService
 
     public async Task SetEStop(int id)
     {
-        var connection = await _service.GetHubConnection();
-        await connection.SendAsync("SetEngineEStop", id);
+        var connection = await _service.TryGetHubConnection();
+        if (connection != null)
+        {
+            await connection.SendAsync("SetEngineEStop", id);
+        }
     }
 
     public async Task SetEStop(EngineFull activeEngine)
@@ -82,8 +97,11 @@ public class EngineService
 
     public async Task SetFunction(int id, byte function, State state)
     {
-        var connection = await _service.GetHubConnection();
-        await connection.SendAsync("SetEngineFunction", id, function, state);
+        var connection = await _service.TryGetHubConnection();
+        if (connection != null)
+        {
+            await connection.SendAsync("SetEngineFunction", id, function, state);
+        }
     }
 
     public async Task ToggleFunction(EngineFull engine, Function function)
@@ -94,7 +112,13 @@ public class EngineService
             return;
         }
 
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+
+        if (connection is null)
+        {
+            return;
+        }
+
         if (function.State == State.Off)
         {
             await connection.SendAsync("SetEngineFunction", engine.Id, function.Number, State.On);
@@ -110,7 +134,8 @@ public class EngineService
     public async Task<EngineFullDto> AddOrUpdateEngine(EngineFull engine)
     {
         var engineDto = engine.ToDto();
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection() ?? throw new InvalidOperationException();
+
         var updatedEngine = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AddOrUpdateEngine", engineDto);
 
         // TODO: Handle Error instead of throwing.
@@ -124,7 +149,12 @@ public class EngineService
             return new ResultDto(false, "Engine does not exist yet");
         }
 
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+        if (connection is null)
+        {
+            return new ResultDto(false, "Failed to establish connection.");
+        }
+
         _activeEngines.Remove(engine.Id);
         return await connection.InvokeAsync<ResultDto>("DeleteEngine", engine.Id);
     }
@@ -132,7 +162,12 @@ public class EngineService
     private async Task SendSpeed((int Id, int Speed, Direction Direction) arg)
     {
         var (id, speed, direction) = arg;
-        var connection = await _service.GetHubConnection();
+        var connection = await _service.TryGetHubConnection();
+        if (connection is null)
+        {
+            return;
+        }
+
         await connection.SendAsync("SetEngineSpeed", id, speed, direction);
     }
 }

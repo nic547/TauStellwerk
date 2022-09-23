@@ -22,8 +22,8 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
         AvaloniaViewService avaloniaViewService = new();
         Locator.CurrentMutable.RegisterConstant<IViewService>(avaloniaViewService);
-        Locator.CurrentMutable.RegisterConstant<AvaloniaViewService>(avaloniaViewService);
-        Locator.CurrentMutable.RegisterConstant<ITurnoutService>(SplatFactory.CreateTurnoutService());
+        Locator.CurrentMutable.RegisterConstant(avaloniaViewService);
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateTurnoutService());
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

@@ -2,8 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:engine="clr-namespace:TauStellwerk.Desktop.ViewModels.Engine"
-        xmlns:root="clr-namespace:TauStellwerk.Desktop"
         xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
