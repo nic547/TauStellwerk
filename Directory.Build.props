@@ -1,16 +1,20 @@
 <Project>
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
-		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
-	
-	<ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <CodeAnalysisRuleSet>../../customRules.ruleset</CodeAnalysisRuleSet>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
     <AdditionalFiles Include="..\..\StyleCop.json" Link="StyleCop.json" />
   </ItemGroup>
-	
-	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+      <PrivateAssets>all</PrivateAssets>
+      <Version>3.5.113</Version>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>

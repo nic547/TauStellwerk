@@ -11,6 +11,11 @@
     <Design.DataContext>
         <viewModels:SettingsViewModel />
     </Design.DataContext>
+    <Window.Styles>
+        <Style Selector="StackPanel">
+            <Setter Property="Margin" Value="2 4" />
+        </Style>
+    </Window.Styles>
     <StackPanel>
         <StackPanel ToolTip.Tip="The username that will be shown to other users." Margin="2">
             <Label Content="Username" />
@@ -24,6 +29,9 @@
             <Label>Theme</Label>
             <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" Items="{Binding AvailableThemes}">
             </ComboBox>
+        </StackPanel>
+        <StackPanel>
+            	<TextBlock Text="{Binding ApplicationInformation}"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
             <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="100" HorizontalContentAlignment="Center" Margin="2" />
