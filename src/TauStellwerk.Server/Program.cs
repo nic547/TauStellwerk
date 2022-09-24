@@ -23,6 +23,7 @@ public static class Program
                     .AddConsoleFormatter<CustomLogFormatter, SimpleConsoleFormatterOptions>();
             })
             .Build()
+            .PrintVersionInformation()
             .MigrateDatabase()
             .LoadEngines()
             .SetupImages()
@@ -37,6 +38,20 @@ public static class Program
             })
             .ConfigureHostConfiguration((config) =>
                 config.AddInMemoryCollection(DefaultConfiguration.Values));
+
+    public static IHost PrintVersionInformation(this IHost host)
+    {
+        var serviceScopeFactory = (IServiceScopeFactory?)host.Services.GetService(typeof(IServiceScopeFactory)) ?? throw new ApplicationException();
+
+        using var scope = serviceScopeFactory.CreateScope();
+
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger<Startup>>(); // Wrong class - but Program doesn't seem to work.
+
+        logger.LogInformation($"--- TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version}) ---");
+
+        return host;
+    }
 
     public static IHost MigrateDatabase(this IHost host)
     {

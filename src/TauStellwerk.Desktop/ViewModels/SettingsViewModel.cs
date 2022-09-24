@@ -29,6 +29,8 @@ public partial class SettingsViewModel : ViewModelBase
 
     public event HandleClosingRequested? ClosingRequested;
 
+    public static string ApplicationInformation => $"TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version})";
+
     public string[] AvailableThemes { get; } = { FluentThemeMode.Light.ToString(), FluentThemeMode.Dark.ToString() };
 
     [RelayCommand]
