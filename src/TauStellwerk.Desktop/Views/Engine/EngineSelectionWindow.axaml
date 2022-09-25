@@ -15,7 +15,7 @@
         <viewModels:EngineSelectionViewModel/>
     </Design.DataContext>
     <Panel Margin="5">
-        <DockPanel LastChildFill="True">
+        <DockPanel LastChildFill="False">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <ComboBox Items="{Binding EngineSortModes}"
                           SelectedItem="{Binding CurrentEngineSortMode}"/>
@@ -41,7 +41,7 @@
                         DockPanel.Dock="Right"
                         Content="Create New"/>
             </DockPanel>
-            <ListBox Items="{Binding Engines}" Name="EngineList">
+            <ListBox Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
