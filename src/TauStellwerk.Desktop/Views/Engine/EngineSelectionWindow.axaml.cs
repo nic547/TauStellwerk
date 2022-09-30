@@ -21,7 +21,7 @@ public class EngineSelectionWindow : Window
         vm.ClosingRequested += Close;
         InitializeComponent();
 
-        var engineList = this.FindControl<ListBox>("EngineList");
+        var engineList = this.FindControl<ListBox>("EngineList") ?? throw new Exception("Failed to locate EngineList ListBox");
 
         engineList.LayoutUpdated += (_, _) =>
         {

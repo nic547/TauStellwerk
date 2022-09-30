@@ -15,7 +15,7 @@
         <viewModels:EngineSelectionViewModel/>
     </Design.DataContext>
     <Panel Margin="5">
-        <DockPanel LastChildFill="True">
+        <DockPanel LastChildFill="False">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <ComboBox Items="{Binding EngineSortModes}"
                           SelectedItem="{Binding CurrentEngineSortMode}"/>
@@ -41,7 +41,7 @@
                         DockPanel.Dock="Right"
                         Content="Create New"/>
             </DockPanel>
-            <ListBox Items="{Binding Engines}" Name="EngineList">
+            <ListBox Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
@@ -49,12 +49,12 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel MinWidth="200" Tag="{Binding Id}">
-                            <Border Background="Red" CornerRadius="4" Padding="4">
+                        <Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto">
+                            <Border Background="Red" CornerRadius="4" Padding="4" Grid.Row="0">
                                 <TextBlock Text="{Binding Name}"/>
                             </Border>
-                            <controls:EngineImageControl EngineImages="{Binding Images}"/>
-                            <ItemsRepeater Items="{Binding Tags}">
+                            <controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
+                            <ItemsRepeater Items="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
                                 <ItemsRepeater.Layout>
                                     <WrapLayout HorizontalSpacing="6"/>
                                 </ItemsRepeater.Layout>
@@ -64,11 +64,11 @@
                                     </DataTemplate>
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
                                 <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit"/>
                                 <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select"/>
                             </StackPanel>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

@@ -19,14 +19,14 @@ public class AvaloniaViewService : IViewService
     {
         var vm = new EngineControlViewModel(engine);
         var window = new EngineControlWindow(vm);
-        ShowWindowCenterOwner(window, TryGetMainWindow(), 0.33);
+        ShowWindowCenterOwner(window, GetMainWindow(), 0.33);
     }
 
     public void ShowSettingsView(object? source = null)
     {
         var vm = new SettingsViewModel();
         var window = new SettingsWindow(vm);
-        window.Show(TryGetMainWindow());
+        window.Show(GetMainWindow());
     }
 
     public void ShowMessageBox(string title, string message, object? source = null)
@@ -43,7 +43,7 @@ public class AvaloniaViewService : IViewService
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
         };
 
-        messageBox.ShowDialog(parentWindow);
+        messageBox.ShowDialog(parentWindow ?? GetMainWindow());
     }
 
     public void ShowEngineEditView(EngineFull engine, object? source = null)
@@ -57,21 +57,29 @@ public class AvaloniaViewService : IViewService
     {
         var vm = new EngineSelectionViewModel();
         var window = new EngineSelectionWindow(vm);
-        window.Show(TryGetMainWindow());
+        window.Show(GetMainWindow());
     }
 
     public void ShowTurnoutsWindow(object? source = null)
     {
         var vm = new TurnoutsViewModel();
         var window = new TurnoutsWindow(vm);
-        window.Show(TryGetMainWindow());
+        window.Show(GetMainWindow());
     }
 
     public void ShowTurnoutEditWindow(Turnout turnout, object? source = null)
     {
         var vm = new TurnoutEditViewModel(turnout);
         var window = new TurnoutEditWindow(vm);
-        window.Show(TryGetAssociatedWindow(source));
+        var associatedWindow = TryGetAssociatedWindow(source);
+        if (associatedWindow is null)
+        {
+            window.Show();
+        }
+        else
+        {
+            window.Show(associatedWindow);
+        }
     }
 
     /// <summary>
@@ -97,10 +105,10 @@ public class AvaloniaViewService : IViewService
         return null;
     }
 
-    private static Window? TryGetMainWindow()
+    private static Window GetMainWindow()
     {
         var appLifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-        return appLifetime?.MainWindow;
+        return appLifetime?.MainWindow ?? throw new Exception("Failed to find ApplicationLifetime.");
     }
 
     private static void ShowWindowCenterOwner(Window window, Window? parent, double widthMultiplier = 1d)
