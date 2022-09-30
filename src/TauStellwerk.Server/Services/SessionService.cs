@@ -6,6 +6,7 @@
 #nullable enable
 
 using System.Collections.Concurrent;
+using FluentResults;
 using TauStellwerk.Base;
 using TauStellwerk.Util;
 
@@ -32,10 +33,10 @@ public class SessionService
 
     public event NoUsersRemainingHandler? NoUsersRemaining;
 
-    public Session? TryGetSession(string connectionId)
+    public Result<Session> TryGetSession(string connectionId)
     {
-        _sessions.TryGetValue(connectionId, out var value);
-        return value;
+        _sessions.TryGetValue(connectionId, out var session);
+        return session is not null ? Result.Ok(session) : Result.Fail("No session associated with this connection was found.");
     }
 
     public void HandleConnected(string connectionId, string username)
@@ -74,12 +75,12 @@ public class SessionService
     public void RenameSessionUser(string sessionId, string newUsername)
     {
         var session = TryGetSession(sessionId);
-        if (session == null)
+        if (session.IsFailed)
         {
             throw new ArgumentException($"No user with user id {sessionId} found. Requested username: {newUsername}");
         }
 
         _logger.LogInformation("{session} has been renamed to {username}", session, newUsername);
-        session.UserName = newUsername;
+        session.ValueOrDefault.UserName = newUsername;
     }
 }

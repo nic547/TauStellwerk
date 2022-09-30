@@ -5,6 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using FluentResults;
+using FluentResults.Extensions;
 using TauStellwerk.Base;
 
 namespace TauStellwerk.Server.Hub;
@@ -14,71 +15,35 @@ public partial class TauHub
 {
     public async Task<ResultDto<EngineFullDto>> AcquireEngine(int id)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
+        var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
-        if (session == null)
-        {
-            return Result.Fail("Session not found");
-        }
-
-        var engineResult = await _engineDao.GetEngine(id);
-        if (!engineResult.IsSuccess)
-        {
-            return Result.Fail("Engine not found");
-        }
-
-        await _engineDao.UpdateLastUsed(id);
-        var acquireResult = await _engineService.AcquireEngine(session, engineResult.Value);
-
-        return acquireResult;
+        return await sessionResult
+            .Bind(_ => _engineDao.GetEngine(id))
+            .Bind(engine => _engineService.AcquireEngine(sessionResult.Value, engine));
     }
 
     public async Task<ResultDto> ReleaseEngine(int id)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
-
-        if (session == null)
-        {
-            return Result.Fail("Session not found");
-        }
-
-        return await _engineService.ReleaseEngine(session, id);
+        return await _sessionService.TryGetSession(Context.ConnectionId)
+            .Bind(session => _engineService.ReleaseEngine(session, id));
     }
 
     public async Task<ResultDto> SetEngineSpeed(int id, int speed, Direction? direction)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
-
-        if (session == null)
-        {
-            return Result.Fail("Session not found");
-        }
-
-        return await _engineService.SetEngineSpeed(session, id, speed, direction);
+        return await _sessionService.TryGetSession(Context.ConnectionId)
+            .Bind(session => _engineService.SetEngineSpeed(session, id, speed, direction));
     }
 
     public async Task<ResultDto> SetEngineEStop(int id)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
-
-        if (session == null)
-        {
-            return Result.Fail("Session not found");
-        }
-
-        return await _engineService.SetEngineEStop(session, id);
+        return await _sessionService.TryGetSession(Context.ConnectionId)
+            .Bind(session => _engineService.SetEngineEStop(session, id));
     }
 
     public async Task<ResultDto> SetEngineFunction(int id, int number, State state)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
-
-        if (session == null)
-        {
-            return Result.Fail("Session not found");
-        }
-
-        return await _engineService.SetEngineFunction(session, id, number, state);
+        return await _sessionService.TryGetSession(Context.ConnectionId)
+            .Bind(session => _engineService.SetEngineFunction(session, id, number, state));
     }
 
     public async Task<Result<EngineFullDto>> GetEngine(int id)
@@ -100,17 +65,9 @@ public partial class TauHub
     {
         if (engine.Id is not 0)
         {
-            var session = _sessionService.TryGetSession(Context.ConnectionId);
-            if (session is null)
-            {
-                return Result.Fail("No session found!");
-            }
-
-            var result = _engineService.IsEngineAcquiredBySession(session, engine.Id);
-            if (result.IsFailed)
-            {
-                return result;
-            }
+            return await _sessionService.TryGetSession(Context.ConnectionId)
+                .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, engine.Id))
+                .Bind(() => _engineDao.UpdateOrAdd(engine));
         }
 
         return await _engineDao.UpdateOrAdd(engine);
@@ -118,25 +75,11 @@ public partial class TauHub
 
     public async Task<ResultDto> DeleteEngine(int id)
     {
-        var session = _sessionService.TryGetSession(Context.ConnectionId);
-        if (session is null)
-        {
-            return Result.Fail("No session found!");
-        }
+        var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
-        var result = _engineService.IsEngineAcquiredBySession(session, id);
-        if (result.IsFailed)
-        {
-            return result;
-        }
-
-        var deleteResult = await _engineDao.Delete(id);
-        if (deleteResult.IsFailed)
-        {
-            return deleteResult;
-        }
-
-        await _engineService.ReleaseEngine(session, id);
-        return Result.Ok();
+        return await sessionResult
+            .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, id))
+            .Bind(() => _engineDao.Delete(id))
+            .Bind(() => _engineService.ReleaseEngine(sessionResult.Value, id));
     }
 }

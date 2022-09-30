@@ -130,7 +130,7 @@ public class EngineService : IEngineService
         return Result.Ok();
     }
 
-    public Result IsEngineAcquiredBySession(Session session, int engineId)
+    public Result CheckIsEngineAcquiredBySession(Session session, int engineId)
     {
         return _manager.GetActiveEngine(engineId, session).ToResult();
     }

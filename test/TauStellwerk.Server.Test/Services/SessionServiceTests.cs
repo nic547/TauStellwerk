@@ -4,6 +4,7 @@
 // </copyright>
 
 using FluentAssertions;
+using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -21,8 +22,9 @@ public class SessionServiceTests
 
         var session = sessionService.TryGetSession("Foo");
 
-        session.Should().NotBeNull();
-        session?.UserName.Should().Be("Alice");
+        session.Should().BeSuccess();
+        session.Value.UserName.Should().Be("Alice");
+        session.Value.ConnectionId.Should().Be("Foo");
     }
 
     [Test]
@@ -34,7 +36,7 @@ public class SessionServiceTests
 
         var session = sessionService.TryGetSession("Foo");
 
-        session.Should().BeNull();
+        session.Should().BeFailure();
     }
 
     [Test]

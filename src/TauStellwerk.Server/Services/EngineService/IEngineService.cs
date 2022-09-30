@@ -23,5 +23,5 @@ public interface IEngineService
 
     Task<Result> SetEngineFunction(Session session, int engineId, int functionNumber, State state);
 
-    Result IsEngineAcquiredBySession(Session session, int engineId);
+    Result CheckIsEngineAcquiredBySession(Session session, int engineId);
 }
