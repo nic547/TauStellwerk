@@ -7,11 +7,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class TurnoutsWindow : Window
+public class TurnoutsWindow : DisposingWindow
 {
     public TurnoutsWindow(TurnoutsViewModel vm)
     {
@@ -27,16 +28,6 @@ public class TurnoutsWindow : Window
     public TurnoutsWindow()
     {
         // https://github.com/AvaloniaUI/Avalonia/issues/2593
-    }
-
-    protected override void OnClosed(EventArgs e)
-    {
-        if (DataContext is TurnoutsViewModel vm)
-        {
-            vm.Dispose();
-        }
-
-        base.OnClosed(e);
     }
 
     private void InitializeComponent()

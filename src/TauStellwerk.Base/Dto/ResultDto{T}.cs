@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
 using FluentResults;
 
 namespace TauStellwerk.Base;
@@ -18,6 +19,7 @@ public class ResultDto<T>
 
     public string? Error { get; }
 
+    [MemberNotNullWhen(true, nameof(Value))]
     public bool Success { get; }
 
     public T? Value { get; }

@@ -52,12 +52,7 @@ public partial class EngineFull : EngineOverview
 
     public static EngineFull? Create(EngineFullDto? engineDto)
     {
-        if (engineDto == null)
-        {
-            return null;
-        }
-
-        return new EngineFull(engineDto);
+        return engineDto is null ? null : new EngineFull(engineDto);
     }
 
     public EngineFullDto ToDto()
