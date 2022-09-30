@@ -22,6 +22,8 @@ public class EngineService
         _service = httpClientService;
     }
 
+    public event EventHandler<EngineFull>? EngineChanged;
+
     public async Task<IReadOnlyList<EngineOverview>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
         var connection = await _service.TryGetHubConnection();
@@ -131,15 +133,20 @@ public class EngineService
         }
     }
 
-    public async Task<EngineFullDto> AddOrUpdateEngine(EngineFull engine)
+    public async Task<EngineFull> AddOrUpdateEngine(EngineFull engine)
     {
         var engineDto = engine.ToDto();
         var connection = await _service.TryGetHubConnection() ?? throw new InvalidOperationException();
 
-        var updatedEngine = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AddOrUpdateEngine", engineDto);
+        var updateResult = await connection.InvokeAsync<ResultDto<EngineFullDto>>("AddOrUpdateEngine", engineDto);
+        if (!updateResult.Success)
+        {
+            throw new InvalidOperationException(updateResult.Error);
+        }
 
-        // TODO: Handle Error instead of throwing.
-        return updatedEngine.Value ?? throw new InvalidOperationException();
+        var updatedEngine = new EngineFull(updateResult.Value);
+        EngineChanged?.Invoke(this, updatedEngine);
+        return updatedEngine;
     }
 
     public async Task<ResultDto> TryDeleteEngine(EngineFull engine)

@@ -3,10 +3,13 @@
 @using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
 @using TauStellwerk.Util
+@using System.Collections.Immutable
 
 @inject ModalManager ModalManager
 @inject EngineService EngineService
 @inject AppState AppState
+
+@implements IDisposable
 
 <div id="EngineSelectionModal" class="modal @(ModalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content-fullwidth">
@@ -23,7 +26,7 @@
             </select>
             <input id="ShowHiddenCheckbox" type="checkbox" @onchange="ShowHiddenCheckboxChanged" />
             <label>Show Hidden</label>
-            <span class="flex-filler" />
+            <span class="flex-filler"></span>
             <button class="bold button-secondary" @onclick="() => ModalManager.IsEngineSelectionVisible = false">X</button>
         </div>
         <div class="can-scroll-y modal-body">
@@ -48,6 +51,7 @@
     private static readonly int EnginesPerPage = 20;
     
     private readonly List<EngineOverview> _engines = new();
+    private readonly object _collectionLock = new();
 
     private bool CannotMoveForward => _engines.Count != EnginesPerPage;
     private bool CannotMoveBackward => _currentPage <= 0;
@@ -62,6 +66,28 @@
     {
         base.OnInitialized();
         ModalManager.PropertyChanged += HandleModalManagerNotification;
+        EngineService.EngineChanged += OnEngineChanged;
+    }
+
+    private void OnEngineChanged(object? sender, EngineFull e)
+    {
+        lock (_collectionLock)
+        {
+            for (var i = 0; i < _engines.Count; i++)
+            {
+                if (_engines[i].Id == e.Id)
+                {
+                    _engines[i] = e;
+                    StateHasChanged();
+                    return;
+                }
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        EngineService.EngineChanged -= OnEngineChanged;
     }
 
     private async void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
@@ -105,7 +131,6 @@
     private async Task ChangePage(int change)
     {
         _currentPage += change;
-        _engines.Clear();
 
         _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
@@ -115,8 +140,12 @@
             _isSortedDescending,
             _showHidden);
 
+        lock (_collectionLock)
+        {
+            _engines.Clear();
+            _engines.AddRange(engines);
+        }
         
-        _engines.AddRange(engines);
         StateHasChanged();
     }
 
@@ -126,4 +155,5 @@
         AppState.SelectedEngine = engine;
         ModalManager.IsEngineEditModalVisible = true;
     }
+
 }

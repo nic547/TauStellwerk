@@ -7,11 +7,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class EngineSelectionWindow : Window
+public class EngineSelectionWindow : DisposingWindow
 {
     public static readonly StyledProperty<int> ColumnsProperty = AvaloniaProperty.Register<EngineSelectionWindow, int>(nameof(Columns));
 

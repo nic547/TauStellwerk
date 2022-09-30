@@ -14,12 +14,14 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public partial class EngineSelectionViewModel : ViewModelBase
+public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
 {
     private const int EnginesPerPage = 20;
 
     private readonly EngineService _engineService;
     private readonly IViewService _viewService;
+
+    private readonly object _collectionLock = new();
 
     [ObservableProperty]
     private bool _showHiddenEngines;
@@ -41,6 +43,8 @@ public partial class EngineSelectionViewModel : ViewModelBase
                        Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
 
         PropertyChanged += HandlePropertyChanged;
+        _engineService.EngineChanged += OnEngineChanged;
+
         _ = Load();
     }
 
@@ -61,6 +65,12 @@ public partial class EngineSelectionViewModel : ViewModelBase
     public void ScrollPages(int change)
     {
         CurrentPage += change;
+    }
+
+    public void Dispose()
+    {
+        _engineService.EngineChanged -= OnEngineChanged;
+        Console.WriteLine("Dispose() was called"); // TODO: REMOVE
     }
 
     private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
@@ -94,15 +104,33 @@ public partial class EngineSelectionViewModel : ViewModelBase
         }
     }
 
+    private void OnEngineChanged(object? sender, EngineFull changedEngine)
+    {
+        lock (_collectionLock)
+        {
+            for (var i = 0; i < Engines.Count; i++)
+            {
+                if (Engines[i].Id == changedEngine.Id)
+                {
+                    Engines[i] = changedEngine;
+                    return;
+                }
+            }
+        }
+    }
+
     private async Task Load()
     {
         var sortDescending = _currentEngineSortDirection == "DESC";
         var engines = await _engineService.GetEngines(_currentPage, _currentEngineSortMode, sortDescending, _showHiddenEngines);
 
-        Engines.Clear();
-        foreach (var engine in engines)
+        lock (_collectionLock)
         {
-            Engines.Add(engine);
+            Engines.Clear();
+            foreach (var engine in engines)
+            {
+                Engines.Add(engine);
+            }
         }
 
         OnPropertyChanged(nameof(CanScrollForwards));
