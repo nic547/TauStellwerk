@@ -158,7 +158,7 @@
 
 @media (min-width: 769px) {
     .form-group > label {
-        width: 150px;
+        width: 300px;
         display: inline-block;
     }
 }

@@ -31,12 +31,24 @@
         {
             _settings = settings;
             await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
-
+            await SetWakeLock(_settings.WakeLock);
 
             StateHasChanged();
         };
 
         _settings = await _settingsService.GetSettings();
         await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
+    }
+
+    private async Task SetWakeLock(bool setWakeLock)
+    {
+        if (setWakeLock)
+        {
+            await _jsRuntime.InvokeVoidAsync("enableWakeLock");
+        }
+        else
+        {
+            await _jsRuntime.InvokeVoidAsync("disableWakeLock");
+        }
     }
 }

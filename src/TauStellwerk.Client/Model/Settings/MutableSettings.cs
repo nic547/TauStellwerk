@@ -13,12 +13,15 @@ public class MutableSettings
 
     public string Theme { get; set; } = "light";
 
+    public bool WakeLock { get; set; }
+
     public ImmutableSettings GetImmutableCopy()
     {
         return new ImmutableSettings(
             Username,
             ServerAddress,
-            Theme);
+            Theme,
+            WakeLock);
     }
 
     public MutableSettings GetMutableCopy()
@@ -28,6 +31,7 @@ public class MutableSettings
             Username = Username,
             ServerAddress = ServerAddress,
             Theme = Theme,
+            WakeLock = WakeLock,
         };
     }
 }

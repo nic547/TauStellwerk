@@ -96,7 +96,7 @@ public class BasicIntegrationTest
         var settingService = new Mock<ISettingsService>(MockBehavior.Strict);
 
         settingService.Setup(s => s.GetSettings().Result)
-            .Returns(() => new ImmutableSettings("TEST", _factory.Server.BaseAddress.ToString(), string.Empty));
+            .Returns(() => new ImmutableSettings("TEST", _factory.Server.BaseAddress.ToString(), string.Empty, false));
 
         var hubConnection = new HubConnectionBuilder().WithUrl(
             _factory.Server.BaseAddress + "hub",
