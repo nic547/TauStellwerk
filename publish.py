@@ -11,6 +11,7 @@ NC='\033[0m' # No Color
 def main():
     
     shutil.rmtree("./publish", ignore_errors=True)
+    delete_build_folders()
     os.system("dotnet clean")
     
     for rid in rids:
@@ -36,5 +37,11 @@ def pack(rid):
     else:
         raise Exception("Unkown platform")
     shutil.rmtree(f"./publish/{rid}")
+
+def delete_build_folders():
+    for folder in glob("./src/*/obj"):
+        shutil.rmtree(folder)
+    for folder in glob("./src/*/bin"):
+        shutil.rmtree(folder)
 
 main()
