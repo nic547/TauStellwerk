@@ -7,11 +7,12 @@ namespace TauStellwerk.Client.Model;
 
 public class ImmutableSettings
 {
-    public ImmutableSettings(string username, string serverAddress, string theme)
+    public ImmutableSettings(string username, string serverAddress, string theme, bool wakeLock)
     {
         Username = username;
         ServerAddress = serverAddress;
         Theme = theme;
+        WakeLock = wakeLock;
     }
 
     public string Username { get; }
@@ -19,4 +20,6 @@ public class ImmutableSettings
     public string ServerAddress { get; }
 
     public string Theme { get; }
+
+    public bool WakeLock { get; }
 }
