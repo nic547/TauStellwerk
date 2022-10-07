@@ -38,14 +38,14 @@ button {
     color: var(--primary-text) /* Doesn't seem to accept the color set for :root  */
 }
 
-button:active {
-    filter: brightness(var(--active-filter-value));
-}
+    button:active {
+        filter: brightness(var(--active-filter-value));
+    }
 
-button:disabled {
-    filter: brightness(var(--disabled-filter-value));
-}
- 
+    button:disabled {
+        filter: brightness(var(--disabled-filter-value));
+    }
+
 output, input, label, select {
     font-size: 1em;
 }
@@ -55,3 +55,11 @@ form > * {
     margin: 5px;
     display: block;
 }
+
+a {
+    color: var(--primary-color);
+}
+
+    a:active {
+        filter: brightness(var(--active-filter-value));
+    }

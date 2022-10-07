@@ -11,6 +11,7 @@
 
     --background-color: #FFFFFF;
     --primary-text: #000000;
+    --primary-text-highlight: #555555;
     
     --shadow-color: #D3D3D3;
     
@@ -22,12 +23,11 @@
     --primary-color: #1e88e5;
     --secondary-color: #445963;
     --danger-color: #D32F2F;
-    
     --background-color: #333333;
     --primary-text: #eeeeee;
-
-    --shadow-color: #000000;
+    --primary-text-highlight: #bbbbbb;
     
+    --shadow-color: #000000;
     --active-filter-value: 70%;
     --disabled-filter-value: 70%;
 }
