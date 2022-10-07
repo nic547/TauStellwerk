@@ -31,13 +31,13 @@
                 {
                     <label>Prevent device from going to sleep while TauStellwerk is open (WakeLock)?</label>
                     <input type="checkbox" disabled Value="false" />
-                    <p>WakeLock doesn't seem to be available. The wakeLock functionallity only works on certain browsers and requires https ("Secure Context")'.
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WakeLock">See here for a list of browsers that support this feature.</a>
+                    <p>WakeLock doesn't seem to be available. The wakeLock functionallity only works on certain browsers and requires https ("Secure Context").
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WakeLock" target="_blank">See here for a list of browsers that support this feature.</a>
                     </p>
                 }
             </div>
             <p>TauStellwerk @ThisAssembly.AssemblyInformationalVersion (.NET @Environment.Version)</p>
-            <p>Report issues and request features <a href="https://github.com/nic547/TauStellwerk/issues">here</a>.</p>
+            <p>Report issues and request features <a href="https://github.com/nic547/TauStellwerk/issues" target="_blank">here</a>.</p>
             <button type="button" @onclick="SaveAndClose" class="is-pulled-right">Save</button>
             <button type="button" @onclick="CloseWithoutSaving" class="is-pulled-right">Cancel</button>
         </EditForm>
