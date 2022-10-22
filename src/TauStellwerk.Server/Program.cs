@@ -5,6 +5,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Images;
@@ -35,9 +36,7 @@ public static class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-            })
-            .ConfigureHostConfiguration((config) =>
-                config.AddInMemoryCollection(DefaultConfiguration.Values));
+            });
 
     public static IHost PrintVersionInformation(this IHost host)
     {
@@ -97,14 +96,14 @@ public static class Program
         var scope = serviceScopeFactory.CreateScope();
         var services = scope.ServiceProvider;
 
-        var config = services.GetRequiredService<IConfiguration>();
+        var options = services.GetRequiredService<IOptions<TauStellwerkOptions>>().Value;
         var logger = services.GetRequiredService<ILogger<ImageSystem>>();
 
         var system = new ImageSystem(
             services.GetRequiredService<StwDbContext>(),
             logger,
-            config["originalImageDirectory"],
-            config["generatedImageDirectory"]);
+            options.OriginalImageDirectory,
+            options.GeneratedImageDirectory);
         _ = Task.Run(system.RunImageSetup);
 
         return host;

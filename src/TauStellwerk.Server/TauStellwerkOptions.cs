@@ -10,4 +10,15 @@ public class TauStellwerkOptions
     public bool ResetEnginesWithoutState { get; init; } = true;
 
     public bool StopOnLastUserDisconnect { get; init; } = true;
+
+    public string OriginalImageDirectory { get; init; } = "./originalImages";
+
+    public string GeneratedImageDirectory { get; init; } = "./generatedImages";
+
+    public DatabaseOptions Database { get; init; } = new();
+
+    public class DatabaseOptions
+    {
+        public string ConnectionString { get; init; } = "Filename=StwDatabase.db;cache=shared";
+    }
 }

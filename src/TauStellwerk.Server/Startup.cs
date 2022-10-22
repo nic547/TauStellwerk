@@ -30,12 +30,12 @@ public class Startup
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
+        Options = configuration.Get<TauStellwerkOptions>();
     }
 
-    /// <summary>
-    /// Gets the <see cref="IConfiguration"/> this application was started with.
-    /// </summary>
     private IConfiguration Configuration { get; }
+
+    private TauStellwerkOptions Options { get; }
 
     /// <summary>
     /// This method gets called by the runtime. Use this method to add services to the container.
@@ -51,7 +51,7 @@ public class Startup
             .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
 
         services.AddDbContextPool<StwDbContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("Database")));
+            options.UseSqlite(Options.Database.ConnectionString));
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
         services.AddSingleton(p => CommandStationFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandStationBase>>()));
@@ -97,7 +97,7 @@ public class Startup
 
         app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Configuration["generatedImageDirectory"])),
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Options.GeneratedImageDirectory)),
             RequestPath = "/images",
             ContentTypeProvider = GetContentTypeProvider(),
         });
@@ -132,7 +132,7 @@ public class Startup
 
     private void EnsureContentDirectoriesExist()
     {
-        Directory.CreateDirectory(Configuration["originalImageDirectory"]);
-        Directory.CreateDirectory(Configuration["generatedImageDirectory"]);
+        Directory.CreateDirectory(Options.OriginalImageDirectory);
+        Directory.CreateDirectory(Options.GeneratedImageDirectory);
     }
 }
