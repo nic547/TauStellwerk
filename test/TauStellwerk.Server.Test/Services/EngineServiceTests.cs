@@ -4,7 +4,6 @@
 // </copyright>
 
 using FluentResults.Extensions.FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -203,8 +202,7 @@ public class EngineServiceTests
 
     private static Mock<CommandStationBase> GetAlwaysTrueMock()
     {
-        var configMock = new Mock<IConfiguration>();
-        var mock = new Mock<CommandStationBase>(configMock.Object);
+        var mock = new Mock<CommandStationBase>();
         mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
         mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>(), It.IsAny<EngineState>()).Result).Returns(true);
 

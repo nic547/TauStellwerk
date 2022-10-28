@@ -1,0 +1,14 @@
+{
+  "AllowedHosts": "*",
+  "CommandStation": {
+    "Type": "DccExSerial",
+    "SerialPort": "/dev/ttyACM0"
+  },
+  "ResetEnginesWithoutState": false,
+  "StopOnLastUserDisconnect": false,
+  "OriginalImageDirectory": "some/directory",
+  "GeneratedImageDirectory": "another/directory",
+  "Database": {
+    "ConnectionString": "IAmAConnectionString"
+  }
+}

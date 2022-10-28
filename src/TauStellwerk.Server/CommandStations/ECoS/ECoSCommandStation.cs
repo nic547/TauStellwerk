@@ -11,25 +11,17 @@ using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.CommandStations;
 
-/// <summary>
-/// Implementation of a <see cref="CommandStationBase"/> for the ESU Command Station (ECoS).
-/// </summary>
 public class ECoSCommandStation : CommandStationBase
 {
     private readonly ILogger<CommandStationBase> _logger;
     private readonly ECosConnectionHandler _connectionHandler;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ECoSCommandStation"/> class.
-    /// </summary>
-    /// <param name="config">IConfiguration to use.</param>
-    /// <param name="logger">ILogger to use.</param>
-    public ECoSCommandStation(IConfiguration config, ILogger<CommandStationBase> logger)
-        : base(config)
+    public ECoSCommandStation(ECoSOptions options, ILogger<CommandStationBase> logger)
+        : base()
     {
         _logger = logger;
-        string ipAddress = Config["CommandStation:IP"];
-        var port = int.Parse(Config["CommandStation:Port"]);
+        string ipAddress = options.IPAddress ?? throw new FormatException("ECoS has been configured as CommandStation, but no IPAddress was configured.");
+        var port = options.Port;
         _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port, logger);
 
         _ = _connectionHandler.RegisterEvent("request(1,view)", "1", HandleStatusEvent);

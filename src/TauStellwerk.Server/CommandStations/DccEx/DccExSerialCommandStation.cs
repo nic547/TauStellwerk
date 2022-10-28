@@ -12,23 +12,24 @@ namespace TauStellwerk.Server.CommandStations;
 
 public class DccExSerialCommandStation : CommandStationBase
 {
+    private readonly DccExSerialOptions _options;
     private readonly ILogger<CommandStationBase> _logger;
     private readonly SerialPort _serialPort;
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
-    public DccExSerialCommandStation(IConfiguration configuration, ILogger<CommandStationBase> logger)
-        : base(configuration)
+    public DccExSerialCommandStation(DccExSerialOptions options, ILogger<CommandStationBase> logger)
+        : base()
     {
+        _options = options;
         _logger = logger;
         _logger.LogWarning("This CommandStation is work-in-progress and experimental. Things will break!");
 
         _serialPort = new SerialPort
         {
-            PortName = Config["CommandStation:SerialPort"],
+            PortName = options.SerialPort ?? throw new FormatException("No SerialPort for DccExSerial was defined."),
+            BaudRate = options.BaudRate,
         };
-        _ = int.TryParse(Config["CommandSystem:BaudRate"] ?? "115200", out var baudRate);
-        _serialPort.BaudRate = baudRate;
         _serialPort.Parity = Parity.None;
         _serialPort.DataBits = 8;
         _serialPort.StopBits = StopBits.One;

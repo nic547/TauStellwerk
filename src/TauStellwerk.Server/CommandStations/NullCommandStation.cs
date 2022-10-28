@@ -14,11 +14,6 @@ namespace TauStellwerk.Server.CommandStations;
 /// </summary>
 public class NullCommandStation : CommandStationBase
 {
-    public NullCommandStation(IConfiguration config)
-        : base(config)
-    {
-    }
-
     /// <inheritdoc/>
     public override Task HandleEngineEStop(Engine engine, Direction priorDirection)
     {

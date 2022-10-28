@@ -16,10 +16,10 @@ public static class CommandStationFactory
     [SuppressMessage("ReSharper", "ArrangeObjectCreationWhenTypeNotEvident", Justification = "Type is clearly visible.")]
     private static readonly List<CommandStationEntry> _commandStations = new()
     {
-        new(typeof(NullCommandStation), (config, _) => new NullCommandStation(config)),
-        new(typeof(ConsoleCommandStation), (config, _) => new ConsoleCommandStation(config)),
-        new(typeof(ECoSCommandStation), (config, logger) => new ECoSCommandStation(config, logger)),
-        new(typeof(DccExSerialCommandStation), (config, logger) => new DccExSerialCommandStation(config, logger)),
+        new(typeof(NullCommandStation), (_, _) => new NullCommandStation()),
+        new(typeof(ConsoleCommandStation), (_, _) => new ConsoleCommandStation()),
+        new(typeof(ECoSCommandStation), (config, logger) => new ECoSCommandStation(config.Get<ECoSOptions>(), logger)),
+        new(typeof(DccExSerialCommandStation), (config, logger) => new DccExSerialCommandStation(config.Get<DccExSerialOptions>(), logger)),
     };
 
     public static CommandStationBase FromConfig(IConfiguration config, ILogger<CommandStationBase> logger)
@@ -35,7 +35,7 @@ public static class CommandStationFactory
 
             if (distance == 0)
             {
-                return system.Constructor.Invoke(config, logger);
+                return system.Constructor.Invoke(config.GetSection("CommandStation"), logger);
             }
 
             if (distance < bestMatchDistance)
@@ -48,11 +48,11 @@ public static class CommandStationFactory
         if (bestMatch is not null && bestMatchDistance < bestMatch.Name.Length / 2)
         {
             logger.LogWarning("Couldn't locate an Implementation for command station \"{systemSetting}\", continuing with similar implementation: \"{bestMatch}\"", systemSetting, bestMatch.Name);
-            return bestMatch.Constructor.Invoke(config, logger);
+            return bestMatch.Constructor.Invoke(config.GetSection("CommandStation"), logger);
         }
 
         logger.LogError("Could not find an implementation for command station \"{systemSetting}\", continuing with default (NullCommandStation)", systemSetting);
-        return new NullCommandStation(config);
+        return new NullCommandStation();
         }
 
     private static string GetHumanFriendlyName(Type commandSystemType)
