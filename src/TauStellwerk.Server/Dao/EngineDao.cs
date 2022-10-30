@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Diagnostics;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
@@ -64,9 +65,10 @@ public class EngineDao
 
     public async Task<IList<EngineOverviewDto>> GetEngineList(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
     {
+        Stopwatch stopwatch = Stopwatch.StartNew();
         var query = _dbContext.Engines
             .AsNoTracking()
-            .AsSingleQuery(); // TODO: Why does AsSplitQuery break this?
+            .AsSplitQuery();
 
         if (!showHiddenEngines)
         {
@@ -90,6 +92,7 @@ public class EngineDao
             .Include(x => x.Tags);
 
         var result = await query.ToListAsync();
+        _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);
         return result.Select(e => e.ToEngineDto()).ToList();
     }
 
