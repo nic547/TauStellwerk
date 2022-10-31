@@ -14,8 +14,9 @@ namespace TauStellwerk.Server.Database.Model;
 /// <summary>
 /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
 /// </summary>
-[Index(nameof(LastUsed))]
-[Index(nameof(Created))]
+[Index(nameof(LastUsed), nameof(IsHidden))]
+[Index(nameof(Created), nameof(IsHidden))]
+[Index(nameof(Name), nameof(IsHidden))]
 public class Engine
 {
     /// <summary>

@@ -42,4 +42,8 @@
     <ProjectReference Include="..\TauStellwerk.WebClient\TauStellwerk.WebClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.119" />
+  </ItemGroup>
+
 </Project>
