@@ -18,16 +18,9 @@ namespace TauStellwerk.Server.CommandStations;
 /// </summary>
 public abstract class CommandStationBase
 {
-    protected CommandStationBase(IConfiguration configuration)
-    {
-        Config = configuration;
-    }
-
     public delegate void StatusChangeHandler(State state);
 
     public event StatusChangeHandler? StatusChanged;
-
-    protected IConfiguration Config { get; }
 
     public abstract Task HandleSystemStatus(State desiredState);
 

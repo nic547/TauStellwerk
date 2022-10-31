@@ -14,12 +14,6 @@ namespace TauStellwerk.Server.CommandStations;
 /// </summary>
 public class ConsoleCommandStation : CommandStationBase
 {
-    // ReSharper disable once UnusedParameter.Local
-    public ConsoleCommandStation(IConfiguration config)
-        : base(config)
-    {
-    }
-
     public override Task CheckState()
     {
         return Task.CompletedTask;

@@ -5,6 +5,16 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>TauStellwerk.Test</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Config\testConfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Config\testConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.1.2">
