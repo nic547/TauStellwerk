@@ -10,7 +10,8 @@
         Title="Engine List"
         MinWidth="200"
         MinHeight="200"
-        ClientSize="{Binding WindowSize, Mode=OneWayToSource}">
+        ClientSize="{Binding WindowSize, Mode=OneWayToSource}"
+        x:DataType="viewModels:EngineSelectionViewModel">
     <Design.DataContext>
         <viewModels:EngineSelectionViewModel/>
     </Design.DataContext>
@@ -24,7 +25,7 @@
                 <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
             </StackPanel>
             <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                <Button Command="{Binding ScrollPages}"
+                <Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="-1"
                         IsEnabled="{Binding CanScrollBackwards}"
@@ -32,7 +33,7 @@
                 <TextBlock Text="{Binding CurrentPage}"
                            DockPanel.Dock="Left"
                            VerticalAlignment="Center"/>
-                <Button Command="{Binding ScrollPages}"
+                <Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="1"
                         IsEnabled="{Binding CanScrollForwards}"
