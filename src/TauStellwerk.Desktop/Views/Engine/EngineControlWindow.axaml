@@ -18,15 +18,17 @@
           VerticalAlignment="Stretch"
           Margin="5">
         <Label Content="{Binding Engine.Name, FallbackValue={}}"
-               Grid.ColumnSpan="2" Padding="2"/>
+               Grid.ColumnSpan="2" Padding="4"/>
         <controls:EngineImageControl Grid.Column="1" Grid.Row="1"
                EngineImages="{Binding Engine.Images}"
                Stretch="Uniform"
-               StretchDirection="Both"/>
+               StretchDirection="Both"
+               Margin="2"/>
         <Slider Orientation="Vertical"
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.RowSpan="2"
+                Margin="0,5"
                 HorizontalAlignment="Center"
                 Maximum="126"
                 Minimum="0"
@@ -38,7 +40,7 @@
 		</StackPanel>
         <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center"
                Content="{Binding Throttle}"/>
-        <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3">
+        <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" Margin="2">
             <StackPanel>
                 <ItemsControl Items="{Binding Engine.Functions, FallbackValue={}}">
                     <ItemsControl.ItemTemplate>
