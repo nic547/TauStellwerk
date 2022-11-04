@@ -10,7 +10,8 @@
         Title="Engine List"
         MinWidth="200"
         MinHeight="200"
-        ClientSize="{Binding WindowSize, Mode=OneWayToSource}">
+        ClientSize="{Binding WindowSize, Mode=OneWayToSource}"
+        x:DataType="viewModels:EngineSelectionViewModel">
     <Design.DataContext>
         <viewModels:EngineSelectionViewModel/>
     </Design.DataContext>
@@ -24,19 +25,23 @@
                 <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
             </StackPanel>
             <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                <Button Command="{Binding ScrollPages}"
+                <Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="-1"
                         IsEnabled="{Binding CanScrollBackwards}"
-                        Content="&lt;"/>
+                        Content="&lt;"
+                        Classes="accent"/>
                 <TextBlock Text="{Binding CurrentPage}"
                            DockPanel.Dock="Left"
-                           VerticalAlignment="Center"/>
-                <Button Command="{Binding ScrollPages}"
+                           VerticalAlignment="Center"
+                           Width="20"
+                           TextAlignment="Center"/>
+                <Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="1"
                         IsEnabled="{Binding CanScrollForwards}"
-                        Content="&gt;"/>
+                        Content="&gt;" 
+                        Classes="accent"/>
                 <Button Command="{Binding CreateEngineCommand}"
                         DockPanel.Dock="Right"
                         Content="Create New"/>
@@ -50,9 +55,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto">
-                            <Border Background="Red" CornerRadius="4" Padding="4" Grid.Row="0">
-                                <TextBlock Text="{Binding Name}"/>
-                            </Border>
+                            <TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
                             <controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
                             <ItemsRepeater Items="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
                                 <ItemsRepeater.Layout>
@@ -65,8 +68,8 @@
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
                             <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
-                                <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit"/>
-                                <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select"/>
+                                <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit" Classes="accent"/>
+                                <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select" Classes="accent"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
