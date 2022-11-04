@@ -30,7 +30,7 @@ public class Startup
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        Options = configuration.Get<TauStellwerkOptions>();
+        Options = configuration.Get<TauStellwerkOptions>() ?? throw new FormatException("Could not parse configuration");
     }
 
     private IConfiguration Configuration { get; }
