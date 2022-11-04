@@ -48,7 +48,8 @@ public partial class TauHub
 
     public async Task<Result<EngineFullDto>> GetEngine(int id)
     {
-        return await _engineDao.GetEngineFullDto(id);
+        var engine = await _engineDao.GetEngine(id);
+        return engine.Bind((engine) => Result.Ok(engine.ToEngineFullDto()));
     }
 
     public async Task<IList<EngineOverviewDto>> GetEngines(
