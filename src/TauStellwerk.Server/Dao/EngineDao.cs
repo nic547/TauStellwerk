@@ -25,29 +25,9 @@ public class EngineDao
         _logger = logger;
     }
 
-    public async Task<Result<EngineFullDto>> GetEngineFullDto(int id)
-    {
-        var engine = await _dbContext.Engines
-            .AsNoTracking()
-            .AsSingleQuery()
-            .Include(x => x.Functions)
-            .Include(x => x.Images)
-            .Include(x => x.Tags)
-            .SingleOrDefaultAsync(x => x.Id == id)
-            .ContinueWith(x => x.Result?.ToEngineFullDto());
-
-        if (engine == null)
-        {
-            return Result.Fail("Engine not found");
-        }
-
-        return Result.Ok(engine);
-    }
-
     public async Task<Result<Engine>> GetEngine(int id)
     {
         var engine = await _dbContext.Engines
-            .AsNoTracking()
             .AsSingleQuery()
             .Include(x => x.Functions)
             .Include(x => x.Images)
@@ -59,6 +39,9 @@ public class EngineDao
         {
             return Result.Fail("Engine not found");
         }
+
+        engine.LastUsed = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
 
         return Result.Ok(engine);
     }
@@ -133,13 +116,6 @@ public class EngineDao
         engineDto.Id = engine.Id;
 
         return Result.Ok(engineDto);
-    }
-
-    public async Task UpdateLastUsed(int id)
-    {
-        var engine = await _dbContext.Engines.SingleAsync(e => e.Id == id);
-        engine.LastUsed = DateTime.UtcNow;
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Result> Delete(int id)
