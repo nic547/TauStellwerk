@@ -54,11 +54,12 @@ public partial class TauHub
 
     public async Task<IList<EngineOverviewDto>> GetEngines(
         int page,
-        SortEnginesBy sorting = SortEnginesBy.LastUsed,
+        int sorting,
         bool sortDescending = true,
         bool showHidden = false)
     {
-        var list = await _engineDao.GetEngineList(page, showHidden, sorting, sortDescending);
+        // With the upgrade to .NET 7.0 SignalR doesn't seem to like the SortEnginesBy enum, so instead we explicitly take an int and just cast that.
+        var list = await _engineDao.GetEngineList(page, showHidden, (SortEnginesBy)sorting, sortDescending);
         return list;
     }
 
