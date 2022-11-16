@@ -32,7 +32,7 @@ public class EngineService
             return new List<EngineOverview>();
         }
 
-        var engines = await connection.InvokeAsync<IReadOnlyList<EngineOverviewDto>>("GetEngines", page, sorting, sortDescending, showHidden);
+        var engines = await connection.InvokeAsync<List<EngineOverviewDto>>("GetEngines", page, sorting, sortDescending, showHidden);
         return engines.Select(e => new EngineOverview(e)).ToList();
     }
 

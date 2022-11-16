@@ -5,6 +5,8 @@
 
 using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
+using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.Client.Services;
@@ -141,6 +143,8 @@ public class ConnectionService : IConnectionService
 
             // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
             opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
-        }).Build();
+        })
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
+            .Build();
     }
 }

@@ -16,6 +16,8 @@ namespace TauStellwerk.Base;
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(ResultDto<EngineFullDto>))]
 [JsonSerializable(typeof(ResultDto))]
+[JsonSerializable(typeof(SortEnginesBy))]
+[JsonSerializable(typeof(Direction?))]
 public partial class TauJsonContext : JsonSerializerContext
 {
 }
