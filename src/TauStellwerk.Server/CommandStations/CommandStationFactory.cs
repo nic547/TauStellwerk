@@ -3,7 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Diagnostics.CodeAnalysis;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Server.CommandStations;
@@ -13,18 +12,17 @@ namespace TauStellwerk.Server.CommandStations;
 /// </summary>
 public static class CommandStationFactory
 {
-    [SuppressMessage("ReSharper", "ArrangeObjectCreationWhenTypeNotEvident", Justification = "Type is clearly visible.")]
     private static readonly List<CommandStationEntry> _commandStations = new()
     {
-        new(typeof(NullCommandStation), (_, _) => new NullCommandStation()),
-        new(typeof(ConsoleCommandStation), (_, _) => new ConsoleCommandStation()),
-        new(typeof(ECoSCommandStation), (config, logger) => new ECoSCommandStation(config.Get<ECoSOptions>(), logger)),
-        new(typeof(DccExSerialCommandStation), (config, logger) => new DccExSerialCommandStation(config.Get<DccExSerialOptions>(), logger)),
+        new CommandStationEntry(typeof(NullCommandStation), (_, _) => new NullCommandStation()),
+        new CommandStationEntry(typeof(ConsoleCommandStation), (_, _) => new ConsoleCommandStation()),
+        new CommandStationEntry(typeof(ECoSCommandStation), (config, logger) => new ECoSCommandStation(config.Get<ECoSOptions>() ?? throw new FormatException("Could not parse configuration for the ECoS"), logger)),
+        new CommandStationEntry(typeof(DccExSerialCommandStation), (config, logger) => new DccExSerialCommandStation(config.Get<DccExSerialOptions>() ?? throw new FormatException("Could not parse configuration for DccExSerial"), logger)),
     };
 
     public static CommandStationBase FromConfig(IConfiguration config, ILogger<CommandStationBase> logger)
     {
-        var systemSetting = RemoveCommandStationSuffix(config["CommandStation:Type"]);
+        var systemSetting = RemoveCommandStationSuffix(config["CommandStation:Type"] ?? string.Empty);
 
         CommandStationEntry? bestMatch = null;
         var bestMatchDistance = int.MaxValue;

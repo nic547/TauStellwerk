@@ -6,19 +6,21 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentResults;
 using FluentResults.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base;
+using TauStellwerk.Server.Dao;
 
 namespace TauStellwerk.Server.Hub;
 
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
-    public async Task<ResultDto<EngineFullDto>> AcquireEngine(int id)
+    public async Task<ResultDto<EngineFullDto>> AcquireEngine([FromServices]EngineDao engineDao, int id)
     {
         var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
         return await sessionResult
-            .Bind(_ => _engineDao.GetEngine(id))
+            .Bind(_ => engineDao.GetEngine(id))
             .Bind(engine => _engineService.AcquireEngine(sessionResult.Value, engine));
     }
 
@@ -46,41 +48,42 @@ public partial class TauHub
             .Bind(session => _engineService.SetEngineFunction(session, id, number, state));
     }
 
-    public async Task<Result<EngineFullDto>> GetEngine(int id)
+    public async Task<Result<EngineFullDto>> GetEngine([FromServices] EngineDao engineDao, int id)
     {
-        var engine = await _engineDao.GetEngine(id);
+        var engine = await engineDao.GetEngine(id);
         return engine.Bind((engine) => Result.Ok(engine.ToEngineFullDto()));
     }
 
     public async Task<IList<EngineOverviewDto>> GetEngines(
+        [FromServices] EngineDao engineDao,
         int page,
-        SortEnginesBy sorting = SortEnginesBy.LastUsed,
+        SortEnginesBy sorting,
         bool sortDescending = true,
         bool showHidden = false)
     {
-        var list = await _engineDao.GetEngineList(page, showHidden, sorting, sortDescending);
+        var list = await engineDao.GetEngineList(page, showHidden, sorting, sortDescending);
         return list;
     }
 
-    public async Task<ResultDto<EngineFullDto>> AddOrUpdateEngine(EngineFullDto engine)
+    public async Task<ResultDto<EngineFullDto>> AddOrUpdateEngine([FromServices] EngineDao engineDao, EngineFullDto engine)
     {
         if (engine.Id is not 0)
         {
             return await _sessionService.TryGetSession(Context.ConnectionId)
                 .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, engine.Id))
-                .Bind(() => _engineDao.UpdateOrAdd(engine));
+                .Bind(() => engineDao.UpdateOrAdd(engine));
         }
 
-        return await _engineDao.UpdateOrAdd(engine);
+        return await engineDao.UpdateOrAdd(engine);
     }
 
-    public async Task<ResultDto> DeleteEngine(int id)
+    public async Task<ResultDto> DeleteEngine([FromServices] EngineDao engineDao, int id)
     {
         var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
         return await sessionResult
             .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, id))
-            .Bind(() => _engineDao.Delete(id))
+            .Bind(() => engineDao.Delete(id))
             .Bind(() => _engineService.ReleaseEngine(sessionResult.Value, id));
     }
 }

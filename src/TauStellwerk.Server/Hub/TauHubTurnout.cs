@@ -3,18 +3,22 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
 using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base;
+using TauStellwerk.Server.Dao;
 
 namespace TauStellwerk.Server.Hub;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
     private const string TurnoutGroupName = "turnouts";
 
-    public async Task<ResultDto> SetTurnout(int id, State state)
+    public async Task<ResultDto> SetTurnout([FromServices] ITurnoutDao turnoutDao, int id, State state)
     {
-        var turnoutResult = await _turnoutDao.GetTurnoutById(id);
+        var turnoutResult = await turnoutDao.GetTurnoutById(id);
 
         if (turnoutResult.IsFailed)
         {
@@ -33,20 +37,20 @@ public partial class TauHub
         return result;
     }
 
-    public async Task<IList<TurnoutDto>> GetTurnouts(int page)
+    public async Task<IList<TurnoutDto>> GetTurnouts([FromServices] ITurnoutDao turnoutDao, int page)
     {
-        var turnouts = await _turnoutDao.GetTurnouts(page);
+        var turnouts = await turnoutDao.GetTurnouts(page);
         return _turnoutService.GetTurnoutsWithState(turnouts).Select(t => t.ToDto()).ToList();
     }
 
-    public async Task<ResultDto> AddOrUpdateTurnout(TurnoutDto dto)
+    public async Task<ResultDto> AddOrUpdateTurnout([FromServices] ITurnoutDao turnoutDao, TurnoutDto dto)
     {
-        return await _turnoutDao.AddOrUpdate(dto);
+        return await turnoutDao.AddOrUpdate(dto);
     }
 
-    public async Task<ResultDto> DeleteTurnout(TurnoutDto dto)
+    public async Task<ResultDto> DeleteTurnout([FromServices] ITurnoutDao turnoutDao, TurnoutDto dto)
     {
-        return await _turnoutDao.Delete(dto);
+        return await turnoutDao.Delete(dto);
     }
 
     public async Task<ResultDto> SubscribeToTurnoutEvents()

@@ -8,11 +8,16 @@ using System.Text.Json.Serialization;
 namespace TauStellwerk.Base;
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-[JsonSerializable(typeof(EngineOverviewDto[]))]
+[JsonSerializable(typeof(List<EngineOverviewDto>[]))]
 [JsonSerializable(typeof(EngineFullDto))]
+[JsonSerializable(typeof(TurnoutDto))]
+[JsonSerializable(typeof(List<TurnoutDto>))]
 [JsonSerializable(typeof(SystemStatus))]
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(ResultDto<EngineFullDto>))]
+[JsonSerializable(typeof(ResultDto))]
+[JsonSerializable(typeof(SortEnginesBy))]
+[JsonSerializable(typeof(Direction?))]
 public partial class TauJsonContext : JsonSerializerContext
 {
 }

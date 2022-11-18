@@ -19,7 +19,7 @@ public class ConfigTests
         builder.AddJsonFile("./Config/testConfig.json");
         var config = builder.Build();
 
-        var options = config.Get<TauStellwerkOptions>();
+        var options = config.Get<TauStellwerkOptions>()!;
 
         options.OriginalImageDirectory.Should().Be("some/directory");
         options.GeneratedImageDirectory.Should().Be("another/directory");
@@ -35,7 +35,7 @@ public class ConfigTests
         builder.AddJsonFile("./Config/testConfig.json");
         var config = builder.Build();
 
-        var options = config.GetRequiredSection("CommandStation").Get<DccExSerialOptions>();
+        var options = config.GetRequiredSection("CommandStation").Get<DccExSerialOptions>()!;
 
         options.BaudRate.Should().Be(115200);
         options.SerialPort.Should().Be("/dev/ttyACM0");

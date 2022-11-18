@@ -26,7 +26,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
 
     public override void Write<TState>(
         in LogEntry<TState> logEntry,
-        IExternalScopeProvider scopeProvider,
+        IExternalScopeProvider? scopeProvider,
         TextWriter textWriter)
     {
         var message = logEntry.Formatter?.Invoke(logEntry.State, logEntry.Exception);

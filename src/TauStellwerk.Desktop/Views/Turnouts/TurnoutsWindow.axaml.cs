@@ -4,7 +4,6 @@
 // </copyright>
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
 using TauStellwerk.Desktop.Controls;
