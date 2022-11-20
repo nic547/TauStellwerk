@@ -118,6 +118,11 @@ public static class EngineDtoGenerator
         tags.Add(_ownerTag.TakeRandom(random));
         tags.AddRange(new List<string> { "DCC", "Sound" });
 
+        // Add two random numbers as a tag to simulate the usage as "alternative names"
+        // For example one could add the full UIC-Numbers to an engine => many "single-use" tags
+        tags.Add(random.NextInt64(0, 999_999_999).ToString());
+        tags.Add(random.NextInt64(0, 999_999_999).ToString());
+
         return new EngineFullDto()
         {
             Name = string.Format(engineNameSet.ClassName, number),
@@ -142,7 +147,6 @@ public static class EngineDtoGenerator
                 new(11, "Conductor's Whistle", 1000),
                 new(12, "Shunting mode", 0),
                 new(13, "Station announcement: passing train", 3500),
-
             },
         };
     }
