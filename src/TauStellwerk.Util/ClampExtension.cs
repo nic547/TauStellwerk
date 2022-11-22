@@ -3,11 +3,14 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Numerics;
+
 namespace TauStellwerk.Util;
 
 public static class ClampExtension
 {
-    public static int Clamp(this int value, int lower, int upper)
+    public static T Clamp<T>(this T value, T lower, T upper)
+        where T : INumber<T>
     {
         if (value < lower)
         {
@@ -28,9 +31,10 @@ public static class ClampExtension
     /// <param name="value">The value to clamp.</param>
     /// <param name="upper">The inclusive upper limit.</param>
     /// <returns>A positive integer no larger then upper.</returns>
-    public static int Clamp(this int value, int upper)
+    public static T Clamp<T>(this T value, T upper)
+    where T : INumber<T>
     {
-        return value.Clamp(0, upper);
+        return value.Clamp(T.Zero, upper);
     }
 
     /// <summary>
@@ -38,8 +42,9 @@ public static class ClampExtension
     /// </summary>
     /// <param name="value">The value to clamped.</param>
     /// <returns>A positive integer.</returns>
-    public static int Clamp(this int value)
+    public static T Clamp<T>(this T value)
+    where T : INumber<T>
     {
-        return value.Clamp(0, int.MaxValue);
+        return value < T.Zero ? T.Zero : value;
     }
 }
