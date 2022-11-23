@@ -30,7 +30,7 @@ public class EngineImage
 
     public static List<ImageDto> ToDtos(ImmutableList<EngineImage> list)
     {
-        return list.Select(i => new ImageDto() { Filename = i.Filename, Width = i.Width }).ToList();
+        return list.Select(i => new ImageDto(i.Filename, i.Width)).ToList();
     }
 
     private (string Type, int Importance) GetFileType()

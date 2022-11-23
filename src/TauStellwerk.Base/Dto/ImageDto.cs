@@ -5,9 +5,4 @@
 
 namespace TauStellwerk.Base;
 
-public class ImageDto
-{
-    public string Filename { get; set; } = string.Empty;
-
-    public int Width { get; set; }
-}
+public record ImageDto(string Filename, int Width);

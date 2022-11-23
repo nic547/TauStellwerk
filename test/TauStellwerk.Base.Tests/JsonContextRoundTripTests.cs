@@ -42,15 +42,15 @@ public class JsonContextRoundTripTests
             LastUsed = DateTime.UtcNow,
             Images = new()
             {
-                new ImageDto { Filename = "3_100.jpg", Width = 800 },
-                new ImageDto { Filename = "3_100.webp", Width = 800 },
-                new ImageDto { Filename = "3_100.avif", Width = 800 },
-                new ImageDto { Filename = "3_50.jpg", Width = 400 },
-                new ImageDto { Filename = "3_50.webp", Width = 400 },
-                new ImageDto { Filename = "3_50.avif", Width = 400 },
-                new ImageDto { Filename = "3_25.jpg", Width = 200 },
-                new ImageDto { Filename = "3_25.webp", Width = 200 },
-                new ImageDto { Filename = "3_25.avif", Width = 200 },
+                new ImageDto("3_100.jpg", 800),
+                new ImageDto("3_100.webp", 800),
+                new ImageDto("3_100.avif", 800),
+                new ImageDto("3_50.jpg", 400),
+                new ImageDto("3_50.webp", 400),
+                new ImageDto("3_50.avif", 400),
+                new ImageDto("3_25.jpg", 200),
+                new ImageDto("3_25.webp", 200),
+                new ImageDto("3_25.avif", 200),
             },
         };
 
@@ -71,15 +71,15 @@ public class JsonContextRoundTripTests
             LastUsed = DateTime.UtcNow,
             Images = new()
             {
-                new ImageDto { Filename = "3_100.jpg", Width = 800 },
-                new ImageDto { Filename = "3_100.webp", Width = 800 },
-                new ImageDto { Filename = "3_100.avif", Width = 800 },
-                new ImageDto { Filename = "3_50.jpg", Width = 400 },
-                new ImageDto { Filename = "3_50.webp", Width = 400 },
-                new ImageDto { Filename = "3_50.avif", Width = 400 },
-                new ImageDto { Filename = "3_25.jpg", Width = 200 },
-                new ImageDto { Filename = "3_25.webp", Width = 200 },
-                new ImageDto { Filename = "3_25.avif", Width = 200 },
+                new ImageDto("3_100.jpg", 800),
+                new ImageDto("3_100.webp", 800),
+                new ImageDto("3_100.avif", 800),
+                new ImageDto("3_50.jpg", 400),
+                new ImageDto("3_50.webp", 400),
+                new ImageDto("3_50.avif", 400),
+                new ImageDto("3_25.jpg", 200),
+                new ImageDto("3_25.webp", 200),
+                new ImageDto("3_25.avif", 200),
             },
             Functions = new()
             {
