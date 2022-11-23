@@ -30,6 +30,7 @@ public static class ClampExtension
     /// </summary>
     /// <param name="value">The value to clamp.</param>
     /// <param name="upper">The inclusive upper limit.</param>
+    /// <typeparam name="T">An INumber.</typeparam>
     /// <returns>A positive integer no larger then upper.</returns>
     public static T Clamp<T>(this T value, T upper)
     where T : INumber<T>
@@ -41,6 +42,7 @@ public static class ClampExtension
     /// Clamp a value to a value greater than zero.
     /// </summary>
     /// <param name="value">The value to clamped.</param>
+    /// <typeparam name="T">An INumber.</typeparam>
     /// <returns>A positive integer.</returns>
     public static T Clamp<T>(this T value)
     where T : INumber<T>

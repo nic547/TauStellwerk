@@ -1,0 +1,118 @@
+﻿// <copyright file="JsonContextRoundTripTests.cs" company="Dominic Ritz">
+// Copyright (c) Dominic Ritz. All rights reserved.
+// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Text.Json;
+using FluentAssertions;
+using NUnit.Framework;
+
+namespace TauStellwerk.Base.Tests;
+
+public class JsonContextRoundTripTests
+{
+    [TestCase(Direction.Forwards)]
+    [TestCase(Direction.Backwards)]
+    [TestCase(SortEnginesBy.Created)]
+    [TestCase(SortEnginesBy.LastUsed)]
+    [TestCase(SortEnginesBy.Name)]
+    [TestCase(State.On)]
+    [TestCase(State.Off)]
+    [TestCase(TurnoutKind.RightTurnout)] // TurnoutKind not tested exhaustively
+    [TestCase(TurnoutKind.SlimCurvedLeftTurnout)]
+    [TestCase(TurnoutKind.SlimCurvedRightTurnout)]
+    public void EnumTests<T>(T value)
+    where T : Enum
+    {
+        var json = JsonSerializer.Serialize(value);
+        var result = JsonSerializer.Deserialize<T>(json);
+
+        result.Should().Be(value);
+    }
+
+    [Test]
+    public void EngineOverviewDtoTest()
+    {
+        var dto = new EngineOverviewDto()
+        {
+            Id = 3,
+            Name = """SBB Re 482 ("Alpäzähmer") """,
+            Tags = new() { "Sound", "DCC", "91 85 4482 026-2 CH-SBBC", ",", ""","",""" },
+            Created = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            LastUsed = DateTime.UtcNow,
+            Images = new()
+            {
+                new ImageDto { Filename = "3_100.jpg", Width = 800 },
+                new ImageDto { Filename = "3_100.webp", Width = 800 },
+                new ImageDto { Filename = "3_100.avif", Width = 800 },
+                new ImageDto { Filename = "3_50.jpg", Width = 400 },
+                new ImageDto { Filename = "3_50.webp", Width = 400 },
+                new ImageDto { Filename = "3_50.avif", Width = 400 },
+                new ImageDto { Filename = "3_25.jpg", Width = 200 },
+                new ImageDto { Filename = "3_25.webp", Width = 200 },
+                new ImageDto { Filename = "3_25.avif", Width = 200 },
+            },
+        };
+
+        var json = JsonSerializer.Serialize(dto);
+        var result = JsonSerializer.Deserialize<EngineOverviewDto>(json);
+        result.Should().BeEquivalentTo(dto);
+    }
+
+    [Test]
+    public void EngineFullDtoTest()
+    {
+        var dto = new EngineFullDto()
+        {
+            Id = 4,
+            Name = """SBB Re 482 ("Alpäzähmer") """,
+            Tags = new() { "Sound", "DCC", "91 85 4482 026-2 CH-SBBC" },
+            Created = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            LastUsed = DateTime.UtcNow,
+            Images = new()
+            {
+                new ImageDto { Filename = "3_100.jpg", Width = 800 },
+                new ImageDto { Filename = "3_100.webp", Width = 800 },
+                new ImageDto { Filename = "3_100.avif", Width = 800 },
+                new ImageDto { Filename = "3_50.jpg", Width = 400 },
+                new ImageDto { Filename = "3_50.webp", Width = 400 },
+                new ImageDto { Filename = "3_50.avif", Width = 400 },
+                new ImageDto { Filename = "3_25.jpg", Width = 200 },
+                new ImageDto { Filename = "3_25.webp", Width = 200 },
+                new ImageDto { Filename = "3_25.avif", Width = 200 },
+            },
+            Functions = new()
+            {
+                new(0, "Light", 0) { State = State.On },
+                new(1, "Sound", 0) { State = State.Off },
+            },
+            Address = 26,
+            TopSpeed = 140,
+            Throttle = 100,
+            Direction = Direction.Forwards,
+        };
+
+        var json = JsonSerializer.Serialize(dto);
+        var result = JsonSerializer.Deserialize<EngineFullDto>(json);
+        result.Should().BeEquivalentTo(dto);
+    }
+
+    [Test]
+    public void TurnoutDtoTest()
+    {
+        var dto = new TurnoutDto()
+        {
+            Id = 1,
+            Address = 1,
+            IsInverted = true,
+            Kind = TurnoutKind.RightTurnout,
+            Name = "W1 BHF XYZ",
+            State = State.On,
+        };
+
+        var json = JsonSerializer.Serialize(dto);
+        var result = JsonSerializer.Deserialize<TurnoutDto>(json);
+
+        result.Should().BeEquivalentTo(dto);
+    }
+}
