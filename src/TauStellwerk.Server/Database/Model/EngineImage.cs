@@ -23,10 +23,6 @@ public class EngineImage
 
     public ImageDto ToImageDto()
     {
-        return new ImageDto()
-        {
-            Filename = Filename,
-            Width = Width,
-        };
+        return new ImageDto(Filename, Width);
     }
 }
