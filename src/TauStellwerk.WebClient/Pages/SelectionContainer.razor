@@ -54,9 +54,9 @@
     private readonly object _collectionLock = new();
 
     private bool CannotMoveForward => _engines.Count != EnginesPerPage;
-    private bool CannotMoveBackward => _currentPage <= 0;
+    private bool CannotMoveBackward => _currentPage <= 1;
 
-    private int _currentPage = 0;
+    private int _currentPage = 1;
 
     private string _currentSorting = "LastUsed";
     private bool _isSortedDescending = true;
@@ -101,7 +101,7 @@
 
         if (ModalManager.IsEngineSelectionVisible)
         {
-            _currentPage = 0;
+            _currentPage = 1;
             await ChangePage(0);
         }
 
@@ -135,7 +135,7 @@
         _currentPage = _currentPage.Clamp();
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
         var engines = await EngineService.GetEngines(
-            _currentPage,
+            _currentPage - 1,
             sortEnum,
             _isSortedDescending,
             _showHidden);

@@ -33,7 +33,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     private string _currentEngineSortDirection = "DESC";
 
     [ObservableProperty]
-    private int _currentPage;
+    private int _currentPage = 1;
 
     public EngineSelectionViewModel(EngineService? engineService = null, IViewService? viewService = null)
     {
@@ -60,7 +60,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
 
     public bool CanScrollForwards => Engines.Count == EnginesPerPage;
 
-    public bool CanScrollBackwards => CurrentPage > 0;
+    public bool CanScrollBackwards => CurrentPage > 1;
 
     public void ScrollPages(int change)
     {
@@ -122,7 +122,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     private async Task Load()
     {
         var sortDescending = _currentEngineSortDirection == "DESC";
-        var engines = await _engineService.GetEngines(_currentPage, _currentEngineSortMode, sortDescending, _showHiddenEngines);
+        var engines = await _engineService.GetEngines(_currentPage - 1, _currentEngineSortMode, sortDescending, _showHiddenEngines);
 
         lock (_collectionLock)
         {
