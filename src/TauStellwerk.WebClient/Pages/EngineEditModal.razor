@@ -2,12 +2,14 @@
 @using System.Reflection.Metadata.Ecma335
 @using TauStellwerk.Client.Model
 @using TauStellwerk.Client.Services
+
 @inject ModalManager _modalManager
 @inject AppState _appState
 @inject EngineService _engineService
+@inject IJSRuntime _jsRuntime
 
 <div class="modal @(_modalManager.IsEngineEditModalVisible ? "active-modal" : "inactive-modal")">
-    <div class="modal-content">
+    <div class="modal-content" id="EngineEditModalContent">
         <EditForm Model="Engine">
             <div class="form-group" title="Name of the engine">
                 <label for="NameInput">Name: </label>
@@ -28,16 +30,15 @@
             <div class="form-group">
                 <label>Tags: </label>
                 <div class="tags">
-                    @foreach(var tag in Engine.Tags)
+                    @foreach (var tag in Engine.Tags)
                     {
-                        <span class="button-secondary is-clickable" 
-                        title="Remove this tag"
-                        @onclick="() => RemoveTag(tag)"
-                        >@tag X</span>
+                        <span class="button-secondary is-clickable"
+                          title="Remove this tag"
+                          @onclick="() => RemoveTag(tag)">@tag X</span>
                     }
                 </div>
                 <div>
-                    <input type="text" @bind="NewTagInput" placeholder="New tag"/>
+                    <input type="text" @bind="NewTagInput" placeholder="New tag" />
                     <button @onclick="AddTag">Add Tag</button>
                 </div>
             </div>
@@ -49,20 +50,20 @@
                         @foreach (var function in Engine.Functions)
                         {
                             <label for="@($"function{function.Number}")">@($"F{function.Number}")</label>
-                            <input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")"/>
+                            <input type=text @bind="@function.Name" placeholder="Unnamed" id="@($"function{function.Number}")" />
                             <div class="is-flex-horizontal function-duration" title="How long the function takes to complete. Use zero for latching functions.">
                                 <label for="@($"function{function.Number}duration")">  Duration:</label>
-                                <input type="number" step="100" min="0" @bind="function.Duration" id="@($"function{function.Number}duration")"/>
+                                <input type="number" step="100" min="0" @bind="function.Duration" id="@($"function{function.Number}duration")" />
                                 <span>ms</span>
                             </div>
-                            
+
                         }
                     }
                     else
                     {
                         <i>No functions defined</i>
                     }
-                    
+
                 </div>
                 <div class="is-flex-horizontal">
                     <button @onclick="RemoveFunction">Remove Function</button>
@@ -71,6 +72,7 @@
             </div>
             <div class="modal-footer">
                 <button @onclick="Delete" class="button-secondary">Delete</button>
+                <button @onclick="Copy" class="button-secondary" title="Create a new engine based on this engine.">Copy</button>
                 <span class="flex-filler"></span>
                 <button @onclick="Close" class="button-secondary">Cancel</button>
                 <button @onclick="Save">Save</button>
@@ -82,6 +84,8 @@
     private EngineFull Engine => _appState.SelectedEngine;
 
     private string NewTagInput { get; set; } = string.Empty;
+
+    private bool IsCopy { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -104,6 +108,8 @@
     private async void Close()
     {
         await _engineService.ReleaseEngine(Engine.Id);
+        IsCopy = false;
+
         _modalManager.IsEngineEditModalVisible = false;
     }
 
@@ -111,6 +117,8 @@
     {
         await _engineService.AddOrUpdateEngine(Engine);
         await _engineService.ReleaseEngine(Engine.Id);
+        IsCopy = false;
+
         _modalManager.IsEngineEditModalVisible = false;
     }
 
@@ -126,7 +134,22 @@
             _appState.MessageBoxText = $"Failed to delete engine: {result.Error}";
             _modalManager.IsMessageBoxVisible = true;
         }
-        
+
+    }
+
+    private async Task Copy()
+    {
+        if (IsCopy)
+        {
+            _appState.ShowMessageBox("The current engine is a copy already - save this engine before creating another copy ");
+        }
+        else
+        {
+            await _engineService.ReleaseEngine(Engine.Id);
+            _appState.SelectedEngine = Engine.CreateCopy();
+            IsCopy = true;
+            await _jsRuntime.InvokeVoidAsync("resetEngineEditModalScroll");
+        }
     }
 
     private void RemoveTag(string tag)
@@ -154,7 +177,7 @@
         if (Engine.Functions.Count == 0)
         {
             return;
-        } 
+        }
         Engine.Functions.RemoveAt(Engine.Functions.Count - 1);
     }
 } 

@@ -38,13 +38,13 @@ public partial class EngineOverview : ObservableObject
         Created = DateTime.UtcNow;
     }
 
-    public int Id { get; }
+    public int Id { get; init; }
 
-    public ObservableCollection<string> Tags { get; }
+    public ObservableCollection<string> Tags { get; init; }
 
-    public ImmutableList<EngineImage> Images { get; }
+    public ImmutableList<EngineImage> Images { get; init; }
 
-    public DateTime LastUsed { get; }
+    public DateTime LastUsed { get; init; }
 
     public DateTime Created { get; }
 }

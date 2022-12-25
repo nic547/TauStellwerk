@@ -36,7 +36,7 @@ public partial class EngineFull : EngineOverview
         Functions = new();
     }
 
-    public ObservableCollection<Function> Functions { get; }
+    public ObservableCollection<Function> Functions { get; init; }
 
     public Direction Direction
     {
@@ -53,6 +53,19 @@ public partial class EngineFull : EngineOverview
     public static EngineFull? Create(EngineFullDto? engineDto)
     {
         return engineDto is null ? null : new EngineFull(engineDto);
+    }
+
+    public EngineFull CreateCopy()
+    {
+        var copy = new EngineFull()
+        {
+            Name = Name + " (Copy)",
+            Tags = new ObservableCollection<string>(Tags),
+            Functions = new ObservableCollection<Function>(Functions.Select(f => new Function(f.Number, f.Name, f.Duration))),
+            TopSpeed = TopSpeed,
+        };
+
+        return copy;
     }
 
     public EngineFullDto ToDto()
