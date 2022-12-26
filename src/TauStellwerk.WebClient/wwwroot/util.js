@@ -39,3 +39,8 @@ async function reenableWakeLock() {
         wakeLock = await navigator.wakeLock.request();
     }
 }
+
+function resetEngineEditModalScroll() {
+    const modal = document.getElementById("EngineEditModalContent");
+    modal.scrollTop = 0;
+}

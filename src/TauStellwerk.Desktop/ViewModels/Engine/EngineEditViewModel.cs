@@ -70,6 +70,12 @@ public partial class EngineEditViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void Copy()
+    {
+        _viewService.ShowEngineEditView(Engine.CreateCopy(), this);
+    }
+
+    [RelayCommand]
     private void AddTag()
     {
         if (TagInputText != string.Empty)

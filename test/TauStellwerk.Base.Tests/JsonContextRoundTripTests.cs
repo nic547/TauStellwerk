@@ -24,8 +24,8 @@ public class JsonContextRoundTripTests
     public void EnumTests<T>(T value)
     where T : Enum
     {
-        var json = JsonSerializer.Serialize(value);
-        var result = JsonSerializer.Deserialize<T>(json);
+        var json = JsonSerializer.Serialize(value, typeof(T), TauJsonContext.Default);
+        var result = JsonSerializer.Deserialize(json, typeof(T), TauJsonContext.Default);
 
         result.Should().Be(value);
     }
@@ -54,8 +54,8 @@ public class JsonContextRoundTripTests
             },
         };
 
-        var json = JsonSerializer.Serialize(dto);
-        var result = JsonSerializer.Deserialize<EngineOverviewDto>(json);
+        var json = JsonSerializer.Serialize(dto, TauJsonContext.Default.EngineOverviewDto);
+        var result = JsonSerializer.Deserialize(json, TauJsonContext.Default.EngineOverviewDto);
         result.Should().BeEquivalentTo(dto);
     }
 
@@ -92,8 +92,8 @@ public class JsonContextRoundTripTests
             Direction = Direction.Forwards,
         };
 
-        var json = JsonSerializer.Serialize(dto);
-        var result = JsonSerializer.Deserialize<EngineFullDto>(json);
+        var json = JsonSerializer.Serialize(dto, TauJsonContext.Default.EngineFullDto);
+        var result = JsonSerializer.Deserialize(json, TauJsonContext.Default.EngineFullDto);
         result.Should().BeEquivalentTo(dto);
     }
 
@@ -110,8 +110,8 @@ public class JsonContextRoundTripTests
             State = State.On,
         };
 
-        var json = JsonSerializer.Serialize(dto);
-        var result = JsonSerializer.Deserialize<TurnoutDto>(json);
+        var json = JsonSerializer.Serialize(dto, TauJsonContext.Default.TurnoutDto);
+        var result = JsonSerializer.Deserialize(json, TauJsonContext.Default.TurnoutDto);
 
         result.Should().BeEquivalentTo(dto);
     }

@@ -46,11 +46,29 @@ public class AvaloniaViewService : IViewService
         messageBox.ShowDialog(parentWindow ?? GetMainWindow());
     }
 
-    public void ShowEngineEditView(EngineFull engine, object? source = null)
+    public void ShowEngineEditView(EngineFull engine, object? source)
     {
         var vm = new EngineEditViewModel(engine);
         var window = new EngineEditWindow(vm);
-        ShowWindowCenterOwner(window, TryGetAssociatedWindow(source), 0.5);
+        var sourceWindow = TryGetAssociatedWindow(source);
+
+        if (sourceWindow is null)
+        {
+            throw new InvalidOperationException("Failed to determine the source window opening a new EngineEditView");
+        }
+
+        if (sourceWindow is EngineEditWindow)
+        {
+            window.Width = sourceWindow.Width;
+        }
+        else
+        {
+            window.Width = sourceWindow.Width * 0.5;
+        }
+
+        window.WindowStartupLocation = WindowStartupLocation.Manual;
+        window.Position = new PixelPoint(sourceWindow.Position.X + 50, sourceWindow.Position.Y + 50);
+        window.Show(GetMainWindow());
     }
 
     public void ShowEngineSelectionView(object? source = null)
