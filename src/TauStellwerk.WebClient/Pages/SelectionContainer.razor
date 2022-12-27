@@ -132,7 +132,7 @@
     {
         _currentPage += change;
 
-        _currentPage = _currentPage.Clamp();
+        _currentPage = _currentPage.Clamp(1, int.MaxValue);
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
         var engines = await EngineService.GetEngines(
             _currentPage - 1,
