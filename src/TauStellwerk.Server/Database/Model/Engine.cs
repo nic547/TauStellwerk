@@ -52,10 +52,10 @@ public class Engine
     public List<DccFunction> Functions { get; init; } = new();
 
     /// <summary>
-    /// Gets a list of strings that describe an engineOverview. These might be alternative names, manufacturers, the owner etc, basically
+    /// Gets or sets a list of strings that describe an engineOverview. These might be alternative names, manufacturers, the owner etc, basically
     /// everything one might search for if the exact name is unknown.
     /// </summary>
-    public List<Tag> Tags { get; init; } = new();
+    public List<string> Tags { get; set; } = new();
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ECoSEngineData? ECoSEngineData { get; init; }
@@ -82,7 +82,7 @@ public class Engine
             Id = Id,
             Name = Name,
             Images = Images.Select(i => i.ToImageDto()).ToList(),
-            Tags = Tags.Select(t => t.Name).ToList(),
+            Tags = Tags,
             LastUsed = LastUsed,
             Created = Created,
             IsHidden = IsHidden,
@@ -96,7 +96,7 @@ public class Engine
             Id = Id,
             Name = Name,
             Images = Images.Select(i => i.ToImageDto()).ToList(),
-            Tags = Tags.Select(t => t.Name).ToList(),
+            Tags = Tags,
             LastUsed = LastUsed,
             Created = Created,
             TopSpeed = TopSpeed,
@@ -106,18 +106,12 @@ public class Engine
         };
     }
 
-    public async Task UpdateWith(EngineFullDto engineDto, StwDbContext dbContext)
+    public void UpdateWith(EngineFullDto engineDto)
     {
         Name = engineDto.Name.Normalize();
         TopSpeed = engineDto.TopSpeed;
         Address = engineDto.Address;
-
-        var incomingTags = engineDto.Tags.Select(t => t.Normalize()).Distinct().ToList();
-
-        Tags.RemoveAll(t => !incomingTags.Contains(t.Name));
-
-        var newTags = incomingTags.Where(newTag => Tags.All(existingTag => existingTag.Name != newTag)).ToList();
-        Tags.AddRange(await Tag.GetTagsFromStrings(newTags, dbContext));
+        Tags = engineDto.Tags;
 
         UpdateFunctions(engineDto.Functions);
 

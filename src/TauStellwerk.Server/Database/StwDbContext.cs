@@ -4,6 +4,7 @@
 // </copyright>
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
 using TauStellwerk.Server.Database.Model;
 
@@ -26,9 +27,21 @@ public class StwDbContext : DbContext
 
     public DbSet<EngineImage> EngineImages => Set<EngineImage>();
 
-    public DbSet<Tag> Tags => Set<Tag>();
-
     public DbSet<Turnout> Turnouts => Set<Turnout>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Engine>()
+            .Property(e => e.Tags)
+            .HasConversion(
+                v => string.Join("\u001F", v),
+                v => v.Split(new char[] { '\u001F' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                new ValueComparer<List<string>>(
+                    (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
+                    t => t.GetHashCode()));
+
+        base.OnModelCreating(modelBuilder);
+    }
 
     internal class StwDbContextDesignTimeFactory : IDesignTimeDbContextFactory<StwDbContext>
     {

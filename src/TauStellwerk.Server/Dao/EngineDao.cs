@@ -31,7 +31,6 @@ public class EngineDao
             .AsSingleQuery()
             .Include(x => x.Functions)
             .Include(x => x.Images)
-            .Include(x => x.Tags)
             .Include(e => e.ECoSEngineData)
             .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -71,8 +70,7 @@ public class EngineDao
 
         query = query.Skip(page * ResultsPerPage)
             .Take(ResultsPerPage)
-            .Include(e => e.Images)
-            .Include(x => x.Tags);
+            .Include(e => e.Images);
 
         var result = await query.ToListAsync();
         _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);
@@ -91,7 +89,6 @@ public class EngineDao
         {
             engine = await _dbContext.Engines
                 .Include(x => x.Functions)
-                .Include(x => x.Tags)
                 .AsSingleQuery()
                 .SingleOrDefaultAsync(x => x.Id == engineDto.Id);
 
@@ -101,7 +98,7 @@ public class EngineDao
             }
         }
 
-        await engine.UpdateWith(engineDto, _dbContext);
+        engine.UpdateWith(engineDto);
 
         try
         {
