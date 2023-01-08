@@ -29,7 +29,6 @@ public class StwDbContextTests : ContextTestBase
         var loadContext = GetContext();
         var loadedEngine = loadContext.Engines
             .Include(x => x.Functions)
-            .Include(e => e.Images)
             .Single();
 
         loadedEngine.Should().NotBeSameAs(originalEngine);

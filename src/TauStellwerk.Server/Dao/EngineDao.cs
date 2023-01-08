@@ -30,7 +30,6 @@ public class EngineDao
         var engine = await _dbContext.Engines
             .AsSingleQuery()
             .Include(x => x.Functions)
-            .Include(x => x.Images)
             .Include(e => e.ECoSEngineData)
             .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -69,8 +68,7 @@ public class EngineDao
         };
 
         query = query.Skip(page * ResultsPerPage)
-            .Take(ResultsPerPage)
-            .Include(e => e.Images);
+            .Take(ResultsPerPage);
 
         var result = await query.ToListAsync();
         _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);
@@ -118,7 +116,6 @@ public class EngineDao
     public async Task<Result> Delete(int id)
     {
         var engine = await _dbContext.Engines
-            .Include(e => e.Images)
             .Include(e => e.Functions)
             .AsSingleQuery()
             .SingleOrDefaultAsync(e => e.Id == id);

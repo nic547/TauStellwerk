@@ -8,6 +8,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
+using TauStellwerk.Client.Model;
+using TauStellwerk.Server.Images;
 
 namespace TauStellwerk.Server.Database.Model;
 
@@ -60,9 +62,9 @@ public class Engine
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ECoSEngineData? ECoSEngineData { get; init; }
 
-    public DateTime? LastImageUpdate { get; set; }
+    public List<int> ImageSizes { get; set; } = new();
 
-    public List<EngineImage> Images { get; init; } = new();
+    public DateTime? LastImageUpdate { get; set; }
 
     public DateTime LastUsed { get; set; }
 
@@ -81,7 +83,7 @@ public class Engine
         {
             Id = Id,
             Name = Name,
-            Images = Images.Select(i => i.ToImageDto()).ToList(),
+            Images = ImageSystem.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
             Tags = Tags,
             LastUsed = LastUsed,
             Created = Created,
@@ -95,7 +97,7 @@ public class Engine
         {
             Id = Id,
             Name = Name,
-            Images = Images.Select(i => i.ToImageDto()).ToList(),
+            Images = ImageSystem.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
             Tags = Tags,
             LastUsed = LastUsed,
             Created = Created,

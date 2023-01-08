@@ -29,13 +29,6 @@ public static class TestDataHelper
             {
                 new DccFunction(0, "Lights", 0),
             },
-            Images =
-            {
-                new EngineImage()
-                {
-                    Filename = "test.jpg",
-                },
-            },
         };
     }
 

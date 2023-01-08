@@ -25,8 +25,6 @@ public class StwDbContext : DbContext
     /// </summary>
     public DbSet<Engine> Engines => Set<Engine>();
 
-    public DbSet<EngineImage> EngineImages => Set<EngineImage>();
-
     public DbSet<Turnout> Turnouts => Set<Turnout>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +35,15 @@ public class StwDbContext : DbContext
                 v => string.Join("\u001F", v),
                 v => v.Split(new char[] { '\u001F' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 new ValueComparer<List<string>>(
+                    (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
+                    t => t.GetHashCode()));
+
+        modelBuilder.Entity<Engine>()
+            .Property(e => e.ImageSizes)
+            .HasConversion(
+                list => string.Join("\u001F", list),
+                savedValue => savedValue.Split(new[] { '\u001F' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList(),
+                new ValueComparer<List<int>>(
                     (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
                     t => t.GetHashCode()));
 

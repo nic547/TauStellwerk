@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NetVips;
+using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Database.Model;
 
@@ -14,14 +15,11 @@ namespace TauStellwerk.Server.Images;
 
 public class ImageSystem
 {
-    private readonly StwDbContext _context;
-    private readonly ILogger<ImageSystem> _logger;
+    private static readonly List<string> _imageFormats = new() { "jpeg", "webp", "avif" };
 
-    private readonly string _userPath;
+    private static readonly List<int> _imageSizes = new() { 25, 50, 100 };
 
-    private readonly string _generatedPath;
-
-    private readonly List<ImageOptions> _imageOptions = new()
+    private static readonly List<ImageOptions> _imageOptions = new()
     {
         // Quality settings derived from webp values, using https://www.industrialempathy.com/posts/avif-webp-quality-settings/
         new AvifOptions(1, "_100", 50, 9),
@@ -39,12 +37,39 @@ public class ImageSystem
         new JpegOptions(0.25, "_025", 70),
     };
 
+    private readonly StwDbContext _context;
+    private readonly ILogger<ImageSystem> _logger;
+
+    private readonly string _userPath;
+
+    private readonly string _generatedPath;
+
     public ImageSystem(StwDbContext context, ILogger<ImageSystem> logger, string userPath, string generatedPath)
     {
         _userPath = userPath;
         _generatedPath = generatedPath;
         _context = context;
         _logger = logger;
+    }
+
+    public static List<ImageDto> CreateImageDtos(int id, DateTime? lastImageUpdate, List<int> imageSizes)
+    {
+        if (lastImageUpdate is null)
+        {
+            return new List<ImageDto>();
+        }
+
+        List<ImageDto> imageDtos = new();
+
+        foreach (var imageFormat in _imageFormats)
+        {
+            foreach (var (pixelSize, percentSize) in imageSizes.Order().Zip(_imageSizes))
+            {
+                imageDtos.Add(new ImageDto($"{id}_{percentSize}.{imageFormat}", pixelSize));
+            }
+        }
+
+        return imageDtos;
     }
 
     public async void RunImageSetup()
@@ -56,79 +81,62 @@ public class ImageSystem
     {
         var totalStopwatch = new Stopwatch();
         totalStopwatch.Start();
-        var totalImages = 0;
 
-        var engines = await _context.Engines.Include(e => e.Images).ToListAsync();
+        var engines = await _context.Engines.ToListAsync();
 
         foreach (var engine in engines)
         {
-            var engineStopwatch = new Stopwatch();
-            engineStopwatch.Start();
-
-            var file = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
-
-            if (file == null)
-            {
-                continue;
-            }
-
-            var sourceImageTimestamp = File.GetLastWriteTime(file);
-
-            ConcurrentBag<(string FileName, int Width)> createdImages = new();
-
-            Parallel.ForEach(_imageOptions, options =>
-            {
-                var filename = $"{engine.Id}{options.Suffix}{options.FileEnding}";
-                var existingImage = Directory.EnumerateFiles(_generatedPath, options.GetFilename(engine.Id)).SingleOrDefault();
-                DateTime existingImageTimestamp = DateTime.MaxValue;
-
-                if (existingImage != null)
-                {
-                    existingImageTimestamp = File.GetLastWriteTimeUtc(existingImage);
-                }
-
-                if (engine.LastImageUpdate == null || existingImageTimestamp > engine.LastImageUpdate || sourceImageTimestamp > engine.LastImageUpdate)
-                {
-                    var width = DownscaleImage(file, engine.Id, options);
-                    createdImages.Add((filename, width));
-                }
-            });
-
-            foreach (var (filename, width) in createdImages)
-            {
-                var existingEntry = engine.Images.SingleOrDefault(i => i.Filename == filename);
-                if (existingEntry is null)
-                {
-                    engine.Images.Add(new EngineImage
-                    {
-                        Filename = filename,
-                        Width = width,
-                    });
-                }
-                else
-                {
-                    existingEntry.Width = width;
-                }
-            }
-
-            if (!createdImages.IsEmpty)
-            {
-                engine.LastImageUpdate = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-
-                engineStopwatch.Stop();
-                var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
-                _logger.LogInformation($"Updated {createdImages.Count} images for {engine} in {elapsedSeconds}s");
-                totalImages += createdImages.Count;
-            }
+            await CreateDownscaledImage(engine);
         }
 
-        if (totalImages > 0)
+        totalStopwatch.Stop();
+        var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
+        _logger.LogInformation($"Updated images in {elapsedSeconds} seconds");
+    }
+
+    private async Task CreateDownscaledImage(Engine engine)
+    {
+        var engineStopwatch = new Stopwatch();
+        engineStopwatch.Start();
+
+        var existingSourceImage = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
+        var existingGeneratedImages = Directory.EnumerateFiles(_generatedPath, $"{engine.Id}_*.*");
+
+        if (existingSourceImage == null)
         {
-            totalStopwatch.Stop();
-            var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
-            _logger.LogInformation($"Updated a total of {totalImages} images in {elapsedSeconds} seconds");
+            if (existingGeneratedImages.Count() != _imageOptions.Count)
+            {
+                engine.ImageSizes.Clear();
+                engine.LastImageUpdate = null;
+                await _context.SaveChangesAsync();
+            }
+
+            return;
         }
+
+        var sourceImageTimestamp = File.GetLastWriteTime(existingSourceImage);
+
+        if (existingGeneratedImages.Count() == _imageOptions.Count && sourceImageTimestamp < engine.LastImageUpdate)
+        {
+            return;
+        }
+
+        ConcurrentBag<int> generatedPixelSizes = new();
+
+        Parallel.ForEach(_imageOptions, options =>
+        {
+            var width = DownscaleImage(existingSourceImage, engine.Id, options);
+            generatedPixelSizes.Add(width);
+        });
+
+        engine.ImageSizes = generatedPixelSizes.Distinct().ToList();
+
+        engine.LastImageUpdate = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        engineStopwatch.Stop();
+        var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
+        _logger.LogInformation($"Updated images for {engine} in {elapsedSeconds}s");
     }
 
     private int DownscaleImage(string inputFilePath, int id, ImageOptions options)
