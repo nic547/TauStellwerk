@@ -65,7 +65,7 @@ public class ImageSystem
         {
             foreach (var (pixelSize, percentSize) in imageSizes.Order().Zip(_imageSizes))
             {
-                imageDtos.Add(new ImageDto($"{id}_{percentSize}.{imageFormat}", pixelSize));
+                imageDtos.Add(new ImageDto($"{id}_{percentSize:D3}.{imageFormat}", pixelSize));
             }
         }
 
