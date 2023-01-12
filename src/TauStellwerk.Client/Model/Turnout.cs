@@ -8,8 +8,7 @@ using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
 
-[ObservableObject]
-public partial class Turnout
+public partial class Turnout : ObservableObject
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsOn))]
@@ -37,7 +36,7 @@ public partial class Turnout
 
     public TurnoutKind Kind { get; set; }
 
-    public bool IsOn => _state == State.On;
+    public bool IsOn => State == State.On;
 
     public TurnoutDto ToDto()
     {
@@ -47,7 +46,7 @@ public partial class Turnout
             Address = Address,
             Id = Id,
             Kind = Kind,
-            State = _state,
+            State = State,
         };
     }
 }

@@ -9,8 +9,7 @@ using TauStellwerk.Client.Model;
 
 namespace TauStellwerk.WebClient;
 
-[ObservableObject]
-public partial class AppState
+public partial class AppState : ObservableObject
 {
     private readonly ModalManager _modalManager;
 

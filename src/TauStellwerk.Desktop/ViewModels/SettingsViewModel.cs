@@ -36,9 +36,9 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     public async Task Save()
     {
-        if (_settings != null)
+        if (Settings != null)
         {
-            await _settingsService.SetSettings(_settings);
+            await _settingsService.SetSettings(Settings);
         }
 
         ClosingRequested?.Invoke();

@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
-using TauStellwerk.Client.Model;
 using TauStellwerk.Server.Images;
 
 namespace TauStellwerk.Server.Database.Model;

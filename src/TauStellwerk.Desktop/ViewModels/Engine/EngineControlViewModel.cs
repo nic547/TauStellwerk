@@ -56,7 +56,7 @@ public partial class EngineControlViewModel : ViewModelBase
 
     private async Task HandleThrottleChange(int throttle)
     {
-        await _engineService.SetSpeed(Engine.Id, throttle, _isDrivingForward ? Direction.Forwards : Direction.Backwards);
+        await _engineService.SetSpeed(Engine.Id, throttle, IsDrivingForward ? Direction.Forwards : Direction.Backwards);
     }
 
     private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
