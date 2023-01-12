@@ -101,7 +101,7 @@ public class TurnoutService : ITurnoutService
             return default(ImmutableArray<Turnout>);
         }
 
-        var dtos = await connection.InvokeAsync<IList<TurnoutDto>>("GetTurnouts", page);
+        var dtos = await connection.InvokeAsync<List<TurnoutDto>>("GetTurnouts", page);
         return dtos.Select(dto => new Turnout(dto)).ToImmutableList();
     }
 

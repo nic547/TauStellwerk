@@ -6,6 +6,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base;
@@ -65,6 +66,7 @@ public class BasicIntegrationTest
     }
 
     [Test]
+    [Category("long-running")]
     public async Task CanCreateAndToggleTurnout()
     {
         var turnoutService = new TurnoutService(CreateConnectionService());
@@ -100,7 +102,9 @@ public class BasicIntegrationTest
 
         var hubConnection = new HubConnectionBuilder().WithUrl(
             _factory.Server.BaseAddress + "hub",
-            options => options.HttpMessageHandlerFactory = _ => _factory.Server.CreateHandler()).Build();
+            options => options.HttpMessageHandlerFactory = _ => _factory.Server.CreateHandler())
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
+            .Build();
 
         return new ConnectionService(settingService.Object, hubConnection);
     }
