@@ -70,7 +70,6 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         _engineService.EngineChanged -= OnEngineChanged;
-        Console.WriteLine("Dispose() was called"); // TODO: REMOVE
     }
 
     private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
