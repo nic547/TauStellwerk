@@ -41,7 +41,7 @@ public class BasicIntegrationTest
 
         foreach (var i in Enumerable.Range(0, 6))
         {
-            engines.AddRange(await engineService.GetEngines(i, SortEnginesBy.Name));
+            engines.AddRange(await engineService.GetEngines(string.Empty, i, SortEnginesBy.Name));
         }
 
         engines.Should().HaveCount(100);

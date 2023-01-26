@@ -24,7 +24,7 @@ public class EngineService
 
     public event EventHandler<EngineFull>? EngineChanged;
 
-    public async Task<IReadOnlyList<EngineOverview>> GetEngines(int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
+    public async Task<IReadOnlyList<EngineOverview>> GetEngines(string searchTerm = "", int page = 0, SortEnginesBy sorting = SortEnginesBy.LastUsed, bool sortDescending = true, bool showHidden = false)
     {
         var connection = await _service.TryGetHubConnection();
         if (connection is null)
@@ -32,7 +32,7 @@ public class EngineService
             return new List<EngineOverview>();
         }
 
-        var engines = await connection.InvokeAsync<List<EngineOverviewDto>>("GetEngines", page, sorting, sortDescending, showHidden);
+        var engines = await connection.InvokeAsync<List<EngineOverviewDto>>("GetEngines", searchTerm, page, sorting, sortDescending, showHidden);
         return engines.Select(e => new EngineOverview(e)).ToList();
     }
 

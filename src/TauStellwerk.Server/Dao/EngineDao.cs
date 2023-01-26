@@ -5,6 +5,7 @@
 
 using System.Diagnostics;
 using FluentResults;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
@@ -44,31 +45,25 @@ public class EngineDao
         return Result.Ok(engine);
     }
 
-    public async Task<IList<EngineOverviewDto>> GetEngineList(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
+    public async Task<IList<EngineOverviewDto>> GetEngineList(
+        string searchTerm,
+        int page,
+        bool showHiddenEngines,
+        SortEnginesBy sortBy,
+        bool sortDescending)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
-        var query = _dbContext.Engines
-            .AsNoTracking()
-            .AsSplitQuery();
 
-        if (!showHiddenEngines)
-        {
-            query = query.Where(e => !e.IsHidden);
-        }
+        searchTerm = $"%{searchTerm}%";
+        SqliteParameter searchParameter = new("searchTerm", $"%{searchTerm}%");
 
-        query = (sortBy, sortDescending) switch
-        {
-            (SortEnginesBy.Created, false) => query.OrderBy(e => e.Created),
-            (SortEnginesBy.Created, true) => query.OrderByDescending(e => e.Created),
-            (SortEnginesBy.Name, false) => query.OrderBy(e => e.Name),
-            (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
-            (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
-            (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
-            _ => throw new InvalidOperationException(),
-        };
-
-        query = query.Skip(page * ResultsPerPage)
-            .Take(ResultsPerPage);
+        var query = _dbContext.Engines.FromSqlRaw(
+            $"SELECT * FROM Engines " +
+            $"WHERE (tags LIKE $searchTerm OR name LIKE $searchTerm) " +
+            $"{(showHiddenEngines ? string.Empty : "AND isHidden = FALSE ")}" +
+            $"ORDER BY {sortBy} {(sortDescending ? "DESC" : "ASC")} " +
+            $"LIMIT {ResultsPerPage} OFFSET {page * ResultsPerPage};",
+            searchParameter);
 
         var result = await query.ToListAsync();
         _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);

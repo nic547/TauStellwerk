@@ -121,7 +121,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     private async Task Load()
     {
         var sortDescending = CurrentEngineSortDirection == "DESC";
-        var engines = await _engineService.GetEngines(CurrentPage - 1, CurrentEngineSortMode, sortDescending, ShowHiddenEngines);
+        var engines = await _engineService.GetEngines(string.Empty, CurrentPage - 1, CurrentEngineSortMode, sortDescending, ShowHiddenEngines);
 
         lock (_collectionLock)
         {

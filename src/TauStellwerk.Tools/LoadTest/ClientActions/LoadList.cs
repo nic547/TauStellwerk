@@ -26,7 +26,7 @@ public class LoadList : ClientActionBase
     {
         var startTime = DateTime.UtcNow;
 
-        await EngineService.GetEngines(0, SortEnginesBy.Name, true, true);
+        await EngineService.GetEngines(string.Empty, 0, SortEnginesBy.Name, true, true);
         return (int)Math.Round((DateTime.UtcNow - startTime).TotalMilliseconds);
     }
 }

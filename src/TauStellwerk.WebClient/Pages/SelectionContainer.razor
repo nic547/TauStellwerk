@@ -14,6 +14,7 @@
 <div id="EngineSelectionModal" class="modal @(ModalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content-fullwidth">
         <div class="modal-header">
+            <input type="text" @oninput="SearchChanged" placeholder="search"/>
             <select @onchange="SortingChanged">
                 @foreach (var sortingOption in Enum.GetValues<SortEnginesBy>())
                 {
@@ -58,6 +59,7 @@
 
     private int _currentPage = 1;
 
+    private string _currentSearch = string.Empty;
     private string _currentSorting = "LastUsed";
     private bool _isSortedDescending = true;
     private bool _showHidden = false;
@@ -128,6 +130,13 @@
         await ChangePage(int.MinValue);
     }
 
+    private async void SearchChanged(ChangeEventArgs eventArgs)
+    {
+        var searchValue = eventArgs.Value as string;
+        _currentSearch = searchValue ?? String.Empty;
+        await ChangePage(int.MinValue);
+    }
+
     private async Task ChangePage(int change)
     {
         _currentPage += change;
@@ -135,6 +144,7 @@
         _currentPage = _currentPage.Clamp(1, int.MaxValue);
         _ = Enum.TryParse<SortEnginesBy>(_currentSorting, true, out var sortEnum);
         var engines = await EngineService.GetEngines(
+            _currentSearch,
             _currentPage - 1,
             sortEnum,
             _isSortedDescending,
