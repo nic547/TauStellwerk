@@ -14,7 +14,7 @@
 <div id="EngineSelectionModal" class="modal @(ModalManager.IsEngineSelectionVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content-fullwidth">
         <div class="modal-header">
-            <input type="text" @oninput="SearchChanged" placeholder="search"/>
+            <input type="text" @bind="_currentSearch" @bind:event="oninput" @bind:after="ListParameterChanged" placeholder="search" />
             <select @onchange="SortingChanged">
                 @foreach (var sortingOption in Enum.GetValues<SortEnginesBy>())
                 {
@@ -25,7 +25,7 @@
                 <option>DESC</option>
                 <option>ASC</option>
             </select>
-            <input id="ShowHiddenCheckbox" type="checkbox" @onchange="ShowHiddenCheckboxChanged" />
+            <input id="ShowHiddenCheckbox" type="checkbox" @bind="_showHidden" @bind:after="ListParameterChanged" />
             <label>Show Hidden</label>
             <span class="flex-filler"></span>
             <button class="bold button-secondary" @onclick="() => ModalManager.IsEngineSelectionVisible = false">X</button>
@@ -34,7 +34,7 @@
             <div id="EngineSelectionContainer" class="selection-grid">
                 @foreach (var engine in _engines)
                 {
-                    <SelectionEngine Engine="engine"/>
+                    <SelectionEngine Engine="engine" SetSearchAction="SetSearch" />
                 }
             </div>
         </div>
@@ -123,17 +123,8 @@
         await ChangePage(int.MinValue);
     }
 
-    private async void ShowHiddenCheckboxChanged(ChangeEventArgs eventArgs)
+    private async void ListParameterChanged()
     {
-        var checkboxValue = eventArgs.Value as bool?;
-        _showHidden = checkboxValue ?? false;
-        await ChangePage(int.MinValue);
-    }
-
-    private async void SearchChanged(ChangeEventArgs eventArgs)
-    {
-        var searchValue = eventArgs.Value as string;
-        _currentSearch = searchValue ?? String.Empty;
         await ChangePage(int.MinValue);
     }
 
@@ -164,6 +155,13 @@
         var engine = new EngineFull();
         AppState.SelectedEngine = engine;
         ModalManager.IsEngineEditModalVisible = true;
+    }
+
+    private async void SetSearch(string searchTerm)
+    {
+        _currentSearch = searchTerm;
+        StateHasChanged();
+        await ChangePage(int.MinValue);
     }
 
 }

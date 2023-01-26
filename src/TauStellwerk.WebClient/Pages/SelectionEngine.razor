@@ -12,7 +12,7 @@
     <span class="tags">
         @foreach (var tag in Engine.Tags)
         {
-            <button class="button-secondary">@tag</button>
+            <button class="button-secondary" @onclick="() => { SetSearchAction.Invoke(tag);}">@tag</button>
         }
     </span>
     <div class="flex-filler"></div>
@@ -28,6 +28,10 @@
     [EditorRequired]
     [Parameter]
     public EngineOverview Engine { get; init; } = null!;
+
+    [EditorRequired]
+    [Parameter]
+    public Action<string> SetSearchAction { get; init; } = null!;
 
     private async void ControlEngine()
     {
