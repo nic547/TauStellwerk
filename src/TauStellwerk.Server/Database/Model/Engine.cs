@@ -97,7 +97,7 @@ public class Engine
             Id = Id,
             Name = Name,
             Images = ImageSystem.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
-            Tags = Tags,
+            Tags = Tags.Order().ToList(),
             LastUsed = LastUsed,
             Created = Created,
             TopSpeed = TopSpeed,
