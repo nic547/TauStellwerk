@@ -4,6 +4,7 @@
 // </copyright>
 
 using System.Diagnostics;
+using System.Globalization;
 using FluentResults;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +67,7 @@ public class EngineDao
             searchParameter);
 
         var result = await query.ToListAsync();
-        _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);
+        _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.Elapsed.TotalMilliseconds.ToString("F2", CultureInfo.CurrentCulture));
         return result.Select(e => e.ToEngineDto()).ToList();
     }
 
