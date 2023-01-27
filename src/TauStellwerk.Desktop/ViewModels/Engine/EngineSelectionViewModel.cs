@@ -24,6 +24,9 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     private readonly object _collectionLock = new();
 
     [ObservableProperty]
+    private string _currentSearchTerm = string.Empty;
+
+    [ObservableProperty]
     private bool _showHiddenEngines;
 
     [ObservableProperty]
@@ -70,7 +73,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         _engineService.EngineChanged -= OnEngineChanged;
-        Console.WriteLine("Dispose() was called"); // TODO: REMOVE
+        GC.SuppressFinalize(this);
     }
 
     private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
@@ -81,6 +84,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
             case nameof(CurrentEngineSortDirection):
             case nameof(ShowHiddenEngines):
             case nameof(CurrentEngineSortMode):
+            case nameof(CurrentSearchTerm):
                 _ = Load();
                 break;
         }
@@ -121,8 +125,8 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
 
     private async Task Load()
     {
-        var sortDescending = _currentEngineSortDirection == "DESC";
-        var engines = await _engineService.GetEngines(_currentPage - 1, _currentEngineSortMode, sortDescending, _showHiddenEngines);
+        var sortDescending = CurrentEngineSortDirection == "DESC";
+        var engines = await _engineService.GetEngines(CurrentSearchTerm, CurrentPage - 1, CurrentEngineSortMode, sortDescending, ShowHiddenEngines);
 
         lock (_collectionLock)
         {
@@ -159,5 +163,11 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     {
         var engine = new EngineFull();
         _viewService.ShowEngineEditView(engine, this);
+    }
+
+    [RelayCommand]
+    private void SetSearchTerm(string searchTerm)
+    {
+        CurrentSearchTerm = searchTerm;
     }
 }

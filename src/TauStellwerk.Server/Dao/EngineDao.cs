@@ -4,7 +4,9 @@
 // </copyright>
 
 using System.Diagnostics;
+using System.Globalization;
 using FluentResults;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
 using TauStellwerk.Server.Database;
@@ -30,8 +32,6 @@ public class EngineDao
         var engine = await _dbContext.Engines
             .AsSingleQuery()
             .Include(x => x.Functions)
-            .Include(x => x.Images)
-            .Include(x => x.Tags)
             .Include(e => e.ECoSEngineData)
             .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -46,36 +46,28 @@ public class EngineDao
         return Result.Ok(engine);
     }
 
-    public async Task<IList<EngineOverviewDto>> GetEngineList(int page = 0, bool showHiddenEngines = false, SortEnginesBy sortBy = SortEnginesBy.LastUsed, bool sortDescending = true)
+    public async Task<IList<EngineOverviewDto>> GetEngineList(
+        string searchTerm,
+        int page,
+        bool showHiddenEngines,
+        SortEnginesBy sortBy,
+        bool sortDescending)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
-        var query = _dbContext.Engines
-            .AsNoTracking()
-            .AsSplitQuery();
 
-        if (!showHiddenEngines)
-        {
-            query = query.Where(e => !e.IsHidden);
-        }
+        searchTerm = $"%{searchTerm}%";
+        SqliteParameter searchParameter = new("searchTerm", $"%{searchTerm}%");
 
-        query = (sortBy, sortDescending) switch
-        {
-            (SortEnginesBy.Created, false) => query.OrderBy(e => e.Created),
-            (SortEnginesBy.Created, true) => query.OrderByDescending(e => e.Created),
-            (SortEnginesBy.Name, false) => query.OrderBy(e => e.Name),
-            (SortEnginesBy.Name, true) => query.OrderByDescending(e => e.Name),
-            (SortEnginesBy.LastUsed, false) => query.OrderBy(e => e.LastUsed),
-            (SortEnginesBy.LastUsed, true) => query.OrderByDescending(e => e.LastUsed),
-            _ => throw new InvalidOperationException(),
-        };
-
-        query = query.Skip(page * ResultsPerPage)
-            .Take(ResultsPerPage)
-            .Include(e => e.Images)
-            .Include(x => x.Tags);
+        var query = _dbContext.Engines.FromSqlRaw(
+            $"SELECT * FROM Engines " +
+            $"WHERE (tags LIKE $searchTerm OR name LIKE $searchTerm) " +
+            $"{(showHiddenEngines ? string.Empty : "AND isHidden = FALSE ")}" +
+            $"ORDER BY {sortBy} {(sortDescending ? "DESC" : "ASC")} " +
+            $"LIMIT {ResultsPerPage} OFFSET {page * ResultsPerPage};",
+            searchParameter);
 
         var result = await query.ToListAsync();
-        _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.ElapsedMilliseconds);
+        _logger.LogDebug("EngineList page {page} was queried in {time}ms", page, stopwatch.Elapsed.TotalMilliseconds.ToString("F2", CultureInfo.CurrentCulture));
         return result.Select(e => e.ToEngineDto()).ToList();
     }
 
@@ -91,7 +83,6 @@ public class EngineDao
         {
             engine = await _dbContext.Engines
                 .Include(x => x.Functions)
-                .Include(x => x.Tags)
                 .AsSingleQuery()
                 .SingleOrDefaultAsync(x => x.Id == engineDto.Id);
 
@@ -101,7 +92,7 @@ public class EngineDao
             }
         }
 
-        await engine.UpdateWith(engineDto, _dbContext);
+        engine.UpdateWith(engineDto);
 
         try
         {
@@ -121,7 +112,6 @@ public class EngineDao
     public async Task<Result> Delete(int id)
     {
         var engine = await _dbContext.Engines
-            .Include(e => e.Images)
             .Include(e => e.Functions)
             .AsSingleQuery()
             .SingleOrDefaultAsync(e => e.Id == id);

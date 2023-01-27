@@ -56,12 +56,13 @@ public partial class TauHub
 
     public async Task<IList<EngineOverviewDto>> GetEngines(
         [FromServices] EngineDao engineDao,
+        string searchTerm,
         int page,
         SortEnginesBy sorting,
         bool sortDescending = true,
         bool showHidden = false)
     {
-        var list = await engineDao.GetEngineList(page, showHidden, sorting, sortDescending);
+        var list = await engineDao.GetEngineList(searchTerm, page, showHidden, sorting, sortDescending);
         return list;
     }
 

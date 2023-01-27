@@ -11,8 +11,7 @@ namespace TauStellwerk.WebClient;
 /// Small helper class for hiding/unhiding modals.
 /// There might be a cleaner solution, the main problem is that the "activators" are in different components.
 /// </summary>
-[ObservableObject]
-public partial class ModalManager
+public partial class ModalManager : ObservableObject
 {
     [ObservableProperty]
     private bool _isEngineSelectionVisible;
