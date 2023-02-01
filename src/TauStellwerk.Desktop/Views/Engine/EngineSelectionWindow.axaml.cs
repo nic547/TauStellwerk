@@ -28,9 +28,9 @@ public class EngineSelectionWindow : DisposingWindow
         {
             Columns = Width switch
             {
-                < 768 => 1,
-                < 992 => 2,
-                < 1400 => 4,
+                < 800 => 1,
+                < 1300 => 2,
+                < 1800 => 4,
                 _ => 5,
             };
         };
