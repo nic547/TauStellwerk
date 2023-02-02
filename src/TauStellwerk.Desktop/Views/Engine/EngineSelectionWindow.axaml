@@ -12,75 +12,77 @@
         MinHeight="200"
         ClientSize="{Binding WindowSize, Mode=OneWayToSource}"
         x:DataType="viewModels:EngineSelectionViewModel">
-    <Design.DataContext>
-        <viewModels:EngineSelectionViewModel/>
-    </Design.DataContext>
-    <Panel Margin="5">
-        <DockPanel LastChildFill="False">
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                <TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="search" Width="200" Text="{Binding CurrentSearchTerm}"/>
-                <ComboBox Items="{Binding EngineSortModes}"
+	<Design.DataContext>
+		<viewModels:EngineSelectionViewModel/>
+	</Design.DataContext>
+	<Panel Margin="0 5 0 5">
+		<DockPanel LastChildFill="False">
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+				<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="search" Width="200" Text="{Binding CurrentSearchTerm}"/>
+				<ComboBox Items="{Binding EngineSortModes}"
                           SelectedItem="{Binding CurrentEngineSortMode}"/>
-                <ComboBox Items="{Binding EngineSortDirections}"
+				<ComboBox Items="{Binding EngineSortDirections}"
                           SelectedItem="{Binding CurrentEngineSortDirection}"/>
-                <CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
-            </StackPanel>
-            <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                <Button Command="{CompiledBinding ScrollPages}"
+				<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
+			</StackPanel>
+			<DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+				<Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="-1"
                         IsEnabled="{Binding CanScrollBackwards}"
                         Content="&lt;"
                         Classes="accent"/>
-                <TextBlock Text="{Binding CurrentPage}"
+				<TextBlock Text="{Binding CurrentPage}"
                            DockPanel.Dock="Left"
                            VerticalAlignment="Center"
                            Width="20"
                            TextAlignment="Center"/>
-                <Button Command="{CompiledBinding ScrollPages}"
+				<Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="1"
                         IsEnabled="{Binding CanScrollForwards}"
-                        Content="&gt;" 
+                        Content="&gt;"
                         Classes="accent"/>
-                <Button Command="{Binding CreateEngineCommand}"
+				<Button Command="{Binding CreateEngineCommand}"
                         DockPanel.Dock="Right"
                         Content="Create New"/>
-            </DockPanel>
-            <ListBox Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto">
-                            <TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
-                            <controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
-                            <ItemsControl Items="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
-                               <ItemsControl.ItemsPanel>
-								   <ItemsPanelTemplate>
-                                       <WrapPanel/>
-                                   </ItemsPanelTemplate>
-                               </ItemsControl.ItemsPanel>
-								<ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Content="{Binding}"
-                                                Padding="4"
-                                                Command="{Binding DataContext.SetSearchTermCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" 
-                                                CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
-                                <Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit" Classes="accent"/>
-                                <Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select" Classes="accent"/>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
-    </Panel>
+			</DockPanel>
+			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0">
+				<ItemsControl Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto" Margin="4">
+								<TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
+								<controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
+								<ItemsControl Items="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Content="{Binding}"
+													Padding="4"
+													Command="{Binding DataContext.SetSearchTermCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
+													CommandParameter="{Binding}"/>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
+									<Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Edit" Classes="accent"/>
+									<Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="Select" Classes="accent"/>
+								</StackPanel>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</DockPanel>
+	</Panel>
 </Window>

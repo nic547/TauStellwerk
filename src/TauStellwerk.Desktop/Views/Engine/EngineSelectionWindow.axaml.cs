@@ -22,7 +22,7 @@ public class EngineSelectionWindow : DisposingWindow
         vm.ClosingRequested += Close;
         InitializeComponent();
 
-        var engineList = this.FindControl<ListBox>("EngineList") ?? throw new Exception("Failed to locate EngineList ListBox");
+        var engineList = this.FindControl<ItemsControl>("EngineList") ?? throw new Exception("Failed to locate EngineList ListBox");
 
         engineList.LayoutUpdated += (_, _) =>
         {
