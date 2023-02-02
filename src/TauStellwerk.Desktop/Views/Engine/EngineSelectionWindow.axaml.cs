@@ -35,6 +35,9 @@ public class EngineSelectionWindow : DisposingWindow
             };
         };
 
+        var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer") ?? throw new Exception("Unable to locate ScrollViewer");
+        vm.ResetScroll += (_, _) => { scrollViewer.Offset = Vector.Zero; };
+
 #if DEBUG
         this.AttachDevTools();
 #endif

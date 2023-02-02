@@ -47,7 +47,7 @@
                         DockPanel.Dock="Right"
                         Content="Create New"/>
 			</DockPanel>
-			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0">
+			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0" Name="ScrollViewer">
 				<ItemsControl Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
