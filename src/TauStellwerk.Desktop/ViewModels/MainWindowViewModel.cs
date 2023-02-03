@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
+using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
@@ -41,6 +42,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (Enum.TryParse<FluentThemeMode>(settings.Theme, out var themeMode))
         {
             ThemeMode = themeMode;
+            Languages.SetUILanguage(settings.Language);
         }
 
         _settingsService.SettingsChanged += (updatedSetting) =>
@@ -48,6 +50,7 @@ public partial class MainWindowViewModel : ViewModelBase
             if (Enum.TryParse<FluentThemeMode>(updatedSetting.Theme, out var updatedThemeMode))
             {
                 ThemeMode = updatedThemeMode;
+                Languages.SetUILanguage(settings.Language);
             }
         };
     }

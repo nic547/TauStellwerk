@@ -11,9 +11,11 @@ public class MutableSettings
 
     public string ServerAddress { get; set; } = "https://localhost";
 
-    public string Theme { get; set; } = "light";
+    public string Theme { get; set; } = "Light";
 
     public bool WakeLock { get; set; }
+
+    public string Language { get; set; } = "English";
 
     public ImmutableSettings GetImmutableCopy()
     {
@@ -21,7 +23,8 @@ public class MutableSettings
             Username,
             ServerAddress,
             Theme,
-            WakeLock);
+            WakeLock,
+            Language);
     }
 
     public MutableSettings GetMutableCopy()
@@ -32,6 +35,7 @@ public class MutableSettings
             ServerAddress = ServerAddress,
             Theme = Theme,
             WakeLock = WakeLock,
+            Language = Language,
         };
     }
 }
