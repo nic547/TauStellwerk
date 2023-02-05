@@ -4,26 +4,20 @@
 // </copyright>
 
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public class MessageBoxModel : ViewModelBase
+public partial class MessageBoxModel : ViewModelBase
 {
+    [ObservableProperty]
     private string _title = string.Empty;
+
+    [ObservableProperty]
     private string _message = string.Empty;
 
-    public string Title
-    {
-        get => _title;
-        set => SetProperty(ref _title, value);
-    }
-
-    public string Message
-    {
-        get => _message;
-        set => SetProperty(ref _message, value);
-    }
-
+    [RelayCommand]
     public static void Close(Window window)
     {
         window.Close();
