@@ -3,7 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using Avalonia.Themes.Fluent;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -34,7 +34,7 @@ public partial class SettingsViewModel : ViewModelBase
     public static string ApplicationInformation =>
         $"TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version})";
 
-    public string[] AvailableThemes { get; } = { FluentThemeMode.Light.ToString(), FluentThemeMode.Dark.ToString() };
+    public string[] AvailableThemes { get; } = { ThemeVariant.Light.ToString(), ThemeVariant.Dark.ToString() };
 
     public List<string> AvailableLanguages => Languages.LanguageNames;
 

@@ -3,7 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using Avalonia.Themes.Fluent;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -21,7 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly AvaloniaViewService _viewService;
 
     [ObservableProperty]
-    private FluentThemeMode _themeMode;
+    private ThemeVariant _themeMode = ThemeVariant.Default;
 
     public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
     {
@@ -39,20 +39,15 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         var settings = _settingsService.GetSettings().Result;
-        if (Enum.TryParse<FluentThemeMode>(settings.Theme, out var themeMode))
-        {
-            ThemeMode = themeMode;
-            Languages.SetUILanguage(settings.Language);
-        }
+
+        ThemeMode = ParseThemeVariant(settings.Theme);
+        Languages.SetUILanguage(settings.Language);
 
         _settingsService.SettingsChanged += (updatedSetting) =>
-        {
-            if (Enum.TryParse<FluentThemeMode>(updatedSetting.Theme, out var updatedThemeMode))
-            {
-                ThemeMode = updatedThemeMode;
-                Languages.SetUILanguage(settings.Language);
-            }
-        };
+    {
+        ThemeMode = ParseThemeVariant(updatedSetting.Theme);
+        Languages.SetUILanguage(updatedSetting.Language);
+    };
     }
 
     public StopButtonState StopButtonState { get; } = new();
@@ -87,5 +82,15 @@ public partial class MainWindowViewModel : ViewModelBase
     private void OpenTurnoutList()
     {
         _viewService.ShowTurnoutsWindow(this);
+    }
+
+    private ThemeVariant ParseThemeVariant(string name)
+    {
+        return name switch
+        {
+            "Dark" => ThemeVariant.Dark,
+            "Light" => ThemeVariant.Light,
+            _ => ThemeVariant.Default,
+        };
     }
 }

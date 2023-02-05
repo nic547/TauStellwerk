@@ -32,11 +32,13 @@
         <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}" Margin="0 0 0 5"/>
         <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
         <Label Content="Tags" Padding="1 1 1 0"/>
-        <ItemsRepeater Items="{Binding Engine.Tags}">
-          <ItemsRepeater.Layout>
-            <WrapLayout HorizontalSpacing="6"/>
-          </ItemsRepeater.Layout>
-          <ItemsRepeater.ItemTemplate>
+        <ItemsControl Items="{Binding Engine.Tags}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
             <DataTemplate>
               <Border BorderBrush="Black" Padding="1" BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
@@ -45,18 +47,20 @@
                 </StackPanel>
               </Border>
             </DataTemplate>
-          </ItemsRepeater.ItemTemplate>
-        </ItemsRepeater>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
           <TextBox Text="{Binding TagInputText}" Watermark="New Tag" MinWidth="150"/>
           <Button Content="Add Tag" Command="{Binding AddTagCommand}"/>
         </StackPanel>
         <Label Content="Functions"/>
-        <ItemsRepeater Items="{Binding Engine.Functions}">
-          <ItemsRepeater.Layout>
-            <StackLayout/>
-          </ItemsRepeater.Layout>
-          <ItemsRepeater.ItemTemplate>
+        <ItemsControl Items="{Binding Engine.Functions}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" Margin="1">
                 <TextBlock Text="F" VerticalAlignment="Center"/>
@@ -68,8 +72,8 @@
                 <TextBlock Text=" ms" VerticalAlignment="Center"/>
               </StackPanel>
             </DataTemplate>
-          </ItemsRepeater.ItemTemplate>
-        </ItemsRepeater>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <StackPanel Orientation="Horizontal">
           <Button Content="Add Function" Command="{Binding AddFunctionCommand}"/>
           <Button Content="Remove Function" Command="{Binding RemoveLastFunctionCommand}"/>
