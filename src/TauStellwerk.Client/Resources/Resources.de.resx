@@ -150,4 +150,58 @@
   <data name="ServerAddressSettingDescription" xml:space="preserve">
     <value>Die Addresse des TauStellwerk-Server mit dem sich die Applikation verbinden soll.</value>
   </data>
+  <data name="EngineList" xml:space="preserve">
+    <value>Lokliste</value>
+  </data>
+  <data name="TurnoutList" xml:space="preserve">
+    <value>Schaltartikel-Liste</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="ShowHidden" xml:space="preserve">
+    <value>Zeige Versteckte</value>
+  </data>
+  <data name="CreateNewEngine" xml:space="preserve">
+    <value>Neue Lok erstellen</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="TopSpeed" xml:space="preserve">
+    <value>Höchstgeschwindigkeit</value>
+  </data>
+  <data name="DccAddress" xml:space="preserve">
+    <value>DCC-Adresse</value>
+  </data>
+  <data name="HideInEngineList" xml:space="preserve">
+    <value>Verstecke die Lok in der Lokliste</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Schlagworte</value>
+  </data>
+  <data name="AddTag" xml:space="preserve">
+    <value>Schlagwort hinzufügen</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Funktionen</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Dauer</value>
+  </data>
+  <data name="NewTagPlaceholder" xml:space="preserve">
+    <value>Neues Schlagwort</value>
+  </data>
+  <data name="RemoveFunction" xml:space="preserve">
+    <value>Funktion entfernen</value>
+  </data>
+  <data name="AddFunction" xml:space="preserve">
+    <value>Funktion hinzufügen</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
 </root>

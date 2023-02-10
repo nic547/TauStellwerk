@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.MainWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -19,9 +20,9 @@
             </StackPanel>
         </Button>
         <StackPanel>
-            <Button Command="{Binding OpenEngineListCommand}">Select Engine</Button>
-            <Button Command="{Binding OpenTurnoutListCommand}">Turnout List</Button>
-            <Button Command="{Binding OpenSettingsCommand}" Content="Settings" />
+            <Button Command="{Binding OpenEngineListCommand}" Content="{x:Static r:Resources.EngineList}"/>
+            <Button Command="{Binding OpenTurnoutListCommand}" Content="{x:Static r:Resources.TurnoutList}"/>
+            <Button Command="{Binding OpenSettingsCommand}" Content="{x:Static r:Resources.Settings}" />
           </StackPanel>
     </DockPanel>
 </Window>

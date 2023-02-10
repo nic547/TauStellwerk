@@ -150,4 +150,58 @@
   <data name="ServerAddressSettingDescription" xml:space="preserve">
     <value>The address of the TauStellwerk server the application should connect to.</value>
   </data>
+  <data name="EngineList" xml:space="preserve">
+    <value>Engine List</value>
+  </data>
+  <data name="TurnoutList" xml:space="preserve">
+    <value>Turnout List</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ShowHidden" xml:space="preserve">
+    <value>Show Hidden</value>
+  </data>
+  <data name="CreateNewEngine" xml:space="preserve">
+    <value>Create New Engine</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DccAddress" xml:space="preserve">
+    <value>DCC address</value>
+  </data>
+  <data name="TopSpeed" xml:space="preserve">
+    <value>Top speed</value>
+  </data>
+  <data name="HideInEngineList" xml:space="preserve">
+    <value>Hide in engine list</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="AddTag" xml:space="preserve">
+    <value>Add Tag</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Functions</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="NewTagPlaceholder" xml:space="preserve">
+    <value>New Tag</value>
+  </data>
+  <data name="AddFunction" xml:space="preserve">
+    <value>Add Function</value>
+  </data>
+  <data name="RemoveFunction" xml:space="preserve">
+    <value>Remove Function</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
 </root>

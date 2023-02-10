@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.EngineSelectionWindow"
         Icon="/Assets/tauStellwerk.ico"
-        Title="Engine List"
+        Title="{x:Static r:Resources.EngineList}"
         MinWidth="200"
         MinHeight="200"
         ClientSize="{Binding WindowSize, Mode=OneWayToSource}"
@@ -19,12 +19,12 @@
 	<Panel Margin="0 5 0 5">
 		<DockPanel LastChildFill="False">
 			<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-				<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="search" Width="200" Text="{Binding CurrentSearchTerm}"/>
+				<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="{x:Static r:Resources.Search}" Width="200" Text="{Binding CurrentSearchTerm}"/>
 				<ComboBox Items="{Binding EngineSortModes}"
                           SelectedItem="{Binding CurrentEngineSortMode}"/>
 				<ComboBox Items="{Binding EngineSortDirections}"
                           SelectedItem="{Binding CurrentEngineSortDirection}"/>
-				<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0">Show Hidden</CheckBox>
+				<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0" Content="{x:Static r:Resources.ShowHidden}"/>
 			</StackPanel>
 			<DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
 				<Button Command="{CompiledBinding ScrollPages}"
@@ -46,7 +46,7 @@
                         Classes="accent"/>
 				<Button Command="{Binding CreateEngineCommand}"
                         DockPanel.Dock="Right"
-                        Content="Create New"/>
+                        Content="{x:Static r:Resources.CreateNewEngine}"/>
 			</DockPanel>
 			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0" Name="ScrollViewer">
 				<ItemsControl Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
