@@ -22,18 +22,21 @@ public class EngineSelectionWindow : DisposingWindow
         vm.ClosingRequested += Close;
         InitializeComponent();
 
-        var engineList = this.FindControl<ListBox>("EngineList") ?? throw new Exception("Failed to locate EngineList ListBox");
+        var engineList = this.FindControl<ItemsControl>("EngineList") ?? throw new Exception("Failed to locate EngineList ListBox");
 
         engineList.LayoutUpdated += (_, _) =>
         {
             Columns = Width switch
             {
-                < 768 => 1,
-                < 992 => 2,
-                < 1400 => 4,
+                < 800 => 1,
+                < 1300 => 2,
+                < 1800 => 4,
                 _ => 5,
             };
         };
+
+        var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer") ?? throw new Exception("Unable to locate ScrollViewer");
+        vm.ResetScroll += (_, _) => { scrollViewer.Offset = Vector.Zero; };
 
 #if DEBUG
         this.AttachDevTools();

@@ -18,7 +18,8 @@ public class LoadGeneratorSettingsService : ISettingsService
             $"Random User {random.Next(999_999)}",
             options.Uri,
             "ThisIsNotATheme",
-            false);
+            false,
+            "en");
     }
 
     public event ISettingsService.SettingsChange SettingsChanged

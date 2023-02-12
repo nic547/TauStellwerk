@@ -7,6 +7,7 @@ If you have any questions, feedback or any other comments, feel free to open a i
 
 ![Screenshot of the web app on a computer](./doc/img/DesktopWebClientScreenshot.png)
 ![Screenshot of the webapp on a mobile device](./doc/img/MobileWebClientScreenshot.png)
+![Screenshot of the Desktop application](./doc/img/AvaloniaScreenshot.png)
 
 ## Current State
 The software is still in a very experimental state. Currently only the ESU Command Station (ECoS) is supported.

@@ -17,7 +17,7 @@
                 Width="130"
                 HorizontalAlignment="Right"
                 Content="Ok"
-                Command="{Binding Close}"
+                Command="{Binding CloseCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                 />
         <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>

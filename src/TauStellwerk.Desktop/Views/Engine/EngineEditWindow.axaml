@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+        xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.EngineEditWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -13,30 +14,32 @@
   </Design.DataContext>
   <DockPanel>
     <DockPanel DockPanel.Dock="Bottom" Margin="5" LastChildFill="False">
-      <Button Content="Delete" Command="{Binding DeleteCommand}"
+      <Button Content="{x:Static r:Resources.Delete}" Command="{Binding DeleteCommand}"
               DockPanel.Dock="Left"/>
-      <Button Content="Copy" Command="{Binding CopyCommand}"
+      <Button Content="{x:Static r:Resources.Copy}" Command="{Binding CopyCommand}"
               DockPanel.Dock="Left"/>
-      <Button Content="Cancel" Command="{Binding CancelCommand}"
+      <Button Content="{x:Static r:Resources.Cancel}" Command="{Binding CancelCommand}"
               DockPanel.Dock="Right"/>
-      <Button Content="Save" Command="{Binding SaveCommand}"
+      <Button Content="{x:Static r:Resources.Save}" Command="{Binding SaveCommand}"
               DockPanel.Dock="Right"/>
     </DockPanel>
     <ScrollViewer>
       <StackPanel Margin="5">
-        <Label Content="Name"/>
+        <Label Content="{x:Static r:Resources.Name}"/>
         <TextBox Text="{Binding Engine.Name}" Margin="0 0 0 5"/>
-        <Label Content="DCC address"/>
+        <Label Content="{x:Static r:Resources.DccAddress}"/>
         <NumericUpDown Value="{Binding Engine.Address}" Margin="0 0 0 5" />
-        <Label Content="Top speed" Padding="1 1 1 0"/>
+        <Label Content="{x:Static r:Resources.TopSpeed}" Padding="1 1 1 0"/>
         <NumericUpDown Increment="5" Value="{Binding Engine.TopSpeed}" Margin="0 0 0 5"/>
-        <CheckBox Content="Hide in engine list" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
-        <Label Content="Tags" Padding="1 1 1 0"/>
-        <ItemsRepeater Items="{Binding Engine.Tags}">
-          <ItemsRepeater.Layout>
-            <WrapLayout HorizontalSpacing="6"/>
-          </ItemsRepeater.Layout>
-          <ItemsRepeater.ItemTemplate>
+        <CheckBox Content="{x:Static r:Resources.HideInEngineList}" IsChecked="{Binding Engine.IsHidden}" Margin="0 0 0 5"/>
+        <Label Content="{x:Static r:Resources.Tags}" Padding="1 1 1 0"/>
+        <ItemsControl Items="{Binding Engine.Tags}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
             <DataTemplate>
               <Border BorderBrush="Black" Padding="1" BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
@@ -45,34 +48,36 @@
                 </StackPanel>
               </Border>
             </DataTemplate>
-          </ItemsRepeater.ItemTemplate>
-        </ItemsRepeater>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
-          <TextBox Text="{Binding TagInputText}" Watermark="New Tag" MinWidth="150"/>
-          <Button Content="Add Tag" Command="{Binding AddTagCommand}"/>
+          <TextBox Text="{Binding TagInputText}" Watermark="{x:Static r:Resources.NewTagPlaceholder}" MinWidth="150"/>
+          <Button Content="{x:Static r:Resources.AddTag}" Command="{Binding AddTagCommand}"/>
         </StackPanel>
-        <Label Content="Functions"/>
-        <ItemsRepeater Items="{Binding Engine.Functions}">
-          <ItemsRepeater.Layout>
-            <StackLayout/>
-          </ItemsRepeater.Layout>
-          <ItemsRepeater.ItemTemplate>
+        <Label Content="{x:Static r:Resources.Functions}"/>
+        <ItemsControl Items="{Binding Engine.Functions}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" Margin="1">
                 <TextBlock Text="F" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Number}" VerticalAlignment="Center"/>
                 <TextBlock Text=" - " VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Name}" MinWidth="200"/>
-                <TextBlock Text="  Duration: " VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Static r:Resources.Duration}" VerticalAlignment="Center" Padding="5 0"/>
                 <NumericUpDown Value="{Binding Duration}" Minimum="0" Increment="100" VerticalAlignment="Center" Width="140"/>
                 <TextBlock Text=" ms" VerticalAlignment="Center"/>
               </StackPanel>
             </DataTemplate>
-          </ItemsRepeater.ItemTemplate>
-        </ItemsRepeater>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <StackPanel Orientation="Horizontal">
-          <Button Content="Add Function" Command="{Binding AddFunctionCommand}"/>
-          <Button Content="Remove Function" Command="{Binding RemoveLastFunctionCommand}"/>
+          <Button Content="{x:Static r:Resources.AddFunction}" Command="{Binding AddFunctionCommand}"/>
+          <Button Content="{x:Static r:Resources.RemoveFunction}" Command="{Binding RemoveLastFunctionCommand}"/>
         </StackPanel>
       </StackPanel>
     </ScrollViewer>

@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
+using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
@@ -27,7 +28,7 @@ public partial class EngineEditViewModel : ViewModelBase
         _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
 
         // Intentionally done once, I don't want the new name to show up until the engine is saved.
-        WindowTitle = $"{engine.Name} - Edit";
+        WindowTitle = $"{engine.Name} - {Resources.Edit}";
     }
 
     public delegate void HandleClosingRequested();

@@ -45,7 +45,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
         _viewService = viewService ??
                        Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
 
-        PropertyChanged += HandlePropertyChanged;
+        PropertyChanged += async (o, args) => await HandlePropertyChanged(o, args);
         _engineService.EngineChanged += OnEngineChanged;
 
         _ = Load();
@@ -54,6 +54,8 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
     public delegate void HandleClosingRequested();
 
     public event HandleClosingRequested? ClosingRequested;
+
+    public event EventHandler? ResetScroll;
 
     public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
 
@@ -76,11 +78,15 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
+    private async Task HandlePropertyChanged(object? sender, PropertyChangedEventArgs args)
     {
         switch (args.PropertyName)
         {
             case nameof(CurrentPage):
+                await Load();
+                ResetScroll?.Invoke(this, EventArgs.Empty);
+                break;
+
             case nameof(CurrentEngineSortDirection):
             case nameof(ShowHiddenEngines):
             case nameof(CurrentEngineSortMode):
