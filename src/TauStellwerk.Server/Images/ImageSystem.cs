@@ -77,24 +77,7 @@ public class ImageSystem
         await CreateDownScaledImages();
     }
 
-    private async Task CreateDownScaledImages()
-    {
-        var totalStopwatch = new Stopwatch();
-        totalStopwatch.Start();
-
-        var engines = await _context.Engines.ToListAsync();
-
-        foreach (var engine in engines)
-        {
-            await CreateDownscaledImage(engine);
-        }
-
-        totalStopwatch.Stop();
-        var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation($"Updated images in {elapsedSeconds} seconds");
-    }
-
-    private async Task CreateDownscaledImage(Engine engine)
+    public async Task CreateDownscaledImage(Engine engine)
     {
         var engineStopwatch = new Stopwatch();
         engineStopwatch.Start();
@@ -137,6 +120,23 @@ public class ImageSystem
         engineStopwatch.Stop();
         var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
         _logger.LogInformation($"Updated images for {engine} in {elapsedSeconds}s");
+    }
+
+    private async Task CreateDownScaledImages()
+    {
+        var totalStopwatch = new Stopwatch();
+        totalStopwatch.Start();
+
+        var engines = await _context.Engines.ToListAsync();
+
+        foreach (var engine in engines)
+        {
+            await CreateDownscaledImage(engine);
+        }
+
+        totalStopwatch.Stop();
+        var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
+        _logger.LogInformation($"Updated images in {elapsedSeconds} seconds");
     }
 
     private int DownscaleImage(string inputFilePath, int id, ImageOptions options)

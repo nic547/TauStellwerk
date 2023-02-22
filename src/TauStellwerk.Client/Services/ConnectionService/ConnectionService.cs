@@ -18,6 +18,7 @@ public class ConnectionService : IConnectionService
     private readonly ISettingsService _settingsService;
 
     private HubConnection? _hubConnection;
+    private HttpClient? _httpClient;
 
     private bool _isConnectionGood;
     private string _currentServerAddress = string.Empty;
@@ -66,6 +67,28 @@ public class ConnectionService : IConnectionService
         return connection;
     }
 
+    public async Task<HttpClient?> TryGetHttpClient()
+    {
+        if (_httpClient is not null)
+        {
+            return _httpClient;
+        }
+
+        HttpClientHandler handler = new()
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
+        };
+
+        var settings = await _settingsService.GetSettings();
+
+        _httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri(settings.ServerAddress),
+        };
+
+        return _httpClient;
+    }
+
     private static void IgnoreInvalidCerts(HttpConnectionOptions opts)
     {
         opts.HttpMessageHandlerFactory = (handler) =>
@@ -106,6 +129,7 @@ public class ConnectionService : IConnectionService
             await _setupSemaphore.WaitAsync();
             _hubConnection = CreateConnection(settings);
             _ = StartConnection();
+            _httpClient = null;
             _setupSemaphore.Release();
         }
     }

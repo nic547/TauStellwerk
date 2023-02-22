@@ -10,12 +10,18 @@ using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 
+// ReSharper disable UnusedMember.Local
 namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class EngineEditViewModel : ViewModelBase
 {
-    private readonly IViewService _viewService;
+    private readonly AvaloniaViewService _viewService;
     private readonly EngineService _engineService;
+
+    private readonly MemoryStream _imageStream = new();
+
+    [ObservableProperty]
+    private string _imageFilename = string.Empty;
 
     [ObservableProperty]
     private string _tagInputText = string.Empty;
@@ -25,7 +31,7 @@ public partial class EngineEditViewModel : ViewModelBase
         Engine = engine;
 
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<IViewService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
 
         // Intentionally done once, I don't want the new name to show up until the engine is saved.
         WindowTitle = $"{engine.Name} - {Resources.Edit}";
@@ -47,7 +53,9 @@ public partial class EngineEditViewModel : ViewModelBase
     [RelayCommand]
     private async Task Save()
     {
-        await _engineService.AddOrUpdateEngine(Engine);
+        var updatedEngine = await _engineService.AddOrUpdateEngine(Engine);
+        await _engineService.UpdateEngineImage(updatedEngine, _imageStream, ImageFilename);
+
         ClosingRequested?.Invoke();
     }
 
@@ -74,6 +82,16 @@ public partial class EngineEditViewModel : ViewModelBase
     private void Copy()
     {
         _viewService.ShowEngineEditView(Engine.CreateCopy(), this);
+    }
+
+    [RelayCommand]
+    private async Task SelectImage()
+    {
+        var file = await _viewService.ShowFilePicker(this);
+
+        await using var stream = await file.OpenReadAsync();
+        await stream.CopyToAsync(_imageStream);
+        ImageFilename = file.Name;
     }
 
     [RelayCommand]

@@ -204,4 +204,7 @@
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
+  <data name="SelectNewImage" xml:space="preserve">
+    <value>Select new image</value>
+  </data>
 </root>

@@ -6,6 +6,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using FluentResults;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.ViewModels;
@@ -98,6 +100,16 @@ public class AvaloniaViewService : IViewService
         {
             window.Show(associatedWindow);
         }
+    }
+
+    public async Task<IStorageFile> ShowFilePicker(object source)
+    {
+        var window = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate window associated with viewmodel.");
+
+        var file = await window.StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions());
+
+        return file.Single();
     }
 
     /// <summary>
