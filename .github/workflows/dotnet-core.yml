@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  DOTNET_VERSION: '7.0.x' # The .NET SDK version to use
+  DOTNET_VERSION: '7.0.103' # The .NET SDK version to use
 jobs:
   build-and-test:
 
