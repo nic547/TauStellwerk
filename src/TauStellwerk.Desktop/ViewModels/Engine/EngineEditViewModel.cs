@@ -54,7 +54,11 @@ public partial class EngineEditViewModel : ViewModelBase
     private async Task Save()
     {
         var updatedEngine = await _engineService.AddOrUpdateEngine(Engine);
-        await _engineService.UpdateEngineImage(updatedEngine, _imageStream, ImageFilename);
+
+        if (_imageStream.Length > 0)
+        {
+            await _engineService.UpdateEngineImage(updatedEngine, _imageStream, ImageFilename);
+        }
 
         ClosingRequested?.Invoke();
     }
@@ -89,9 +93,13 @@ public partial class EngineEditViewModel : ViewModelBase
     {
         var file = await _viewService.ShowFilePicker(this);
 
-        await using var stream = await file.OpenReadAsync();
-        await stream.CopyToAsync(_imageStream);
-        ImageFilename = file.Name;
+        if (file != null)
+        {
+            await using var stream = await file.OpenReadAsync();
+            await stream.CopyToAsync(_imageStream);
+            ImageFilename = file.Name;
+        }
+
     }
 
     [RelayCommand]
