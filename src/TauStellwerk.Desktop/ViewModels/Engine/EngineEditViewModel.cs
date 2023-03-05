@@ -99,7 +99,6 @@ public partial class EngineEditViewModel : ViewModelBase
             await stream.CopyToAsync(_imageStream);
             ImageFilename = file.Name;
         }
-
     }
 
     [RelayCommand]

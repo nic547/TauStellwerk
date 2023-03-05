@@ -97,7 +97,7 @@ public class ImageSystem
             return;
         }
 
-        var sourceImageTimestamp = File.GetLastWriteTime(existingSourceImage);
+        var sourceImageTimestamp = File.GetLastWriteTimeUtc(existingSourceImage);
 
         if (existingGeneratedImages.Count() == _imageOptions.Count && sourceImageTimestamp < engine.LastImageUpdate)
         {
