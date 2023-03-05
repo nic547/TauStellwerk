@@ -6,6 +6,7 @@
 @inject ModalManager _modalManager
 @inject AppState _appState
 @inject EngineService _engineService
+@inject ISettingsService SettingsService
 @inject IJSRuntime _jsRuntime
 
 <div class="modal @(_modalManager.IsEngineEditModalVisible ? "active-modal" : "inactive-modal")">
@@ -28,13 +29,17 @@
                 <input type="checkbox" id="HiddenSwitch" @bind="@Engine.IsHidden" />
             </div>
             <div class="form-group">
+                <label>Image: </label>
+                <input type="file" form="imageForm" id="ImageSelectionInput" name="image"/>
+            </div>
+            <div class="form-group">
                 <label>Tags: </label>
                 <div class="tags">
                     @foreach (var tag in Engine.Tags)
                     {
                         <span class="button-secondary is-clickable"
-                          title="Remove this tag"
-                          @onclick="() => RemoveTag(tag)">@tag X</span>
+                              title="Remove this tag"
+                              @onclick="() => RemoveTag(tag)">@tag X</span>
                     }
                 </div>
                 <div>
@@ -78,6 +83,8 @@
                 <button @onclick="Save">Save</button>
             </div>
         </EditForm>
+        <!-- Dirty little workaround to post the image file without having to get it across the js/c# boundary -->
+        <form Id="imageForm" action="@_imageUploadPath" method="post"></form>
     </div>
 </div>
 @code {
@@ -86,6 +93,8 @@
     private string NewTagInput { get; set; } = string.Empty;
 
     private bool IsCopy { get; set; }
+
+    private string _imageUploadPath = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,6 +125,12 @@
     private async Task Save()
     {
         await _engineService.AddOrUpdateEngine(Engine);
+
+        var settings = await SettingsService.GetSettings();
+
+        _imageUploadPath = Path.Combine(settings.ServerAddress, $"upload/{Engine.Id}");
+
+        await _jsRuntime.InvokeVoidAsync("postImageFormData", Path.Combine(settings.ServerAddress, $"upload/{Engine.Id}"));
         await _engineService.ReleaseEngine(Engine.Id);
         IsCopy = false;
 
