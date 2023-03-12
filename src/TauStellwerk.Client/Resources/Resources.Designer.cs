@@ -240,6 +240,15 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select new image.
+        /// </summary>
+        public static string SelectNewImage {
+            get {
+                return ResourceManager.GetString("SelectNewImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server address.
         /// </summary>
         public static string ServerAddress {

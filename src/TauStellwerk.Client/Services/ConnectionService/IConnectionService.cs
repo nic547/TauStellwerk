@@ -12,4 +12,6 @@ public interface IConnectionService
     public event EventHandler<HubConnection?>? ConnectionChanged;
 
     Task<HubConnection?> TryGetHubConnection();
+
+    Task<HttpClient?> TryGetHttpClient();
 }

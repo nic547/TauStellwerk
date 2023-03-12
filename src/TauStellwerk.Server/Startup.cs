@@ -13,6 +13,7 @@ using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Dao;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Hub;
+using TauStellwerk.Server.Images;
 using TauStellwerk.Server.Services;
 using TauStellwerk.Server.Services.EngineService;
 
@@ -72,6 +73,12 @@ public class Startup
 
         services.AddScoped(p => new EngineDao(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineDao>>()));
         services.AddScoped<ITurnoutDao>(p => new TurnoutDao(p.GetRequiredService<StwDbContext>()));
+
+        services.AddScoped(p => new ImageSystem(
+            p.GetRequiredService<StwDbContext>(),
+            p.GetRequiredService<ILogger<ImageSystem>>(),
+            Options.OriginalImageDirectory,
+            Options.GeneratedImageDirectory));
     }
 
     /// <summary>

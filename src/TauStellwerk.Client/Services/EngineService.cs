@@ -149,6 +149,17 @@ public class EngineService
         return updatedEngine;
     }
 
+    public async Task UpdateEngineImage(EngineFull engine, MemoryStream stream, string filename)
+    {
+        HttpClient client = await _service.TryGetHttpClient() ?? throw new InvalidOperationException();
+
+        ByteArrayContent arrayContent = new(stream.ToArray());
+        MultipartFormDataContent content = new();
+        content.Add(arrayContent, "image", filename);
+
+        await client.PostAsync($"/upload/{engine.Id}", content);
+    }
+
     public async Task<ResultDto> TryDeleteEngine(EngineFull engine)
     {
         if (engine.Id == 0)

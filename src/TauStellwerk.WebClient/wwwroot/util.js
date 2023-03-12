@@ -14,6 +14,22 @@ function getItem(key){
     return localStorage.getItem(key);
 }
 
+function postImageFormData(url) {
+    const form = document.getElementById("imageForm");
+    const imageInput = form.elements[0];
+
+    if (!imageInput.value) {
+        return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    const fd = new FormData(form);
+
+    xhr.open("POST", url);
+    xhr.send(fd);
+}
+
+
 function isWakeLockSupported() {
     return "wakeLock" in navigator;
 }
