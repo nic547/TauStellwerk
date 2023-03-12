@@ -1,10 +1,10 @@
 ﻿@using System.ComponentModel
-@inject ModalManager _modalManager
-@inject AppState _appState
+@inject ModalManager ModalManager
+@inject AppState AppState
 
-<div class="modal @(_modalManager.IsMessageBoxVisible ? "active-modal" : "inactive-modal")">
+<div class="modal @(ModalManager.IsMessageBoxVisible ? "active-modal" : "inactive-modal")">
     <div class="modal-content">
-        <p>@_appState.MessageBoxText</p>
+        <p>@AppState.MessageBoxText</p>
         <button @onclick="Close" class="is-pulled-right">Ok</button>
     </div>
 </div>
@@ -14,12 +14,12 @@
     {
         await base.OnInitializedAsync();
 
-        _modalManager.PropertyChanged += HandleModalManagerNotification;
+        ModalManager.PropertyChanged += HandleModalManagerNotification;
     }
 
     private void HandleModalManagerNotification(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName != nameof(_modalManager.IsMessageBoxVisible))
+        if (args.PropertyName != nameof(ModalManager.IsMessageBoxVisible))
         {
             return;
         }
@@ -29,6 +29,6 @@
 
     private void Close()
     {
-        _modalManager.IsMessageBoxVisible = false;
+        ModalManager.IsMessageBoxVisible = false;
     }
 }
