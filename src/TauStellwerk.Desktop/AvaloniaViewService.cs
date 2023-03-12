@@ -101,12 +101,12 @@ public class AvaloniaViewService : IViewService
         }
     }
 
-    public async Task<IStorageFile?> ShowFilePicker(object source)
+    public async Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null)
     {
         var window = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate window associated with viewmodel.");
 
         var file = await window.StorageProvider.OpenFilePickerAsync(
-            new FilePickerOpenOptions());
+            filePickerOpenOptions ?? new FilePickerOpenOptions());
 
         return file.SingleOrDefault();
     }

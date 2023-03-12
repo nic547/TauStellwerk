@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -91,7 +92,16 @@ public partial class EngineEditViewModel : ViewModelBase
     [RelayCommand]
     private async Task SelectImage()
     {
-        var file = await _viewService.ShowFilePicker(this);
+        FilePickerOpenOptions options = new()
+        {
+            AllowMultiple = false,
+            FileTypeFilter = new List<FilePickerFileType>
+            {
+                Util.FilePickerFileTypes.ImageAllExtended,
+            },
+        };
+
+        var file = await _viewService.ShowFilePicker(this, options);
 
         if (file != null)
         {
