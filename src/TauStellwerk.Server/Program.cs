@@ -47,7 +47,7 @@ public static class Program
         var services = scope.ServiceProvider;
         var logger = services.GetRequiredService<ILogger<Startup>>(); // Wrong class - but Program doesn't seem to work.
 
-        logger.LogInformation($"--- TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version}) ---");
+        logger.LogInformation("--- TauStellwerk {AssemblyInformationalVersion} (.NET {Version}) ---", ThisAssembly.AssemblyInformationalVersion, Environment.Version);
 
         return host;
     }

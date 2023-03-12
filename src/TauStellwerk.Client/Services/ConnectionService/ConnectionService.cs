@@ -122,6 +122,22 @@ public class ConnectionService : IConnectionService
         }
     }
 
+    private static HubConnection CreateConnection(ImmutableSettings settings)
+    {
+        var baseAddress = new Uri(settings.ServerAddress);
+        var hubPath = new Uri(baseAddress, "/hub");
+
+        return new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
+            {
+                IgnoreInvalidCerts(opts);
+
+                // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
+                opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
+            })
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
+            .Build();
+    }
+
     private async void HandleSettingsChanged(ImmutableSettings settings)
     {
         if (settings.ServerAddress != _currentServerAddress)
@@ -154,21 +170,5 @@ public class ConnectionService : IConnectionService
             ConnectionChanged?.Invoke(this, null);
             return null;
         }
-    }
-
-    private HubConnection CreateConnection(ImmutableSettings settings)
-    {
-        var baseAddress = new Uri(settings.ServerAddress);
-        var hubPath = new Uri(baseAddress, "/hub");
-
-        return new HubConnectionBuilder().WithUrl(hubPath, (opts) =>
-        {
-            IgnoreInvalidCerts(opts);
-
-            // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
-            opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
-        })
-            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
-            .Build();
     }
 }

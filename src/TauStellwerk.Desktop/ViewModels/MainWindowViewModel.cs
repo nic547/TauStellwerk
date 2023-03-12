@@ -11,6 +11,7 @@ using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Desktop.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
@@ -18,7 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
     private readonly StatusService _statusService;
-    private readonly AvaloniaViewService _viewService;
+    private readonly IAvaloniaViewService _viewService;
 
     [ObservableProperty]
     private ThemeVariant _themeMode = ThemeVariant.Default;
@@ -27,7 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
         _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
 
         _statusService.StatusChanged += (_, status) =>
         {
@@ -51,6 +52,16 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     public StopButtonState StopButtonState { get; } = new();
+
+    private static ThemeVariant ParseThemeVariant(string name)
+    {
+        return name switch
+        {
+            "Dark" => ThemeVariant.Dark,
+            "Light" => ThemeVariant.Light,
+            _ => ThemeVariant.Default,
+        };
+    }
 
     [RelayCommand]
     private async Task StopButton()
@@ -81,16 +92,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void OpenTurnoutList()
     {
-        _viewService.ShowTurnoutsWindow(this);
-    }
-
-    private ThemeVariant ParseThemeVariant(string name)
-    {
-        return name switch
-        {
-            "Dark" => ThemeVariant.Dark,
-            "Light" => ThemeVariant.Light,
-            _ => ThemeVariant.Default,
-        };
+        _viewService.ShowTurnoutsWindow();
     }
 }

@@ -119,7 +119,7 @@ public class ImageSystem
 
         engineStopwatch.Stop();
         var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation($"Updated images for {engine} in {elapsedSeconds}s");
+        _logger.LogInformation("Updated images for {engine} in {elapsedSeconds}s", engine, elapsedSeconds);
     }
 
     private async Task CreateDownScaledImages()
@@ -136,7 +136,7 @@ public class ImageSystem
 
         totalStopwatch.Stop();
         var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation($"Updated images in {elapsedSeconds} seconds");
+        _logger.LogInformation("Updated images in {elapsedSeconds} seconds", elapsedSeconds);
     }
 
     private int DownscaleImage(string inputFilePath, int id, ImageOptions options)

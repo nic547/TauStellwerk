@@ -7,22 +7,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TauStellwerk.Server.Database.Migrations
+namespace TauStellwerk.Server.Database.Migrations;
+
+/// <inheritdoc />
+public partial class EngineTagsAsSingleString : Migration
 {
     /// <inheritdoc />
-    public partial class EngineTagsAsSingleString : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "Tags",
-                table: "Engines",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: string.Empty);
+        migrationBuilder.AddColumn<string>(
+            name: "Tags",
+            table: "Engines",
+            type: "TEXT",
+            nullable: false,
+            defaultValue: string.Empty);
 
-            migrationBuilder.Sql(@"
+        migrationBuilder.Sql(@"
                 UPDATE Engines
                 SET  Tags = old_table.tags
                 FROM
@@ -34,67 +34,66 @@ namespace TauStellwerk.Server.Database.Migrations
                 WHERE Engines.Id = old_table.id
                 ");
 
-            migrationBuilder.DropTable(
-                name: "EngineTag");
+        migrationBuilder.DropTable(
+            name: "EngineTag");
 
-            migrationBuilder.DropTable(
-                name: "Tags");
-        }
+        migrationBuilder.DropTable(
+            name: "Tags");
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Tags",
-                table: "Engines");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "Tags",
+            table: "Engines");
 
-            migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
+        migrationBuilder.CreateTable(
+            name: "Tags",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    .Annotation("Sqlite:Autoincrement", true),
+                Name = table.Column<string>(type: "TEXT", nullable: false),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Tags", x => x.Id);
+            });
 
-            migrationBuilder.CreateTable(
-                name: "EngineTag",
-                columns: table => new
-                {
-                    EnginesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TagsId = table.Column<int>(type: "INTEGER", nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EngineTag", x => new { x.EnginesId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_EngineTag_Engines_EnginesId",
-                        column: x => x.EnginesId,
-                        principalTable: "Engines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EngineTag_Tags_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+        migrationBuilder.CreateTable(
+            name: "EngineTag",
+            columns: table => new
+            {
+                EnginesId = table.Column<int>(type: "INTEGER", nullable: false),
+                TagsId = table.Column<int>(type: "INTEGER", nullable: false),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_EngineTag", x => new { x.EnginesId, x.TagsId });
+                table.ForeignKey(
+                    name: "FK_EngineTag_Engines_EnginesId",
+                    column: x => x.EnginesId,
+                    principalTable: "Engines",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_EngineTag_Tags_TagsId",
+                    column: x => x.TagsId,
+                    principalTable: "Tags",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_EngineTag_TagsId",
-                table: "EngineTag",
-                column: "TagsId");
+        migrationBuilder.CreateIndex(
+            name: "IX_EngineTag_TagsId",
+            table: "EngineTag",
+            column: "TagsId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Tags_Name",
-                table: "Tags",
-                column: "Name",
-                unique: true);
-        }
+        migrationBuilder.CreateIndex(
+            name: "IX_Tags_Name",
+            table: "Tags",
+            column: "Name",
+            unique: true);
     }
 }

@@ -10,13 +10,14 @@ using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Desktop.Services;
 
 // ReSharper disable UnusedMember.Local
 namespace TauStellwerk.Desktop.ViewModels;
 
 public partial class EngineEditViewModel : ViewModelBase
 {
-    private readonly AvaloniaViewService _viewService;
+    private readonly IAvaloniaViewService _viewService;
     private readonly EngineService _engineService;
 
     private readonly MemoryStream _imageStream = new();
@@ -27,12 +28,12 @@ public partial class EngineEditViewModel : ViewModelBase
     [ObservableProperty]
     private string _tagInputText = string.Empty;
 
-    public EngineEditViewModel(EngineFull engine, EngineService? engineService = null, AvaloniaViewService? viewService = null)
+    public EngineEditViewModel(EngineFull engine, EngineService? engineService = null, IAvaloniaViewService? viewService = null)
     {
         Engine = engine;
 
         _engineService = engineService ?? Locator.Current.GetService<EngineService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
 
         // Intentionally done once, I don't want the new name to show up until the engine is saved.
         WindowTitle = $"{engine.Name} - {Resources.Edit}";

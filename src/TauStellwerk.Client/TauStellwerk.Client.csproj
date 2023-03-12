@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Client.xml</DocumentationFile>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

@@ -10,21 +10,22 @@ using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Desktop.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
 public sealed partial class TurnoutsViewModel : ViewModelBase, IDisposable
 {
-    private readonly AvaloniaViewService _viewService;
+    private readonly IAvaloniaViewService _viewService;
     private readonly ITurnoutService _turnoutService;
 
     [ObservableProperty]
     private int _currentPage;
 
-    public TurnoutsViewModel(TurnoutService? turnoutService = null, AvaloniaViewService? viewService = null)
+    public TurnoutsViewModel(TurnoutService? turnoutService = null, IAvaloniaViewService? viewService = null)
     {
         _turnoutService = turnoutService ?? Locator.Current.GetService<ITurnoutService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<AvaloniaViewService>() ?? throw new InvalidOperationException();
+        _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
 
         PropertyChanged += HandlePageChange;
 

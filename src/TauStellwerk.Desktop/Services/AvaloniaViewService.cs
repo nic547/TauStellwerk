@@ -8,13 +8,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using TauStellwerk.Client.Model;
-using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.ViewModels;
 using TauStellwerk.Desktop.Views;
 
-namespace TauStellwerk.Desktop;
+namespace TauStellwerk.Desktop.Services;
 
-public class AvaloniaViewService : IViewService
+public class AvaloniaViewService : IAvaloniaViewService
 {
     public void ShowEngineControlView(EngineFull engine, object? source = null)
     {
@@ -51,12 +50,7 @@ public class AvaloniaViewService : IViewService
     {
         var vm = new EngineEditViewModel(engine);
         var window = new EngineEditWindow(vm);
-        var sourceWindow = TryGetAssociatedWindow(source);
-
-        if (sourceWindow is null)
-        {
-            throw new InvalidOperationException("Failed to determine the source window opening a new EngineEditView");
-        }
+        var sourceWindow = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to determine the source window opening a new EngineEditView");
 
         if (sourceWindow is EngineEditWindow)
         {

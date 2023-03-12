@@ -156,7 +156,7 @@ public class ConnectionHandlerTests
                 var buffer = new byte[1024];
                 while (_shouldRun)
                 {
-                    var readBytes = await stream.ReadAsync(buffer, 0, 1024, CancellationToken.None);
+                    var readBytes = await stream.ReadAsync(buffer.AsMemory(0, 1024), CancellationToken.None);
                     Data.AddRange(buffer[0..readBytes]);
                 }
             }
