@@ -22,7 +22,7 @@ public partial class TauHub
 
         if (turnoutResult.IsFailed)
         {
-           return turnoutResult.ToResult();
+            return turnoutResult.ToResult();
         }
 
         var turnout = turnoutResult.Value;

@@ -15,7 +15,7 @@ namespace TauStellwerk.Server.Hub;
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
-    public async Task<ResultDto<EngineFullDto>> AcquireEngine([FromServices]EngineDao engineDao, int id)
+    public async Task<ResultDto<EngineFullDto>> AcquireEngine([FromServices] EngineDao engineDao, int id)
     {
         var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 

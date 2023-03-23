@@ -23,12 +23,11 @@ public class MomentaryFunctionHandler
     public MomentaryFunctionHandler(CommandStationBase commandStation, int timeBetweenRuns)
     {
         _commandStation = commandStation;
-        var timeBetweenRuns1 = timeBetweenRuns;
 
         // Chosen so functions are turned off slighty early - doesn't seem to have an effect on the function, but it's certainly "ready" for the next activation.
-        _timeDecrement = Convert.ToInt32(timeBetweenRuns1 * 1.2);
+        _timeDecrement = Convert.ToInt32(timeBetweenRuns * 1.2);
 
-        _timer = new Timer(timeBetweenRuns1);
+        _timer = new Timer(timeBetweenRuns);
         _timer.Elapsed += async (_, _) =>
         {
             await HandleMomentaryFunctions();
@@ -42,7 +41,7 @@ public class MomentaryFunctionHandler
         _listLock.Wait();
         _activeFunctions.Add(new Entry(engine, function.Duration, function.Number));
         _listLock.Release();
-        _timer.Start();
+        _timer.Start(); // Starting a running timer would have no effect
     }
 
     private async Task HandleMomentaryFunctions()

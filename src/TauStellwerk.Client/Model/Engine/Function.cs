@@ -24,7 +24,7 @@ public class Function : ObservableObject
         _name = name;
     }
 
-    public Function(byte number, string name, int duration,  State state)
+    public Function(byte number, string name, int duration, State state)
         : this(number, name, duration)
     {
         State = state;

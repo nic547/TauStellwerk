@@ -51,7 +51,7 @@ public static class CommandStationFactory
 
         logger.LogError("Could not find an implementation for command station \"{systemSetting}\", continuing with default (NullCommandStation)", systemSetting);
         return new NullCommandStation();
-        }
+    }
 
     private static string GetHumanFriendlyName(Type commandSystemType)
     {

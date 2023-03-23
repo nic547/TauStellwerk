@@ -43,7 +43,7 @@ public class EngineService : IEngineService
 
         var systemResult = await _commandStation.TryAcquireEngine(engine);
 
-        if (systemResult == false)
+        if (systemResult.IsFailed)
         {
             _logger.LogWarning("{session} tried acquiring {engine}, but the command system returned false", session, engine);
             _manager.RemoveActiveEngine(engine.Id, session);

@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -42,7 +43,7 @@ public class EngineServiceTests
     public async Task CannotAcquireEngineTest()
     {
         var mock = GetAlwaysTrueMock();
-        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(false);
+        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(Result.Fail("Fail"));
         var (service, session) = PrepareEngineService(mock);
 
         var result = await service.AcquireEngine(session, _engine);
@@ -203,7 +204,7 @@ public class EngineServiceTests
     private static Mock<CommandStationBase> GetAlwaysTrueMock()
     {
         var mock = new Mock<CommandStationBase>();
-        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(true);
+        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(Result.Ok());
         mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>(), It.IsAny<EngineState>()).Result).Returns(true);
 
         return mock;
