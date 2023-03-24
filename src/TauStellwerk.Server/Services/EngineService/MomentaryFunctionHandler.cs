@@ -6,83 +6,65 @@
 using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Database.Model;
-using Timer = System.Timers.Timer;
+using TauStellwerk.Util;
 
 namespace TauStellwerk.Server.Services.EngineService;
 
 public class MomentaryFunctionHandler
 {
     private readonly CommandStationBase _commandStation;
-    private readonly int _timeDecrement;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
-    private readonly List<Entry> _activeFunctions = new();
+    private readonly List<ActiveFunction> _activeFunctions = new();
 
     private readonly SemaphoreSlim _listLock = new(1);
-    private readonly Timer _timer;
+    private readonly ITimer _timer;
 
-    public MomentaryFunctionHandler(CommandStationBase commandStation, int timeBetweenRuns)
+    public MomentaryFunctionHandler(CommandStationBase commandStation, int timeBetweenRuns, ITimer? timer = null, IDateTimeProvider? nowProvider = null)
     {
         _commandStation = commandStation;
 
-        // Chosen so functions are turned off slighty early - doesn't seem to have an effect on the function, but it's certainly "ready" for the next activation.
-        _timeDecrement = Convert.ToInt32(timeBetweenRuns * 1.2);
-
-        _timer = new Timer(timeBetweenRuns);
-        _timer.Elapsed += async (_, _) =>
+        _dateTimeProvider = nowProvider ?? new DateTimeProvider();
+        _timer = timer ?? new TimerWrapper(timeBetweenRuns);
+        _timer.Elapsed += async (_, signalTime) =>
         {
-            await HandleMomentaryFunctions();
+            await HandleMomentaryFunctions(signalTime.ToUniversalTime());
         };
-
-        _timer.Start();
     }
 
-    public void Add(Engine engine, DccFunction function)
+    public async Task Add(Engine engine, DccFunction function)
     {
-        _listLock.Wait();
-        _activeFunctions.Add(new Entry(engine, function.Duration, function.Number));
+        var now = _dateTimeProvider.GetUtcNow();
+        var expiry = now.AddMilliseconds(function.Duration * 0.8);
+
+        await _listLock.WaitAsync();
+        _activeFunctions.Add(new ActiveFunction(engine, function.Number, expiry));
+
         _listLock.Release();
-        _timer.Start(); // Starting a running timer would have no effect
+        _timer.Start(); // Starting a running timer has no effect => starting them multiple times is not a problem.
     }
 
-    private async Task HandleMomentaryFunctions()
+    private async Task HandleMomentaryFunctions(DateTime signalTime)
     {
-        _listLock.Wait();
+        await _listLock.WaitAsync();
 
-        for (int i = 0; i < _activeFunctions.Count; i++)
+        for (int i = _activeFunctions.Count - 1; i >= 0; i--)
         {
-            var entry = _activeFunctions[i];
-            if (entry.RemainingDuration < 0)
+            var activeFunction = _activeFunctions[i];
+            if (activeFunction.Expiry <= signalTime)
             {
-                await _commandStation.HandleEngineFunction(entry.Engine, entry.FunctionNumber, State.Off);
+                await _commandStation.HandleEngineFunction(activeFunction.Engine, activeFunction.FunctionNumber, State.Off);
                 _activeFunctions.RemoveAt(i);
             }
-            else
-            {
-                entry.RemainingDuration -= _timeDecrement;
-            }
         }
-
-        _listLock.Release();
 
         if (!_activeFunctions.Any())
         {
             _timer.Stop();
         }
+
+        _listLock.Release();
     }
 
-    private class Entry
-    {
-        public Entry(Engine engine, int duration, byte functionNumber)
-        {
-            Engine = engine;
-            RemainingDuration = duration;
-            FunctionNumber = functionNumber;
-        }
-
-        public Engine Engine { get; }
-
-        public int RemainingDuration { get; set; }
-
-        public byte FunctionNumber { get; }
-    }
+    private record ActiveFunction(Engine Engine, byte FunctionNumber, DateTime Expiry);
 }

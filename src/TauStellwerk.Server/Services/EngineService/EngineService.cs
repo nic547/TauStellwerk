@@ -120,7 +120,7 @@ public class EngineService : IEngineService
 
         if (currentFunction.Duration > 0 && state == State.On)
         {
-            _momentaryFunctionHandler.Add(activeEngine.Engine, currentFunction);
+            await _momentaryFunctionHandler.Add(activeEngine.Engine, currentFunction);
         }
         else
         {

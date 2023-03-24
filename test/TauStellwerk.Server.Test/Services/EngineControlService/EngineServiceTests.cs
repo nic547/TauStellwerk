@@ -16,7 +16,7 @@ using TauStellwerk.Server.Database.Model;
 using TauStellwerk.Server.Services;
 using TauStellwerk.Server.Services.EngineService;
 
-namespace TauStellwerk.Test.Services;
+namespace TauStellwerk.Test.Services.EngineControlService;
 
 public class EngineServiceTests
 {
@@ -25,7 +25,7 @@ public class EngineServiceTests
         Id = 1,
         Functions = new List<DccFunction>
         {
-            new(0, "Light", -1),
+            new(0, "Light", 0),
         },
     };
 

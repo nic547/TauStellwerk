@@ -3,9 +3,9 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Timers;
 using FluentAssertions;
 using NUnit.Framework;
+using TauStellwerk.Util.Timer;
 
 namespace TauStellwerk.Util.Tests;
 
@@ -64,24 +64,6 @@ public class CoalescingLimiterTests
         {
             MethodCalls.Add((param, DateTime.UtcNow));
             return Task.CompletedTask;
-        }
-    }
-
-    public class FakeTimer : ITimer
-    {
-        public event ElapsedEventHandler? Elapsed;
-
-        public double Interval { get; set; }
-
-        public bool AutoReset { get; set; }
-
-        public void Start()
-        {
-        }
-
-        public void Elapse()
-        {
-            Elapsed?.Invoke(this, (ElapsedEventArgs)new EventArgs());
         }
     }
 }

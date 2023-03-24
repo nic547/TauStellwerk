@@ -3,8 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Timers;
-
 namespace TauStellwerk.Util;
 
 /// <summary>
@@ -17,10 +15,16 @@ public class TimerWrapper : ITimer
     public TimerWrapper()
     {
         _timer = new();
-        _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args);
+        _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args.SignalTime);
     }
 
-    public event ElapsedEventHandler? Elapsed;
+    public TimerWrapper(int milliseconds)
+    {
+        _timer = new(milliseconds);
+        _timer.Elapsed += (sender, args) => Elapsed?.Invoke(sender, args.SignalTime);
+    }
+
+    public event EventHandler<DateTime>? Elapsed;
 
     public double Interval { get => _timer.Interval; set => _timer.Interval = value; }
 
@@ -29,5 +33,10 @@ public class TimerWrapper : ITimer
     public void Start()
     {
         _timer.Start();
+    }
+
+    public void Stop()
+    {
+        _timer.Stop();
     }
 }
