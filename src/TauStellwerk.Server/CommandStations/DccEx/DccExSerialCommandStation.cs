@@ -6,7 +6,7 @@
 using System.IO.Ports;
 using FluentResults;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Data.Model;
 
 namespace TauStellwerk.Server.CommandStations;
 

@@ -4,8 +4,9 @@
 // </copyright>
 
 using Microsoft.EntityFrameworkCore;
+using TauStellwerk.Server.Data;
+using TauStellwerk.Server.Data.Model;
 using TauStellwerk.Server.Database;
-using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Tools.CreateTestDb;
 

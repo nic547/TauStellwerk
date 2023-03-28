@@ -10,12 +10,11 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
-using TauStellwerk.Server.Dao;
+using TauStellwerk.Server.Data;
+using TauStellwerk.Server.Data.Dao;
 using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Hub;
-using TauStellwerk.Server.Images;
 using TauStellwerk.Server.Services;
-using TauStellwerk.Server.Services.EngineService;
 
 namespace TauStellwerk.Server;
 
@@ -56,27 +55,27 @@ public class Startup
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
         services.AddSingleton(p => CommandStationFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandStationBase>>()));
-        services.AddSingleton(p => new StatusService(
+        services.AddSingleton(p => new StatusControlService(
                 p.GetRequiredService<CommandStationBase>(),
                 p.GetRequiredService<IHubContext<TauHub>>(),
-                p.GetRequiredService<ILogger<StatusService>>(),
+                p.GetRequiredService<ILogger<StatusControlService>>(),
                 p.GetRequiredService<SessionService>(),
                 p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
-        services.AddSingleton<IEngineService>(p => new EngineService(
+        services.AddSingleton<IEngineControlService>(p => new EngineControlControlService(
             p.GetRequiredService<CommandStationBase>(),
             p.GetRequiredService<SessionService>(),
-            p.GetRequiredService<ILogger<EngineService>>(),
+            p.GetRequiredService<ILogger<EngineControlControlService>>(),
             p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
-        services.AddSingleton<TurnoutService>();
+        services.AddSingleton<TurnoutControlService>();
 
         services.AddScoped(p => new EngineDao(p.GetRequiredService<StwDbContext>(), p.GetRequiredService<ILogger<EngineDao>>()));
         services.AddScoped<ITurnoutDao>(p => new TurnoutDao(p.GetRequiredService<StwDbContext>()));
 
-        services.AddScoped(p => new ImageSystem(
+        services.AddScoped(p => new ImageService(
             p.GetRequiredService<StwDbContext>(),
-            p.GetRequiredService<ILogger<ImageSystem>>(),
+            p.GetRequiredService<ILogger<ImageService>>(),
             Options.OriginalImageDirectory,
             Options.GeneratedImageDirectory));
     }

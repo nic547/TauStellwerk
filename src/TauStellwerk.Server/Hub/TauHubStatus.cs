@@ -12,12 +12,12 @@ public partial class TauHub
 {
     public SystemStatus GetStatus()
     {
-        return _statusService.CheckStatus();
+        return _statusControlService.CheckStatus();
     }
 
     public async Task SetStatus(SystemStatus systemStatus)
     {
-        await _statusService.HandleStatusCommand(systemStatus.State, systemStatus.LastActionUsername);
+        await _statusControlService.HandleStatusCommand(systemStatus.State, systemStatus.LastActionUsername);
         await Clients.Others.SendAsync("HandleStatusChange", systemStatus);
     }
 }

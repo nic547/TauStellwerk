@@ -4,29 +4,28 @@
 // </copyright>
 
 using TauStellwerk.Server.Services;
-using TauStellwerk.Server.Services.EngineService;
 
 namespace TauStellwerk.Server.Hub;
 
 public partial class TauHub : Microsoft.AspNetCore.SignalR.Hub
 {
     private readonly SessionService _sessionService;
-    private readonly StatusService _statusService;
-    private readonly IEngineService _engineService;
-    private readonly TurnoutService _turnoutService;
+    private readonly StatusControlService _statusControlService;
+    private readonly IEngineControlService _engineControlService;
+    private readonly TurnoutControlService _turnoutControlService;
     private readonly ILogger<TauHub> _logger;
 
     public TauHub(
         SessionService sessionService,
-        StatusService statusService,
-        IEngineService engineService,
-        TurnoutService turnoutService,
+        StatusControlService statusControlService,
+        IEngineControlService engineControlService,
+        TurnoutControlService turnoutControlService,
         ILogger<TauHub> logger)
     {
         _sessionService = sessionService;
-        _statusService = statusService;
-        _engineService = engineService;
-        _turnoutService = turnoutService;
+        _statusControlService = statusControlService;
+        _engineControlService = engineControlService;
+        _turnoutControlService = turnoutControlService;
         _logger = logger;
     }
 }

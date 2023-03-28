@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Dao;
-using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Data.Dao;
+using TauStellwerk.Server.Data.Model;
 
 namespace TauStellwerk.Test.Database;
 public class EngineDaoTests : ContextTestBase

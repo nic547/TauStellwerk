@@ -12,9 +12,8 @@ using NUnit.Framework;
 using TauStellwerk.Base;
 using TauStellwerk.Server;
 using TauStellwerk.Server.CommandStations;
-using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Data.Model;
 using TauStellwerk.Server.Services;
-using TauStellwerk.Server.Services.EngineService;
 
 namespace TauStellwerk.Test.Services.EngineControlService;
 
@@ -182,7 +181,7 @@ public class EngineServiceTests
         functionResult.Should().BeFailure();
     }
 
-    private static (EngineService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
+    private static (EngineControlControlService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
     {
         var logger = new Mock<ILogger<SessionService>>();
 
@@ -190,15 +189,15 @@ public class EngineServiceTests
         var session = new Session("ConnectionId", "TestUser");
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
-        var loggerMock = new Mock<ILogger<EngineService>>();
+        var loggerMock = new Mock<ILogger<EngineControlControlService>>();
 
         TauStellwerkOptions options = new()
         {
             ResetEnginesWithoutState = true,
         };
 
-        EngineService engineService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
-        return (engineService, session);
+        EngineControlControlService engineControlControlService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
+        return (engineControlControlService, session);
     }
 
     private static Mock<CommandStationBase> GetAlwaysTrueMock()

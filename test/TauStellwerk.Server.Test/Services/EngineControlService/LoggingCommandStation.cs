@@ -5,7 +5,7 @@
 
 using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
-using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Data.Model;
 
 namespace TauStellwerk.Test.Services.EngineControlService;
 

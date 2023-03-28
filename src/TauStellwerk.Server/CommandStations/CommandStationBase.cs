@@ -7,8 +7,9 @@
 
 using FluentResults;
 using TauStellwerk.Base;
+using TauStellwerk.Server.Data;
+using TauStellwerk.Server.Data.Model;
 using TauStellwerk.Server.Database;
-using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.CommandStations;
 

@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Server.CommandStations;
+using TauStellwerk.Server.Data;
 using TauStellwerk.Server.Database;
-using TauStellwerk.Server.Images;
+using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Server;
 
@@ -97,9 +98,9 @@ public static class Program
         var services = scope.ServiceProvider;
 
         var options = services.GetRequiredService<IOptions<TauStellwerkOptions>>().Value;
-        var logger = services.GetRequiredService<ILogger<ImageSystem>>();
+        var logger = services.GetRequiredService<ILogger<ImageService>>();
 
-        var system = new ImageSystem(
+        var system = new ImageService(
             services.GetRequiredService<StwDbContext>(),
             logger,
             options.OriginalImageDirectory,
