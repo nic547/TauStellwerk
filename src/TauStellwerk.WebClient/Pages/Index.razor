@@ -2,9 +2,9 @@
 @using TauStellwerk.Client.Services
 @using TauStellwerk.Client.Model
 
-@inject ModalManager _modalManager;
-@inject ISettingsService _settingsService;
-@inject IJSRuntime _jsRuntime;
+@inject ModalManager ModalManager;
+@inject ISettingsService SettingsService;
+@inject IJSRuntime JsRuntime;
 
 <StopButton />
 <ControlContainer />
@@ -15,8 +15,8 @@
 <MessageBoxModal/>
 
 <footer>
-    <button class="is-pulled-left button-secondary" id="UsernameLabel" @onclick="() => _modalManager.IsSettingsModalVisible = true" >User: @_settings?.Username</button>
-    <button class="is-pulled-right button-secondary" @onclick="() => _modalManager.IsSettingsModalVisible = true" >Settings</button>
+    <button class="is-pulled-left button-secondary" id="UsernameLabel" @onclick="() => ModalManager.IsSettingsModalVisible = true" >User: @_settings?.Username</button>
+    <button class="is-pulled-right button-secondary" @onclick="() => ModalManager.IsSettingsModalVisible = true" >Settings</button>
 </footer>
 
 @code
@@ -27,28 +27,28 @@
     {
         await base.OnInitializedAsync();
 
-        _settingsService.SettingsChanged +=async settings =>
+        SettingsService.SettingsChanged +=async settings =>
         {
             _settings = settings;
-            await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
+            await JsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
             await SetWakeLock(_settings.WakeLock);
 
             StateHasChanged();
         };
 
-        _settings = await _settingsService.GetSettings();
-        await _jsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
+        _settings = await SettingsService.GetSettings();
+        await JsRuntime.InvokeVoidAsync("setTheme", _settings.Theme);
     }
 
     private async Task SetWakeLock(bool setWakeLock)
     {
         if (setWakeLock)
         {
-            await _jsRuntime.InvokeVoidAsync("enableWakeLock");
+            await JsRuntime.InvokeVoidAsync("enableWakeLock");
         }
         else
         {
-            await _jsRuntime.InvokeVoidAsync("disableWakeLock");
+            await JsRuntime.InvokeVoidAsync("disableWakeLock");
         }
     }
 }

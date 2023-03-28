@@ -31,12 +31,12 @@ public partial class SettingsViewModel : ViewModelBase
 
     public event HandleClosingRequested? ClosingRequested;
 
+    public static List<string> AvailableLanguages => Languages.LanguageNames;
+
     public static string ApplicationInformation =>
         $"TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version})";
 
     public string[] AvailableThemes { get; } = { ThemeVariant.Light.ToString(), ThemeVariant.Dark.ToString() };
-
-    public List<string> AvailableLanguages => Languages.LanguageNames;
 
     [RelayCommand]
     public async Task Save()

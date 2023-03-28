@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Dao;
+using TauStellwerk.Server.Data.Dao;
 
 namespace TauStellwerk.Server.Hub;
 
@@ -22,11 +22,11 @@ public partial class TauHub
 
         if (turnoutResult.IsFailed)
         {
-           return turnoutResult.ToResult();
+            return turnoutResult.ToResult();
         }
 
         var turnout = turnoutResult.Value;
-        var result = await _turnoutService.SetState(turnout, state);
+        var result = await _turnoutControlService.SetState(turnout, state);
 
         if (result.IsSuccess && turnout.Address is not 0)
         {
@@ -40,7 +40,7 @@ public partial class TauHub
     public async Task<IList<TurnoutDto>> GetTurnouts([FromServices] ITurnoutDao turnoutDao, int page)
     {
         var turnouts = await turnoutDao.GetTurnouts(page);
-        return _turnoutService.GetTurnoutsWithState(turnouts).Select(t => t.ToDto()).ToList();
+        return _turnoutControlService.GetTurnoutsWithState(turnouts).Select(t => t.ToDto()).ToList();
     }
 
     public async Task<ResultDto> AddOrUpdateTurnout([FromServices] ITurnoutDao turnoutDao, TurnoutDto dto)

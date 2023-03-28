@@ -11,7 +11,7 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class EngineEditWindow : Window
+public partial class EngineEditWindow : Window
 {
     public EngineEditWindow(EngineEditViewModel vm)
     {

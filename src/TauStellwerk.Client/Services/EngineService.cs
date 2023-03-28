@@ -154,8 +154,10 @@ public class EngineService
         HttpClient client = await _service.TryGetHttpClient() ?? throw new InvalidOperationException();
 
         ByteArrayContent arrayContent = new(stream.ToArray());
-        MultipartFormDataContent content = new();
-        content.Add(arrayContent, "image", filename);
+        MultipartFormDataContent content = new()
+        {
+            { arrayContent, "image", filename },
+        };
 
         await client.PostAsync($"/upload/{engine.Id}", content);
     }

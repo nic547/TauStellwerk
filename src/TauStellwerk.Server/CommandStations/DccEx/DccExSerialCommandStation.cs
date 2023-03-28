@@ -6,13 +6,12 @@
 using System.IO.Ports;
 using FluentResults;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Database.Model;
+using TauStellwerk.Server.Data.Model;
 
 namespace TauStellwerk.Server.CommandStations;
 
 public class DccExSerialCommandStation : CommandStationBase
 {
-    private readonly DccExSerialOptions _options;
     private readonly ILogger<CommandStationBase> _logger;
     private readonly SerialPort _serialPort;
 
@@ -21,7 +20,6 @@ public class DccExSerialCommandStation : CommandStationBase
     public DccExSerialCommandStation(DccExSerialOptions options, ILogger<CommandStationBase> logger)
         : base()
     {
-        _options = options;
         _logger = logger;
         _logger.LogWarning("This CommandStation is work-in-progress and experimental. Things will break!");
 
@@ -29,11 +27,11 @@ public class DccExSerialCommandStation : CommandStationBase
         {
             PortName = options.SerialPort ?? throw new FormatException("No SerialPort for DccExSerial was defined."),
             BaudRate = options.BaudRate,
+            Parity = Parity.None,
+            DataBits = 8,
+            StopBits = StopBits.One,
+            Handshake = Handshake.None,
         };
-        _serialPort.Parity = Parity.None;
-        _serialPort.DataBits = 8;
-        _serialPort.StopBits = StopBits.One;
-        _serialPort.Handshake = Handshake.None;
 
         _serialPort.Open();
 

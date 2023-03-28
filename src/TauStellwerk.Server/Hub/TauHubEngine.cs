@@ -8,44 +8,44 @@ using FluentResults;
 using FluentResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Dao;
+using TauStellwerk.Server.Data.Dao;
 
 namespace TauStellwerk.Server.Hub;
 
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Members are called via SignalR.")]
 public partial class TauHub
 {
-    public async Task<ResultDto<EngineFullDto>> AcquireEngine([FromServices]EngineDao engineDao, int id)
+    public async Task<ResultDto<EngineFullDto>> AcquireEngine([FromServices] EngineDao engineDao, int id)
     {
         var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
         return await sessionResult
             .Bind(_ => engineDao.GetEngine(id))
-            .Bind(engine => _engineService.AcquireEngine(sessionResult.Value, engine));
+            .Bind(engine => _engineControlService.AcquireEngine(sessionResult.Value, engine));
     }
 
     public async Task<ResultDto> ReleaseEngine(int id)
     {
         return await _sessionService.TryGetSession(Context.ConnectionId)
-            .Bind(session => _engineService.ReleaseEngine(session, id));
+            .Bind(session => _engineControlService.ReleaseEngine(session, id));
     }
 
     public async Task<ResultDto> SetEngineSpeed(int id, int speed, Direction? direction)
     {
         return await _sessionService.TryGetSession(Context.ConnectionId)
-            .Bind(session => _engineService.SetEngineSpeed(session, id, speed, direction));
+            .Bind(session => _engineControlService.SetEngineSpeed(session, id, speed, direction));
     }
 
     public async Task<ResultDto> SetEngineEStop(int id)
     {
         return await _sessionService.TryGetSession(Context.ConnectionId)
-            .Bind(session => _engineService.SetEngineEStop(session, id));
+            .Bind(session => _engineControlService.SetEngineEStop(session, id));
     }
 
     public async Task<ResultDto> SetEngineFunction(int id, int number, State state)
     {
         return await _sessionService.TryGetSession(Context.ConnectionId)
-            .Bind(session => _engineService.SetEngineFunction(session, id, number, state));
+            .Bind(session => _engineControlService.SetEngineFunction(session, id, number, state));
     }
 
     public async Task<Result<EngineFullDto>> GetEngine([FromServices] EngineDao engineDao, int id)
@@ -71,7 +71,7 @@ public partial class TauHub
         if (engine.Id is not 0)
         {
             return await _sessionService.TryGetSession(Context.ConnectionId)
-                .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, engine.Id))
+                .Bind(session => _engineControlService.CheckIsEngineAcquiredBySession(session, engine.Id))
                 .Bind(() => engineDao.UpdateOrAdd(engine));
         }
 
@@ -83,8 +83,8 @@ public partial class TauHub
         var sessionResult = _sessionService.TryGetSession(Context.ConnectionId);
 
         return await sessionResult
-            .Bind(session => _engineService.CheckIsEngineAcquiredBySession(session, id))
+            .Bind(session => _engineControlService.CheckIsEngineAcquiredBySession(session, id))
             .Bind(() => engineDao.Delete(id))
-            .Bind(() => _engineService.ReleaseEngine(sessionResult.Value, id));
+            .Bind(() => _engineControlService.ReleaseEngine(sessionResult.Value, id));
     }
 }

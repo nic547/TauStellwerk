@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Server.CommandStations;
+using TauStellwerk.Server.Data;
 using TauStellwerk.Server.Database;
-using TauStellwerk.Server.Images;
+using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Server;
 
@@ -47,7 +48,7 @@ public static class Program
         var services = scope.ServiceProvider;
         var logger = services.GetRequiredService<ILogger<Startup>>(); // Wrong class - but Program doesn't seem to work.
 
-        logger.LogInformation($"--- TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version}) ---");
+        logger.LogInformation("--- TauStellwerk {AssemblyInformationalVersion} (.NET {Version}) ---", ThisAssembly.AssemblyInformationalVersion, Environment.Version);
 
         return host;
     }
@@ -97,9 +98,9 @@ public static class Program
         var services = scope.ServiceProvider;
 
         var options = services.GetRequiredService<IOptions<TauStellwerkOptions>>().Value;
-        var logger = services.GetRequiredService<ILogger<ImageSystem>>();
+        var logger = services.GetRequiredService<ILogger<ImageService>>();
 
-        var system = new ImageSystem(
+        var system = new ImageService(
             services.GetRequiredService<StwDbContext>(),
             logger,
             options.OriginalImageDirectory,

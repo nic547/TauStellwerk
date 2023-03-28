@@ -7,8 +7,9 @@
 
 using FluentResults;
 using TauStellwerk.Base;
+using TauStellwerk.Server.Data;
+using TauStellwerk.Server.Data.Model;
 using TauStellwerk.Server.Database;
-using TauStellwerk.Server.Database.Model;
 
 namespace TauStellwerk.Server.CommandStations;
 
@@ -46,9 +47,9 @@ public abstract class CommandStationBase
     /// </summary>
     /// <param name="engine">The engine to acquire.</param>
     /// <returns>A bool indicating whether the operation was successful.</returns>
-    public virtual Task<bool> TryAcquireEngine(Engine engine)
+    public virtual Task<Result> TryAcquireEngine(Engine engine)
     {
-        return Task.FromResult(true);
+        return Task.FromResult(Result.Ok());
     }
 
     /// <summary>

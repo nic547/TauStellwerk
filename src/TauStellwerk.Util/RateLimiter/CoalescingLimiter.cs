@@ -3,8 +3,6 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Timers;
-
 namespace TauStellwerk.Util;
 
 public class CoalescingLimiter<T>
@@ -46,7 +44,7 @@ public class CoalescingLimiter<T>
         }
     }
 
-    private async void HandleTimer(object? source, ElapsedEventArgs args)
+    private async void HandleTimer(object? source, DateTime dateTime)
     {
         await _semaphore.WaitAsync();
         if (_waitingTasks.Any())

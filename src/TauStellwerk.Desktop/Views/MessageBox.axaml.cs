@@ -9,7 +9,7 @@ using Avalonia.Markup.Xaml;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class MessageBox : Window
+public partial class MessageBox : Window
 {
     public MessageBox()
     {

@@ -131,13 +131,7 @@ public class EngineImageControl : Image
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
         };
 
-        var settingService = Locator.Current.GetService<ISettingsService>();
-
-        if (settingService is null)
-        {
-            throw new InvalidOperationException("Settings service is not available.");
-        }
-
+        var settingService = Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException("Settings service is not available.");
         var settings = await settingService.GetSettings();
 
         _httpClient = new HttpClient(handler)

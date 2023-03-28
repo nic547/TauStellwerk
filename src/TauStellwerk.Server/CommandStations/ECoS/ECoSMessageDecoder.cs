@@ -12,10 +12,10 @@ namespace TauStellwerk.Server.CommandStations;
 /// <summary>
 /// Provides methods that decode a message from the ECoS into something "more usable".
 /// </summary>
-public static class ECoSMessageDecoder
+public static partial class ECoSMessageDecoder
 {
-    private static readonly Regex _funcDescRegex = new("(?:\\d+) funcdesc\\[(?<functionId>\\d+),(?<functionDesc>\\d+),?(?<momentary>.*)\\]", RegexOptions.Compiled);
-    private static readonly Regex _engineListRegex = new("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]", RegexOptions.Compiled);
+    private static readonly Regex _funcDescRegex = FuncDescRegex();
+    private static readonly Regex _engineListRegex = EngineListRegex();
 
     public static IEnumerable<(byte Number, short Type, bool IsMomentary)> DecodeFuncdescMessage(string message)
     {
@@ -52,4 +52,10 @@ public static class ECoSMessageDecoder
             }
         }
     }
+
+    [GeneratedRegex("(?:\\d+) funcdesc\\[(?<functionId>\\d+),(?<functionDesc>\\d+),?(?<momentary>.*)\\]", RegexOptions.Compiled)]
+    private static partial Regex FuncDescRegex();
+
+    [GeneratedRegex("(?<Id>\\d*) name\\[\"(?<Name>.*?)\"\\] protocol\\[(?<Protocol>.*?)\\]", RegexOptions.Compiled)]
+    private static partial Regex EngineListRegex();
 }

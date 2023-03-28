@@ -6,6 +6,7 @@
 using Avalonia;
 using Splat;
 using TauStellwerk.Client.Services;
+using TauStellwerk.Desktop.Services;
 
 namespace TauStellwerk.Desktop;
 
@@ -22,7 +23,7 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateClientStatusService(), typeof(StatusService));
         AvaloniaViewService avaloniaViewService = new();
         Locator.CurrentMutable.RegisterConstant<IViewService>(avaloniaViewService);
-        Locator.CurrentMutable.RegisterConstant(avaloniaViewService);
+        Locator.CurrentMutable.RegisterConstant<IAvaloniaViewService>(avaloniaViewService);
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateTurnoutService());
 
         BuildAvaloniaApp()
