@@ -12,7 +12,7 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class EngineSelectionWindow : DisposingWindow
+public partial class EngineSelectionWindow : DisposingWindow
 {
     public static readonly StyledProperty<int> ColumnsProperty = AvaloniaProperty.Register<EngineSelectionWindow, int>(nameof(Columns));
 

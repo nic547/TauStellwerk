@@ -11,7 +11,7 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class SettingsWindow : Window
+public partial class SettingsWindow : Window
 {
     public SettingsWindow(SettingsViewModel vm)
     {

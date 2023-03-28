@@ -11,7 +11,7 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public class TurnoutsWindow : DisposingWindow
+public partial class TurnoutsWindow : DisposingWindow
 {
     public TurnoutsWindow(TurnoutsViewModel vm)
     {
