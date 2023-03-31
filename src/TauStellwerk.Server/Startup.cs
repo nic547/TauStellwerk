@@ -12,7 +12,6 @@ using TauStellwerk.Base;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Data;
 using TauStellwerk.Server.Data.Dao;
-using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Hub;
 using TauStellwerk.Server.Services;
 
@@ -62,10 +61,10 @@ public class Startup
                 p.GetRequiredService<SessionService>(),
                 p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
-        services.AddSingleton<IEngineControlService>(p => new EngineControlControlService(
+        services.AddSingleton<IEngineControlService>(p => new EngineControlService(
             p.GetRequiredService<CommandStationBase>(),
             p.GetRequiredService<SessionService>(),
-            p.GetRequiredService<ILogger<EngineControlControlService>>(),
+            p.GetRequiredService<ILogger<EngineControlService>>(),
             p.GetRequiredService<IOptions<TauStellwerkOptions>>()));
 
         services.AddSingleton<TurnoutControlService>();

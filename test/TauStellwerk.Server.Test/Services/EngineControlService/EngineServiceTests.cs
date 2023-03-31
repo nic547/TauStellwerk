@@ -181,7 +181,7 @@ public class EngineServiceTests
         functionResult.Should().BeFailure();
     }
 
-    private static (EngineControlControlService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
+    private static (Server.Services.EngineControlService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
     {
         var logger = new Mock<ILogger<SessionService>>();
 
@@ -189,14 +189,14 @@ public class EngineServiceTests
         var session = new Session("ConnectionId", "TestUser");
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
-        var loggerMock = new Mock<ILogger<EngineControlControlService>>();
+        var loggerMock = new Mock<ILogger<Server.Services.EngineControlService>>();
 
         TauStellwerkOptions options = new()
         {
             ResetEnginesWithoutState = true,
         };
 
-        EngineControlControlService engineControlControlService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
+        Server.Services.EngineControlService engineControlControlService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
         return (engineControlControlService, session);
     }
 
