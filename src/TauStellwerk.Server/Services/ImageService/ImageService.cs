@@ -77,7 +77,37 @@ public class ImageService
         await CreateDownScaledImages();
     }
 
+    public async Task CreateDownScaledImages()
+    {
+        var totalStopwatch = new Stopwatch();
+        totalStopwatch.Start();
+
+        var engines = await _context.Engines.ToListAsync();
+
+        foreach (var engine in engines)
+        {
+            await CreateDownscaledImageInternal(engine);
+        }
+
+        totalStopwatch.Stop();
+        var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
+        _logger.LogInformation("Updated images in {elapsedSeconds} seconds", elapsedSeconds);
+
+        // Ensure that NetVips caches are cleared, GC has run, etc. after use, because we don't want NetVips to hog memory when not actually used.
+        NetVips.NetVips.Shutdown();
+        GC.Collect();
+    }
+
     public async Task CreateDownscaledImage(Engine engine)
+    {
+        await CreateDownscaledImageInternal(engine);
+
+        // Ensure that NetVips caches are cleared, etc.
+        NetVips.NetVips.Shutdown();
+        GC.Collect();
+    }
+
+    private async Task CreateDownscaledImageInternal(Engine engine)
     {
         var engineStopwatch = new Stopwatch();
         engineStopwatch.Start();
@@ -106,9 +136,12 @@ public class ImageService
 
         ConcurrentBag<int> generatedPixelSizes = new();
 
+        using var image = Image.NewFromFile(existingSourceImage);
+
         Parallel.ForEach(_imageOptions, options =>
         {
-            var width = DownscaleImage(existingSourceImage, engine.Id, options);
+            // ReSharper disable once AccessToDisposedClosure - DownscaleImage shouldn't access the after the outer scope has disposed the image.
+            var width = DownscaleImage(image, engine.Id, options);
             generatedPixelSizes.Add(width);
         });
 
@@ -122,27 +155,10 @@ public class ImageService
         _logger.LogInformation("Updated images for {engine} in {elapsedSeconds}s", engine, elapsedSeconds);
     }
 
-    private async Task CreateDownScaledImages()
+    private int DownscaleImage(Image image, int id, ImageOptions options)
     {
-        var totalStopwatch = new Stopwatch();
-        totalStopwatch.Start();
-
-        var engines = await _context.Engines.ToListAsync();
-
-        foreach (var engine in engines)
-        {
-            await CreateDownscaledImage(engine);
-        }
-
-        totalStopwatch.Stop();
-        var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation("Updated images in {elapsedSeconds} seconds", elapsedSeconds);
-    }
-
-    private int DownscaleImage(string inputFilePath, int id, ImageOptions options)
-    {
-        using var image = Image.NewFromFile(inputFilePath);
-        using var smallerImage = image.Resize(options.Scale);
+        var width = (int)Math.Round(image.Width * options.Scale);
+        using var smallerImage = image.ThumbnailImage(width);
 
         var outputFileName = options.GetFilename(id);
         var outputFilePath = $"{_generatedPath}/{outputFileName}";
