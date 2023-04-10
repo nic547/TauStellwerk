@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Data;
-using TauStellwerk.Server.Database;
 using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Server;

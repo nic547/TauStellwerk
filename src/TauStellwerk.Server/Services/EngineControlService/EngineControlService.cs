@@ -1,4 +1,4 @@
-﻿// <copyright file="EngineControlControlService.cs" company="Dominic Ritz">
+﻿// <copyright file="EngineControlService.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -11,7 +11,7 @@ using TauStellwerk.Server.Data.Model;
 
 namespace TauStellwerk.Server.Services;
 
-public class EngineControlControlService : IEngineControlService
+public class EngineControlService : IEngineControlService
 {
     private const int CheckMomentaryFunctionsEveryMilliseconds = 100;
 
@@ -22,7 +22,7 @@ public class EngineControlControlService : IEngineControlService
     private readonly EngineStateManager _stateManager;
     private readonly MomentaryFunctionHandler _momentaryFunctionHandler;
 
-    public EngineControlControlService(CommandStationBase commandStation, SessionService sessionService, ILogger<EngineControlControlService> logger, IOptions<TauStellwerkOptions> options)
+    public EngineControlService(CommandStationBase commandStation, SessionService sessionService, ILogger<EngineControlService> logger, IOptions<TauStellwerkOptions> options)
     {
         _commandStation = commandStation;
         _logger = logger;

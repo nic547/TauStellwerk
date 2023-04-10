@@ -16,9 +16,9 @@ public class EngineStateManager
 
     private readonly ConcurrentDictionary<int, EngineState> _inactiveEngineStates = new();
 
-    private readonly ILogger<EngineControlControlService> _logger;
+    private readonly ILogger<EngineControlService> _logger;
 
-    public EngineStateManager(ILogger<EngineControlControlService> logger)
+    public EngineStateManager(ILogger<EngineControlService> logger)
     {
         _logger = logger;
     }
