@@ -14,6 +14,12 @@ function getItem(key){
     return localStorage.getItem(key);
 }
 
+function isDarkModePreferred(){
+    let value = window.matchMedia("(prefers-color-scheme:dark)").matches;
+    console.log(value);
+    return value;
+}
+
 function postImageFormData(url) {
     const form = document.getElementById("imageForm");
     const imageInput = form.elements[0];

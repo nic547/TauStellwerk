@@ -26,6 +26,7 @@ public class BlazorSettingsService : ISettingsService
     {
         _baseAddress = baseAddress;
         _runtime = runtime;
+
         _settings = new MutableSettings
         {
             ServerAddress = baseAddress,
@@ -80,10 +81,17 @@ public class BlazorSettingsService : ISettingsService
                 _immutableSettings = _settings.GetImmutableCopy();
                 SettingsChanged?.Invoke(_immutableSettings);
             }
+            else
+            {
+                var prefersDarkMode = await _runtime.InvokeAsync<bool>("isDarkModePreferred");
+                _settings.Theme = prefersDarkMode ? "dark" : "light";
+                _immutableSettings = _settings.GetImmutableCopy();
+                SettingsChanged?.Invoke(_immutableSettings);
+            }
         }
         catch (Exception)
         {
-            // ignore exception, file probably just doesn't exists yet.
+            // ignore exception, key-value pair probably just doesn't exists yet.
         }
 
         _hasLoadBeenAttempted = true;
@@ -91,7 +99,12 @@ public class BlazorSettingsService : ISettingsService
 
     private async Task<MutableSettings?> TryLoadSettings()
     {
-        var json = await _runtime.InvokeAsync<string>("getItem", SettingsKey);
+        var json = await _runtime.InvokeAsync<string?>("getItem", SettingsKey);
+        if (json is null)
+        {
+            return null;
+        }
+
         return JsonSerializer.Deserialize(json, Client.SettingsJsonContext.Default.MutableSettings);
     }
 
