@@ -15,7 +15,7 @@ public static class OptimalStringAlignment
     /// <returns>Distance between the two strings.</returns>
     public static int Calculate(string s1, string s2)
     {
-        /* A basic implementation using the Wagner–Fischer algorithm.
+        /* A basic implementation using the Wagnerâ€“Fischer algorithm.
         Further optimization is possible, but I don't care about it yet. */
 
         var length1 = s1.Length;

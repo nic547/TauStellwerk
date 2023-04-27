@@ -1,4 +1,4 @@
-﻿.modal-content {
+.modal-content {
     margin-left: max(4px, calc((100vw) - 400px) / 2);
     margin-right: max(4px, calc((100vw) - 400px) / 2);
 }

@@ -1,4 +1,4 @@
-﻿:root {
+:root {
 	--engine-controller-width: calc((100vw - 2 * 16px) / 1); /* In the engine controller margins get collapsed */
 	--engine-selection-width: calc((100vw - 60px - 1 * 16px) / 1); /* But that doesn't happen in the engine selection */
 }

@@ -1,4 +1,4 @@
-﻿// This contains various functions to access js specific functionality from C#/WASM
+// This contains various functions to access js specific functionality from C#/WASM
 // noinspection JSUnusedGlobalSymbols
 
 function setTheme(theme) {

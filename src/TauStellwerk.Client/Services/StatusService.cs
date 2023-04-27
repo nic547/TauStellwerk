@@ -10,9 +10,9 @@ namespace TauStellwerk.Client.Services;
 
 public class StatusService
 {
-    private readonly ConnectionService _service;
+    private readonly IConnectionService _service;
 
-    public StatusService(ConnectionService connectionService)
+    public StatusService(IConnectionService connectionService)
     {
         _service = connectionService;
         _service.ConnectionChanged += async (_, _) => await Init();
