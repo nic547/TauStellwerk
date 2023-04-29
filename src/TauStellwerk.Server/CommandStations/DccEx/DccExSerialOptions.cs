@@ -10,4 +10,6 @@ public class DccExSerialOptions
     public string? SerialPort { get; set; }
 
     public int BaudRate { get; set; } = 115200;
+
+    public bool UseJoinMode { get; set; }
 }

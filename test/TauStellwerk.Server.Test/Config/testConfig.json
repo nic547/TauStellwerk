@@ -2,7 +2,8 @@
   "AllowedHosts": "*",
   "CommandStation": {
     "Type": "DccExSerial",
-    "SerialPort": "/dev/ttyACM0"
+    "SerialPort": "/dev/ttyACM0",
+    "UseJoinMode": true
   },
   "ResetEnginesWithoutState": false,
   "StopOnLastUserDisconnect": false,
