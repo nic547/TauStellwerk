@@ -39,5 +39,6 @@ public class ConfigTests
 
         options.BaudRate.Should().Be(115200);
         options.SerialPort.Should().Be("/dev/ttyACM0");
+        options.UseJoinMode.Should().BeTrue();
     }
 }
