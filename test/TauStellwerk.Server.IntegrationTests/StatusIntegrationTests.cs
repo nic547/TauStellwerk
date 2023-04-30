@@ -24,8 +24,7 @@ public class StatusIntegrationTests : IntegrationTestBase
 
         await service2.SetStatus(SystemStatus(State.On, "Roobärt"));
 
-        // Wait for SignalR to actually send the event to the other connections.
-        await Task.Delay(100);
+        await AwaitNewState(() => lastStatusNotification?.State, State.On);
 
         lastStatusNotification!.State.Should().Be(State.On);
         lastStatusNotification.LastActionUsername.Should().Be("Roobärt");
@@ -34,8 +33,7 @@ public class StatusIntegrationTests : IntegrationTestBase
 
         await service2.SetStatus(SystemStatus(State.Off, "You"));
 
-        // Wait for SignalR to actually send the event to the other connections.
-        await Task.Delay(100);
+        await AwaitNewState(() => lastStatusNotification?.State, State.Off);
 
         lastStatusNotification!.State.Should().Be(State.Off);
         lastStatusNotification.LastActionUsername.Should().Be("You");
@@ -45,11 +43,27 @@ public class StatusIntegrationTests : IntegrationTestBase
 
     private static SystemStatus SystemStatus(State state, string username)
     {
-        return new SystemStatus()
+        return new SystemStatus
         {
             State = state,
             LastActionUsername = username,
         };
+    }
+
+    private static async Task AwaitNewState(Func<State?> getter, State expected)
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            var currentValue = getter.Invoke();
+            if (currentValue == expected)
+            {
+                return;
+            }
+
+            await Task.Delay(25);
+        }
+
+        throw new InvalidOperationException();
     }
 
     private StatusService CreateStatusService()
