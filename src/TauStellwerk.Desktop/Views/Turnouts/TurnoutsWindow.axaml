@@ -11,7 +11,7 @@
         <StackPanel DockPanel.Dock="Bottom">
             <Button Command="{Binding CreateTurnoutCommand}" Content="Create" />
         </StackPanel>
-        <ListBox Items="{Binding Turnouts}" DataContext="{Binding .}" HorizontalAlignment="Stretch">
+        <ListBox ItemsSource="{Binding Turnouts}" DataContext="{Binding .}" HorizontalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

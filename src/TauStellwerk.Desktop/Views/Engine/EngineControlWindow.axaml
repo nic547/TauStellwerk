@@ -42,7 +42,7 @@
                Content="{Binding Throttle}"/>
         <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" Margin="2">
             <StackPanel>
-                <ItemsControl Items="{Binding Engine.Functions, FallbackValue={}}">
+                <ItemsControl ItemsSource="{Binding Engine.Functions, FallbackValue={}}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <ToggleButton Content="{Binding }"

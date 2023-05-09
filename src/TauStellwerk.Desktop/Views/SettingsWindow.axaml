@@ -28,12 +28,12 @@
         </StackPanel>
         <StackPanel>
             <Label>Theme</Label>
-            <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" Items="{Binding AvailableThemes}">
+            <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" ItemsSource="{Binding AvailableThemes}">
             </ComboBox>
         </StackPanel>
 		<StackPanel ToolTip.Tip="{x:Static r:Resources.LanguageSettingDescription}">
             <Label Content="{x:Static r:Resources.Language}"/>
-            <ComboBox SelectedItem="{Binding Settings.Language}" Items="{Binding AvailableLanguages}"/>
+            <ComboBox SelectedItem="{Binding Settings.Language}" ItemsSource="{Binding AvailableLanguages}"/>
         </StackPanel>
         <StackPanel>
             	<TextBlock Text="{Binding ApplicationInformation}"/>

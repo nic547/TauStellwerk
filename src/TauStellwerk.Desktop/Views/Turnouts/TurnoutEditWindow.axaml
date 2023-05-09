@@ -20,7 +20,7 @@
         </StackPanel>
         <StackPanel ToolTip.Tip="The type of turnout this is.">
             <Label>Type</Label>
-            <ComboBox SelectedItem="{Binding Turnout.Kind, FallbackValue={}}" Items="{Binding TurnoutKinds}">
+            <ComboBox SelectedItem="{Binding Turnout.Kind, FallbackValue={}}" ItemsSource="{Binding TurnoutKinds}">
             </ComboBox>
         </StackPanel>
         <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
