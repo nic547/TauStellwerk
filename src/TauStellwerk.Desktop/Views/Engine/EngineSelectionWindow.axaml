@@ -20,10 +20,10 @@
 		<DockPanel LastChildFill="False">
 			<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
 				<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="{x:Static r:Resources.Search}" Width="200" Text="{Binding CurrentSearchTerm}"/>
-				<ComboBox Items="{Binding EngineSortModes}"
+				<ComboBox ItemsSource="{Binding EngineSortModes}"
                           SelectedItem="{Binding CurrentEngineSortMode}"/>
-				<ComboBox Items="{Binding EngineSortDirections}"
-                          SelectedItem="{Binding CurrentEngineSortDirection}"/>
+				<ComboBox ItemsSource="{Binding EngineSortDirections}"
+				          SelectedItem="{Binding CurrentEngineSortDirection}"/>
 				<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0" Content="{x:Static r:Resources.ShowHidden}"/>
 			</StackPanel>
 			<DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
@@ -49,7 +49,7 @@
                         Content="{x:Static r:Resources.CreateNewEngine}"/>
 			</DockPanel>
 			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0" Name="ScrollViewer">
-				<ItemsControl Items="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
+				<ItemsControl ItemsSource="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
 							<UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
@@ -60,7 +60,7 @@
 							<Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto" Margin="4">
 								<TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
 								<controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
-								<ItemsControl Items="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
+								<ItemsControl ItemsSource="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
 									<ItemsControl.ItemsPanel>
 										<ItemsPanelTemplate>
 											<WrapPanel/>
