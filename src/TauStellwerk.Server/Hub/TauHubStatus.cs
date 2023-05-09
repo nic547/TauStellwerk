@@ -17,6 +17,7 @@ public partial class TauHub
 
     public async Task SetStatus(SystemStatus systemStatus)
     {
+        _logger.LogDebug("StatusChange received: {status}", systemStatus.State);
         await _statusControlService.HandleStatusCommand(systemStatus.State, systemStatus.LastActionUsername);
         await Clients.Others.SendAsync("HandleStatusChange", systemStatus);
     }

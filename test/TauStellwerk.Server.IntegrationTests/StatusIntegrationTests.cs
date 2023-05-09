@@ -57,6 +57,7 @@ public class StatusIntegrationTests : IntegrationTestBase
             var currentValue = getter.Invoke();
             if (currentValue == expected)
             {
+                Console.WriteLine($"New state {currentValue} has been set.");
                 return;
             }
 
