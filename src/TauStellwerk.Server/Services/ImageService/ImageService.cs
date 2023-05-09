@@ -50,6 +50,10 @@ public class ImageService
         _generatedPath = generatedPath;
         _context = context;
         _logger = logger;
+
+        // NetVips caching doesn't really provide any benefit in this use case, no measurable performance impact
+        // Turning it off reduces memory consumption somewhat
+        Cache.MaxMem = 0;
     }
 
     public static List<ImageDto> CreateImageDtos(int id, DateTime? lastImageUpdate, List<int> imageSizes)
@@ -93,8 +97,6 @@ public class ImageService
         var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
         _logger.LogInformation("Updated images in {elapsedSeconds} seconds", elapsedSeconds);
 
-        // Ensure that NetVips caches are cleared, GC has run, etc. after use, because we don't want NetVips to hog memory when not actually used.
-        NetVips.NetVips.Shutdown();
         GC.Collect();
     }
 
@@ -102,8 +104,6 @@ public class ImageService
     {
         await CreateDownscaledImageInternal(engine);
 
-        // Ensure that NetVips caches are cleared, etc.
-        NetVips.NetVips.Shutdown();
         GC.Collect();
     }
 
