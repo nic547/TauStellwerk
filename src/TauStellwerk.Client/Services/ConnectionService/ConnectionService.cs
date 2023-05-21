@@ -140,14 +140,16 @@ public class ConnectionService : IConnectionService
 
     private async void HandleSettingsChanged(ImmutableSettings settings)
     {
+        await _setupSemaphore.WaitAsync();
+
         if (settings.ServerAddress != _currentServerAddress)
         {
-            await _setupSemaphore.WaitAsync();
             _hubConnection = CreateConnection(settings);
             _ = StartConnection();
             _httpClient = null;
-            _setupSemaphore.Release();
         }
+
+        _setupSemaphore.Release();
     }
 
     private async Task<HubConnection?> StartConnection()
