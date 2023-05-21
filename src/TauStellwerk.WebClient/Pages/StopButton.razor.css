@@ -14,6 +14,7 @@
 div {
     margin: 0 -8px;
     text-align: center;
+    height: 3.5em;
     padding: 1em;
     flex: 0 0 auto;
     z-index: 100; /* Should always be displayed on top, even on overlays*/
