@@ -13,7 +13,7 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview8" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview8" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.5" />
-    <PackageReference Include="Splat" Version="14.6.8" />
+    <PackageReference Include="Splat" Version="14.6.37" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -38,6 +38,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.128" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
   </ItemGroup>
 </Project>
