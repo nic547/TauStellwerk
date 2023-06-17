@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using TauStellwerk.Base;
 
 namespace TauStellwerk.Client.Model;
+
 public class EngineImage
 {
     public EngineImage(string filename, int width)
