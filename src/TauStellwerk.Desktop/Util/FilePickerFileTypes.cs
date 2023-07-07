@@ -6,6 +6,7 @@
 using Avalonia.Platform.Storage;
 
 namespace TauStellwerk.Desktop.Util;
+
 public class FilePickerFileTypes
 {
     /// <summary>

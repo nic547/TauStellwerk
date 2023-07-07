@@ -10,6 +10,7 @@ using TauStellwerk.Server;
 using TauStellwerk.Server.CommandStations;
 
 namespace TauStellwerk.Test.Config;
+
 public class ConfigTests
 {
     [Test]

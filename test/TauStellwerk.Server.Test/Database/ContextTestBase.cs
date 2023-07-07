@@ -9,6 +9,7 @@ using NUnit.Framework;
 using TauStellwerk.Server.Data;
 
 namespace TauStellwerk.Test.Database;
+
 public class ContextTestBase
 {
     private string _connectionString = string.Empty;
