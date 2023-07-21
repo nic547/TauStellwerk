@@ -1,10 +1,11 @@
 # TauStellwerk
 
-A collection of Software centred around "Teppichbahning" ("Carpet Railroading"), temporary model railways with changing layouts, users, devices and trains with little automation.
-The end-goal is a simple user interface, fast setup, solid handling of multiple users and supporting most platforms.
-Currently the project consists of a server application with a included web-based client as well as a separate desktop client, all based on .NET.
+TauStellwerk is a open-source software project for controlling model railways.
+It is intended to provide a intuitive user interface for easy and quick edits and control of a model railway.
+It is not intended to be a competitor to more complex software like JMRI, TrainController or similar, but rather
+an alternative to manufacturer-provided applications.
 
-If you have any questions, feedback or any other comments, feel free to open a issue or pm me(nic547#2614) on discord.
+If you have any questions, feedback or any other comments, feel free to open a issue or pm me(nic547) on discord.
 
 ![Screenshot of the web app on a computer](./doc/img/DesktopWebClientScreenshot.png)
 ![Screenshot of the webapp on a mobile device](./doc/img/MobileWebClientScreenshot.png)
@@ -12,13 +13,14 @@ If you have any questions, feedback or any other comments, feel free to open a i
 
 ## Overview
 
-The software is still in a somewhat experimental state. There might be some fundamental changes that break existing databases or installations.
+The software is still in an experimental state. There might be some fundamental changes that break existing databases or installations.
 Currently there are no prebuilt binaries available.
 
 Currently supported Command Stations:
 
 - ESU Command Station (ECoS)
 - DCC++ EX (via USB)
+
 
 ### MacOS/iOS
 
@@ -40,7 +42,7 @@ Uses .NET and AvaloniaUI. Connects to the TauStellwerk.Server. Tested on Linux a
 
 ### Mobile App
 
-Not started yet. Should be using .NET MAUI. Currently waiting until we get closer to the release of MAUI.
+Planned but not started. Initially MAUI was intended to be used, currently waiting to see how MAUI vs UNO vs AvaloniaUI for mobile apps pans out.
 
 ## Licences
 
