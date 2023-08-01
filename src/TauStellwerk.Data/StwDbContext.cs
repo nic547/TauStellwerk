@@ -6,9 +6,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.Data;
+namespace TauStellwerk.Data;
 
 /// <summary>
 /// <inheritdoc cref="DbContext"/>

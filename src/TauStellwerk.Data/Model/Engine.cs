@@ -8,9 +8,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Services;
 
-namespace TauStellwerk.Server.Data.Model;
+namespace TauStellwerk.Data.Model;
 
 /// <summary>
 /// A choo-choo, in this context generally understood to be smaller than real-live-sized.
@@ -82,7 +81,7 @@ public class Engine
         {
             Id = Id,
             Name = Name,
-            Images = ImageService.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
+            Images = ImageService.ImageService.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
             Tags = Tags,
             LastUsed = LastUsed,
             Created = Created,
@@ -96,7 +95,7 @@ public class Engine
         {
             Id = Id,
             Name = Name,
-            Images = ImageService.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
+            Images = ImageService.ImageService.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
             Tags = Tags.Order().ToList(),
             LastUsed = LastUsed,
             Created = Created,

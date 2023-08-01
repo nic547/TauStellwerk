@@ -6,9 +6,10 @@
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data;
+using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.Data.Dao;
+namespace TauStellwerk.Data.Dao;
 
 public class TurnoutDao : ITurnoutDao
 {

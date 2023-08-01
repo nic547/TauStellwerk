@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 using TauStellwerk.Server.Database;
 
 #nullable disable
@@ -12,8 +12,8 @@ using TauStellwerk.Server.Database;
 namespace TauStellwerk.Server.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    [Migration("20230108165813_RemoveImageTable")]
-    partial class RemoveImageTable
+    [Migration("20230106135238_EngineTagAsSingleString")]
+    partial class EngineTagsAsSingleString
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,10 +77,6 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<int?>("ECoSEngineDataId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ImageSizes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
@@ -115,6 +111,29 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.HasIndex("Name", "IsHidden");
 
                     b.ToTable("Engines");
+                });
+
+            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EngineId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EngineId");
+
+                    b.ToTable("EngineImages");
                 });
 
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.Turnout", b =>
@@ -157,9 +176,18 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Navigation("ECoSEngineData");
                 });
 
+            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+                {
+                    b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
+                        .WithMany("Images")
+                        .HasForeignKey("EngineId");
+                });
+
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.Engine", b =>
                 {
                     b.Navigation("Functions");
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

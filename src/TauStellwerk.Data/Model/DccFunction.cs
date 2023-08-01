@@ -6,7 +6,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TauStellwerk.Base;
 
-namespace TauStellwerk.Server.Data.Model;
+namespace TauStellwerk.Data.Model;
 
 public class DccFunction
 {

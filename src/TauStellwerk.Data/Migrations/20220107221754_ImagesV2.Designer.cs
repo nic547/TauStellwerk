@@ -4,20 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 using TauStellwerk.Server.Database;
+
+#nullable disable
 
 namespace TauStellwerk.Server.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    [Migration("20210701204259_Inital")]
-    partial class Inital
+    [Migration("20220107221754_ImagesV2")]
+    partial class ImagesV2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.7");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
             modelBuilder.Entity("EngineTag", b =>
                 {
@@ -90,6 +91,9 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("LastImageUpdate")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastUsed")
                         .HasColumnType("TEXT");
 
@@ -105,7 +109,11 @@ namespace TauStellwerk.Server.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Created");
+
                     b.HasIndex("ECoSEngineDataId");
+
+                    b.HasIndex("LastUsed");
 
                     b.ToTable("Engines");
                 });
@@ -122,9 +130,6 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<string>("Filename")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsGenerated")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Width")
                         .HasColumnType("INTEGER");

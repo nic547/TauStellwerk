@@ -3,7 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Test.Database;
 

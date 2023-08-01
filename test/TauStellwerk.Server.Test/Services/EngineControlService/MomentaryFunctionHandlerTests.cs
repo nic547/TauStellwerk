@@ -6,7 +6,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
 using TauStellwerk.Server.Services;
 using TauStellwerk.Util;
 using TauStellwerk.Util.Timer;

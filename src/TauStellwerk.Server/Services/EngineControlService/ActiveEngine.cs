@@ -4,7 +4,7 @@
 // </copyright>
 
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Server.Services;
 

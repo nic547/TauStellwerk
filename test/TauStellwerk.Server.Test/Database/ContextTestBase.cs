@@ -6,7 +6,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 
 namespace TauStellwerk.Test.Database;
 

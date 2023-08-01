@@ -6,12 +6,13 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NetVips;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
+using TauStellwerk.Server.Services;
 
-namespace TauStellwerk.Server.Services;
+namespace TauStellwerk.Data.ImageService;
 
 public class ImageService
 {

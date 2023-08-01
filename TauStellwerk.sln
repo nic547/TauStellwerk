@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31521.260
@@ -36,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Server.Integra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Base.Tests", "test\TauStellwerk.Base.Tests\TauStellwerk.Base.Tests.csproj", "{8F2F04AA-DE5A-40A0-870A-5F5B31E52367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Client.Tests", "test\TauStellwerk.Client.Tests\TauStellwerk.Client.Tests.csproj", "{47AEDC0F-7298-4335-9A49-898E38B6228B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Client.Tests", "test\TauStellwerk.Client.Tests\TauStellwerk.Client.Tests.csproj", "{47AEDC0F-7298-4335-9A49-898E38B6228B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Data", "src\TauStellwerk.Data\TauStellwerk.Data.csproj", "{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +93,10 @@ Global
 		{47AEDC0F-7298-4335-9A49-898E38B6228B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47AEDC0F-7298-4335-9A49-898E38B6228B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47AEDC0F-7298-4335-9A49-898E38B6228B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

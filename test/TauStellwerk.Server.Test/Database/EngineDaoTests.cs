@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data.Dao;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Dao;
+using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Test.Database;
 

@@ -5,7 +5,7 @@
 
 using System.Web;
 
-namespace TauStellwerk.Server.Data.Model;
+namespace TauStellwerk.Data.Model;
 
 /// <summary>
 /// Data used by the ECoS-related components.

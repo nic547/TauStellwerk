@@ -2,8 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 using TauStellwerk.Server.Database;
 
 #nullable disable
@@ -11,12 +12,28 @@ using TauStellwerk.Server.Database;
 namespace TauStellwerk.Server.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    partial class StwDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221030221725_EngineIndices")]
+    partial class EngineIndices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
+
+            modelBuilder.Entity("EngineTag", b =>
+                {
+                    b.Property<int>("EnginesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EnginesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("EngineTag");
+                });
 
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.DccFunction", b =>
                 {
@@ -74,10 +91,6 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<int?>("ECoSEngineDataId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ImageSizes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
@@ -94,10 +107,6 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<byte>("SpeedSteps")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Tags")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("TopSpeed")
                         .HasColumnType("INTEGER");
 
@@ -112,6 +121,47 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.HasIndex("Name", "IsHidden");
 
                     b.ToTable("Engines");
+                });
+
+            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EngineId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EngineId");
+
+                    b.ToTable("EngineImages");
+                });
+
+            modelBuilder.Entity("TauStellwerk.Server.Database.Model.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.Turnout", b =>
@@ -138,6 +188,21 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.ToTable("Turnouts");
                 });
 
+            modelBuilder.Entity("EngineTag", b =>
+                {
+                    b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
+                        .WithMany()
+                        .HasForeignKey("EnginesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TauStellwerk.Server.Database.Model.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.DccFunction", b =>
                 {
                     b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
@@ -154,9 +219,18 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Navigation("ECoSEngineData");
                 });
 
+            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+                {
+                    b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
+                        .WithMany("Images")
+                        .HasForeignKey("EngineId");
+                });
+
             modelBuilder.Entity("TauStellwerk.Server.Database.Model.Engine", b =>
                 {
                     b.Navigation("Functions");
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

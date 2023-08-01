@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 using TauStellwerk.Server.Database;
 
 #nullable disable
@@ -12,16 +12,30 @@ using TauStellwerk.Server.Database;
 namespace TauStellwerk.Server.Database.Migrations
 {
     [DbContext(typeof(StwDbContext))]
-    [Migration("20230106135238_EngineTagAsSingleString")]
-    partial class EngineTagsAsSingleString
+    [Migration("20220505133043_FunctionDuration")]
+    partial class FunctionDuration
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.DccFunction", b =>
+            modelBuilder.Entity("EngineTag", b =>
+                {
+                    b.Property<int>("EnginesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EnginesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("EngineTag");
+                });
+
+            modelBuilder.Entity("TauStellwerk.Database.Model.DccFunction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -47,7 +61,7 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.ToTable("DccFunction");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.ECoSEngineData", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.ECoSEngineData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,7 +76,7 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.ToTable("ECoSEngineData");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.Engine", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.Engine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,27 +107,21 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.Property<byte>("SpeedSteps")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Tags")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("TopSpeed")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Created");
+
                     b.HasIndex("ECoSEngineDataId");
 
-                    b.HasIndex("Created", "IsHidden");
-
-                    b.HasIndex("LastUsed", "IsHidden");
-
-                    b.HasIndex("Name", "IsHidden");
+                    b.HasIndex("LastUsed");
 
                     b.ToTable("Engines");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.EngineImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,19 +144,10 @@ namespace TauStellwerk.Server.Database.Migrations
                     b.ToTable("EngineImages");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.Turnout", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Address")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsInverted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Kind")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -157,33 +156,51 @@ namespace TauStellwerk.Server.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Turnouts");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.DccFunction", b =>
+            modelBuilder.Entity("EngineTag", b =>
                 {
-                    b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
+                    b.HasOne("TauStellwerk.Database.Model.Engine", null)
+                        .WithMany()
+                        .HasForeignKey("EnginesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TauStellwerk.Database.Model.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TauStellwerk.Database.Model.DccFunction", b =>
+                {
+                    b.HasOne("TauStellwerk.Database.Model.Engine", null)
                         .WithMany("Functions")
                         .HasForeignKey("EngineId");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.Engine", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.Engine", b =>
                 {
-                    b.HasOne("TauStellwerk.Server.Database.Model.ECoSEngineData", "ECoSEngineData")
+                    b.HasOne("TauStellwerk.Database.Model.ECoSEngineData", "ECoSEngineData")
                         .WithMany()
                         .HasForeignKey("ECoSEngineDataId");
 
                     b.Navigation("ECoSEngineData");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.EngineImage", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.EngineImage", b =>
                 {
-                    b.HasOne("TauStellwerk.Server.Database.Model.Engine", null)
+                    b.HasOne("TauStellwerk.Database.Model.Engine", null)
                         .WithMany("Images")
                         .HasForeignKey("EngineId");
                 });
 
-            modelBuilder.Entity("TauStellwerk.Server.Database.Model.Engine", b =>
+            modelBuilder.Entity("TauStellwerk.Database.Model.Engine", b =>
                 {
                     b.Navigation("Functions");
 

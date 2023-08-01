@@ -6,7 +6,7 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using TauStellwerk.Server.Data.Model;
+using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Test.Database;
 
