@@ -4,8 +4,8 @@
 // </copyright>
 
 using TauStellwerk.Base;
+using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Model;
-using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Util;
 
 namespace TauStellwerk.Server.Services;

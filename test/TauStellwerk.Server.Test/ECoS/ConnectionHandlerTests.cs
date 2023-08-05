@@ -11,7 +11,8 @@ using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using TauStellwerk.Server.CommandStations;
+using TauStellwerk.CommandStations;
+using TauStellwerk.CommandStations.ECoS;
 
 namespace TauStellwerk.Test.ECoS;
 

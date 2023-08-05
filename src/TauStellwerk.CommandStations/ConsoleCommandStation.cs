@@ -7,7 +7,7 @@ using FluentResults;
 using TauStellwerk.Base;
 using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations;
 
 /// <summary>
 /// <see cref="CommandStationBase"/> that just writes everything to the console.

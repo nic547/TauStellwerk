@@ -3,9 +3,11 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using TauStellwerk.CommandStations.DccEx;
+using TauStellwerk.CommandStations.ECoS;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations;
 
 /// <summary>
 /// Contains a factory for instances that implement ICommandSystem.

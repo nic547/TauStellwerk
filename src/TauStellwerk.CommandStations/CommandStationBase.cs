@@ -10,11 +10,10 @@ using TauStellwerk.Base;
 using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations;
 
 /// <summary>
 /// Interface for implementing communication with a specific command system.
-/// Every implementation needs to be "registered" in <see cref="CommandStationFactory"/> by hand.
 /// </summary>
 public abstract class CommandStationBase
 {

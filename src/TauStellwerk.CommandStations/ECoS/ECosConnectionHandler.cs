@@ -9,9 +9,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Util;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations.ECoS;
 
 /// <summary>
 /// Handles the connection to the ECoS, including sending and receiving stuff.

@@ -6,7 +6,6 @@
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using TauStellwerk.Base;
-using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Data.Dao;

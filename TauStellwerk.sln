@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Base.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Client.Tests", "test\TauStellwerk.Client.Tests\TauStellwerk.Client.Tests.csproj", "{47AEDC0F-7298-4335-9A49-898E38B6228B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Data", "src\TauStellwerk.Data\TauStellwerk.Data.csproj", "{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Data", "src\TauStellwerk.Data\TauStellwerk.Data.csproj", "{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.CommandStations", "src\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj", "{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

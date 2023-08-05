@@ -3,7 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations.ECoS;
 
 public class ECoSOptions
 {

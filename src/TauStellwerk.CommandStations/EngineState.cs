@@ -5,7 +5,7 @@
 
 using TauStellwerk.Base;
 
-namespace TauStellwerk.Server;
+namespace TauStellwerk.CommandStations;
 
 public class EngineState
 {

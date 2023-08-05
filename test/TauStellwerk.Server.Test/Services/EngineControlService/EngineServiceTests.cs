@@ -10,9 +10,9 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using TauStellwerk.Base;
+using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Server;
-using TauStellwerk.Server.CommandStations;
 using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Test.Services.EngineControlService;

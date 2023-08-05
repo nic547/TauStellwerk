@@ -5,10 +5,11 @@
 
 using System.IO.Ports;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base;
 using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations.DccEx;
 
 public class DccExSerialCommandStation : CommandStationBase
 {

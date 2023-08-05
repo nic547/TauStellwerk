@@ -5,11 +5,13 @@
 
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TauStellwerk.Base;
 using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
+using TauStellwerk.Server.CommandStations;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations.ECoS;
 
 public class ECoSCommandStation : CommandStationBase
 {

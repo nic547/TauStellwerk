@@ -6,8 +6,8 @@
 using System.Collections;
 using FluentResults;
 using TauStellwerk.Base;
+using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Model;
-using TauStellwerk.Server.CommandStations;
 
 namespace TauStellwerk.Server.Services;
 

@@ -6,8 +6,8 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using TauStellwerk.CommandStations.DccEx;
 using TauStellwerk.Server;
-using TauStellwerk.Server.CommandStations;
 
 namespace TauStellwerk.Test.Config;
 

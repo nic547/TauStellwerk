@@ -7,7 +7,7 @@ using FluentResults;
 using TauStellwerk.Base;
 using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Server.CommandStations;
+namespace TauStellwerk.CommandStations;
 
 /// <summary>
 /// Implements a <see cref="CommandStationBase"/> that does nothing.

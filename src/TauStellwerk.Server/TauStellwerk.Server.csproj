@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj" />
     <ProjectReference Include="..\TauStellwerk.Data\TauStellwerk.Data.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
     <ProjectReference Include="..\TauStellwerk.WebClient\TauStellwerk.WebClient.csproj" />
