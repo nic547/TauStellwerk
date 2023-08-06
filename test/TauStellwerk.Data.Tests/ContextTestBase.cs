@@ -41,7 +41,7 @@ public class ContextTestBase
         _sqliteConnection?.Close();
     }
 
-    internal StwDbContext GetContext()
+    public StwDbContext GetContext()
     {
         var contextOptions = new DbContextOptionsBuilder<StwDbContext>().UseSqlite(_connectionString);
         return new StwDbContext(contextOptions.Options);

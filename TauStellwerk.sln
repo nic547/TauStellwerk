@@ -41,6 +41,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Data", "src\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.CommandStations", "src\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj", "{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Data.Tests", "test\TauStellwerk.Data.Tests\TauStellwerk.Data.Tests.csproj", "{EA0FE423-0FC3-4422-8DA3-491DD190F30D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.CommandStations.Tests", "test\TauStellwerk.CommandStations.Tests\TauStellwerk.CommandStations.Tests.csproj", "{B232515D-D1CC-45A0-8E0B-08BABF1A2380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +107,14 @@ Global
 		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA0FE423-0FC3-4422-8DA3-491DD190F30D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA0FE423-0FC3-4422-8DA3-491DD190F30D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA0FE423-0FC3-4422-8DA3-491DD190F30D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA0FE423-0FC3-4422-8DA3-491DD190F30D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B232515D-D1CC-45A0-8E0B-08BABF1A2380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B232515D-D1CC-45A0-8E0B-08BABF1A2380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B232515D-D1CC-45A0-8E0B-08BABF1A2380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B232515D-D1CC-45A0-8E0B-08BABF1A2380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +126,8 @@ Global
 		{1FF1F0CF-4A8D-49B8-B803-FD97735ED6C3} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 		{8F2F04AA-DE5A-40A0-870A-5F5B31E52367} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 		{47AEDC0F-7298-4335-9A49-898E38B6228B} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
+		{EA0FE423-0FC3-4422-8DA3-491DD190F30D} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
+		{B232515D-D1CC-45A0-8E0B-08BABF1A2380} = {DEFECBB3-F873-4F04-99AB-842997EF9A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EFC0537-3BEE-4528-BBFD-FC8E6D95C0C1}

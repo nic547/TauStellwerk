@@ -49,7 +49,7 @@ public class StwDbContextTests : ContextTestBase
         var testContext = GetContext();
         var loadedEngines = testContext.Engines;
 
-        Assert.AreEqual(testData.Count, loadedEngines.Count());
+        loadedEngines.Count().Should().Be(testData.Count);
     }
 
     /// <summary>
