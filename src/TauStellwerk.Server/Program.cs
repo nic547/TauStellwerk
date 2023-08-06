@@ -6,9 +6,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
-using TauStellwerk.Server.CommandStations;
-using TauStellwerk.Server.Data;
-using TauStellwerk.Server.Services;
+using TauStellwerk.CommandStations;
+using TauStellwerk.Data;
+using TauStellwerk.Data.ImageService;
 
 namespace TauStellwerk.Server;
 

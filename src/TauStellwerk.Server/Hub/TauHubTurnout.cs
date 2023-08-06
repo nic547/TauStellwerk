@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base;
-using TauStellwerk.Server.Data.Dao;
+using TauStellwerk.Data.Dao;
 
 namespace TauStellwerk.Server.Hub;
 

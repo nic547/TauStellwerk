@@ -6,8 +6,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using TauStellwerk.Server.Data;
-using TauStellwerk.Server.Services;
+using TauStellwerk.Data;
+using TauStellwerk.Data.ImageService;
 
 namespace TauStellwerk.Server.Controllers;
 

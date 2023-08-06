@@ -5,7 +5,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TauStellwerk.Server.Data;
+using TauStellwerk.Data;
 
 namespace TauStellwerk.Server.IntegrationTests;
 

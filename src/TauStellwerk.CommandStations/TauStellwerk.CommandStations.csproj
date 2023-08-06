@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<DocumentationFile>.\bin\TauStellwerk.CommandStations.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentResults" Version="3.15.2" />
+		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.IO.Ports" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
+		<ProjectReference Include="..\TauStellwerk.Data\TauStellwerk.Data.csproj" />
+		<ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
+	</ItemGroup>
+
+</Project>
+

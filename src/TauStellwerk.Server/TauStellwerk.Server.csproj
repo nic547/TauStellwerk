@@ -28,8 +28,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="7.0.0" />
-    <PackageReference Include="NetVips" Version="2.3.1" />
-    <PackageReference Include="NetVips.Native" Version="8.14.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -38,12 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj" />
+    <ProjectReference Include="..\TauStellwerk.Data\TauStellwerk.Data.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
     <ProjectReference Include="..\TauStellwerk.WebClient\TauStellwerk.WebClient.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
   </ItemGroup>
 
 </Project>
