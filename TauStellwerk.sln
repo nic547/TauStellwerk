@@ -39,11 +39,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Client.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Data", "src\TauStellwerk.Data\TauStellwerk.Data.csproj", "{7E77B81C-C80A-4C3B-A737-5A0A108AEF25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.CommandStations", "src\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj", "{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.CommandStations", "src\TauStellwerk.CommandStations\TauStellwerk.CommandStations.csproj", "{77E9A379-FC35-4AD1-9FA2-55156F6BD8E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.Data.Tests", "test\TauStellwerk.Data.Tests\TauStellwerk.Data.Tests.csproj", "{EA0FE423-0FC3-4422-8DA3-491DD190F30D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.Data.Tests", "test\TauStellwerk.Data.Tests\TauStellwerk.Data.Tests.csproj", "{EA0FE423-0FC3-4422-8DA3-491DD190F30D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TauStellwerk.CommandStations.Tests", "test\TauStellwerk.CommandStations.Tests\TauStellwerk.CommandStations.Tests.csproj", "{B232515D-D1CC-45A0-8E0B-08BABF1A2380}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TauStellwerk.CommandStations.Tests", "test\TauStellwerk.CommandStations.Tests\TauStellwerk.CommandStations.Tests.csproj", "{B232515D-D1CC-45A0-8E0B-08BABF1A2380}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
