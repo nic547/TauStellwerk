@@ -9,7 +9,7 @@ using System.Text;
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TauStellwerk.CommandStations;
 using TauStellwerk.CommandStations.ECoS;
@@ -29,7 +29,7 @@ public class ConnectionHandlerTests
     [SetUp]
     public async Task SetUp()
     {
-        var logger = new Mock<ILogger<CommandStationBase>>().Object;
+        var logger = Substitute.For<ILogger<CommandStationBase>>();
         _tcpListener = new TestTcpListener();
         var listenerTask = _tcpListener.Start();
         _connectionHandler = new ECosConnectionHandler(_ip, Port, logger);

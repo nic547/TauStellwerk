@@ -6,7 +6,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
@@ -26,10 +26,8 @@ public class IntegrationTestBase
 
     protected IConnectionService CreateConnectionService()
     {
-        var settingService = new Mock<ISettingsService>(MockBehavior.Strict);
-
-        settingService.Setup(s => s.GetSettings().Result)
-            .Returns(() => new ImmutableSettings("TEST", _factory.Server.BaseAddress.ToString(), string.Empty, false, "en"));
+        var settingService = Substitute.For<ISettingsService>();
+        settingService.GetSettings().Returns(new ImmutableSettings("TEST", _factory.Server.BaseAddress.ToString(), string.Empty, false, "en"));
 
         var hubConnection = new HubConnectionBuilder().WithUrl(
             _factory.Server.BaseAddress + "hub",
@@ -37,6 +35,6 @@ public class IntegrationTestBase
             .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
             .Build();
 
-        return new ConnectionService(settingService.Object, hubConnection);
+        return new ConnectionService(settingService, hubConnection);
     }
 }

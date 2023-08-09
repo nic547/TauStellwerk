@@ -6,7 +6,7 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TauStellwerk.Base;
 using TauStellwerk.Data.Dao;
@@ -36,8 +36,8 @@ public class EngineDaoTests : ContextTestBase
 
         await using (var context = GetContext())
         {
-            var logger = new Mock<ILogger<EngineDao>>();
-            var engineDao = new EngineDao(context, logger.Object);
+            var logger = Substitute.For<ILogger<EngineDao>>();
+            var engineDao = new EngineDao(context, logger);
 
             _ = engineDao.GetEngine(engine.Id);
         }
@@ -166,7 +166,7 @@ public class EngineDaoTests : ContextTestBase
 
     private EngineDao GetDao()
     {
-        var loggerMock = new Mock<ILogger<EngineDao>>();
-        return new EngineDao(GetContext(), loggerMock.Object);
+        var loggerMock = Substitute.For<ILogger<EngineDao>>();
+        return new EngineDao(GetContext(), loggerMock);
     }
 }
