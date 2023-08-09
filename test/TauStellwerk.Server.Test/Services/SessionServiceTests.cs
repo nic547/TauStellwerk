@@ -6,7 +6,7 @@
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TauStellwerk.Server.Services;
 
@@ -17,7 +17,7 @@ public class SessionServiceTests
     [Test]
     public void SessionIsCreatedOnConnecting()
     {
-        var sessionService = new SessionService(GetLoggerMock().Object);
+        var sessionService = new SessionService(GetTestLogger());
         sessionService.HandleConnected("Foo", "Alice");
 
         var session = sessionService.TryGetSession("Foo");
@@ -30,7 +30,7 @@ public class SessionServiceTests
     [Test]
     public void SessionIsRemovedOnDisconnecting()
     {
-        var sessionService = new SessionService(GetLoggerMock().Object);
+        var sessionService = new SessionService(GetTestLogger());
         sessionService.HandleConnected("Foo", "Alice");
         sessionService.HandleDisconnected("Foo", null);
 
@@ -42,8 +42,8 @@ public class SessionServiceTests
     [Test]
     public void CreatingSessionIsLogged()
     {
-        var loggerMock = GetLoggerMock();
-        SessionService sessionService = new(loggerMock.Object);
+        var loggerMock = GetTestLogger();
+        SessionService sessionService = new(loggerMock);
 
         sessionService.HandleConnected("Foo", "Bob");
 
@@ -53,8 +53,8 @@ public class SessionServiceTests
     [Test]
     public void DisconnectingWithExceptionIsLogged()
     {
-        var loggerMock = GetLoggerMock();
-        SessionService sessionService = new(loggerMock.Object);
+        var loggerMock = GetTestLogger();
+        SessionService sessionService = new(loggerMock);
 
         sessionService.HandleConnected("Foo", "Bob");
         sessionService.HandleDisconnected("Foo", new InvalidOperationException("Test"));
@@ -62,20 +62,31 @@ public class SessionServiceTests
         VerifyLoggerWasUsed(loggerMock, "InvalidOperationException");
     }
 
-    private static Mock<ILogger<SessionService>> GetLoggerMock()
+    private static MockLogger<SessionService> GetTestLogger()
     {
-        return new Mock<ILogger<SessionService>>();
+        return Substitute.For<MockLogger<SessionService>>();
     }
 
-    private static void VerifyLoggerWasUsed(Mock<ILogger<SessionService>> mock, string? shouldContain = null)
+    private static void VerifyLoggerWasUsed(MockLogger<SessionService> mock, string shouldContain)
     {
-        mock.Verify(
-            x => x.Log(
-                It.IsAny<LogLevel>(),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(shouldContain ?? string.Empty)),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.AtLeastOnce);
+        mock.Received().Log(
+            Arg.Any<LogLevel>(),
+            Arg.Is<object>(o => o!.ToString()!.Contains(shouldContain)),
+            Arg.Any<Exception>());
+    }
+
+#nullable disable
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    public abstract class MockLogger<T> : ILogger<T>
+    {
+        void ILogger.Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            => Log(logLevel, formatter(state, exception), exception);
+
+        public abstract void Log(LogLevel logLevel, object state, Exception exception = null);
+
+        public virtual bool IsEnabled(LogLevel logLevel) => true;
+
+        public abstract IDisposable BeginScope<TState>(TState state);
     }
 }

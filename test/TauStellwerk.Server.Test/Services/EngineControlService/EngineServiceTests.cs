@@ -7,7 +7,7 @@ using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TauStellwerk.Base;
 using TauStellwerk.CommandStations;
@@ -42,7 +42,7 @@ public class EngineServiceTests
     public async Task CannotAcquireEngineTest()
     {
         var mock = GetAlwaysTrueMock();
-        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(Result.Fail("Fail"));
+        mock.TryAcquireEngine(Arg.Any<Engine>()).Returns(Result.Fail("Fail"));
         var (service, session) = PrepareEngineService(mock);
 
         var result = await service.AcquireEngine(session, _engine);
@@ -181,30 +181,31 @@ public class EngineServiceTests
         functionResult.Should().BeFailure();
     }
 
-    private static (Server.Services.EngineControlService EngineService, Session Session) PrepareEngineService(Mock<CommandStationBase>? mock = null)
+    private static (Server.Services.EngineControlService EngineService, Session Session) PrepareEngineService(CommandStationBase? mock = null)
     {
-        var logger = new Mock<ILogger<SessionService>>();
+        var sessionServiceLogger = Substitute.For<ILogger<SessionService>>();
 
-        var sessionService = new SessionService(logger.Object);
+        var sessionService = new SessionService(sessionServiceLogger);
         var session = new Session("ConnectionId", "TestUser");
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
-        var loggerMock = new Mock<ILogger<Server.Services.EngineControlService>>();
+        var loggerMock = Substitute.For<ILogger<Server.Services.EngineControlService>>();
 
         TauStellwerkOptions options = new()
         {
             ResetEnginesWithoutState = true,
         };
 
-        Server.Services.EngineControlService engineControlControlService = new(mock.Object, sessionService, loggerMock.Object, Options.Create(options));
+        Server.Services.EngineControlService engineControlControlService = new(mock, sessionService, loggerMock, Options.Create(options));
         return (engineControlControlService, session);
     }
 
-    private static Mock<CommandStationBase> GetAlwaysTrueMock()
+    private static CommandStationBase GetAlwaysTrueMock()
     {
-        var mock = new Mock<CommandStationBase>();
-        mock.Setup(e => e.TryAcquireEngine(It.IsAny<Engine>()).Result).Returns(Result.Ok());
-        mock.Setup(e => e.TryReleaseEngine(It.IsAny<Engine>(), It.IsAny<EngineState>()).Result).Returns(true);
+        var mock = Substitute.For<CommandStationBase>();
+
+        mock.TryAcquireEngine(Arg.Any<Engine>()).Returns(Result.Ok());
+        mock.TryReleaseEngine(Arg.Any<Engine>(), Arg.Any<EngineState>()).Returns(true);
 
         return mock;
     }
