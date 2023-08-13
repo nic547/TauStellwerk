@@ -33,7 +33,7 @@ public class EngineImageControl : Image
     private const string ImageCacheLocation = "./cache/images/";
     private const string DefaultImagePath = "avares://TauStellwerk.Desktop/Assets/noImageImage.png";
 
-    private static IBitmap? _defaultImage;
+    private static Bitmap? _defaultImage;
 
     private static HttpClient? _httpClient;
 
@@ -53,8 +53,7 @@ public class EngineImageControl : Image
     {
         if (_defaultImage is null)
         {
-            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>() ?? throw new Exception("failed to locate IAssetLoader");
-            _defaultImage = new Bitmap(assets.Open(new Uri(DefaultImagePath)));
+            _defaultImage = new Bitmap(AssetLoader.Open(new Uri(DefaultImagePath)));
         }
 
         Source = _defaultImage;
