@@ -59,7 +59,7 @@
 						<DataTemplate>
 							<Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto" Margin="4">
 								<TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
-								<controls:EngineImageControl EngineImages="{Binding Images}" Grid.Row="1"/>
+								<controls:EngineImageControl EngineImages="{Binding Images}" ImageTimestamp="{Binding ImageTimestamp}" Grid.Row="1"/>
 								<ItemsControl ItemsSource="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
 									<ItemsControl.ItemsPanel>
 										<ItemsPanelTemplate>

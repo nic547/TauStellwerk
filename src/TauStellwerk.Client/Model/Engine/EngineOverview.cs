@@ -25,6 +25,7 @@ public partial class EngineOverview : ObservableObject
         Id = dto.Id;
         Tags = new ObservableCollection<string>(dto.Tags);
         Images = EngineImage.CreateFromImageDtoList(dto.Images);
+        ImageTimestamp = dto.ImageTimestamp;
         LastUsed = dto.LastUsed;
         Created = dto.Created;
     }
@@ -43,6 +44,8 @@ public partial class EngineOverview : ObservableObject
     public ObservableCollection<string> Tags { get; init; }
 
     public ImmutableList<EngineImage> Images { get; init; }
+
+    public int ImageTimestamp { get; init; }
 
     public DateTime LastUsed { get; init; }
 

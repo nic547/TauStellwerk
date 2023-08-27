@@ -86,6 +86,7 @@ public class Engine
             LastUsed = LastUsed,
             Created = Created,
             IsHidden = IsHidden,
+            ImageTimestamp = (int)(LastImageUpdate?.Ticks ?? 0),
         };
     }
 
@@ -103,6 +104,7 @@ public class Engine
             Address = Address,
             Functions = Functions.Select(f => f.ToFunctionDto()).ToList(),
             IsHidden = IsHidden,
+            ImageTimestamp = (int)(LastImageUpdate?.Ticks ?? 0),
         };
     }
 

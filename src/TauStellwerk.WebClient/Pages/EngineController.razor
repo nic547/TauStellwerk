@@ -15,7 +15,7 @@
         <span class="flex-filler"></span>
         <button class="bold button-secondary" @onclick="RemoveEngine">X</button>
     </div>
-    <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes" />
+    <EnginePicture Class="ec-grid-image" Images="Engine.Images" Sizes="Sizes" ImageTimestamp="Engine.ImageTimestamp" />
     <label class="ec-grid-slider has-100percent-height">
         <!-- orient="vertical" is for firefox -->
         <input type="range" orient="vertical" min="0" max="126" value="@Engine.Throttle" @oninput="SetSpeed" />

@@ -26,6 +26,12 @@ public class EngineImageControl : Image
             i => i.EngineImages,
             (o, v) => o.EngineImages = v);
 
+    public static readonly DirectProperty<EngineImageControl, int> ImageTimestampProperty =
+        AvaloniaProperty.RegisterDirect<EngineImageControl, int>(
+            nameof(ImageTimestamp),
+            i => i.ImageTimestamp,
+            (o, v) => o.ImageTimestamp = v);
+
     private const string ImageUrlFragment = "images/";
 
     // I don't want to write to a temp directory, because having the image cache persist is a positive side effect.
@@ -38,6 +44,7 @@ public class EngineImageControl : Image
     private static HttpClient? _httpClient;
 
     private IImmutableList<EngineImage>? _engineImages;
+    private int _imageTimestamp;
 
     public IImmutableList<EngineImage>? EngineImages
     {
@@ -47,6 +54,12 @@ public class EngineImageControl : Image
             SetAndRaise(EngineImagesProperty, ref _engineImages, value);
             _ = Task.Run(() => LoadImages(value)).ConfigureAwait(false);
         }
+    }
+
+    public int ImageTimestamp
+    {
+        get => _imageTimestamp;
+        set => SetAndRaise(ImageTimestampProperty, ref _imageTimestamp, value);
     }
 
     protected override void OnInitialized()
@@ -67,25 +80,29 @@ public class EngineImageControl : Image
             return;
         }
 
-        var imagePathResult = await DownloadImageToFilesystem(images);
+        var imagePathResult = await DownloadImageToFilesystem(images, ImageTimestamp);
         if (imagePathResult.IsFailed)
         {
             throw new Exception("Failed to download image");
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            Source = new Bitmap(imagePathResult.Value);
-        });
+        await Dispatcher.UIThread.InvokeAsync(() => { Source = new Bitmap(imagePathResult.Value); });
     }
 
-    private static async Task<Result<string>> DownloadImageToFilesystem(IImmutableList<EngineImage> images)
+    private static async Task<Result<string>> DownloadImageToFilesystem(IImmutableList<EngineImage> images, int timeStamp)
     {
         var bestCandidate = SelectBestImageCandidate(images);
 
         if (bestCandidate is null)
         {
             return Result.Fail("No suitable images were provided.");
+        }
+
+        var fileNameLocation = Path.Combine(ImageCacheLocation, FileNameWithTimestamp(bestCandidate.Filename, timeStamp));
+
+        if (File.Exists(fileNameLocation))
+        {
+            return fileNameLocation;
         }
 
         var client = await GetHttpClient();
@@ -96,10 +113,9 @@ public class EngineImageControl : Image
 
             Directory.CreateDirectory(ImageCacheLocation);
 
-            var filename = Path.Combine(ImageCacheLocation, bestCandidate.Filename);
-            await File.WriteAllBytesAsync(filename, imageBytes);
+            await File.WriteAllBytesAsync(fileNameLocation, imageBytes);
 
-            return Result.Ok(filename);
+            return Result.Ok(fileNameLocation);
         }
         catch (Exception e)
         {
@@ -118,6 +134,12 @@ public class EngineImageControl : Image
         return image.Where(i => i.Type == "image/webp" && i.Width < 1000).MaxBy(i => i.Width);
     }
 
+    private static string FileNameWithTimestamp(string filename, int timestamp)
+    {
+        var segements = filename.Split('.');
+        return $"{segements[0]}_{timestamp:X}.{segements[1]}";
+    }
+
     private static async Task<HttpClient> GetHttpClient()
     {
         if (_httpClient is not null)
@@ -130,7 +152,8 @@ public class EngineImageControl : Image
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
         };
 
-        var settingService = Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException("Settings service is not available.");
+        var settingService = Locator.Current.GetService<ISettingsService>() ??
+                             throw new InvalidOperationException("Settings service is not available.");
         var settings = await settingService.GetSettings();
 
         _httpClient = new HttpClient(handler)
