@@ -21,6 +21,7 @@
                Grid.ColumnSpan="2" Padding="4"/>
         <controls:EngineImageControl Grid.Column="1" Grid.Row="1"
                EngineImages="{Binding Engine.Images}"
+               ImageTimestamp="{Binding Engine.ImageTimestamp}"
                Stretch="Uniform"
                StretchDirection="Both"
                Margin="2"/>

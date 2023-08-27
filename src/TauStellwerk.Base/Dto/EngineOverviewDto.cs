@@ -15,6 +15,9 @@ public class EngineOverviewDto
 
     public List<ImageDto> Images { get; set; } = new();
 
+    // Intentionally not a long, wanna keep the number short, collisions should be unlikely anyway
+    public int ImageTimestamp { get; set; }
+
     public DateTime LastUsed { get; set; }
 
     public DateTime Created { get; set; }

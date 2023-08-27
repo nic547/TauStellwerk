@@ -1,11 +1,13 @@
 @using System.Collections.Immutable
+@using System.ComponentModel
 @using TauStellwerk.Client.Model
+@using System.Buffers.Text
 <picture class="@Class">
     @if (!_hasErrorOccurredYet)
     {
         @foreach (var imageset in Images.GroupBy(e => e.Importance).OrderBy(x => x.Key))
         {
-            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename} {i.Width}w"));
+            var srcset = string.Join(',', imageset.Select(i => $"images/{i.Filename}?v={ImageTimestamp:X} {i.Width}w"));
             <source sizes="@Sizes" srcset="@srcset" type="@imageset.FirstOrDefault()?.Type">
         }
     }
@@ -23,6 +25,10 @@
     [Parameter]
     [EditorRequired]
     public string Sizes { get; set; } = string.Empty;
+    
+    [Parameter]
+    [EditorRequired]
+    public int ImageTimestamp { get; set; }
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
