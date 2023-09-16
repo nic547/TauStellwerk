@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
+        xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.MainWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -13,12 +14,7 @@
     </Design.DataContext>
 
     <DockPanel>
-        <Button IsEnabled="{Binding StopButtonState.ShouldBeEnabled}" DockPanel.Dock="Top" Name="StopButton" Margin="50 0 50 0" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
-            <StackPanel HorizontalAlignment="Center">
-              <Label Content="{Binding StopButtonState.TitleText}" FontSize="24"/>
-              <Label Content="{Binding StopButtonState.BottomText}"/>  
-            </StackPanel>
-        </Button>
+        <controls:StopButtonControl DockPanel.Dock="Top"/>
         <StackPanel>
             <Button Command="{Binding OpenEngineListCommand}" Content="{x:Static r:Resources.EngineList}"/>
             <Button Command="{Binding OpenTurnoutListCommand}" Content="{x:Static r:Resources.TurnoutList}"/>

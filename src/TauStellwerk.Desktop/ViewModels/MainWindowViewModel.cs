@@ -7,8 +7,6 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base;
-using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.Services;
@@ -18,26 +16,15 @@ namespace TauStellwerk.Desktop.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly ISettingsService _settingsService;
-    private readonly StatusService _statusService;
     private readonly IAvaloniaViewService _viewService;
 
     [ObservableProperty]
     private ThemeVariant _themeMode = ThemeVariant.Default;
 
-    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
+    public MainWindowViewModel(ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
     {
         _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
-        _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
         _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
-
-        _statusService.StatusChanged += (_, status) =>
-        {
-            StopButtonState.SetStatus(status);
-        };
-        if (_statusService.LastKnownStatus != null)
-        {
-            StopButtonState.SetStatus(_statusService.LastKnownStatus);
-        }
 
         var settings = _settingsService.GetSettings().Result;
 
@@ -51,8 +38,6 @@ public partial class MainWindowViewModel : ViewModelBase
     };
     }
 
-    public StopButtonState StopButtonState { get; } = new();
-
     private static ThemeVariant ParseThemeVariant(string name)
     {
         return name switch
@@ -61,20 +46,6 @@ public partial class MainWindowViewModel : ViewModelBase
             "Light" => ThemeVariant.Light,
             _ => ThemeVariant.Default,
         };
-    }
-
-    [RelayCommand]
-    private async Task StopButton()
-    {
-        var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
-        var username = (await _settingsService.GetSettings()).Username;
-        var status = new SystemStatus()
-        {
-            State = isCurrentlyRunning == State.On ? State.Off : State.On,
-            LastActionUsername = username,
-        };
-
-        await _statusService.SetStatus(status);
     }
 
     [RelayCommand]
