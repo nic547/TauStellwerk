@@ -7,6 +7,6 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
     <Application.Styles>
-        <FluentTheme/>
+        <FluentTheme DensityStyle="Compact"/>
     </Application.Styles>
 </Application>
