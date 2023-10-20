@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
+        xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.SettingsWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -18,6 +19,7 @@
         </Style>
     </Window.Styles>
     <StackPanel>
+        <controls:TopMenuControl/>
         <StackPanel ToolTip.Tip="{x:Static r:Resources.UsernameSettingDescription}" Margin="2">
             <Label Content="{x:Static r:Resources.Username}" />
             <TextBox Text="{Binding Settings.Username, Mode=TwoWay, FallbackValue={}}" />

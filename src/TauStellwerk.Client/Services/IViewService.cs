@@ -17,5 +17,5 @@ public interface IViewService
 
     public void ShowSettingsView(object? source);
 
-    public void ShowMessageBox(string title, string message, object? source = null);
+    public void ShowMessageBox(string title, string message, object source);
 }
