@@ -4,6 +4,7 @@
 // </copyright>
 
 using Avalonia;
+using Avalonia.Controls;
 using Splat;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.Services;

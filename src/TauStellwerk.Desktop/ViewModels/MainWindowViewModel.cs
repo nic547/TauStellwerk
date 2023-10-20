@@ -7,35 +7,30 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
+using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : TopMenuViewModel
 {
     private readonly ISettingsService _settingsService;
-    private readonly IAvaloniaViewService _viewService;
 
     [ObservableProperty]
     private ThemeVariant _themeMode = ThemeVariant.Default;
 
     public MainWindowViewModel(ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
+        : base(viewService)
     {
-        _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
+        _settingsService = settingsService ??
+                           Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
 
         var settings = _settingsService.GetSettings().Result;
 
-        ThemeMode = ParseThemeVariant(settings.Theme);
-        Languages.SetUILanguage(settings.Language);
-
-        _settingsService.SettingsChanged += (updatedSetting) =>
-    {
-        ThemeMode = ParseThemeVariant(updatedSetting.Theme);
-        Languages.SetUILanguage(updatedSetting.Language);
-    };
+        _settingsService.SettingsChanged += HandleSettingsChange;
+        HandleSettingsChange(settings);
     }
 
     private static ThemeVariant ParseThemeVariant(string name)
@@ -48,21 +43,9 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
-    [RelayCommand]
-    private void OpenEngineList()
+    private void HandleSettingsChange(ImmutableSettings settings)
     {
-        _viewService.ShowEngineSelectionView(this);
-    }
-
-    [RelayCommand]
-    private void OpenSettings()
-    {
-        _viewService.ShowSettingsView(this);
-    }
-
-    [RelayCommand]
-    private void OpenTurnoutList()
-    {
-        _viewService.ShowTurnoutsWindow();
+        ThemeMode = ParseThemeVariant(settings.Theme);
+        Languages.SetUILanguage(settings.Language);
     }
 }

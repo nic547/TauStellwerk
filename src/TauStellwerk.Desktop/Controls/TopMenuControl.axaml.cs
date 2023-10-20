@@ -1,4 +1,4 @@
-// <copyright file="StopButtonControl.axaml.cs" company="Dominic Ritz">
+// <copyright file="TopMenuControl.axaml.cs" company="Dominic Ritz">
 // Copyright (c) Dominic Ritz. All rights reserved.
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,12 +8,12 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Controls;
 
-public partial class StopButtonControl : UserControl
+public partial class TopMenuControl : UserControl
 {
-    public StopButtonControl()
+    public TopMenuControl()
     {
         InitializeComponent();
 
-        DataContext = new StopButtonControlViewModel();
+        DataContext = new TopMenuViewModel();
     }
 }
