@@ -3,6 +3,7 @@
 // Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Desktop.Services;
@@ -17,6 +18,8 @@ public partial class TopMenuViewModel : ViewModelBase
     {
         _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
     }
+
+    public StopButtonControlViewModel StopButtonVm { get; } = new();
 
     [RelayCommand]
     protected virtual void OpenEngineList()

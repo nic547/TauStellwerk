@@ -9,8 +9,20 @@
              x:DataType="viewModels:TopMenuViewModel"
              x:CompileBindings="True">
     <Menu>
-        <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
-        <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+        <MenuItem Header="{x:Static r:Resources.Open}">
+            <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
+            <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+        </MenuItem>
         <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
+        <MenuItem 
+            Command="{Binding StopButtonVm.StopButtonCommand}" 
+            Header="{Binding StopButtonVm.CurrentState}">
+            <ToolTip.Tip>
+                <TextBlock>
+                    <Run Text="{Binding StopButtonVm.LastAction}"/>
+                    <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
+                </TextBlock>
+            </ToolTip.Tip>
+        </MenuItem>
     </Menu>
 </UserControl>

@@ -46,7 +46,6 @@ public partial class StopButtonControlViewModel : ViewModelBase
     private void HandleStatusChange(object? sender, SystemStatus? e)
     {
         _lastSystemStatus = e;
-
         switch (e?.State)
         {
             case State.On:

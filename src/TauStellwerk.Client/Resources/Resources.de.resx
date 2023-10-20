@@ -228,4 +228,7 @@
   <data name="StatusRunningSubtitle" xml:space="preserve">
     <value>TauStellwerk wurde gestartet von:</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
 </root>
