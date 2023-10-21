@@ -7,6 +7,6 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
     <Application.Styles>
-        <FluentTheme DensityStyle="Compact"/>
+        <StyleInclude Source="avares://Semi.Avalonia/Themes/Index.axaml" />
     </Application.Styles>
 </Application>
