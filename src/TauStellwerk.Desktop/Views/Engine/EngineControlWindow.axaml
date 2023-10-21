@@ -15,7 +15,7 @@
     <DockPanel>
         <controls:TopMenuControl DockPanel.Dock="Top"/>
         <Grid
-              ColumnDefinitions="56 *"
+              ColumnDefinitions="72 *"
               RowDefinitions="auto auto * auto auto auto"
               VerticalAlignment="Stretch"
               Margin="5">
@@ -26,7 +26,8 @@
                    ImageTimestamp="{Binding Engine.ImageTimestamp}"
                    Stretch="Uniform"
                    StretchDirection="Both"
-                   Margin="2"/>
+                   Margin="2"
+                   RenderOptions.BitmapInterpolationMode="HighQuality"/>
             <Slider Orientation="Vertical"
                     Grid.Row="1"
                     Grid.Column="0"
@@ -38,13 +39,13 @@
                     Value="{Binding Throttle}"/>
 	    	<StackPanel Grid.Column="0" Grid.Row="3"
                         Orientation="Horizontal" HorizontalAlignment="Center">
-	    		<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="false"/>
-	    		<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="true"/>
+	    		<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="false" Padding="10"/>
+	    		<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="true" Padding="10"/>
 	    	</StackPanel>
             <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center"
                    Content="{Binding Throttle}"/>
             <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" Margin="2">
-                <StackPanel>
+                <StackPanel Spacing="2">
                     <ItemsControl ItemsSource="{Binding Engine.Functions, FallbackValue={}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

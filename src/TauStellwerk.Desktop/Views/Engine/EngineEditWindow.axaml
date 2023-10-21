@@ -21,9 +21,9 @@
       <Button Content="{x:Static r:Resources.Copy}" Command="{Binding CopyCommand}"
               DockPanel.Dock="Left"/>
       <Button Content="{x:Static r:Resources.Cancel}" Command="{Binding CancelCommand}"
-              DockPanel.Dock="Right"/>
+              DockPanel.Dock="Right" Theme="{DynamicResource SolidButton}" Margin="1"/>
       <Button Content="{x:Static r:Resources.Save}" Command="{Binding SaveCommand}"
-              DockPanel.Dock="Right"/>
+              DockPanel.Dock="Right" Theme="{DynamicResource SolidButton}" Margin="1"/>
     </DockPanel>
     <ScrollViewer>
       <StackPanel Margin="5">

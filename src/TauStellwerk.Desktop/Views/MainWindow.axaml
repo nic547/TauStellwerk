@@ -15,10 +15,13 @@
 
     <DockPanel>
         <controls:StopButtonControl DockPanel.Dock="Top"/>
-        <StackPanel>
-            <Button Command="{Binding OpenEngineListCommand}" Content="{x:Static r:Resources.EngineList}"/>
-            <Button Command="{Binding OpenTurnoutListCommand}" Content="{x:Static r:Resources.TurnoutList}"/>
-            <Button Command="{Binding OpenSettingsCommand}" Content="{x:Static r:Resources.Settings}" />
+        <StackPanel Spacing="5">
+            <Button Command="{Binding OpenEngineListCommand}" Content="{x:Static r:Resources.EngineList}"
+                    Width="400" Theme="{DynamicResource SolidButton}"/>
+            <Button Command="{Binding OpenTurnoutListCommand}" Content="{x:Static r:Resources.TurnoutList}"
+                    Width="400" Theme="{DynamicResource SolidButton}"/>
+            <Button Command="{Binding OpenSettingsCommand}" Content="{x:Static r:Resources.Settings}"
+                    Width="400" Theme="{DynamicResource SolidButton}"/>
           </StackPanel>
     </DockPanel>
 </Window>
