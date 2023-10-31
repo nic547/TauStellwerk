@@ -108,4 +108,28 @@
     <data name="UsernameSettingDescription" xml:space="preserve">
         <value>De Benutzername wo anderne Nutzer azeigt werde söll.</value>
     </data>
+    <data name="StatusStopped" xml:space="preserve">
+        <value>STOP</value>
+    </data>
+    <data name="StatusStoppedSubtitle" xml:space="preserve">
+        <value>TauStellwerk isch gschtopt worde vo:</value>
+    </data>
+    <data name="StatusRunning" xml:space="preserve">
+        <value>AKTIV</value>
+    </data>
+    <data name="StatusStoppedLocked" xml:space="preserve">
+        <value>STOP (GSPERT)</value>
+    </data>
+    <data name="StatusUnknown" xml:space="preserve">
+        <value>UNBEKANNT</value>
+    </data>
+    <data name="StatusUnknownSubtitle" xml:space="preserve">
+        <value>Status nonig bekannt</value>
+    </data>
+    <data name="StatusRunningSubtitle" xml:space="preserve">
+        <value>TauStellwerk isch gstopt worde vo:</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>Öffne</value>
+    </data>
 </root>

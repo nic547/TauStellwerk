@@ -18,21 +18,25 @@
 	</Design.DataContext>
 	<Panel Margin="0 5 0 5">
 		<DockPanel LastChildFill="False">
-			<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-				<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="{x:Static r:Resources.Search}" Width="200" Text="{Binding CurrentSearchTerm}"/>
-				<ComboBox ItemsSource="{Binding EngineSortModes}"
-                          SelectedItem="{Binding CurrentEngineSortMode}"/>
-				<ComboBox ItemsSource="{Binding EngineSortDirections}"
-				          SelectedItem="{Binding CurrentEngineSortDirection}"/>
-				<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0" Content="{x:Static r:Resources.ShowHidden}"/>
+			<StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="5">
+				<controls:TopMenuControl/>
+				<Separator/>
+				<StackPanel Orientation="Horizontal">
+					<TextBox AcceptsReturn="False" AcceptsTab="False" MaxLines="1" Watermark="{x:Static r:Resources.Search}" Width="200" Text="{Binding CurrentSearchTerm}"/>
+					<ComboBox ItemsSource="{Binding EngineSortModes}"
+					          SelectedItem="{Binding CurrentEngineSortMode}"/>
+					<ComboBox ItemsSource="{Binding EngineSortDirections}"
+					          SelectedItem="{Binding CurrentEngineSortDirection}"/>
+					<CheckBox IsChecked="{Binding ShowHiddenEngines}" Margin="5, 0 , 5,0" Content="{x:Static r:Resources.ShowHidden}"/>
+				</StackPanel>
 			</StackPanel>
-			<DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+			<DockPanel DockPanel.Dock="Bottom" LastChildFill="False" Margin="5">
 				<Button Command="{CompiledBinding ScrollPages}"
                         DockPanel.Dock="Left"
                         CommandParameter="-1"
                         IsEnabled="{Binding CanScrollBackwards}"
                         Content="&lt;"
-                        Classes="accent"/>
+                        Theme="{DynamicResource SolidButton}"/>
 				<TextBlock Text="{Binding CurrentPage}"
                            DockPanel.Dock="Left"
                            VerticalAlignment="Center"
@@ -43,13 +47,14 @@
                         CommandParameter="1"
                         IsEnabled="{Binding CanScrollForwards}"
                         Content="&gt;"
-                        Classes="accent"/>
+                        Theme="{DynamicResource SolidButton}"/>
 				<Button Command="{Binding CreateEngineCommand}"
                         DockPanel.Dock="Right"
-                        Content="{x:Static r:Resources.CreateNewEngine}"/>
+                        Content="{x:Static r:Resources.CreateNewEngine}"
+                        Theme="{DynamicResource SolidButton}"/>
 			</DockPanel>
-			<ScrollViewer AllowAutoHide="False" Padding="0 0 16 0" Name="ScrollViewer">
-				<ItemsControl ItemsSource="{Binding Engines}" Name="EngineList" VerticalAlignment="Top">
+			<ScrollViewer AllowAutoHide="False" Name="ScrollViewer">
+				<ItemsControl ItemsSource="{Binding Engines}" Name="EngineList" VerticalAlignment="Top" Margin="2 2 12 2">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
 							<UniformGrid Columns="{Binding Columns , RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
@@ -59,7 +64,7 @@
 						<DataTemplate>
 							<Grid MinWidth="200" Tag="{Binding Id}" VerticalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto, Auto, *, Auto" Margin="4">
 								<TextBlock Text="{Binding Name}"  Padding="4" Grid.Row="0"/>
-								<controls:EngineImageControl EngineImages="{Binding Images}" ImageTimestamp="{Binding ImageTimestamp}" Grid.Row="1"/>
+								<controls:EngineImageControl EngineImages="{Binding Images}" ImageTimestamp="{Binding ImageTimestamp}" Grid.Row="1" RenderOptions.BitmapInterpolationMode="HighQuality"/>
 								<ItemsControl ItemsSource="{Binding Tags}" VerticalAlignment="Stretch" Grid.Row="2">
 									<ItemsControl.ItemsPanel>
 										<ItemsPanelTemplate>
@@ -76,8 +81,16 @@
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>
 								<StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
-									<Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="{x:Static r:Resources.Edit}" Classes="accent"/>
-									<Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" CommandParameter="{Binding Id}" Content="{x:Static r:Resources.Select}" Classes="accent"/>
+									<Button Command="{Binding DataContext.EditEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" 
+									        CommandParameter="{Binding Id}" 
+									        Content="{x:Static r:Resources.Edit}" 
+									        Theme="{DynamicResource SolidButton}" 
+									        Margin="1" />
+									<Button Command="{Binding DataContext.ControlEngineCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}" 
+									        CommandParameter="{Binding Id}" 
+									        Content="{x:Static r:Resources.Select}" 
+									        Theme="{DynamicResource SolidButton}" 
+									        Margin="1" />
 								</StackPanel>
 							</Grid>
 						</DataTemplate>

@@ -7,7 +7,6 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
-using TauStellwerk.Base;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
@@ -15,43 +14,24 @@ using TauStellwerk.Desktop.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : TopMenuViewModel
 {
     private readonly ISettingsService _settingsService;
-    private readonly StatusService _statusService;
-    private readonly IAvaloniaViewService _viewService;
 
     [ObservableProperty]
     private ThemeVariant _themeMode = ThemeVariant.Default;
 
-    public MainWindowViewModel(StatusService? statusService = null, ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
+    public MainWindowViewModel(ISettingsService? settingsService = null, AvaloniaViewService? viewService = null)
+        : base(viewService)
     {
-        _settingsService = settingsService ?? Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
-        _statusService = statusService ?? Locator.Current.GetService<StatusService>() ?? throw new InvalidOperationException();
-        _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
-
-        _statusService.StatusChanged += (_, status) =>
-        {
-            StopButtonState.SetStatus(status);
-        };
-        if (_statusService.LastKnownStatus != null)
-        {
-            StopButtonState.SetStatus(_statusService.LastKnownStatus);
-        }
+        _settingsService = settingsService ??
+                           Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
 
         var settings = _settingsService.GetSettings().Result;
 
-        ThemeMode = ParseThemeVariant(settings.Theme);
-        Languages.SetUILanguage(settings.Language);
-
-        _settingsService.SettingsChanged += (updatedSetting) =>
-    {
-        ThemeMode = ParseThemeVariant(updatedSetting.Theme);
-        Languages.SetUILanguage(updatedSetting.Language);
-    };
+        _settingsService.SettingsChanged += HandleSettingsChange;
+        HandleSettingsChange(settings);
     }
-
-    public StopButtonState StopButtonState { get; } = new();
 
     private static ThemeVariant ParseThemeVariant(string name)
     {
@@ -63,35 +43,9 @@ public partial class MainWindowViewModel : ViewModelBase
         };
     }
 
-    [RelayCommand]
-    private async Task StopButton()
+    private void HandleSettingsChange(ImmutableSettings settings)
     {
-        var isCurrentlyRunning = _statusService.LastKnownStatus?.State;
-        var username = (await _settingsService.GetSettings()).Username;
-        var status = new SystemStatus()
-        {
-            State = isCurrentlyRunning == State.On ? State.Off : State.On,
-            LastActionUsername = username,
-        };
-
-        await _statusService.SetStatus(status);
-    }
-
-    [RelayCommand]
-    private void OpenEngineList()
-    {
-        _viewService.ShowEngineSelectionView(this);
-    }
-
-    [RelayCommand]
-    private void OpenSettings()
-    {
-        _viewService.ShowSettingsView(this);
-    }
-
-    [RelayCommand]
-    private void OpenTurnoutList()
-    {
-        _viewService.ShowTurnoutsWindow();
+        ThemeMode = ParseThemeVariant(settings.Theme);
+        Languages.SetUILanguage(settings.Language);
     }
 }

@@ -12,55 +12,59 @@
     <Design.DataContext>
         <viewModels:EngineControlViewModel/>
     </Design.DataContext>
-    <Grid
-          ColumnDefinitions="56 *"
-          RowDefinitions="auto auto * auto auto auto"
-          VerticalAlignment="Stretch"
-          Margin="5">
-        <Label Content="{Binding Engine.Name, FallbackValue={}}"
-               Grid.ColumnSpan="2" Padding="4"/>
-        <controls:EngineImageControl Grid.Column="1" Grid.Row="1"
-               EngineImages="{Binding Engine.Images}"
-               ImageTimestamp="{Binding Engine.ImageTimestamp}"
-               Stretch="Uniform"
-               StretchDirection="Both"
-               Margin="2"/>
-        <Slider Orientation="Vertical"
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.RowSpan="2"
-                Margin="0,5"
-                HorizontalAlignment="Center"
-                Maximum="126"
-                Minimum="0"
-                Value="{Binding Throttle}"/>
-		<StackPanel Grid.Column="0" Grid.Row="3"
-                    Orientation="Horizontal" HorizontalAlignment="Center">
-			<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="false"/>
-			<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="true"/>
-		</StackPanel>
-        <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center"
-               Content="{Binding Throttle}"/>
-        <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" Margin="2">
-            <StackPanel>
-                <ItemsControl ItemsSource="{Binding Engine.Functions, FallbackValue={}}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ToggleButton Content="{Binding }"
-                                          Tag="{Binding}"
-                                          IsChecked="{Binding IsOn}"
-                                          Command="{Binding Path=DataContext.FunctionCommand ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
-                                          CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-        </ScrollViewer>
-		<Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
-                Margin="2"
-                HorizontalAlignment="Center"
-                Content="     Emergency Stop     " 
-                ToolTip.Tip="Quickly stops an engine without simulating momentum." 
-                Command="{Binding EmergencyStopCommand}"/>
-    </Grid>
+    <DockPanel>
+        <controls:TopMenuControl DockPanel.Dock="Top"/>
+        <Grid
+              ColumnDefinitions="72 *"
+              RowDefinitions="auto auto * auto auto auto"
+              VerticalAlignment="Stretch"
+              Margin="5">
+            <Label Content="{Binding Engine.Name, FallbackValue={}}"
+                   Grid.ColumnSpan="2" Padding="4"/>
+            <controls:EngineImageControl Grid.Column="1" Grid.Row="1"
+                   EngineImages="{Binding Engine.Images}"
+                   ImageTimestamp="{Binding Engine.ImageTimestamp}"
+                   Stretch="Uniform"
+                   StretchDirection="Both"
+                   Margin="2"
+                   RenderOptions.BitmapInterpolationMode="HighQuality"/>
+            <Slider Orientation="Vertical"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.RowSpan="2"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
+                    Maximum="126"
+                    Minimum="0"
+                    Value="{Binding Throttle}"/>
+	    	<StackPanel Grid.Column="0" Grid.Row="3"
+                        Orientation="Horizontal" HorizontalAlignment="Center">
+	    		<Button Content="&lt;" IsEnabled="{Binding IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="false" Padding="10"/>
+	    		<Button Content="&gt;" IsEnabled="{Binding !IsDrivingForward}" Command="{Binding ChangeDirectionCommand}" CommandParameter="true" Padding="10"/>
+	    	</StackPanel>
+            <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center"
+                   Content="{Binding Throttle}"/>
+            <ScrollViewer Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" Margin="2">
+                <StackPanel Spacing="2">
+                    <ItemsControl ItemsSource="{Binding Engine.Functions, FallbackValue={}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton Content="{Binding }"
+                                              Tag="{Binding}"
+                                              IsChecked="{Binding IsOn}"
+                                              Command="{Binding Path=DataContext.FunctionCommand ,RelativeSource={RelativeSource AncestorType={x:Type Window}}, FallbackValue={}}"
+                                              CommandParameter="{Binding ., RelativeSource={RelativeSource Self}}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+	    	<Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
+                    Margin="2"
+                    HorizontalAlignment="Center"
+                    Content="     Emergency Stop     " 
+                    ToolTip.Tip="Quickly stops an engine without simulating momentum." 
+                    Command="{Binding EmergencyStopCommand}"/>
+        </Grid>
+    </DockPanel>
 </Window>

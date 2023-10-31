@@ -19,19 +19,19 @@ public class AvaloniaViewService : IAvaloniaViewService
     {
         var vm = new EngineControlViewModel(engine);
         var window = new EngineControlWindow(vm);
-        ShowWindowCenterOwner(window, GetMainWindow(), 0.33);
+        window.Show();
     }
 
     public void ShowSettingsView(object? source = null)
     {
         var vm = new SettingsViewModel();
         var window = new SettingsWindow(vm);
-        window.Show(GetMainWindow());
+        window.Show();
     }
 
-    public void ShowMessageBox(string title, string message, object? source = null)
+    public void ShowMessageBox(string title, string message, object source)
     {
-        var parentWindow = TryGetAssociatedWindow(source);
+        var parentWindow = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate source of dialog request");
 
         var messageBox = new MessageBox
         {
@@ -43,7 +43,7 @@ public class AvaloniaViewService : IAvaloniaViewService
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
         };
 
-        messageBox.ShowDialog(parentWindow ?? GetMainWindow());
+        messageBox.ShowDialog(parentWindow);
     }
 
     public void ShowEngineEditView(EngineFull engine, object? source)
@@ -63,21 +63,21 @@ public class AvaloniaViewService : IAvaloniaViewService
 
         window.WindowStartupLocation = WindowStartupLocation.Manual;
         window.Position = new PixelPoint(sourceWindow.Position.X + 50, sourceWindow.Position.Y + 50);
-        window.Show(GetMainWindow());
+        window.Show();
     }
 
     public void ShowEngineSelectionView(object? source = null)
     {
         var vm = new EngineSelectionViewModel();
         var window = new EngineSelectionWindow(vm);
-        window.Show(GetMainWindow());
+        window.Show();
     }
 
     public void ShowTurnoutsWindow(object? source = null)
     {
         var vm = new TurnoutsViewModel();
         var window = new TurnoutsWindow(vm);
-        window.Show(GetMainWindow());
+        window.Show();
     }
 
     public void ShowTurnoutEditWindow(Turnout turnout, object? source = null)
@@ -91,7 +91,7 @@ public class AvaloniaViewService : IAvaloniaViewService
         }
         else
         {
-            window.Show(associatedWindow);
+            window.Show();
         }
     }
 
@@ -126,24 +126,5 @@ public class AvaloniaViewService : IAvaloniaViewService
         }
 
         return null;
-    }
-
-    private static Window GetMainWindow()
-    {
-        var appLifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-        return appLifetime?.MainWindow ?? throw new Exception("Failed to find ApplicationLifetime.");
-    }
-
-    private static void ShowWindowCenterOwner(Window window, Window? parent, double widthMultiplier = 1d)
-    {
-        if (parent == null)
-        {
-            window.Show();
-            return;
-        }
-
-        window.Width = parent.ClientSize.Width * widthMultiplier;
-        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        window.Show(parent);
     }
 }

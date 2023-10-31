@@ -207,4 +207,28 @@
   <data name="SelectNewImage" xml:space="preserve">
     <value>Neues Bild auswählen</value>
   </data>
+  <data name="StatusStopped" xml:space="preserve">
+    <value>STOP</value>
+  </data>
+  <data name="StatusStoppedSubtitle" xml:space="preserve">
+    <value>TauStellwerk wurde gestopt von:</value>
+  </data>
+  <data name="StatusRunning" xml:space="preserve">
+    <value>AKTIV</value>
+  </data>
+  <data name="StatusStoppedLocked" xml:space="preserve">
+    <value>STOP (GESPERRT)</value>
+  </data>
+  <data name="StatusUnknown" xml:space="preserve">
+    <value>UNBEKANNT</value>
+  </data>
+  <data name="StatusUnknownSubtitle" xml:space="preserve">
+    <value>Status noch nicht bekannt</value>
+  </data>
+  <data name="StatusRunningSubtitle" xml:space="preserve">
+    <value>TauStellwerk wurde gestartet von:</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
 </root>

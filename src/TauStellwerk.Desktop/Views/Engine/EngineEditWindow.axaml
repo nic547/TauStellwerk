@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
+        xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.EngineEditWindow"
         Icon="/Assets/tauStellwerk.ico"
@@ -13,15 +14,16 @@
     <viewModels:EngineEditViewModel/>
   </Design.DataContext>
   <DockPanel>
+    <controls:TopMenuControl DockPanel.Dock="Top"/>
     <DockPanel DockPanel.Dock="Bottom" Margin="5" LastChildFill="False">
       <Button Content="{x:Static r:Resources.Delete}" Command="{Binding DeleteCommand}"
               DockPanel.Dock="Left"/>
       <Button Content="{x:Static r:Resources.Copy}" Command="{Binding CopyCommand}"
               DockPanel.Dock="Left"/>
       <Button Content="{x:Static r:Resources.Cancel}" Command="{Binding CancelCommand}"
-              DockPanel.Dock="Right"/>
+              DockPanel.Dock="Right" Theme="{DynamicResource SolidButton}" Margin="1"/>
       <Button Content="{x:Static r:Resources.Save}" Command="{Binding SaveCommand}"
-              DockPanel.Dock="Right"/>
+              DockPanel.Dock="Right" Theme="{DynamicResource SolidButton}" Margin="1"/>
     </DockPanel>
     <ScrollViewer>
       <StackPanel Margin="5">

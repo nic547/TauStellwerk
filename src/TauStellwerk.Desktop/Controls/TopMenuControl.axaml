@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
+             xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TauStellwerk.Desktop.Controls.TopMenuControl"
+             x:DataType="viewModels:TopMenuViewModel"
+             x:CompileBindings="True">
+    <Menu>
+        <MenuItem Header="{x:Static r:Resources.Open}">
+            <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
+            <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+        </MenuItem>
+        <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
+        <MenuItem 
+            Command="{Binding StopButtonVm.StopButtonCommand}" 
+            Header="{Binding StopButtonVm.CurrentState}">
+            <ToolTip.Tip>
+                <TextBlock>
+                    <Run Text="{Binding StopButtonVm.LastAction}"/>
+                    <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
+                </TextBlock>
+            </ToolTip.Tip>
+        </MenuItem>
+    </Menu>
+</UserControl>
