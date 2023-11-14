@@ -1,12 +1,10 @@
-﻿// <copyright file="ECoSCommandStation.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Server.CommandStations;
@@ -22,7 +20,7 @@ public class ECoSCommandStation : CommandStationBase
         : base()
     {
         _logger = logger;
-        string ipAddress = options.IPAddress ?? throw new FormatException("ECoS has been configured as CommandStation, but no IPAddress was configured.");
+        var ipAddress = options.IPAddress ?? throw new FormatException("ECoS has been configured as CommandStation, but no IPAddress was configured.");
         var port = options.Port;
         _connectionHandler = new ECosConnectionHandler(IPAddress.Parse(ipAddress), port, logger);
 
@@ -39,7 +37,7 @@ public class ECoSCommandStation : CommandStationBase
 
             foreach (var (id, name, protocol) in ecosEngines)
             {
-                Engine? engine = context.Engines.Include(e => e.ECoSEngineData)
+                var engine = context.Engines.Include(e => e.ECoSEngineData)
                     .Include(e => e.Functions)
                     .SingleOrDefault(e => e.ECoSEngineData != null && e.ECoSEngineData.Id == id);
 
@@ -88,7 +86,7 @@ public class ECoSCommandStation : CommandStationBase
     public override async Task HandleEngineSpeed(Engine engine, short speed, Direction priorDirection, Direction newDirection)
     {
         var ecosData = CheckForEcosData(engine);
-        Task directionTask = priorDirection != newDirection
+        var directionTask = priorDirection != newDirection
             ? _connectionHandler.SendCommandAsync($"set({ecosData.Id},dir[{(newDirection == Direction.Forwards ? "0" : "1")}])")
             : Task.CompletedTask;
 

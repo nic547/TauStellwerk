@@ -1,11 +1,13 @@
-﻿// <copyright file="TestDataHelper.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
+
+
+// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using TauStellwerk.Data.Model;
 
-namespace TauStellwerk.Test.Database;
+namespace TauStellwerk.Data.Tests;
 
 /// <summary>
 /// Contains helpers proving sample data for testing stuff.
@@ -76,7 +78,7 @@ public static class TestDataHelper
                 },
             },
 
-            new Engine()
+            new()
             {
                 Name = "Roco BR 193 492 (Hupac Nightpiercer)",
                 SpeedSteps = 128,
@@ -116,7 +118,7 @@ public static class TestDataHelper
                 },
             },
 
-            new Engine()
+            new()
             {
                 Name = "Roco BR 193 Gotthardo (SBB C Int)",
                 SpeedSteps = 128,
@@ -155,7 +157,7 @@ public static class TestDataHelper
                 },
             },
 
-            new Engine()
+            new()
             {
                 Name = "Märklin Re 474 003",
                 SpeedSteps = 128,
@@ -180,7 +182,7 @@ public static class TestDataHelper
                     new DccFunction(15, "Squealing brakes", 1000),
                 },
             },
-            new Engine()
+            new()
             {
                 Name = "Märklin Re 460 Circus Knie",
                 SpeedSteps = 128,
@@ -218,116 +220,99 @@ public static class TestDataHelper
                     new DccFunction(28, "Train announcements 3", 4000),
                 },
             },
-            new Engine
-            {
+            new() {
                 Name = "Märklin Re 620 X-Rail",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "Märklin Re 620 058",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new Engine
-            {
+            new() {
                 Name = "Märklin Re 6/6 Balerna",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new Engine
-            {
+            new() {
                 Name = "Märklin Re 420 Circus Knie",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new Engine
-            {
+            new() {
                 Name = "Märklin Re 482 036 (SBB Cargo)",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new Engine
-            {
+            new() {
                 Name = "ES 64 F4 - 063 (MRCE)",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "Black Pearl",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "Cat's Eye",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "Re 475 BLS Alpinist",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BR 193 \"Das ist Grün\"",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BR 193 (Railpool)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BR 193 (MRCE)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BR 193 (DB Cargo)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BLS Re 4/4 185",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BLS Re 4/4 174",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "BLS Re 4/4 194",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new Engine
-            {
+            new() {
                 Name = "SBB Re 460 \"Munot\"",
                 SpeedSteps = 128,
                 TopSpeed = 200,

@@ -1,7 +1,5 @@
-﻿// <copyright file="EngineServiceTests.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
@@ -9,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Model;
 using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Server;
@@ -181,7 +179,7 @@ public class EngineServiceTests
         functionResult.Should().BeFailure();
     }
 
-    private static (Server.Services.EngineControlService EngineService, Session Session) PrepareEngineService(CommandStationBase? mock = null)
+    private static (Server.Services.EngineControlService.EngineControlService EngineService, Session Session) PrepareEngineService(CommandStationBase? mock = null)
     {
         var sessionServiceLogger = Substitute.For<ILogger<SessionService>>();
 
@@ -189,14 +187,14 @@ public class EngineServiceTests
         var session = new Session("ConnectionId", "TestUser");
         sessionService.HandleConnected(session.ConnectionId, session.UserName);
         mock ??= GetAlwaysTrueMock();
-        var loggerMock = Substitute.For<ILogger<Server.Services.EngineControlService>>();
+        var loggerMock = Substitute.For<ILogger<Server.Services.EngineControlService.EngineControlService>>();
 
         TauStellwerkOptions options = new()
         {
             ResetEnginesWithoutState = true,
         };
 
-        Server.Services.EngineControlService engineControlControlService = new(mock, sessionService, loggerMock, Options.Create(options));
+        Server.Services.EngineControlService.EngineControlService engineControlControlService = new(mock, sessionService, loggerMock, Options.Create(options));
         return (engineControlControlService, session);
     }
 

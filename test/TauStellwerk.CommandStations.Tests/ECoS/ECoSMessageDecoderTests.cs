@@ -1,15 +1,11 @@
-﻿// <copyright file="ECoSMessageDecoderTests.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using FluentAssertions;
 using NUnit.Framework;
 using TauStellwerk.Server.CommandStations;
 
-#nullable enable
-
-namespace TauStellwerk.Test.ECoS;
+namespace TauStellwerk.CommandStations.Tests.ECoS;
 
 /// <summary>
 /// <see cref="ECoSMessageDecoder"/>.
@@ -19,7 +15,7 @@ public class ECoSMessageDecoderTests
     [Test]
     public void FuncDescCanHandleCRLF()
     {
-        string message = "1000 funcdesc[11,9,moment]\r\n1000 funcdesc[12,2055]\r\n1000 funcdesc[13,11783,moment]\r\n";
+        var message = "1000 funcdesc[11,9,moment]\r\n1000 funcdesc[12,2055]\r\n1000 funcdesc[13,11783,moment]\r\n";
         var result = ECoSMessageDecoder.DecodeFuncdescMessage(message).ToList();
 
         result[0].Number.Should().Be(11);
@@ -38,7 +34,7 @@ public class ECoSMessageDecoderTests
     [Test]
     public void FuncDescCanHandleLF()
     {
-        string message = "1000 funcdesc[11,9,moment]\n1000 funcdesc[12,2055]\n1000 funcdesc[13,11783,moment]\n";
+        var message = "1000 funcdesc[11,9,moment]\n1000 funcdesc[12,2055]\n1000 funcdesc[13,11783,moment]\n";
         var result = ECoSMessageDecoder.DecodeFuncdescMessage(message).ToList();
 
         result[0].Number.Should().Be(11);

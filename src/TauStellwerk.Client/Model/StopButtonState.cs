@@ -1,12 +1,10 @@
-﻿// <copyright file="StopButtonState.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.ComponentModel;
 using System.Timers;
 using JetBrains.Annotations;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Model;
 
 namespace TauStellwerk.Client.Model;
 
@@ -38,38 +36,26 @@ public class StopButtonState : INotifyPropertyChanged
         Stopped,
     }
 
-    public bool ShouldBeEnabled => CurrentState != State.StoppedLocked && CurrentState != State.Unknown;
+    public bool ShouldBeEnabled => CurrentState is not State.StoppedLocked and not State.Unknown;
 
     public bool ShouldBeDisabled => !ShouldBeEnabled;
 
-    public string TitleText
+    public string TitleText => CurrentState switch
     {
-        get
-        {
-            return CurrentState switch
-            {
-                State.Unknown => "UNKNOWN",
-                State.Running => "RUNNING",
-                State.StoppedLocked => "STOPPED (LOCKED)",
-                State.Stopped => "STOPPED",
-                _ => throw new ArgumentOutOfRangeException(),
-            };
-        }
-    }
+        State.Unknown => "UNKNOWN",
+        State.Running => "RUNNING",
+        State.StoppedLocked => "STOPPED (LOCKED)",
+        State.Stopped => "STOPPED",
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
-    public string BottomText
+    public string BottomText => CurrentState switch
     {
-        get
-        {
-            return CurrentState switch
-            {
-                State.Unknown => "TauStellwerk is in unknown state",
-                State.Running => $"TauStellwerk started by {_lastActionUsername}",
-                State.Stopped or State.StoppedLocked => $"TauStellwerk started by {_lastActionUsername}",
-                _ => throw new ArgumentOutOfRangeException(),
-            };
-        }
-    }
+        State.Unknown => "TauStellwerk is in unknown state",
+        State.Running => $"TauStellwerk started by {_lastActionUsername}",
+        State.Stopped or State.StoppedLocked => $"TauStellwerk started by {_lastActionUsername}",
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
     public State CurrentState { get; private set; } = State.Unknown;
 
@@ -84,7 +70,7 @@ public class StopButtonState : INotifyPropertyChanged
         }
         else
         {
-            if (systemStatus.State == Base.State.On)
+            if (systemStatus.State == Base.Model.State.On)
             {
                 CurrentState = State.Running;
             }

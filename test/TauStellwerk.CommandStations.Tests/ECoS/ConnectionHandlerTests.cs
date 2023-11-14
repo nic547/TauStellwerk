@@ -1,7 +1,5 @@
-﻿// <copyright file="ConnectionHandlerTests.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Net;
 using System.Net.Sockets;
@@ -11,10 +9,9 @@ using FluentResults.Extensions.FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
-using TauStellwerk.CommandStations;
 using TauStellwerk.CommandStations.ECoS;
 
-namespace TauStellwerk.Test.ECoS;
+namespace TauStellwerk.CommandStations.Tests.ECoS;
 
 public class ConnectionHandlerTests
 {
