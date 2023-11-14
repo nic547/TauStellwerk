@@ -1,11 +1,9 @@
-// <copyright file="TurnoutDao.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Data.Dao;

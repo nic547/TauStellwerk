@@ -1,10 +1,9 @@
-// <copyright file="CoalescingLimiterTests.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using FluentAssertions;
 using NUnit.Framework;
+using TauStellwerk.Util.RateLimiter;
 using TauStellwerk.Util.Timer;
 
 namespace TauStellwerk.Util.Tests;
@@ -15,7 +14,7 @@ public class CoalescingLimiterTests
     public async Task FunctionIsExecuted()
     {
         var helper = new LimiterTestHelper<int>();
-        var limiter = new CoalescingLimiter<int>(x => helper.Method(x), 100);
+        var limiter = new CoalescingLimiter<int>(helper.Method, 100);
 
         await limiter.Execute(460);
         helper.MethodCalls.Should().HaveCount(1);
@@ -26,7 +25,7 @@ public class CoalescingLimiterTests
     public async Task SubsequentExecutionGetsDelayed()
     {
         var helper = new LimiterTestHelper<int>();
-        var limiter = new CoalescingLimiter<int>(x => helper.Method(x), 100);
+        var limiter = new CoalescingLimiter<int>(helper.Method, 100);
 
         _ = limiter.Execute(460);
         await limiter.Execute(620);
@@ -41,7 +40,7 @@ public class CoalescingLimiterTests
     {
         var helper = new LimiterTestHelper<int>();
         var fakeTimer = new FakeTimer();
-        var limiter = new CoalescingLimiter<int>(x => helper.Method(x), 100);
+        var limiter = new CoalescingLimiter<int>(helper.Method, 100);
 
         _ = limiter.Execute(460);
         fakeTimer.Elapse();

@@ -1,15 +1,13 @@
-// <copyright file="ConnectionService.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using TauStellwerk.Base;
-using TauStellwerk.Client.Model;
+using TauStellwerk.Client.Model.Settings;
 
-namespace TauStellwerk.Client.Services;
+namespace TauStellwerk.Client.Services.Connections;
 
 public class ConnectionService : IConnectionService
 {

@@ -9,10 +9,6 @@
 		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
 		<PackageReference Include="NetVips" Version="2.3.1" />
 		<PackageReference Include="NetVips.Native" Version="8.14.5" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="7.0.12" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">

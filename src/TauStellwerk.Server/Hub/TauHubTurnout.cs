@@ -1,12 +1,11 @@
-// <copyright file="TauHubTurnout.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Diagnostics.CodeAnalysis;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Dto;
+using TauStellwerk.Base.Model;
 using TauStellwerk.Data.Dao;
 
 namespace TauStellwerk.Server.Hub;

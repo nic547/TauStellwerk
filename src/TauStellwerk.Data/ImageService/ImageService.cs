@@ -1,16 +1,13 @@
-// <copyright file="ImageService.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetVips;
-using TauStellwerk.Base;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Data.Model;
-using TauStellwerk.Server.Services;
 
 namespace TauStellwerk.Data.ImageService;
 
@@ -176,6 +173,8 @@ public class ImageService
             case AvifOptions avifOptions:
                 smallerImage.Heifsave(outputFilePath, avifOptions.Quality, effort: avifOptions.Effort, strip: true, compression: avifOptions.HeifCompression);
                 break;
+            default:
+                throw new InvalidOperationException("Unknown imageOption subtype");
         }
 
         return smallerImage.Width;

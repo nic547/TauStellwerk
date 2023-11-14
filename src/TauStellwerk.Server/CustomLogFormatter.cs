@@ -1,7 +1,5 @@
-// <copyright file="CustomLogFormatter.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Extensions.Hosting.Systemd;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -59,6 +57,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
             LogLevel.Warning => $"{DarkYellow}WARN {Reset}",
             LogLevel.Error => $"{Red}ERROR{Reset}",
             LogLevel.Critical => $"{Red}CRIT {Reset}",
+            LogLevel.None => "NONE ",
             _ => throw new ArgumentOutOfRangeException(nameof(level)),
         };
     }
@@ -73,6 +72,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
             LogLevel.Warning => "<4>",
             LogLevel.Error => "<3>",
             LogLevel.Critical => "<2>",
+            LogLevel.None => "<7>",
             _ => throw new ArgumentOutOfRangeException(nameof(level)),
         };
     }

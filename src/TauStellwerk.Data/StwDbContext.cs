@@ -1,7 +1,5 @@
-// <copyright file="StwDbContext.cs" company="Dominic Ritz">
-// Copyright (c) Dominic Ritz. All rights reserved.
-// Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-// </copyright>
+﻿// This file is part of the TauStellwerk project.
+//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -29,7 +27,7 @@ public class StwDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Engine>()
+        _ = modelBuilder.Entity<Engine>()
             .Property(e => e.Tags)
             .HasConversion(
                 v => string.Join("\u001F", v),
@@ -38,7 +36,7 @@ public class StwDbContext : DbContext
                     (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
                     t => t.GetHashCode()));
 
-        modelBuilder.Entity<Engine>()
+        _ = modelBuilder.Entity<Engine>()
             .Property(e => e.ImageSizes)
             .HasConversion(
                 list => string.Join("\u001F", list),
@@ -55,7 +53,7 @@ public class StwDbContext : DbContext
         public StwDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<StwDbContext>();
-            optionsBuilder.UseSqlite($"Filename=MigrationTestDatabase.db;cache=shared");
+            _ = optionsBuilder.UseSqlite($"Filename=MigrationTestDatabase.db;cache=shared");
 
             return new StwDbContext(optionsBuilder.Options);
         }
