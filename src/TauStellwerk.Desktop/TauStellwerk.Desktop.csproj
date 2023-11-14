@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Desktop.xml</DocumentationFile>
     <OutputType>WinExe</OutputType>
@@ -14,10 +14,6 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.12" />
     <PackageReference Include="Semi.Avalonia" Version="11.0.1" />
     <PackageReference Include="Splat" Version="14.7.1" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
