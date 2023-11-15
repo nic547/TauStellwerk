@@ -88,7 +88,7 @@ public class TurnoutService : ITurnoutService
             }
         }
 
-        await connection.InvokeAsync("SetTurnout", turnout.Id, turnout.State);
+        await connection.InvokeAsync<ResultDto>("SetTurnout", turnout.Id, turnout.State);
 
         return Result.Ok();
     }

@@ -132,7 +132,7 @@ public class ConnectionService : IConnectionService
                 // The username is sent as access_token because it seemed like the easiest way to get SignalR to pass it along.
                 opts.AccessTokenProvider = () => Task.FromResult((string?)settings.Username);
             })
-            .AddJsonProtocol(options => options.PayloadSerializerOptions.TypeInfoResolver = new TauJsonContext())
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.TypeInfoResolver = TauJsonContext.Default)
             .Build();
     }
 
