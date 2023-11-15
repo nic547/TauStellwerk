@@ -2,13 +2,14 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using TauStellwerk.Util.Timer;
+using ITimer = TauStellwerk.Util.Timer.ITimer;
 
 namespace TauStellwerk.Util.RateLimiter;
 
 public class CoalescingLimiter<T>
 {
     private readonly Func<T, Task> _func;
-    private readonly List<TaskCompletionSource> _waitingTasks = new();
+    private readonly List<TaskCompletionSource> _waitingTasks = [];
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly ITimer _timer;
     private T? _lastParam;
@@ -47,7 +48,7 @@ public class CoalescingLimiter<T>
     private async void HandleTimer(object? source, DateTime dateTime)
     {
         await _semaphore.WaitAsync();
-        if (_waitingTasks.Any())
+        if (_waitingTasks.Count != 0)
         {
             await _func.Invoke(_lastParam ?? throw new InvalidOperationException());
             foreach (var tcs in _waitingTasks)

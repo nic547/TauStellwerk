@@ -13,12 +13,12 @@ namespace TauStellwerk.Data.ImageService;
 
 public class ImageService
 {
-    private static readonly List<string> _imageFormats = new() { "jpeg", "webp", "avif" };
+    private static readonly List<string> _imageFormats = ["jpeg", "webp", "avif"];
 
-    private static readonly List<int> _imageSizes = new() { 25, 50, 100 };
+    private static readonly List<int> _imageSizes = [25, 50, 100];
 
-    private static readonly List<ImageOptions> _imageOptions = new()
-    {
+    private static readonly List<ImageOptions> _imageOptions =
+    [
         // Quality settings derived from webp values, using https://www.industrialempathy.com/posts/avif-webp-quality-settings/
         new AvifOptions(1, "_100", 50, 9),
         new AvifOptions(0.5, "_050", 50, 9),
@@ -33,7 +33,7 @@ public class ImageService
         new JpegOptions(1, "_100", 60),
         new JpegOptions(0.5, "_050", 60),
         new JpegOptions(0.25, "_025", 70),
-    };
+    ];
 
     private readonly StwDbContext _context;
     private readonly ILogger<ImageService> _logger;
@@ -58,10 +58,10 @@ public class ImageService
     {
         if (lastImageUpdate is null)
         {
-            return new List<ImageDto>();
+            return [];
         }
 
-        List<ImageDto> imageDtos = new();
+        List<ImageDto> imageDtos = [];
 
         foreach (var imageFormat in _imageFormats)
         {
@@ -132,7 +132,7 @@ public class ImageService
             return;
         }
 
-        ConcurrentBag<int> generatedPixelSizes = new();
+        ConcurrentBag<int> generatedPixelSizes = [];
 
         using var image = Image.NewFromFile(existingSourceImage);
 
@@ -163,15 +163,15 @@ public class ImageService
         switch (options)
         {
             case WebpOptions webpOptions:
-                smallerImage.Webpsave(outputFilePath, webpOptions.Quality, effort: webpOptions.Effort, strip: true);
+                smallerImage.Webpsave(outputFilePath, webpOptions.Quality, effort: webpOptions.Effort);
                 break;
 
             case JpegOptions jpegOptions:
-                smallerImage.Jpegsave(outputFilePath, jpegOptions.Quality, strip: true);
+                smallerImage.Jpegsave(outputFilePath, jpegOptions.Quality);
                 break;
 
             case AvifOptions avifOptions:
-                smallerImage.Heifsave(outputFilePath, avifOptions.Quality, effort: avifOptions.Effort, strip: true, compression: avifOptions.HeifCompression);
+                smallerImage.Heifsave(outputFilePath, avifOptions.Quality, effort: avifOptions.Effort, compression: avifOptions.HeifCompression);
                 break;
             default:
                 throw new InvalidOperationException("Unknown imageOption subtype");

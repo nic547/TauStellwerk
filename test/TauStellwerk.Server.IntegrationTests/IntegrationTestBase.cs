@@ -31,7 +31,7 @@ public class IntegrationTestBase
         var hubConnection = new HubConnectionBuilder().WithUrl(
             _factory.Server.BaseAddress + "hub",
             options => options.HttpMessageHandlerFactory = _ => _factory.Server.CreateHandler())
-            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>())
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.TypeInfoResolver = TauJsonContext.Default)
             .Build();
 
         return new ConnectionService(settingService, hubConnection);

@@ -6,6 +6,7 @@ using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Util.DateTimeProvider;
 using TauStellwerk.Util.Timer;
+using ITimer = TauStellwerk.Util.Timer.ITimer;
 
 namespace TauStellwerk.Server.Services.EngineControlService;
 
@@ -14,7 +15,7 @@ public class MomentaryFunctionHandler
     private readonly CommandStationBase _commandStation;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    private readonly List<ActiveFunction> _activeFunctions = new();
+    private readonly List<ActiveFunction> _activeFunctions = [];
 
     private readonly SemaphoreSlim _listLock = new(1);
     private readonly ITimer _timer;
@@ -57,7 +58,7 @@ public class MomentaryFunctionHandler
             }
         }
 
-        if (!_activeFunctions.Any())
+        if (_activeFunctions.Count == 0)
         {
             _timer.Stop();
         }
