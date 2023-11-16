@@ -11,9 +11,9 @@
     <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
     <PackageReference Include="Semi.Avalonia" Version="11.0.1" />
-    <PackageReference Include="Splat" Version="14.7.1" />
+    <PackageReference Include="Splat" Version="14.8.6" />
   </ItemGroup>
 
   <ItemGroup>

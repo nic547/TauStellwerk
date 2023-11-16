@@ -21,21 +21,15 @@ namespace TauStellwerk.Server;
 /// <summary>
 /// Startup class of the WebAPI.
 /// </summary>
-public class Startup
+/// <remarks>
+/// Initializes a new instance of the <see cref="Startup"/> class.
+/// </remarks>
+/// <param name="configuration"><see cref="Configuration"/>.</param>
+public class Startup(IConfiguration configuration)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Startup"/> class.
-    /// </summary>
-    /// <param name="configuration"><see cref="Configuration"/>.</param>
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-        Options = configuration.Get<TauStellwerkOptions>() ?? throw new FormatException("Could not parse configuration");
-    }
+    private IConfiguration Configuration { get; } = configuration;
 
-    private IConfiguration Configuration { get; }
-
-    private TauStellwerkOptions Options { get; }
+    private TauStellwerkOptions Options { get; } = configuration.Get<TauStellwerkOptions>() ?? throw new FormatException("Could not parse configuration");
 
     /// <summary>
     /// This method gets called by the runtime. Use this method to add services to the container.
@@ -48,7 +42,7 @@ public class Startup
 
         services.AddRazorPages();
         services.AddSignalR()
-            .AddJsonProtocol(options => options.PayloadSerializerOptions.AddContext<TauJsonContext>());
+            .AddJsonProtocol(options => options.PayloadSerializerOptions.TypeInfoResolver = TauJsonContext.Default);
 
         services.AddDbContextPool<StwDbContext>(options =>
             options.UseSqlite(Options.Database.ConnectionString));
@@ -121,7 +115,7 @@ public class Startup
         appLifetime.ApplicationStopping.Register(() => Shutdown(app.ApplicationServices));
     }
 
-    private static IContentTypeProvider GetContentTypeProvider()
+    private static FileExtensionContentTypeProvider GetContentTypeProvider()
     {
         var provider = new FileExtensionContentTypeProvider();
 
