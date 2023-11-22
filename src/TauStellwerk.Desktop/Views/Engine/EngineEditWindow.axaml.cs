@@ -5,11 +5,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public partial class EngineEditWindow : Window
+public partial class EngineEditWindow : BaseWindow
 {
     public EngineEditWindow(EngineEditViewModel vm)
     {

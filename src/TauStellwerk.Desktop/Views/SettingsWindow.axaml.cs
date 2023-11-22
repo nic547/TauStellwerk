@@ -5,11 +5,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public partial class SettingsWindow : Window
+public partial class SettingsWindow : BaseWindow
 {
     public SettingsWindow(SettingsViewModel vm)
     {

@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 
 namespace TauStellwerk.Desktop.Views;
 
+// Intentionally not inheriting from BaseWindow, as this dialog isn't really a window like others
 public partial class MessageBox : Window
 {
     public MessageBox()

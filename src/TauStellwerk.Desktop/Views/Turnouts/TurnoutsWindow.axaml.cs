@@ -9,7 +9,7 @@ using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public partial class TurnoutsWindow : DisposingWindow
+public partial class TurnoutsWindow : BaseWindow
 {
     public TurnoutsWindow(TurnoutsViewModel vm)
     {
