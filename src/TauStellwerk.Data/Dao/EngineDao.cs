@@ -52,7 +52,7 @@ public class EngineDao
         SortEnginesBy sortBy,
         bool sortDescending)
     {
-        Stopwatch stopwatch = Stopwatch.StartNew();
+        var stopwatch = Stopwatch.StartNew();
 
         searchTerm = $"%{searchTerm}%";
         SqliteParameter searchParameter = new("searchTerm", $"%{searchTerm}%");

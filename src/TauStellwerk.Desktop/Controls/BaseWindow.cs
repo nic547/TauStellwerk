@@ -3,7 +3,6 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Splat;
 using TauStellwerk.Desktop.Services.WindowSettingService;
 
@@ -15,7 +14,7 @@ namespace TauStellwerk.Desktop.Controls;
 public class BaseWindow : Window
 {
     protected virtual Size DefaultSize => new(800, 600);
-    
+
     protected override void OnClosed(EventArgs e)
     {
         if (DataContext is IDisposable disposable)
@@ -31,7 +30,7 @@ public class BaseWindow : Window
         base.OnInitialized();
         var windowSettingService = Locator.Current.GetRequiredService<IWindowSettingService>();
         ClientSize = windowSettingService.LoadSize(GetType().ToString()) ?? DefaultSize;
-        
+
     }
 
     protected override void OnResized(WindowResizedEventArgs e)

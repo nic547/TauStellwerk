@@ -57,7 +57,7 @@ public class CoalescingLimiterTests
 
     public class LimiterTestHelper<T>
     {
-        public List<(T Value, DateTime DateTime)> MethodCalls { get; } = new();
+        public List<(T Value, DateTime DateTime)> MethodCalls { get; } = [];
 
         public Task Method(T param)
         {

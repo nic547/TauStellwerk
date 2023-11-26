@@ -9,9 +9,9 @@ public class EngineOverviewDto
 
     public string Name { get; set; } = string.Empty;
 
-    public List<string> Tags { get; set; } = new List<string>();
+    public List<string> Tags { get; set; } = [];
 
-    public List<ImageDto> Images { get; set; } = new();
+    public List<ImageDto> Images { get; set; } = [];
 
     // Intentionally not a long, wanna keep the number short, collisions should be unlikely anyway
     public int ImageTimestamp { get; set; }

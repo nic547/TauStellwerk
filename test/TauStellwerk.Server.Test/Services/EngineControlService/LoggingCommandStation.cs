@@ -9,7 +9,7 @@ namespace TauStellwerk.Test.Services.EngineControlService;
 
 public class LoggingCommandStation : CommandStationBase
 {
-    public List<(byte Number, State State)> EngineFunctionCalls { get; } = new();
+    public List<(byte Number, State State)> EngineFunctionCalls { get; } = [];
 
     public override Task HandleSystemStatus(State desiredState)
     {

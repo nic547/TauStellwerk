@@ -9,58 +9,58 @@ namespace TauStellwerk.Tools.CreateTestDb;
 
 public static class EngineDtoGenerator
 {
-    private static readonly List<EngineNameSet> _engineNameComponents = new()
-    {
-        new("BLS Re 465 {0:000} (Blue)", 1, 18, 160, new() { "Universal", "Long-Distance", "Regional", "SLM", "CH" }),
-        new("BLS Re 465 {0:000} (Green)", 1, 18, 160, new() { "Universal", "Long-Distance", "Regional", "SLM", "CH" }),
-        new("BLS Re 475 {0:000} (Alpinist)", 401, 415, 200, new() { "Freight", "Siemens", "D/A/CH/I/NL", "Vectron MS" }),
-        new("BLS Re 475 {0:000} (Alpinist)", 416, 440, 200, new() { "Freight", "Siemens", "D/A/CH/I/NL/B", "Vectron MS" }),
-        new("BLS Re 485 {0:000} (Connecting Europe)", 1, 20, 140, new() { "Freight", "Bombardier", "D/CH", "Traxx F140 AC1" }),
-        new("BLS Re 485 {0:000} (Alpinist)", 1, 20, 140, new() { "Freight", "Bombardier", "D/CH", "Traxx F140 AC1" }),
-        new("BLS Re 486 {0:000} (Alpinist)", 1, 10, 140, new() { "Freight", "Bombardier", "D/A/CH/I", "Traxx F140 MS2E" }),
+    private static readonly List<EngineNameSet> _engineNameComponents =
+    [
+        new("BLS Re 465 {0:000} (Blue)", 1, 18, 160, ["Universal", "Long-Distance", "Regional", "SLM", "CH"]),
+        new("BLS Re 465 {0:000} (Green)", 1, 18, 160, ["Universal", "Long-Distance", "Regional", "SLM", "CH"]),
+        new("BLS Re 475 {0:000} (Alpinist)", 401, 415, 200, ["Freight", "Siemens", "D/A/CH/I/NL", "Vectron MS"]),
+        new("BLS Re 475 {0:000} (Alpinist)", 416, 440, 200, ["Freight", "Siemens", "D/A/CH/I/NL/B", "Vectron MS"]),
+        new("BLS Re 485 {0:000} (Connecting Europe)", 1, 20, 140, ["Freight", "Bombardier", "D/CH", "Traxx F140 AC1"]),
+        new("BLS Re 485 {0:000} (Alpinist)", 1, 20, 140, ["Freight", "Bombardier", "D/CH", "Traxx F140 AC1"]),
+        new("BLS Re 486 {0:000} (Alpinist)", 1, 10, 140, ["Freight", "Bombardier", "D/A/CH/I", "Traxx F140 MS2E"]),
 
-        new("DB BR 185 {0:000}", 85, 94, 140, new() { "Freight", "Bombardier", "Traxx F140 AC1", "D/A/CH" }),
-        new("DB BR 185 {0:000}", 95, 149, 140, new() { "Freight", "Bombardier", "Traxx F140 AC1", "D/CH" }),
+        new("DB BR 185 {0:000}", 85, 94, 140, ["Freight", "Bombardier", "Traxx F140 AC1", "D/A/CH"]),
+        new("DB BR 185 {0:000}", 95, 149, 140, ["Freight", "Bombardier", "Traxx F140 AC1", "D/CH"]),
 
-        new("Hupac BR 193 {0:000}", 490, 497, 200, new() { "Freight", "Siemens", "D/A/CH/I/NL", "Vectron MS" }),
+        new("Hupac BR 193 {0:000}", 490, 497, 200, ["Freight", "Siemens", "D/A/CH/I/NL", "Vectron MS"]),
 
-        new("Railcare Rem 476 {0:000}", 451, 457, 200, new() { "Freight", "Siemens", "Vectron AC" }),
+        new("Railcare Rem 476 {0:000}", 451, 457, 200, ["Freight", "Siemens", "Vectron AC"]),
 
-        new("SBB Ae 6/6 {0} (Green)", 11401, 11520, 125, new() { "SLM", "BBC", "MFO", "Universal", "Long-Distance", "Regional", "CH" }),
-        new("SBB Ae 6/6 {0} (Red)", 11401, 11520, 125, new() { "SLM", "BBC", "MFO", "Universal", "Long-Distance", "Regional", "CH" }),
-        new("SBB Ae 610 {0:000} (Red)", 401, 520, 125, new() { "Universal", "Long-Distance", "Regional", "SLM", "CH" }),
-        new("SBB RABDe 500 {0:000}", 0, 43, 200, new() { "Passenger", "Long-Distance", "ICN", "Adtranz", "Tilting Train", "CH" }),
-        new("SBB RABe 501 {0:000}", 1, 29, 250, new() { "Giruno", "Long-Distance", "Passenger", "Stadler", "D/A/CH/I" }),
-        new("SBB RBDe 560 {0:000}", 0, 141, 140, new() { "Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH" }),
-        new("SBB RBDe 560 {0:000} (Domino)", 203, 307, 140, new() { "Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH" }),
-        new("SBB RBDe 560 {0:000} (RegioAlps)", 401, 416, 140, new() { "Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH" }),
-        new("SBB RBDe 560 {0:000} (Glarner Sprinter)", 201, 202, 140, new() { "Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH" }),
-        new("SBB Re 4/4 {0} (Green)", 11101, 11376, 140, new() { "Universal", "Long-Distance", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH" }),
-        new("SBB Re 420 {0:000} (Red)", 101, 349, 140, new() { "Universal", "Long-Distance", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH" }),
-        new("SBB Re 420 {0:000} (LION)", 201, 230, 140, new() { "Passenger", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH" }),
-        new("SBB Re 6/6 {0} (Green)", 11601, 11689, 140, new() { "Universal", "Long-Distance", "SLM", "BBC", "SAAS", "CH" }),
-        new("SBB Re 620 {0:000} (Red)", 0, 89, 140, new() { "Universal", "Long-Distance", "SLM", "BBC", "SAAS", "CH" }),
-        new("SBB Re 450 {0:000} (DPZ)", 0, 114, 140, new() { "Passenger", "Regional", "SLM", "Schindler Waggon", "ABB", "SIG", "ZVV", "CH" }),
-        new("SBB Re 450 {0:000} (DPZ+)", 0, 114, 140, new() { "Passenger", "Regional", "SLM", "Schindler Waggon", "ABB", "SIG", "ZVV", "CH" }),
-        new("SBB Re 460 {0:000} (Lok 2000)", 0, 118, 200, new() { "Passenger", "Long-Distance", "SLM", "ABB", "CH" }),
-        new("SBB Re 460 {0:000} (Refit)", 0, 118, 200, new() { "Passenger", "Long-Distance", "SLM", "ABB", "CH" }),
-        new("SBB Re 474 {0:000} (SBB Cargo)", 1, 18, 140, new() { "Freight", "Siemens" }),
-        new("SBB Re 482 {0:000} (SBB Cargo)", 0, 49, 140, new() { "Freight", "Bombardier" }),
-        new("SBB Re 484 {0:000} (SBB Cargo)", 2, 21, 140, new() { "Freight", "Bombardier" }),
-        new("SBB Re 484 {0:000} (SBB Cargo)", 103, 105, 140, new() { "Freight", "Bombardier" }),
-        new("SBB BR 193 {0:000} (Daypiercer)", 461, 478, 20, new() { "Freight", "Siemens", "LokRoll" }),
+        new("SBB Ae 6/6 {0} (Green)", 11401, 11520, 125, ["SLM", "BBC", "MFO", "Universal", "Long-Distance", "Regional", "CH"]),
+        new("SBB Ae 6/6 {0} (Red)", 11401, 11520, 125, ["SLM", "BBC", "MFO", "Universal", "Long-Distance", "Regional", "CH"]),
+        new("SBB Ae 610 {0:000} (Red)", 401, 520, 125, ["Universal", "Long-Distance", "Regional", "SLM", "CH"]),
+        new("SBB RABDe 500 {0:000}", 0, 43, 200, ["Passenger", "Long-Distance", "ICN", "Adtranz", "Tilting Train", "CH"]),
+        new("SBB RABe 501 {0:000}", 1, 29, 250, ["Giruno", "Long-Distance", "Passenger", "Stadler", "D/A/CH/I"]),
+        new("SBB RBDe 560 {0:000}", 0, 141, 140, ["Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH"]),
+        new("SBB RBDe 560 {0:000} (Domino)", 203, 307, 140, ["Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH"]),
+        new("SBB RBDe 560 {0:000} (RegioAlps)", 401, 416, 140, ["Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH"]),
+        new("SBB RBDe 560 {0:000} (Glarner Sprinter)", 201, 202, 140, ["Passenger", "Regional", "FFA", "BBC", "Schindler Waggon", "ABB", "SIG", "CH"]),
+        new("SBB Re 4/4 {0} (Green)", 11101, 11376, 140, ["Universal", "Long-Distance", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH"]),
+        new("SBB Re 420 {0:000} (Red)", 101, 349, 140, ["Universal", "Long-Distance", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH"]),
+        new("SBB Re 420 {0:000} (LION)", 201, 230, 140, ["Passenger", "Regional", "SLM", "BBC", "MFO", "SAAS", "CH"]),
+        new("SBB Re 6/6 {0} (Green)", 11601, 11689, 140, ["Universal", "Long-Distance", "SLM", "BBC", "SAAS", "CH"]),
+        new("SBB Re 620 {0:000} (Red)", 0, 89, 140, ["Universal", "Long-Distance", "SLM", "BBC", "SAAS", "CH"]),
+        new("SBB Re 450 {0:000} (DPZ)", 0, 114, 140, ["Passenger", "Regional", "SLM", "Schindler Waggon", "ABB", "SIG", "ZVV", "CH"]),
+        new("SBB Re 450 {0:000} (DPZ+)", 0, 114, 140, ["Passenger", "Regional", "SLM", "Schindler Waggon", "ABB", "SIG", "ZVV", "CH"]),
+        new("SBB Re 460 {0:000} (Lok 2000)", 0, 118, 200, ["Passenger", "Long-Distance", "SLM", "ABB", "CH"]),
+        new("SBB Re 460 {0:000} (Refit)", 0, 118, 200, ["Passenger", "Long-Distance", "SLM", "ABB", "CH"]),
+        new("SBB Re 474 {0:000} (SBB Cargo)", 1, 18, 140, ["Freight", "Siemens"]),
+        new("SBB Re 482 {0:000} (SBB Cargo)", 0, 49, 140, ["Freight", "Bombardier"]),
+        new("SBB Re 484 {0:000} (SBB Cargo)", 2, 21, 140, ["Freight", "Bombardier"]),
+        new("SBB Re 484 {0:000} (SBB Cargo)", 103, 105, 140, ["Freight", "Bombardier"]),
+        new("SBB BR 193 {0:000} (Daypiercer)", 461, 478, 20, ["Freight", "Siemens", "LokRoll"]),
 
-        new("SOB RABe 526 {0:000} (FLIRT)", 41, 63, 160, new() { "Passenger", "Long-Distance", "Regional", "Stadler", "CH" }),
-        new("SOB RABe 526 {0:000} (FLIRT 3)", 1, 10, 160, new() { "Passenger", "Long-Distance", "Regional", "Stadler", "CH" }),
-        new("SOB RABe 526 {0:000} (Traverso)", 101, 124, 160, new() { "Passenger", "Long-Distance", "Stadler", "CH" }),
-        new("SOB Re 446 {0:000}", 15, 18, 160, new() { "Universal", "Long-Distance", "SLM", "CH" }),
-        new("SOB Re 456 {0:000}", 91, 96, 130, new() { "Universal", "Long-Distance", "SLM", "CH" }),
+        new("SOB RABe 526 {0:000} (FLIRT)", 41, 63, 160, ["Passenger", "Long-Distance", "Regional", "Stadler", "CH"]),
+        new("SOB RABe 526 {0:000} (FLIRT 3)", 1, 10, 160, ["Passenger", "Long-Distance", "Regional", "Stadler", "CH"]),
+        new("SOB RABe 526 {0:000} (Traverso)", 101, 124, 160, ["Passenger", "Long-Distance", "Stadler", "CH"]),
+        new("SOB Re 446 {0:000}", 15, 18, 160, ["Universal", "Long-Distance", "SLM", "CH"]),
+        new("SOB Re 456 {0:000}", 91, 96, 130, ["Universal", "Long-Distance", "SLM", "CH"]),
 
-        new("SRT Rem 487 {0:000} (Biene Maja)", 1, 1, 140, new() { "Freight", "Bombardier", "D/A/CH", "Traxx AC3 (LM)" }),
-    };
+        new("SRT Rem 487 {0:000} (Biene Maja)", 1, 1, 140, ["Freight", "Bombardier", "D/A/CH", "Traxx AC3 (LM)"]),
+    ];
 
-    private static readonly List<string> _manufacturerTags = new() { "Märklin", "Piko", "Roco", "LS Models", "HAG", "Lilliput", "ESU" };
-    private static readonly List<string> _ownerTag = new() { "Peter", "Mike", "Sara", "Max", "Jean", "Ralf", "Simon", "Hans", "Ueli" };
+    private static readonly List<string> _manufacturerTags = ["Märklin", "Piko", "Roco", "LS Models", "HAG", "Lilliput", "ESU"];
+    private static readonly List<string> _ownerTag = ["Peter", "Mike", "Sara", "Max", "Jean", "Ralf", "Simon", "Hans", "Ueli"];
 
     public static EngineFullDto GetEngineDto()
     {
@@ -129,8 +129,8 @@ public static class EngineDtoGenerator
             Tags = tags,
             LastUsed = new DateTime(2021, 1, 1).AddDays(random.Next(0, 364)).AddHours(random.Next(0, 23)).AddMinutes(random.Next(0, 59)).AddSeconds(random.Next(0, 59)),
             Created = new DateTime(2020, 1, 1).AddDays(random.Next(0, 364)).AddHours(random.Next(0, 23)).AddMinutes(random.Next(0, 59)).AddSeconds(random.Next(0, 59)),
-            Functions = new()
-            {
+            Functions =
+            [
                 new(0, "Headlights", 0),
                 new(1, "Sound", 0),
                 new(2, "Horn (short/high)", 500),
@@ -145,7 +145,7 @@ public static class EngineDtoGenerator
                 new(11, "Conductor's Whistle", 1000),
                 new(12, "Shunting mode", 0),
                 new(13, "Station announcement: passing train", 3500),
-            },
+            ],
         };
     }
 

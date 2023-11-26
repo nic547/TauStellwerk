@@ -7,11 +7,11 @@ namespace TauStellwerk.Client.Resources;
 
 public static class Languages
 {
-    public static List<string> LanguageNames { get; } = new() { "English", "Deutsch", "Schwyzerdütsch" };
+    public static List<string> LanguageNames { get; } = ["English", "Deutsch", "Schwyzerdütsch"];
 
     public static void SetUILanguage(string language)
     {
-        string languageCode = language switch
+        var languageCode = language switch
         {
             "Deutsch" => "de",
             "Schwyzerdütsch" => "gsw",

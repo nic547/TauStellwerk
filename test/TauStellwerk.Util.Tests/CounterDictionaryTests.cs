@@ -38,7 +38,7 @@ public class CounterDictionaryTests
     public void PercentileTest()
     {
         var ct = new CounterDictionary();
-        for (int i = 1; i <= 100_000; i++)
+        for (var i = 1; i <= 100_000; i++)
         {
             ct.Increment(i);
         }
@@ -60,7 +60,7 @@ public class CounterDictionaryTests
     {
         var ct = SimpleTestCounterDictionary();
         var ct2 = new CounterDictionary();
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             ct.Increment(3);
         }

@@ -59,7 +59,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
 
     public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
 
-    public ObservableCollection<EngineOverview> Engines { get; } = new();
+    public ObservableCollection<EngineOverview> Engines { get; } = [];
 
     public bool CanScrollForwards => Engines.Count == EnginesPerPage;
 

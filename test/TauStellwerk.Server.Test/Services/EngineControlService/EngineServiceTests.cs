@@ -20,10 +20,10 @@ public class EngineServiceTests
     private readonly Engine _engine = new()
     {
         Id = 1,
-        Functions = new List<DccFunction>
-        {
+        Functions =
+        [
             new(0, "Light", 0),
-        },
+        ],
     };
 
     [Test]

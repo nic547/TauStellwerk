@@ -106,7 +106,7 @@ public class ECosConnectionHandler
 
         StreamReader reader = new(stream, Encoding.UTF8, false, BufferSize, false);
 
-        List<string> lines = new();
+        List<string> lines = [];
 
         while (true)
         {

@@ -7,7 +7,7 @@ namespace TauStellwerk.Base.Dto;
 
 public class EngineFullDto : EngineOverviewDto
 {
-    public List<FunctionDto> Functions { get; set; } = new();
+    public List<FunctionDto> Functions { get; set; } = [];
 
     public ushort Address { get; set; }
 

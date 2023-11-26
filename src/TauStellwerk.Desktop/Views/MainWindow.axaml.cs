@@ -2,7 +2,6 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using TauStellwerk.Desktop.Controls;
 

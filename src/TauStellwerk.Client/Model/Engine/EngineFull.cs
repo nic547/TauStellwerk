@@ -33,7 +33,7 @@ public partial class EngineFull : EngineOverview
     public EngineFull()
         : base()
     {
-        Functions = new();
+        Functions = [];
     }
 
     public ObservableCollection<Function> Functions { get; init; }
@@ -81,7 +81,7 @@ public partial class EngineFull : EngineOverview
             IsHidden = IsHidden,
             LastUsed = LastUsed,
             Name = Name,
-            Tags = Tags.ToList(),
+            Tags = [.. Tags],
             TopSpeed = TopSpeed,
         };
     }

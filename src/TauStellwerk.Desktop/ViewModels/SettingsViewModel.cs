@@ -34,7 +34,7 @@ public partial class SettingsViewModel : ViewModelBase
     public static string ApplicationInformation =>
         $"TauStellwerk {ThisAssembly.AssemblyInformationalVersion} (.NET {Environment.Version})";
 
-    public string[] AvailableThemes { get; } = { ThemeVariant.Light.ToString(), ThemeVariant.Dark.ToString() };
+    public string[] AvailableThemes { get; } = [ThemeVariant.Light.ToString(), ThemeVariant.Dark.ToString()];
 
     [RelayCommand]
     public async Task Save()

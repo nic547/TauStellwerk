@@ -62,10 +62,7 @@ public class EngineImageControl : Image
 
     protected override void OnInitialized()
     {
-        if (_defaultImage is null)
-        {
-            _defaultImage = new Bitmap(AssetLoader.Open(new Uri(DefaultImagePath)));
-        }
+        _defaultImage ??= new Bitmap(AssetLoader.Open(new Uri(DefaultImagePath)));
 
         Source = _defaultImage;
         base.OnInitialized();

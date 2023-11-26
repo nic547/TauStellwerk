@@ -50,8 +50,8 @@ public partial class EngineSelectionWindow : BaseWindow
 
     public int Columns
     {
-        get { return GetValue(ColumnsProperty); }
-        set { SetValue(ColumnsProperty, value); }
+        get => GetValue(ColumnsProperty);
+        set => SetValue(ColumnsProperty, value);
     }
 
     private void InitializeComponent()

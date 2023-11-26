@@ -114,7 +114,7 @@ public class ConnectionHandlerTests
 
         private TcpClient? _client;
 
-        public List<byte> Data { get; } = new();
+        public List<byte> Data { get; } = [];
 
         public async Task Start()
         {
