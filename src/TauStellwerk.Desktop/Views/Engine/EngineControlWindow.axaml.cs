@@ -5,12 +5,15 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using JetBrains.Annotations;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public partial class EngineControlWindow : Window
+public partial class EngineControlWindow : BaseWindow
 {
+    protected override Size DefaultSize { get; } = new Size(400, 800);
+
     public EngineControlWindow(EngineControlViewModel vm)
     {
         DataContext = vm;

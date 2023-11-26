@@ -6,6 +6,7 @@ using Splat;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Client.Services.Connections;
 using TauStellwerk.Desktop.Services;
+using TauStellwerk.Desktop.Services.WindowSettingService;
 
 namespace TauStellwerk.Desktop;
 
@@ -24,6 +25,7 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant<IViewService>(avaloniaViewService);
         Locator.CurrentMutable.RegisterConstant<IAvaloniaViewService>(avaloniaViewService);
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateTurnoutService());
+        Locator.CurrentMutable.RegisterConstant<IWindowSettingService>(new WindowSettingService());
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
