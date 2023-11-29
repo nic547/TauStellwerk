@@ -37,11 +37,11 @@ public class JsonContextRoundTripTests
         {
             Id = 3,
             Name = """SBB Re 482 ("Alpäzähmer") """,
-            Tags = new() { "Sound", "DCC", "91 85 4482 026-2 CH-SBBC", ",", ""","",""" },
+            Tags = ["Sound", "DCC", "91 85 4482 026-2 CH-SBBC", ",", ""","","""],
             Created = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             LastUsed = DateTime.UtcNow,
-            Images = new()
-            {
+            Images =
+            [
                 new ImageDto("3_100.jpg", 800),
                 new ImageDto("3_100.webp", 800),
                 new ImageDto("3_100.avif", 800),
@@ -51,7 +51,7 @@ public class JsonContextRoundTripTests
                 new ImageDto("3_25.jpg", 200),
                 new ImageDto("3_25.webp", 200),
                 new ImageDto("3_25.avif", 200),
-            },
+            ],
         };
 
         var json = JsonSerializer.Serialize(dto, TauJsonContext.Default.EngineOverviewDto);
@@ -66,11 +66,11 @@ public class JsonContextRoundTripTests
         {
             Id = 4,
             Name = """SBB Re 482 ("Alpäzähmer") """,
-            Tags = new() { "Sound", "DCC", "91 85 4482 026-2 CH-SBBC" },
+            Tags = ["Sound", "DCC", "91 85 4482 026-2 CH-SBBC"],
             Created = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             LastUsed = DateTime.UtcNow,
-            Images = new()
-            {
+            Images =
+            [
                 new ImageDto("3_100.jpg", 800),
                 new ImageDto("3_100.webp", 800),
                 new ImageDto("3_100.avif", 800),
@@ -80,12 +80,12 @@ public class JsonContextRoundTripTests
                 new ImageDto("3_25.jpg", 200),
                 new ImageDto("3_25.webp", 200),
                 new ImageDto("3_25.avif", 200),
-            },
-            Functions = new()
-            {
+            ],
+            Functions =
+            [
                 new(0, "Light", 0) { State = State.On },
                 new(1, "Sound", 0) { State = State.Off },
-            },
+            ],
             Address = 26,
             TopSpeed = 140,
             Throttle = 100,

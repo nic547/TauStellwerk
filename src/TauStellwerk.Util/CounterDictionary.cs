@@ -11,7 +11,7 @@ namespace TauStellwerk.Util;
 /// </summary>
 public class CounterDictionary : IEnumerable<KeyValuePair<int, long>>
 {
-    private readonly Dictionary<int, long> _dictionary = new();
+    private readonly Dictionary<int, long> _dictionary = [];
 
     /// <inheritdoc/>
     public IEnumerator<KeyValuePair<int, long>> GetEnumerator()

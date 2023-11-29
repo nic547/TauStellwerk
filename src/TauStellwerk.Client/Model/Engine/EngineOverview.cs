@@ -32,8 +32,8 @@ public partial class EngineOverview : ObservableObject
     public EngineOverview()
     {
         _name = string.Empty;
-        Tags = new ObservableCollection<string>();
-        Images = new List<EngineImage>().ToImmutableList();
+        Tags = [];
+        Images = [];
         LastUsed = DateTime.UtcNow;
         Created = DateTime.UtcNow;
     }

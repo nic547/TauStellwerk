@@ -13,13 +13,13 @@ namespace TauStellwerk.Server;
 /// </summary>
 public static class CommandStationFactory
 {
-    private static readonly List<CommandStationEntry> _commandStations = new()
-    {
+    private static readonly List<CommandStationEntry> _commandStations =
+    [
         new CommandStationEntry(typeof(NullCommandStation), (_, _) => new NullCommandStation()),
         new CommandStationEntry(typeof(ConsoleCommandStation), (_, _) => new ConsoleCommandStation()),
         new CommandStationEntry(typeof(ECoSCommandStation), (config, logger) => new ECoSCommandStation(config.Get<ECoSOptions>() ?? throw new FormatException("Could not parse configuration for the ECoS"), logger)),
         new CommandStationEntry(typeof(DccExSerialCommandStation), (config, logger) => new DccExSerialCommandStation(config.Get<DccExSerialOptions>() ?? throw new FormatException("Could not parse configuration for DccExSerial"), logger)),
-    };
+    ];
 
     public static CommandStationBase FromConfig(IConfiguration config, ILogger<CommandStationBase> logger)
     {

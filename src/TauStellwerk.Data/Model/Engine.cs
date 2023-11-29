@@ -47,18 +47,18 @@ public class Engine
     /// <summary>
     /// Gets a list of functions a decoder offers.
     /// </summary>
-    public List<DccFunction> Functions { get; init; } = new();
+    public List<DccFunction> Functions { get; init; } = [];
 
     /// <summary>
     /// Gets or sets a list of strings that describe an engineOverview. These might be alternative names, manufacturers, the owner etc, basically
     /// everything one might search for if the exact name is unknown.
     /// </summary>
-    public List<string> Tags { get; set; } = new();
+    public List<string> Tags { get; set; } = [];
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ECoSEngineData? ECoSEngineData { get; init; }
 
-    public List<int> ImageSizes { get; set; } = new();
+    public List<int> ImageSizes { get; set; } = [];
 
     public DateTime? LastImageUpdate { get; set; }
 
@@ -95,7 +95,7 @@ public class Engine
             Id = Id,
             Name = Name,
             Images = ImageService.ImageService.CreateImageDtos(Id, LastImageUpdate, ImageSizes),
-            Tags = Tags.Order().ToList(),
+            Tags = [.. Tags.Order()],
             LastUsed = LastUsed,
             Created = Created,
             TopSpeed = TopSpeed,

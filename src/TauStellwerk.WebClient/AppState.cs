@@ -22,7 +22,7 @@ public partial class AppState : ObservableObject
         _modalManager = modalManager;
     }
 
-    public ObservableCollection<EngineFull> ActiveEngines { get; } = new();
+    public ObservableCollection<EngineFull> ActiveEngines { get; } = [];
 
     public void ShowMessageBox(string text)
     {

@@ -32,7 +32,7 @@ public sealed partial class TurnoutsViewModel : ViewModelBase, IDisposable
         LoadTurnouts();
     }
 
-    public ObservableCollection<Turnout> Turnouts { get; set; } = new();
+    public ObservableCollection<Turnout> Turnouts { get; set; } = [];
 
     public void Dispose()
     {

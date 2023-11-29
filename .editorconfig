@@ -28,6 +28,9 @@ dotnet_diagnostic.IDE0045.severity = silent
 dotnet_diagnostic.IDE0046.severity = silent
 dotnet_diagnostic.IDE0058.severity = silent
 
+#Prefers primary constructors - Unsure about them for now, the analyzer fix seems to introduce some behavioural changes
+dotnet_diagnostic.IDE0290.severity = silent
+
 ###############################
 # .NET Coding Conventions     #
 ###############################
@@ -133,6 +136,9 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
+
+csharp_style_namespace_declarations = file_scoped:warning
+
 ###############################
 # VB Coding Conventions       #
 ###############################

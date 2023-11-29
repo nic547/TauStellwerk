@@ -25,7 +25,7 @@ public class SpeedChange : ClientActionBase
     /// <inheritdoc/>
     public override async Task<int> PerformRequest()
     {
-        int newSpeed = Random.Next(0, 128);
+        var newSpeed = Random.Next(0, 128);
         var startTime = DateTime.UtcNow;
 
         await EngineService.SetSpeed(Id, newSpeed, Direction.Forwards);

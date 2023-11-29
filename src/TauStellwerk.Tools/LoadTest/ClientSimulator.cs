@@ -17,7 +17,7 @@ public class ClientSimulator
 {
     private readonly CounterDictionary _results = new();
 
-    private readonly List<Timer> _timers = new();
+    private readonly List<Timer> _timers = [];
 
     private readonly ImmutableList<ClientActionBase> _actions;
 
@@ -56,7 +56,7 @@ public class ClientSimulator
             instancedActions.Add(action);
         }
 
-        return new ClientSimulator(instancedActions.ToImmutableList());
+        return new ClientSimulator([.. instancedActions]);
     }
 
     /// <summary>

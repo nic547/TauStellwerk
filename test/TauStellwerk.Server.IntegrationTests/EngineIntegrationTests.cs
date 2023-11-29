@@ -23,7 +23,7 @@ public class EngineIntegrationTests : IntegrationTestBase
             await engineService.AddOrUpdateEngine(new EngineFull(engine));
         }
 
-        List<EngineOverview> engines = new();
+        List<EngineOverview> engines = [];
 
         foreach (var i in Enumerable.Range(0, 6))
         {

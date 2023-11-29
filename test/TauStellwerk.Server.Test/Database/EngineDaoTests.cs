@@ -144,19 +144,19 @@ public class EngineDaoTests : ContextTestBase
         EngineFullDto dto1 = new()
         {
             Name = "ABC-Lok",
-            Tags = new() { "Tag" },
+            Tags = ["Tag"],
         };
 
         EngineFullDto dto2 = new()
         {
             Name = "BCD-Lok",
-            Tags = new() { "Tag" },
+            Tags = ["Tag"],
         };
 
         EngineFullDto dto3 = new()
         {
             Name = "CDE-Lok",
-            Tags = new() { "Tag" },
+            Tags = ["Tag"],
         };
 
         await dao.UpdateOrAdd(dto1);

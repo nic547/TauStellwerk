@@ -16,7 +16,7 @@ public class EngineService
     private const double TimeoutMilliseconds = 100;
 
     private readonly IConnectionService _service;
-    private readonly Dictionary<int, CoalescingLimiter<(int, int, Direction)>> _activeEngines = new();
+    private readonly Dictionary<int, CoalescingLimiter<(int, int, Direction)>> _activeEngines = [];
 
     public EngineService(IConnectionService httpClientService)
     {

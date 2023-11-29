@@ -15,7 +15,7 @@ namespace TauStellwerk.Util;
 public class MultiDictionary<TKey, TValue>
     where TKey : notnull
 {
-    private readonly Dictionary<TKey, List<TValue>> _dict = new();
+    private readonly Dictionary<TKey, List<TValue>> _dict = [];
 
     /// <summary>
     /// Add a value to the MultiDictionary for the specified key.
@@ -29,7 +29,7 @@ public class MultiDictionary<TKey, TValue>
             _dict.TryGetValue(key, out var existingList);
             if (existingList == null)
             {
-                _dict.Add(key, new List<TValue> { value });
+                _dict.Add(key, [value]);
             }
             else
             {

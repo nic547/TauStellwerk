@@ -3,7 +3,6 @@
 
 using System.Text.Json;
 using Avalonia;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace TauStellwerk.Desktop.Services.WindowSettingService;
 
@@ -18,10 +17,10 @@ public class WindowSettingService : IWindowSettingService
         {
             var json = File.ReadAllText(Filename);
             var windowSizes = JsonSerializer.Deserialize<Dictionary<string, WindowSetting>>(json);
-            _windowSettings = windowSizes ?? new();
+            _windowSettings = windowSizes ?? [];
             return;
         }
-        _windowSettings = new();
+        _windowSettings = [];
     }
 
     public void SaveSize(string windowType, Size size)
