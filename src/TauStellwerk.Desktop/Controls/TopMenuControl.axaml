@@ -8,7 +8,7 @@
              x:Class="TauStellwerk.Desktop.Controls.TopMenuControl"
              x:DataType="viewModels:TopMenuViewModel"
              x:CompileBindings="True">
-    <Menu>
+    <Menu Margin="0 0 0 5">
         <MenuItem Header="{x:Static r:Resources.Open}">
             <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
             <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
