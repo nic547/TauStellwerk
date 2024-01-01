@@ -34,12 +34,12 @@ public class MultiDictionaryTests
         mdict.Add(2, "Zwo");
 
         mdict.TryRemoveFirst(2, out var out1);
-        Assert.AreEqual("Deux", out1);
+        out1.Should().Be("Deux");
 
         mdict.TryRemoveFirst(2, out var out2);
-        Assert.AreEqual("Zwo", out2);
+        out2.Should().Be("Zwo");
 
-        Assert.False(mdict.TryRemoveFirst(2, out _));
+        mdict.TryRemoveFirst(2, out _).Should().BeFalse();
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ public class MultiDictionaryTests
 
         var list = immutableList!.ToList();
 
-        Assert.AreEqual(3, list.Count);
-        Assert.Contains("Eins", list);
-        Assert.Contains("One", list);
-        Assert.Contains("Uno", list);
+        list.Count.Should().Be(3);
+        list.Should().Contain("Eins");
+        list.Should().Contain("One");
+        list.Should().Contain("Uno");
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class MultiDictionaryTests
         var mdict = new MultiDictionary<int, object>();
         var success = mdict.TryGetAllValues(482001, out var list);
 
-        Assert.False(success);
-        Assert.IsNull(list);
+        success.Should().BeFalse();
+        list.Should().BeNull();
     }
 }

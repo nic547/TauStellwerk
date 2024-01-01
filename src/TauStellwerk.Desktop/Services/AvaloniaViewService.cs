@@ -13,6 +13,8 @@ namespace TauStellwerk.Desktop.Services;
 
 public class AvaloniaViewService : IAvaloniaViewService
 {
+    private readonly object settingsWindowLock = new();
+
     public void ShowEngineControlView(EngineFull engine, object? source = null)
     {
         var vm = new EngineControlViewModel(engine);
@@ -22,9 +24,33 @@ public class AvaloniaViewService : IAvaloniaViewService
 
     public void ShowSettingsView(object? source = null)
     {
-        var vm = new SettingsViewModel();
-        var window = new SettingsWindow(vm);
-        window.Show();
+        // Opening multiple setting windows will cause them to intefere with each other.
+        // So we only show one settings window at a time.
+
+        lock (settingsWindowLock)
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime appLifetime)
+            {
+                foreach (var existingWindow in appLifetime.Windows)
+                {
+                    if (existingWindow.GetType() == typeof(SettingsWindow))
+                    {
+                        if (existingWindow.WindowState == WindowState.Minimized)
+                        {
+                            existingWindow.WindowState = WindowState.Normal;
+                        }
+
+                        existingWindow.Activate();
+                        return;
+                    }
+                }
+            }
+
+            var vm = new SettingsViewModel();
+            var window = new SettingsWindow(vm);
+            window.Show();
+
+        }
     }
 
     public void ShowMessageBox(string title, string message, object source)

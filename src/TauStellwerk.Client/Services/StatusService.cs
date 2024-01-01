@@ -51,7 +51,6 @@ public class StatusService
 
     private void HandleStatusChange(SystemStatus? newSystemStatus)
     {
-        Console.WriteLine($"Recivied status change notification");
         LastKnownStatus = newSystemStatus;
         StatusChanged?.Invoke(this, newSystemStatus);
     }

@@ -14,35 +14,37 @@
         <viewModels:SettingsViewModel />
     </Design.DataContext>
     <Window.Styles>
-        <Style Selector="StackPanel">
+        <Style Selector="StackPanel > StackPanel, DockPanel > StackPanel">
             <Setter Property="Margin" Value="2 4" />
         </Style>
     </Window.Styles>
-    <StackPanel>
-        <controls:TopMenuControl/>
-        <StackPanel ToolTip.Tip="{x:Static r:Resources.UsernameSettingDescription}" Margin="2">
-            <Label Content="{x:Static r:Resources.Username}" />
-            <TextBox Text="{Binding Settings.Username, Mode=TwoWay, FallbackValue={}}" />
-        </StackPanel>
-        <StackPanel ToolTip.Tip="{x:Static r:Resources.ServerAddressSettingDescription}" Margin="2">
-            <Label Content="{x:Static r:Resources.ServerAddress}" />
-            <TextBox Text="{Binding Settings.ServerAddress, Mode=TwoWay, FallbackValue={}}" />
-        </StackPanel>
+    <DockPanel>
+        <controls:TopMenuControl DockPanel.Dock="Top"/>
         <StackPanel>
-            <Label>Theme</Label>
-            <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" ItemsSource="{Binding AvailableThemes}">
-            </ComboBox>
+            <StackPanel ToolTip.Tip="{x:Static r:Resources.UsernameSettingDescription}" Margin="2">
+                <Label Content="{x:Static r:Resources.Username}" />
+                <TextBox Text="{Binding Settings.Username, Mode=TwoWay, FallbackValue={}}" />
+            </StackPanel>
+            <StackPanel ToolTip.Tip="{x:Static r:Resources.ServerAddressSettingDescription}" Margin="2">
+                <Label Content="{x:Static r:Resources.ServerAddress}" />
+                <TextBox Text="{Binding Settings.ServerAddress, Mode=TwoWay, FallbackValue={}}" />
+            </StackPanel>
+            <StackPanel>
+                <Label>Theme</Label>
+                <ComboBox SelectedItem="{Binding Settings.Theme, FallbackValue={}}" ItemsSource="{Binding AvailableThemes}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel ToolTip.Tip="{x:Static r:Resources.LanguageSettingDescription}">
+                <Label Content="{x:Static r:Resources.Language}"/>
+                <ComboBox SelectedItem="{Binding Settings.Language}" ItemsSource="{Binding AvailableLanguages}"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="{Binding ApplicationInformation}"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="2">
+                <Button Command="{Binding CancelCommand}" Content="{x:Static r:Resources.Cancel}" MinWidth="100" HorizontalContentAlignment="Center" Theme="{DynamicResource SolidButton}"/>
+                <Button Command="{Binding SaveCommand}" Content="{x:Static r:Resources.Save}" MinWidth="100" HorizontalContentAlignment="Center" Theme="{DynamicResource SolidButton}"/>
+            </StackPanel>
         </StackPanel>
-		<StackPanel ToolTip.Tip="{x:Static r:Resources.LanguageSettingDescription}">
-            <Label Content="{x:Static r:Resources.Language}"/>
-            <ComboBox SelectedItem="{Binding Settings.Language}" ItemsSource="{Binding AvailableLanguages}"/>
-        </StackPanel>
-        <StackPanel>
-            	<TextBlock Text="{Binding ApplicationInformation}"/>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="2">
-            <Button Command="{Binding CancelCommand}" Content="{x:Static r:Resources.Cancel}" MinWidth="100" HorizontalContentAlignment="Center" Theme="{DynamicResource SolidButton}"/>
-            <Button Command="{Binding SaveCommand}" Content="{x:Static r:Resources.Save}" MinWidth="100" HorizontalContentAlignment="Center" Theme="{DynamicResource SolidButton}"/>
-        </StackPanel>
-    </StackPanel>
+    </DockPanel>
 </Window>

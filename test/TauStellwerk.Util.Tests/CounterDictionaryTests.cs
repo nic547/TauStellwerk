@@ -2,6 +2,7 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace TauStellwerk.Util.Tests;
@@ -18,20 +19,22 @@ public class CounterDictionaryTests
     [TestCase(new[] { 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 2, 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 1, 1, 3 }, 1.5d)]
-    public void AverageCaseTest(int[] values, double? result)
+    public void AverageCaseTest(int[] values, double? expectedResult)
     {
         var ct = CounterFromArray(values);
-        Assert.AreEqual(result, ct.Average());
+        var result = ct.Average();
+        result.Should().Be(expectedResult);
     }
 
     [TestCase(new int[] { }, 0)]
     [TestCase(new[] { 0 }, 1)]
     [TestCase(new[] { 2 }, 1)]
     [TestCase(new[] { 2, 2, 1, 3, 1929 }, 5)]
-    public void CountTest(int[] values, long result)
+    public void CountTest(int[] values, long expectedResult)
     {
         var ct = CounterFromArray(values);
-        Assert.AreEqual(result, ct.Count());
+        var result = ct.Count();
+        result.Should().Be(expectedResult);
     }
 
     [Test]
@@ -43,16 +46,18 @@ public class CounterDictionaryTests
             ct.Increment(i);
         }
 
-        Assert.AreEqual(90_000, ct.Get90ThPercentile());
-        Assert.AreEqual(95_000, ct.Get95ThPercentile());
-        Assert.AreEqual(99_000, ct.Get99ThPercentile());
+        ct.Get90ThPercentile().Should().Be(90_000);
+        ct.Get95ThPercentile().Should().Be(95_000);
+        ct.Get99ThPercentile().Should().Be(99_000);
     }
 
     [Test]
     public void PercentilesOnEmptyNull()
     {
         var ct = new CounterDictionary();
-        Assert.IsNull(ct.Get90ThPercentile());
+        ct.Get90ThPercentile().Should().BeNull();
+        ct.Get95ThPercentile().Should().BeNull();
+        ct.Get99ThPercentile().Should().BeNull();
     }
 
     [Test]
@@ -67,7 +72,7 @@ public class CounterDictionaryTests
 
         ct.Combine(ct2);
 
-        Assert.AreEqual(5, ct.GetByKey(3));
+        ct.GetByKey(3).Should().Be(5);
     }
 
     private static CounterDictionary SimpleTestCounterDictionary()
