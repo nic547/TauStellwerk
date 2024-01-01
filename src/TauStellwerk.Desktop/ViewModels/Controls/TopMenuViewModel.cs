@@ -33,7 +33,7 @@ public partial class TopMenuViewModel : ViewModelBase
         };
     }
 
-    public StopButtonControlViewModel StopButtonVm { get; } = new();
+    public StopButtonControlViewModel StopButtonVm { get; } = Locator.Current.GetRequiredService<StopButtonControlViewModel>();
 
     public void UpdateWindowType(string windowType)
     {

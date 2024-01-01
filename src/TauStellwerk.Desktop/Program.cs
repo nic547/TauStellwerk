@@ -7,6 +7,7 @@ using TauStellwerk.Client.Services;
 using TauStellwerk.Client.Services.Connections;
 using TauStellwerk.Desktop.Services;
 using TauStellwerk.Desktop.Services.WindowSettingService;
+using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop;
 
@@ -26,6 +27,8 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant<IAvaloniaViewService>(avaloniaViewService);
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateTurnoutService());
         Locator.CurrentMutable.RegisterConstant<IWindowSettingService>(new WindowSettingService());
+
+        Locator.CurrentMutable.RegisterConstant(new StopButtonControlViewModel());
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
