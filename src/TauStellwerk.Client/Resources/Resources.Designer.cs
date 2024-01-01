@@ -213,6 +213,15 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string Options {
+            get {
+                return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Function.
         /// </summary>
         public static string RemoveFunction {
@@ -362,6 +371,15 @@ namespace TauStellwerk.Client.Resources {
         public static string Tags {
             get {
                 return ResourceManager.GetString("Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle large stop button.
+        /// </summary>
+        public static string ToggleLargeStopButton {
+            get {
+                return ResourceManager.GetString("ToggleLargeStopButton", resourceCulture);
             }
         }
         

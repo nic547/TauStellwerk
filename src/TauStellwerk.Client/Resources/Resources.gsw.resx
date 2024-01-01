@@ -132,4 +132,10 @@
     <data name="Open" xml:space="preserve">
         <value>Öffne</value>
     </data>
+  <data name="Options" xml:space="preserve">
+    <value>Optione</value>
+  </data>
+  <data name="ToggleLargeStopButton" xml:space="preserve">
+    <value>Grosse Stopchnopf aktiviere/deaktiviere</value>
+  </data>
 </root>

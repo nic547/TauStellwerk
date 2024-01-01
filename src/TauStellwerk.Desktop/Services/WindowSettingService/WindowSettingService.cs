@@ -11,6 +11,8 @@ public class WindowSettingService : IWindowSettingService
     private const string Filename = "./windowSettings.json";
     private readonly Dictionary<string, WindowSetting> _windowSettings;
 
+    public event EventHandler<(string WindowType, bool UseLargeButton)>? UseLargeButtonChanged;
+
     public WindowSettingService()
     {
         if (File.Exists(Filename))
@@ -21,22 +23,61 @@ public class WindowSettingService : IWindowSettingService
             return;
         }
         _windowSettings = [];
+
+        // TODO: Find a smarter way to set default values for the large/small button switch
+        // default window sizes are just part of each window
+
+        _windowSettings["TauStellwerk.Desktop.Views.EngineControlView"] = new WindowSetting(null, null, true);
     }
 
     public void SaveSize(string windowType, Size size)
     {
-        _windowSettings[windowType] = new WindowSetting(size.Width, size.Height);
+        var existingSettings = _windowSettings[windowType];
+
+        if (existingSettings is not null)
+        {
+            _windowSettings[windowType] = new WindowSetting(size.Width, size.Height, existingSettings.UseLargeButton);
+            WriteDictionaryToFile();
+            return;
+        }
+        _windowSettings[windowType] = new WindowSetting(size.Width, size.Height, null);
         WriteDictionaryToFile();
     }
 
     public Size? LoadSize(string windowType)
     {
         _windowSettings.TryGetValue(windowType, out var settings);
-        if (settings is null)
+        if (settings is null || settings.Width is null || settings.Height is null)
         {
             return null;
         }
-        return new Size(settings.Width, settings.Height);
+        return new Size((double)settings.Width, (double)settings.Height);
+    }
+
+    public void SaveUseLargeButton(string windowType, bool useLargeButton)
+    {
+        UseLargeButtonChanged?.Invoke(this, (windowType, useLargeButton));
+
+        var existingSettings = _windowSettings[windowType];
+
+        if (existingSettings is not null)
+        {
+            _windowSettings[windowType] = new WindowSetting(existingSettings.Width, existingSettings.Height, useLargeButton);
+            WriteDictionaryToFile();
+            return;
+        }
+        _windowSettings[windowType] = new WindowSetting(null, null, useLargeButton);
+        WriteDictionaryToFile();
+    }
+
+    public bool? LoadUseLargeButton(string windowType)
+    {
+        _windowSettings.TryGetValue(windowType, out var settings);
+        if (settings is null || settings.UseLargeButton is null)
+        {
+            return null;
+        }
+        return settings.UseLargeButton;
     }
 
     private void WriteDictionaryToFile()
@@ -45,5 +86,5 @@ public class WindowSettingService : IWindowSettingService
         File.WriteAllText(Filename, json);
     }
 
-    public record WindowSetting(double Width, double Height);
+    public record WindowSetting(double? Width, double? Height, bool? UseLargeButton);
 }

@@ -4,25 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
              xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
+             xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TauStellwerk.Desktop.Controls.TopMenuControl"
              x:DataType="viewModels:TopMenuViewModel"
              x:CompileBindings="True">
-    <Menu Margin="0 0 0 5">
-        <MenuItem Header="{x:Static r:Resources.Open}">
-            <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
-            <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
-        </MenuItem>
-        <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
-        <MenuItem 
-            Command="{Binding StopButtonVm.StopButtonCommand}" 
-            Header="{Binding StopButtonVm.CurrentState}">
-            <ToolTip.Tip>
-                <TextBlock>
-                    <Run Text="{Binding StopButtonVm.LastAction}"/>
-                    <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
-                </TextBlock>
-            </ToolTip.Tip>
-        </MenuItem>
-    </Menu>
+    <StackPanel Margin="0 0 0 5">
+        <Menu>
+            <MenuItem Header="{x:Static r:Resources.Open}">
+                <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
+                <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+            </MenuItem>
+            <MenuItem Header="{x:Static r:Resources.Options}">
+                <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
+                <MenuItem Header="{x:Static r:Resources.ToggleLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}"/>
+            </MenuItem>
+            <MenuItem
+                IsVisible="{Binding !UseLargeButton}"
+                Command="{Binding StopButtonVm.StopButtonCommand}"
+                Header="{Binding StopButtonVm.CurrentState}">
+                <ToolTip.Tip>
+                    <TextBlock>
+                        <Run Text="{Binding StopButtonVm.LastAction}"/>
+                        <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
+                    </TextBlock>
+                </ToolTip.Tip>
+            </MenuItem>
+        </Menu>
+        <Panel IsVisible="{Binding UseLargeButton}" Margin="0 2 0 0">
+            <controls:StopButtonControl/>
+        </Panel>
+    </StackPanel>
 </UserControl>

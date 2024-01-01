@@ -7,7 +7,7 @@
              x:Class="TauStellwerk.Desktop.Controls.StopButtonControl"
              x:DataType="viewModels:StopButtonControlViewModel"
              x:CompileBindings="True">
-  <Button IsEnabled="{Binding ShouldBeEnabled}" Name="StopButton" Margin="50 0 50 0" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
+  <Button IsEnabled="{Binding ShouldBeEnabled}" Name="StopButton" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
             <StackPanel HorizontalAlignment="Center">
               <Label Content="{Binding CurrentState}" FontSize="24"/>
               <TextBlock>

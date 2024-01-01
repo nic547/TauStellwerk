@@ -7,7 +7,11 @@ namespace TauStellwerk.Desktop.Services.WindowSettingService;
 
 public interface IWindowSettingService
 {
+    event EventHandler<(string WindowType, bool UseLargeButton)>? UseLargeButtonChanged;
+
     public void SaveSize(string windowType, Size size);
 
     public Size? LoadSize(string windowType);
+    bool? LoadUseLargeButton(string windowType);
+    void SaveUseLargeButton(string windowType, bool useLargeButton);
 }
