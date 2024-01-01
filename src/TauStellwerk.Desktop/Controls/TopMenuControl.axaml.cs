@@ -25,6 +25,12 @@ public partial class TopMenuControl : UserControl
         base.OnAttachedToVisualTree(e);
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _vm.Dispose();
+    }
+
     private string TryGetContainingWindowType()
     {
         return VisualRoot?.GetType().ToString() ?? string.Empty;

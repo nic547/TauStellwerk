@@ -1,6 +1,7 @@
 ﻿// This file is part of the TauStellwerk project.
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -9,7 +10,7 @@ using TauStellwerk.Desktop.Services.WindowSettingService;
 
 namespace TauStellwerk.Desktop.ViewModels;
 
-public partial class TopMenuViewModel : ViewModelBase
+public partial class TopMenuViewModel : ViewModelBase, IDisposable
 {
     private readonly IAvaloniaViewService _viewService;
     private readonly IWindowSettingService _windowSettingService;
@@ -21,16 +22,20 @@ public partial class TopMenuViewModel : ViewModelBase
 
     public TopMenuViewModel(IAvaloniaViewService? viewService = null)
     {
+        Debug.WriteLine("Creating TopMenuViewModel");
+
         _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
         _windowSettingService = Locator.Current.GetService<IWindowSettingService>() ?? throw new InvalidOperationException();
 
-        _windowSettingService.UseLargeButtonChanged += (sender, args) =>
+        _windowSettingService.UseLargeButtonChanged += LargeButtonChangedHandler;
+    }
+
+    private void LargeButtonChangedHandler(object? sender, (string WindowType, bool UseLargeButton) args)
+    {
+        if (args.WindowType == _windowType)
         {
-            if (args.WindowType == _windowType)
-            {
-                UseLargeButton = args.UseLargeButton;
-            }
-        };
+            UseLargeButton = args.UseLargeButton;
+        }
     }
 
     public StopButtonControlViewModel StopButtonVm { get; } = Locator.Current.GetRequiredService<StopButtonControlViewModel>();
@@ -63,5 +68,11 @@ public partial class TopMenuViewModel : ViewModelBase
     protected virtual void OpenTurnoutList()
     {
         _viewService.ShowTurnoutsWindow();
+    }
+
+    public void Dispose()
+    {
+        Debug.WriteLine("Disposing TopMenuViewModel");
+        _windowSettingService.UseLargeButtonChanged -= LargeButtonChangedHandler;
     }
 }
