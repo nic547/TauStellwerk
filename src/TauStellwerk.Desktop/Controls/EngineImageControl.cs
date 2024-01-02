@@ -70,7 +70,7 @@ public class EngineImageControl : Image
 
     private async Task LoadImages(IImmutableList<EngineImage>? images)
     {
-        if (images is null)
+        if (images is null || images.Count == 0)
         {
             return;
         }
