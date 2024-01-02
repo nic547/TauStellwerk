@@ -22,8 +22,6 @@ public partial class TopMenuViewModel : ViewModelBase, IDisposable
 
     public TopMenuViewModel(IAvaloniaViewService? viewService = null)
     {
-        Debug.WriteLine("Creating TopMenuViewModel");
-
         _viewService = viewService ?? Locator.Current.GetService<IAvaloniaViewService>() ?? throw new InvalidOperationException();
         _windowSettingService = Locator.Current.GetService<IWindowSettingService>() ?? throw new InvalidOperationException();
 
@@ -72,7 +70,6 @@ public partial class TopMenuViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
-        Debug.WriteLine("Disposing TopMenuViewModel");
         _windowSettingService.UseLargeButtonChanged -= LargeButtonChangedHandler;
     }
 }
