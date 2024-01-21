@@ -36,6 +36,10 @@ public class ImageService
     ];
 
     private readonly StwDbContext _context;
+
+    private readonly SemaphoreSlim _contextSemaphore = new(1);
+    private int _TotalEngineCount;
+
     private readonly ILogger<ImageService> _logger;
 
     private readonly string _userPath;
@@ -86,14 +90,15 @@ public class ImageService
 
         var engines = await _context.Engines.ToListAsync();
 
-        foreach (var engine in engines)
+        await Parallel.ForEachAsync(engines, async (engine, _) =>
         {
             await CreateDownscaledImageInternal(engine);
-        }
+        });
 
         totalStopwatch.Stop();
         var elapsedSeconds = Math.Round(totalStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation("Updated images in {elapsedSeconds} seconds", elapsedSeconds);
+        _logger.LogInformation("Updated {totalImages} images in {elapsedSeconds} seconds", _TotalEngineCount, elapsedSeconds);
+        _TotalEngineCount = 0;
 
         GC.Collect();
     }
@@ -107,9 +112,6 @@ public class ImageService
 
     private async Task CreateDownscaledImageInternal(Engine engine)
     {
-        var engineStopwatch = new Stopwatch();
-        engineStopwatch.Start();
-
         var existingSourceImage = Directory.EnumerateFiles(_userPath, $"{engine.Id}.*").SingleOrDefault();
         var existingGeneratedImages = Directory.EnumerateFiles(_generatedPath, $"{engine.Id}_*.*");
 
@@ -119,7 +121,9 @@ public class ImageService
             {
                 engine.ImageSizes.Clear();
                 engine.LastImageUpdate = null;
+                await _contextSemaphore.WaitAsync();
                 await _context.SaveChangesAsync();
+                _contextSemaphore.Release();
             }
 
             return;
@@ -146,11 +150,13 @@ public class ImageService
         engine.ImageSizes = generatedPixelSizes.Distinct().ToList();
 
         engine.LastImageUpdate = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
 
-        engineStopwatch.Stop();
-        var elapsedSeconds = Math.Round(engineStopwatch.Elapsed.TotalSeconds);
-        _logger.LogInformation("Updated images for {engine} in {elapsedSeconds}s", engine, elapsedSeconds);
+        await _contextSemaphore.WaitAsync();
+        await _context.SaveChangesAsync();
+        _contextSemaphore.Release();
+
+        _logger.LogInformation("Updated images for {engine}", engine);
+        Interlocked.Increment(ref _TotalEngineCount);
     }
 
     private int DownscaleImage(Image image, int id, ImageOptions options)
