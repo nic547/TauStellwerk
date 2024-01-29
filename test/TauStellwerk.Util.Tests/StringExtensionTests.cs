@@ -3,6 +3,7 @@
 
 using FluentAssertions;
 using NUnit.Framework;
+using TauStellwerk.Util.Extensions;
 
 namespace TauStellwerk.Util.Tests;
 
