@@ -20,14 +20,14 @@ public class ImageService
     private static readonly List<ImageOptions> _imageOptions =
     [
         // Quality settings derived from webp values, using https://www.industrialempathy.com/posts/avif-webp-quality-settings/
-        new AvifOptions(1, "_100", 50, 9),
-        new AvifOptions(0.5, "_050", 50, 9),
-        new AvifOptions(0.25, "_025", 55, 9),
+        new AvifOptions(1, "_100", 50, 8),
+        new AvifOptions(0.5, "_050", 50, 8),
+        new AvifOptions(0.25, "_025", 55, 8),
 
         // Quality settings determined experimentally.
-        new WebpOptions(1, "_100", 65, 6),
-        new WebpOptions(0.5, "_050", 65, 6),
-        new WebpOptions(0.25, "_025", 70, 6),
+        //new WebpOptions(1, "_100", 65, 6),
+        //new WebpOptions(0.5, "_050", 65, 6),
+        //new WebpOptions(0.25, "_025", 70, 6),
 
         // Quality settings derived from webp values, using https://www.industrialempathy.com/posts/avif-webp-quality-settings/
         new JpegOptions(1, "_100", 60),

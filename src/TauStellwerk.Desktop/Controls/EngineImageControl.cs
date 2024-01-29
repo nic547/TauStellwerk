@@ -121,12 +121,12 @@ public class EngineImageControl : Image
     private static EngineImage? SelectBestImageCandidate(IImmutableList<EngineImage> image)
     {
         /* For now a very basic heuristic is used.
-        Webp seems to be supported on all platforms
+        No avif support seems to be in AvaloniaUI yet, so JPEG it is for now.
         Loading large images directly tanks performance. From testing it seems that staying below 1000px width works.
         AFAIK there's a way to scale down images before loading them as bitmaps to lower the performance impact, but that's for future me.
         */
 
-        return image.Where(i => i.Type == "image/webp" && i.Width < 1000).MaxBy(i => i.Width);
+        return image.Where(i => i.Type == "image/jpeg" && i.Width < 1000).MaxBy(i => i.Width);
     }
 
     private static string FileNameWithTimestamp(string filename, int timestamp)
