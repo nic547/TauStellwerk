@@ -59,7 +59,7 @@ public class MultiDictionary<TKey, TValue>
                 value = list[0];
                 list.RemoveAt(0);
 
-                if (!list.Any())
+                if (list.Count == 0)
                 {
                     _dict.Remove(key);
                 }

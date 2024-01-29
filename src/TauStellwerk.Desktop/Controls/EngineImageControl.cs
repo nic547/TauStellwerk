@@ -2,7 +2,6 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -15,7 +14,6 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.Controls;
 
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "This specific class looks better this way.")]
 public class EngineImageControl : Image
 {
     public static readonly DirectProperty<EngineImageControl, IImmutableList<EngineImage>?> EngineImagesProperty =

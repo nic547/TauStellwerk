@@ -68,12 +68,7 @@ public class EngineService
 
     public async Task SetSpeed(int id, int speed, Direction direction)
     {
-        var limiter = _activeEngines.TryGet(id);
-        if (limiter == null)
-        {
-            throw new InvalidOperationException();
-        }
-
+        var limiter = _activeEngines.TryGet(id) ?? throw new InvalidOperationException();
         await limiter.Execute((id, speed, direction));
     }
 
