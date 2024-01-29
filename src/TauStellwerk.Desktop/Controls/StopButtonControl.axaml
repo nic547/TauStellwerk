@@ -7,13 +7,24 @@
              x:Class="TauStellwerk.Desktop.Controls.StopButtonControl"
              x:DataType="viewModels:StopButtonControlViewModel"
              x:CompileBindings="True">
-  <Button IsEnabled="{Binding ShouldBeEnabled}" Name="StopButton" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
-            <StackPanel HorizontalAlignment="Center">
-              <Label Content="{Binding CurrentState}" FontSize="24"/>
-              <TextBlock>
-                  <Run Text="{Binding LastAction}"/>
-                  <Run Text="{Binding LastActionUsername}" FontWeight="Bold" />
-              </TextBlock>
-            </StackPanel>
-        </Button>
+    <UserControl.Styles>
+        <Style Selector="TextBlock[Tag=Stopped]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorWarning}"/>
+        </Style>
+        <Style Selector="TextBlock[Tag=Locked]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorDanger}"/>
+        </Style>
+        <Style Selector="TextBlock[Tag=Running]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorPrimary}"/>
+        </Style>
+    </UserControl.Styles>
+    <Button IsEnabled="{Binding ShouldBeEnabled}" Name="StopButton" HorizontalAlignment="Stretch" Command="{Binding StopButtonCommand}">
+        <StackPanel HorizontalAlignment="Center">
+            <Label Content="{Binding CurrentState}" FontSize="24"/>
+            <TextBlock Tag="{Binding ButtonClass}">
+                <Run Text="{Binding LastAction}"/>
+                <Run Text="{Binding LastActionUsername}" FontWeight="Bold" />
+            </TextBlock>
+        </StackPanel>
+    </Button>
 </UserControl>

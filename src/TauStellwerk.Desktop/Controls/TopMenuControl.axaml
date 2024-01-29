@@ -9,6 +9,17 @@
              x:Class="TauStellwerk.Desktop.Controls.TopMenuControl"
              x:DataType="viewModels:TopMenuViewModel"
              x:CompileBindings="True">
+    <UserControl.Styles>
+        <Style Selector="MenuItem#SmallStopButton[Tag=Stopped]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorWarning}"/>
+        </Style>
+        <Style Selector="MenuItem#SmallStopButton[Tag=Locked]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorDanger}"/>
+        </Style>
+        <Style Selector="MenuItem#SmallStopButton[Tag=Running]">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorPrimary}"/>
+        </Style>
+    </UserControl.Styles>
     <StackPanel Margin="0 0 0 5">
         <Menu>
             <MenuItem Header="{x:Static r:Resources.Open}">
@@ -20,9 +31,12 @@
                 <MenuItem Header="{x:Static r:Resources.ToggleLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}"/>
             </MenuItem>
             <MenuItem
+                Name="SmallStopButton"
                 IsVisible="{Binding !UseLargeButton}"
                 Command="{Binding StopButtonVm.StopButtonCommand}"
-                Header="{Binding StopButtonVm.CurrentState}">
+                Header="{Binding StopButtonVm.CurrentState}"
+                Tag="{Binding StopButtonVm.ButtonClass}"
+                >
                 <ToolTip.Tip>
                     <TextBlock>
                         <Run Text="{Binding StopButtonVm.LastAction}"/>
