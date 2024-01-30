@@ -28,7 +28,11 @@ public partial class StopButtonControlViewModel : ViewModelBase
     [ObservableProperty]
     private bool _shouldBeEnabled;
 
+    [ObservableProperty]
     private SystemStatus? _lastSystemStatus;
+
+    [ObservableProperty]
+    private string buttonClass = "Unknown";
 
     public StopButtonControlViewModel()
     {
@@ -43,7 +47,7 @@ public partial class StopButtonControlViewModel : ViewModelBase
 
     private void HandleStatusChange(object? sender, SystemStatus? e)
     {
-        _lastSystemStatus = e;
+        LastSystemStatus = e;
         switch (e?.State)
         {
             case State.On:
@@ -51,12 +55,14 @@ public partial class StopButtonControlViewModel : ViewModelBase
                 CurrentState = Resources.StatusRunning;
                 LastAction = Resources.StatusRunningSubtitle;
                 LastActionUsername = e.LastActionUsername;
+                ButtonClass = "Running";
                 break;
             case State.Off:
                 ShouldBeEnabled = false;
                 CurrentState = Resources.StatusStoppedLocked;
                 LastAction = Resources.StatusStoppedSubtitle;
                 LastActionUsername = e.LastActionUsername;
+                ButtonClass = "Locked";
                 HandleLockedStatus();
                 break;
             case null:
@@ -64,6 +70,7 @@ public partial class StopButtonControlViewModel : ViewModelBase
                 CurrentState = Resources.StatusUnknown;
                 LastAction = Resources.StatusUnknownSubtitle;
                 LastActionUsername = string.Empty;
+                ButtonClass = "Unknown";
                 break;
 
             default:
@@ -75,10 +82,11 @@ public partial class StopButtonControlViewModel : ViewModelBase
     {
         await Task.Delay(3000);
 
-        if (_lastSystemStatus?.State == State.Off)
+        if (LastSystemStatus?.State == State.Off)
         {
             ShouldBeEnabled = true;
             CurrentState = Resources.StatusStopped;
+            ButtonClass = "Stopped";
         }
     }
 

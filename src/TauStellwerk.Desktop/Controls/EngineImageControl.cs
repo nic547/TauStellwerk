@@ -2,7 +2,6 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -15,7 +14,6 @@ using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.Controls;
 
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "This specific class looks better this way.")]
 public class EngineImageControl : Image
 {
     public static readonly DirectProperty<EngineImageControl, IImmutableList<EngineImage>?> EngineImagesProperty =
@@ -70,7 +68,7 @@ public class EngineImageControl : Image
 
     private async Task LoadImages(IImmutableList<EngineImage>? images)
     {
-        if (images is null)
+        if (images is null || images.Count == 0)
         {
             return;
         }
@@ -121,12 +119,12 @@ public class EngineImageControl : Image
     private static EngineImage? SelectBestImageCandidate(IImmutableList<EngineImage> image)
     {
         /* For now a very basic heuristic is used.
-        Webp seems to be supported on all platforms
+        No avif support seems to be in AvaloniaUI yet, so JPEG it is for now.
         Loading large images directly tanks performance. From testing it seems that staying below 1000px width works.
         AFAIK there's a way to scale down images before loading them as bitmaps to lower the performance impact, but that's for future me.
         */
 
-        return image.Where(i => i.Type == "image/webp" && i.Width < 1000).MaxBy(i => i.Width);
+        return image.Where(i => i.Type == "image/jpeg" && i.Width < 1000).MaxBy(i => i.Width);
     }
 
     private static string FileNameWithTimestamp(string filename, int timestamp)

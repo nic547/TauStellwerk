@@ -2,7 +2,7 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using TauStellwerk.Base.Dto;
-using TauStellwerk.Util;
+using TauStellwerk.Util.Extensions;
 
 // ReSharper disable ArrangeObjectCreationWhenTypeNotEvident
 namespace TauStellwerk.Tools.CreateTestDb;

@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using Avalonia;
+using TauStellwerk.Util.Extensions;
 
 namespace TauStellwerk.Desktop.Services.WindowSettingService;
 
@@ -32,7 +33,7 @@ public class WindowSettingService : IWindowSettingService
 
     public void SaveSize(string windowType, Size size)
     {
-        var existingSettings = _windowSettings[windowType];
+        var existingSettings = _windowSettings.TryGet(windowType);
 
         if (existingSettings is not null)
         {
@@ -46,7 +47,7 @@ public class WindowSettingService : IWindowSettingService
 
     public Size? LoadSize(string windowType)
     {
-        _windowSettings.TryGetValue(windowType, out var settings);
+        var settings = _windowSettings.TryGet(windowType);
         if (settings is null || settings.Width is null || settings.Height is null)
         {
             return null;
@@ -72,7 +73,7 @@ public class WindowSettingService : IWindowSettingService
 
     public bool? LoadUseLargeButton(string windowType)
     {
-        _windowSettings.TryGetValue(windowType, out var settings);
+        var settings = _windowSettings.TryGet(windowType);
         if (settings is null || settings.UseLargeButton is null)
         {
             return null;

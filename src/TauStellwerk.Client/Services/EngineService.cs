@@ -7,6 +7,7 @@ using TauStellwerk.Base.Model;
 using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Model.Engine;
 using TauStellwerk.Client.Services.Connections;
+using TauStellwerk.Util.Extensions;
 using TauStellwerk.Util.RateLimiter;
 
 namespace TauStellwerk.Client.Services;
@@ -67,12 +68,7 @@ public class EngineService
 
     public async Task SetSpeed(int id, int speed, Direction direction)
     {
-        _ = _activeEngines.TryGetValue(id, out var limiter);
-        if (limiter == null)
-        {
-            throw new InvalidOperationException();
-        }
-
+        var limiter = _activeEngines.TryGet(id) ?? throw new InvalidOperationException();
         await limiter.Execute((id, speed, direction));
     }
 

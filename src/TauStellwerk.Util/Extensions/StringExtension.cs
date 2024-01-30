@@ -3,7 +3,7 @@
 
 using System.Globalization;
 
-namespace TauStellwerk.Util;
+namespace TauStellwerk.Util.Extensions;
 
 public static class StringExtension
 {
