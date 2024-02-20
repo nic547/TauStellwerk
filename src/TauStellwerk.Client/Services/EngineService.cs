@@ -31,7 +31,7 @@ public class EngineService
         var connection = await _service.TryGetHubConnection();
         if (connection is null)
         {
-            return new List<EngineOverview>();
+            return [];
         }
 
         var engines = await connection.InvokeAsync<List<EngineOverviewDto>>("GetEngines", searchTerm, page, sorting, sortDescending, showHidden);

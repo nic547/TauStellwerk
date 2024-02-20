@@ -57,7 +57,7 @@ public partial class EngineSelectionViewModel : ViewModelBase, IDisposable
 
     public static SortEnginesBy[] EngineSortModes => Enum.GetValues<SortEnginesBy>();
 
-    public static string[] EngineSortDirections => new[] { "ASC", "DESC" };
+    public static string[] EngineSortDirections => ["ASC", "DESC"];
 
     public ObservableCollection<EngineOverview> Engines { get; } = [];
 

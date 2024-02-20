@@ -70,5 +70,6 @@ public partial class TopMenuViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         _windowSettingService.UseLargeButtonChanged -= LargeButtonChangedHandler;
+        GC.SuppressFinalize(this);
     }
 }

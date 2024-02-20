@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using TauStellwerk.Base.Model;
-using TauStellwerk.Client.Model;
 using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 
@@ -45,6 +44,7 @@ public partial class StopButtonControlViewModel : ViewModelBase
         HandleStatusChange(null, _statusService.LastKnownStatus);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Enum isn't a parameter of the method")]
     private void HandleStatusChange(object? sender, SystemStatus? e)
     {
         LastSystemStatus = e;
@@ -74,7 +74,7 @@ public partial class StopButtonControlViewModel : ViewModelBase
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException(nameof(StopButtonState.State), "Unknown value for State enum");
+                throw new ArgumentOutOfRangeException(nameof(e.State), "Unknown value for State enum");
         }
     }
 

@@ -11,6 +11,7 @@ namespace TauStellwerk.Util.Tests;
 /// Tests for <see cref="CounterDictionary"/>.
 /// </summary>
 [Parallelizable(ParallelScope.All)]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments", Justification = "Testcases use it - looks really messy otherwise")]
 public class CounterDictionaryTests
 {
     [TestCase(new int[] { }, null)]
@@ -19,6 +20,7 @@ public class CounterDictionaryTests
     [TestCase(new[] { 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 2, 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 1, 1, 3 }, 1.5d)]
+
     public void AverageCaseTest(int[] values, double? expectedResult)
     {
         var ct = CounterFromArray(values);
