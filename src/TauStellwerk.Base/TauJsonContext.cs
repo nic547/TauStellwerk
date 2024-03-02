@@ -14,10 +14,9 @@ namespace TauStellwerk.Base;
 [JsonSerializable(typeof(List<TurnoutDto>))]
 [JsonSerializable(typeof(SystemStatus))]
 [JsonSerializable(typeof(string))]
-[JsonSerializable(typeof(ResultDto<EngineFullDto>))]
 [JsonSerializable(typeof(ResultDto))]
+[JsonSerializable(typeof(ResultDto<EngineFullDto>))]
+[JsonSerializable(typeof(ResultDto<int>))]
 [JsonSerializable(typeof(SortEnginesBy))]
 [JsonSerializable(typeof(Direction?))]
-public partial class TauJsonContext : JsonSerializerContext
-{
-}
+public partial class TauJsonContext : JsonSerializerContext;

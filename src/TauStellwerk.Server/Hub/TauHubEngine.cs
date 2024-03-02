@@ -7,6 +7,7 @@ using FluentResults.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using TauStellwerk.Base.Dto;
 using TauStellwerk.Base.Model;
+using TauStellwerk.CommandStations;
 using TauStellwerk.Data.Dao;
 
 namespace TauStellwerk.Server.Hub;
@@ -85,5 +86,15 @@ public partial class TauHub
             .Bind(session => _engineControlService.CheckIsEngineAcquiredBySession(session, id))
             .Bind(() => engineDao.Delete(id))
             .Bind(() => _engineControlService.ReleaseEngine(sessionResult.Value, id));
+    }
+
+    public async Task<ResultDto<int>> ReadDccAddress([FromServices] CommandStationBase commandStation)
+    {
+        return await commandStation.ReadDccAddress();
+    }
+
+    public async Task<ResultDto> WriteDccAddress([FromServices] CommandStationBase commandStation, int address)
+    {
+        return await commandStation.WriteDccAddress(address);
     }
 }

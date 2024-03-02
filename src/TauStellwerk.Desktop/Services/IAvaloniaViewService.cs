@@ -9,6 +9,8 @@ namespace TauStellwerk.Desktop.Services;
 
 public interface IAvaloniaViewService : IViewService
 {
+    void ShowProgrammingWindow();
+
     void ShowTurnoutsWindow(object? source = null);
 
     void ShowTurnoutEditWindow(Turnout turnout, object? source = null);

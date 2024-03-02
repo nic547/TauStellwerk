@@ -17,6 +17,10 @@ public class DccExSerialCommandStation : CommandStationBase
 
     private readonly SemaphoreSlim _writeSemaphore = new(1);
 
+    private readonly SemaphoreSlim _programmingSemaphore = new(1);
+    private TaskCompletionSource<int>? _addressReadCompletion;
+    private TaskCompletionSource<int>? _addressWriteCompletion;
+
     public DccExSerialCommandStation(DccExSerialOptions options, ILogger<CommandStationBase> logger)
         : base()
     {
@@ -42,6 +46,8 @@ public class DccExSerialCommandStation : CommandStationBase
             {
                 var line = _serialPort.ReadLine();
 
+                _logger.LogTrace("From DCC EX: {Line}", line);
+
                 if (line == "<p0>")
                 {
                     OnStatusChange(State.Off);
@@ -66,6 +72,30 @@ public class DccExSerialCommandStation : CommandStationBase
                     {
                         OnStatusChange(State.Off);
                     }
+                }
+
+                if (line.StartsWith("<r "))
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        await _programmingSemaphore.WaitAsync();
+                        var address = int.Parse(line[3..^1]);
+                        _addressReadCompletion?.SetResult(address);
+                        _addressReadCompletion = null;
+                        _programmingSemaphore.Release();
+                    });
+                }
+
+                if (line.StartsWith("<w "))
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        await _programmingSemaphore.WaitAsync();
+                        var address = int.Parse(line[3..^1]);
+                        _addressWriteCompletion?.SetResult(address);
+                        _addressWriteCompletion = null;
+                        _programmingSemaphore.Release();
+                    });
                 }
             }
         });
@@ -134,6 +164,53 @@ public class DccExSerialCommandStation : CommandStationBase
         return Result.Ok();
     }
 
+    public override async Task<Result<int>> ReadDccAddress()
+    {
+        await _programmingSemaphore.WaitAsync();
+        if (_addressReadCompletion is null)
+        {
+            _addressReadCompletion = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _programmingSemaphore.Release();
+            await Send("<R>");
+        }
+        else
+        {
+            _programmingSemaphore.Release();
+        }
+
+        var result = await _addressReadCompletion.Task;
+        if (result < 1)
+        {
+            return Result.Fail<int>("Failed to read an address from the programming track");
+        }
+
+        return Result.Ok(result);
+    }
+
+    public override async Task<Result> WriteDccAddress(int address)
+    {
+        await _programmingSemaphore.WaitAsync();
+        if (_addressWriteCompletion is null)
+        {
+            _addressWriteCompletion = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _programmingSemaphore.Release();
+            await Send($"<W {address}>");
+        }
+        else
+        {
+            _programmingSemaphore.Release();
+            return Result.Fail("Another programming operation is already in progress");
+        }
+
+        var result = await _addressWriteCompletion.Task;
+        if (result == address)
+        {
+            return Result.Fail("Failed to write the address to the programming track");
+        }
+
+        return Result.Ok();
+    }
+
     private async Task Send(string message)
     {
         if (!await _writeSemaphore.WaitAsync(2_500))
@@ -142,6 +219,7 @@ public class DccExSerialCommandStation : CommandStationBase
         }
 
         _serialPort.WriteLine(message);
+        _logger.LogTrace("To DCC EX: {Message}", message);
         _writeSemaphore.Release();
     }
 }

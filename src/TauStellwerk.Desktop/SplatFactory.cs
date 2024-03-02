@@ -4,6 +4,7 @@
 using Splat;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Client.Services.Connections;
+using TauStellwerk.Client.Services.DecoderProgramming;
 using TauStellwerk.Client.Services.Turnouts;
 
 namespace TauStellwerk.Desktop;
@@ -23,6 +24,12 @@ public static class SplatFactory
     {
         var httpService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
         return new StatusService(httpService);
+    }
+
+    public static DecoderProgrammingService CreateProgrammingService()
+    {
+        var connectionService = Locator.Current.GetService<ConnectionService>() ?? throw new Exception($"Failed to locate an instance of {nameof(IConnectionService)}");
+        return new DecoderProgrammingService(connectionService);
     }
 
     public static ConnectionService CreateClientHttpService()

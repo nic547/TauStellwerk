@@ -12,6 +12,8 @@ namespace TauStellwerk.CommandStations;
 /// </summary>
 public class ConsoleCommandStation : CommandStationBase
 {
+    private int _address = Random.Shared.Next(1, 10239);
+
     public override Task CheckState()
     {
         return Task.CompletedTask;
@@ -52,6 +54,17 @@ public class ConsoleCommandStation : CommandStationBase
     public override Task<Result> HandleTurnout(Turnout turnout, State state)
     {
         Console.WriteLine($"Turnout at address {turnout.Address} was {(state == State.On ? "turned on" : "turned off")}");
+        return Task.FromResult(Result.Ok());
+    }
+
+    public override Task<Result<int>> ReadDccAddress()
+    {
+        return Task.FromResult(Result.Ok(_address));
+    }
+
+    public override Task<Result> WriteDccAddress(int address)
+    {
+        _address = address;
         return Task.FromResult(Result.Ok());
     }
 }

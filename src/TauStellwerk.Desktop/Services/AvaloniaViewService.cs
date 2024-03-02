@@ -119,6 +119,13 @@ public class AvaloniaViewService : IAvaloniaViewService
         }
     }
 
+    public void ShowProgrammingWindow()
+    {
+        var vm = new DecoderProgrammingViewModel();
+        var window = new DecoderProgrammingWindow(vm);
+        window.Show();
+    }
+
     public async Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null)
     {
         var window = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate window associated with viewmodel.");

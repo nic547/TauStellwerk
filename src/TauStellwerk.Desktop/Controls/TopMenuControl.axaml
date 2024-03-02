@@ -25,6 +25,7 @@
             <MenuItem Header="{x:Static r:Resources.Open}">
                 <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
                 <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+                <MenuItem Header="{x:Static r:Resources.DecoderProgramming}" Command="{Binding OpenProgrammingWindowCommand}"/>
             </MenuItem>
             <MenuItem Header="{x:Static r:Resources.Options}">
                 <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />

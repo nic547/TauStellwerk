@@ -237,4 +237,19 @@
   <data name="ToggleLargeStopButton" xml:space="preserve">
     <value>Grosse Stoptaste aktivieren/deaktivieren</value>
   </data>
+  <data name="DecoderProgramming" xml:space="preserve">
+    <value>Decoder-Programmierung</value>
+  </data>
+  <data name="ReadWriteDccAddress" xml:space="preserve">
+    <value>Lokadresse lesen/schreiben</value>
+  </data>
+  <data name="Write" xml:space="preserve">
+    <value>Schreiben</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Lesen</value>
+  </data>
+  <data name="NonePlaceholder" xml:space="preserve">
+    <value>Keine</value>
+  </data>
 </root>

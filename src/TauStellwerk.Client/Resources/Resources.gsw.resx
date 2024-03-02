@@ -138,4 +138,16 @@
   <data name="ToggleLargeStopButton" xml:space="preserve">
     <value>Grosse Stopchnopf aktiviere/deaktiviere</value>
   </data>
+  <data name="DecoderProgramming" xml:space="preserve">
+    <value>Decoder-Programmierig</value>
+  </data>
+  <data name="ReadWriteDccAddress" xml:space="preserve">
+    <value>Lokadrässe läse/schribe</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Läse</value>
+  </data>
+  <data name="NonePlaceholder" xml:space="preserve">
+    <value>Keini</value>
+  </data>
 </root>

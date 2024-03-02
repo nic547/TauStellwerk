@@ -67,6 +67,12 @@ public partial class TopMenuViewModel : ViewModelBase, IDisposable
         _viewService.ShowTurnoutsWindow();
     }
 
+    [RelayCommand]
+    protected virtual void OpenProgrammingWindow()
+    {
+        _viewService.ShowProgrammingWindow();
+    }
+
     public void Dispose()
     {
         _windowSettingService.UseLargeButtonChanged -= LargeButtonChangedHandler;

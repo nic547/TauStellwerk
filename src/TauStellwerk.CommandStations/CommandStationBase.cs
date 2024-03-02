@@ -70,6 +70,16 @@ public abstract class CommandStationBase
         return Task.FromResult(Result.Fail("CommandSystem doesn't support Turnouts"));
     }
 
+    public virtual Task<Result<int>> ReadDccAddress()
+    {
+        return Task.FromResult(Result.Fail<int>("Programming addresses hasn't been implemented for this command station"));
+    }
+
+    public virtual Task<Result> WriteDccAddress(int address)
+    {
+        return Task.FromResult(Result.Fail("Programming addresses hasn't been implemented for this command station"));
+    }
+
     protected virtual void OnStatusChange(State state)
     {
         StatusChanged?.Invoke(state);
