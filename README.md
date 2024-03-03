@@ -24,7 +24,7 @@ Currently supported Command Stations:
 
 ### MacOS/iOS
 
-Using the cross-platform .NET software framework does mean that the TauStellwerk-Software should run on MacOS/iOS. Unfortunately I do not have access to either OS, so I cannot support either OS.
+Using the cross-platform .NET software framework does mean that the TauStellwerk-Software should run on MacOS/iOS. Unfortunately I do not have access to either OS, so I cannot test on either OS.
 
 ### Webserver
 
@@ -51,3 +51,7 @@ Unless noted otherwise, this project is licensed under the GNU GPLv3, see [here]
 ## Contributing
 
 All contributions are welcome. As I'm currently the sole user and developer, documentation isn't a huge focus for me, so feel free approach me with any potential questions.
+
+## Acknowledgements
+
+JetBrains has been kind enough to provide me with a free open-source license for their products as part of their [open source support program](https://jb.gg/OpenSourceSupport). I'm using Rider for development and can only recommend it.
