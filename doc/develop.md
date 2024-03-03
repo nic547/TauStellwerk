@@ -2,7 +2,7 @@
 
 ## Building the applications
 
-Building the project (currently) requires the .NET 6 SDK.
+Building the project (currently) requires the .NET 8 SDK.
 Because the project relies on information from it's git history for generating it's version number, copies/clones need to include the full git history*
 
 (*technically you only need the history up to the last commit that changed the version.json file, but that's a bit annoying to handle.)
@@ -39,3 +39,5 @@ A slightly simplified Overview over the projects:
 - TauStellwerk.Client: Library shared by all client applications.
 - TauStellwerk.WebClient: The Blazor WebAssembly client. Used by the server application, not necessarily feature complete.
 - TauStellwerk.Desktop: The Desktop application using AvaloniaUI.
+
+For most projects there's also a associated .Test project that, as the name implies, contains test for the project. 
