@@ -2,7 +2,17 @@
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Desktop.xml</DocumentationFile>
     <OutputType>WinExe</OutputType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+    <AssemblyName>TauStellwerk_Desktop</AssemblyName><!-- Linux doesn't like .Desktop Files-->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
@@ -20,17 +30,6 @@
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="Views\CustomStyles.xaml" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Update="Views\Turnouts\TurnoutsWindow.axaml.cs">
-      <DependentUpon>TurnoutsWindow.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
 </Project>
