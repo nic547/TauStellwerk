@@ -14,7 +14,7 @@ public partial class TauHub
         var username = "unnamed";
 
         var usernameFromQuery = Context.GetHttpContext()?.Request.Query["access_token"].ToString();
-        var usernameFromHeader = Context.GetHttpContext()?.Request.Headers["Authorization"].ToString();
+        var usernameFromHeader = Context.GetHttpContext()?.Request.Headers.Authorization.ToString();
 
         if (!string.IsNullOrEmpty(usernameFromQuery))
         {

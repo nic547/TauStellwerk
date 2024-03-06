@@ -11,7 +11,6 @@ namespace TauStellwerk.Util.Tests;
 /// Tests for <see cref="CounterDictionary"/>.
 /// </summary>
 [Parallelizable(ParallelScope.All)]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments", Justification = "Testcases use it - looks really messy otherwise")]
 public class CounterDictionaryTests
 {
     [TestCase(new int[] { }, null)]
