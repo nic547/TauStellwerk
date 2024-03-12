@@ -5,7 +5,6 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Splat;
 using TauStellwerk.Client.Model.Settings;
-using TauStellwerk.Client.Resources;
 using TauStellwerk.Client.Services;
 using TauStellwerk.Desktop.Services;
 
@@ -43,6 +42,5 @@ public partial class MainWindowViewModel : TopMenuViewModel
     private void HandleSettingsChange(ImmutableSettings settings)
     {
         ThemeMode = ParseThemeVariant(settings.Theme);
-        Languages.SetUILanguage(settings.Language);
     }
 }
