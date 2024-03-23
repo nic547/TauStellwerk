@@ -20,6 +20,8 @@
                     Width="400" Theme="{DynamicResource SolidButton}"/>
             <Button Command="{Binding OpenTurnoutListCommand}" Content="{x:Static r:Resources.TurnoutList}"
                     Width="400" Theme="{DynamicResource SolidButton}"/>
+            <Button Command="{Binding OpenProgrammingWindowCommand}" Content="{x:Static r:Resources.DecoderProgramming}"
+                    Width="400" Theme="{DynamicResource SolidButton}"/>
             <Button Command="{Binding OpenSettingsCommand}" Content="{x:Static r:Resources.Settings}"
                     Width="400" Theme="{DynamicResource SolidButton}"/>
           </StackPanel>

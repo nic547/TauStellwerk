@@ -20,33 +20,38 @@
             <Setter Property="Foreground" Value="{DynamicResource SemiColorPrimary}"/>
         </Style>
     </UserControl.Styles>
-    <StackPanel Margin="0 0 0 5">
-        <Menu>
-            <MenuItem Header="{x:Static r:Resources.Open}">
-                <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
-                <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
-            </MenuItem>
-            <MenuItem Header="{x:Static r:Resources.Options}">
-                <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
-                <MenuItem Header="{x:Static r:Resources.ToggleLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}"/>
-            </MenuItem>
-            <MenuItem
-                Name="SmallStopButton"
-                IsVisible="{Binding !UseLargeButton}"
-                Command="{Binding StopButtonVm.StopButtonCommand}"
-                Header="{Binding StopButtonVm.CurrentState}"
-                Tag="{Binding StopButtonVm.ButtonClass}"
+    <Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource BorderCardBorderBrush}" Margin="0 0 0 5" 
+            Background="{DynamicResource BorderCardBackground}"
+            >
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="{x:Static r:Resources.Open}">
+                    <MenuItem Header="{x:Static r:Resources.EngineList}" Command="{Binding OpenEngineListCommand}" />
+                    <MenuItem Header="{x:Static r:Resources.TurnoutList}" Command="{Binding OpenTurnoutListCommand}" />
+                    <MenuItem Header="{x:Static r:Resources.DecoderProgramming}" Command="{Binding OpenProgrammingWindowCommand}"/>
+                </MenuItem>
+                <MenuItem Header="{x:Static r:Resources.Options}">
+                    <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
+                    <MenuItem Header="{x:Static r:Resources.ToggleLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}"/>
+                </MenuItem>
+                <MenuItem
+                    Name="SmallStopButton"
+                    IsVisible="{Binding !UseLargeButton}"
+                    Command="{Binding StopButtonVm.StopButtonCommand}"
+                    Header="{Binding StopButtonVm.CurrentState}"
+                    Tag="{Binding StopButtonVm.ButtonClass}"
                 >
-                <ToolTip.Tip>
-                    <TextBlock>
-                        <Run Text="{Binding StopButtonVm.LastAction}"/>
-                        <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
-                    </TextBlock>
-                </ToolTip.Tip>
-            </MenuItem>
-        </Menu>
-        <Panel IsVisible="{Binding UseLargeButton}" Margin="0 2 0 0">
-            <controls:StopButtonControl/>
-        </Panel>
-    </StackPanel>
+                    <ToolTip.Tip>
+                        <TextBlock>
+                            <Run Text="{Binding StopButtonVm.LastAction}"/>
+                            <Run Text="{Binding StopButtonVm.LastActionUsername}" FontWeight="Bold" />
+                        </TextBlock>
+                    </ToolTip.Tip>
+                </MenuItem>
+            </Menu>
+            <Panel IsVisible="{Binding UseLargeButton}" Margin="0 2 0 0">
+                <controls:StopButtonControl/>
+            </Panel>
+        </StackPanel>
+    </Border>
 </UserControl>

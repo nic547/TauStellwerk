@@ -2,17 +2,27 @@
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Desktop.xml</DocumentationFile>
     <OutputType>WinExe</OutputType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+    <AssemblyName>TauStellwerk_Desktop</AssemblyName><!-- Linux doesn't like .Desktop Files-->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.7" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.7" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.1" />
-    <PackageReference Include="Semi.Avalonia" Version="11.0.1" />
+    <PackageReference Include="Avalonia" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.3" />
+    <PackageReference Include="Semi.Avalonia" Version="11.0.7.1" />
     <PackageReference Include="Splat" Version="14.8.12" />
   </ItemGroup>
 
@@ -20,17 +30,6 @@
     <ProjectReference Include="..\TauStellwerk.Client\TauStellwerk.Client.csproj" />
     <ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
     <ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="Views\CustomStyles.xaml" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Update="Views\Turnouts\TurnoutsWindow.axaml.cs">
-      <DependentUpon>TurnoutsWindow.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
 </Project>

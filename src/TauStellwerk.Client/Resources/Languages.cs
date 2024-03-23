@@ -18,6 +18,6 @@ public static class Languages
             _ => "en",
         };
 
-        Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
     }
 }

@@ -15,28 +15,34 @@ def main():
     os.system("dotnet clean")
     
     for rid in rids:
-        print(f"{BLUE}Building {rid}{NC}")
-        os.system(f"dotnet publish ./src/TauStellwerk.Server/ -r {rid} -o ./publish/{rid} {customargs}")
+        print(f"{BLUE}Building Server {rid}{NC}")
+        os.system(f"dotnet publish ./src/TauStellwerk.Server/ -r {rid} -o ./publish/TauStellwerk.Server-{rid} {customargs}")
         remove_unneeded_files(rid)
-        pack(rid)
+        pack(rid, "Server")
+
+    for rid in rids:
+        print(f"{BLUE}Building Desktop {rid}{NC}")
+        os.system(f"dotnet publish ./src/TauStellwerk.Desktop/ -r {rid} -o ./publish/TauStellwerk.Desktop-{rid}")
+        pack(rid, "Desktop")
     
 def remove_unneeded_files(rid):
-    os.remove(f"./publish/{rid}/appsettings.Development.json")
-    if os.path.exists(f"./publish/{rid}/web.config"):
-        os.remove(f"./publish/{rid}/web.config")
-    shutil.rmtree(f"./publish/{rid}/BlazorDebugProxy")
-    for file in glob(f"./publish/{rid}/*.xml"):
+    if os.path.exists(f"./publish/TauStellwerk.Server-{rid}/appsettings.Development.json"):
+        os.remove(f"./publish/TauStellwerk.Server-{rid}/appsettings.Development.json")
+    if os.path.exists(f"./publish/TauStellwerk.Server-{rid}/web.config"):
+        os.remove(f"./publish/TauStellwerk.Server-{rid}/web.config")
+    shutil.rmtree(f"./publish/TauStellwerk.Server-{rid}/BlazorDebugProxy")
+    for file in glob(f"./publish/TauStellwerk.Server-{rid}/*.xml"):
         os.remove(file)
         
         
-def pack(rid):
+def pack(rid,type):
     if rid.startswith("linux"):
-        shutil.make_archive(f"./publish/TauStellwerk-{rid}", "gztar", f"./publish/{rid}")
+        shutil.make_archive(f"./publish/TauStellwerk.{type}-{rid}", "gztar", f"./publish/TauStellwerk.{type}-{rid}")
     elif rid.startswith("win"):
-        shutil.make_archive(f"./publish/TauStellwerk-{rid}", "zip", f"./publish/{rid}")
+        shutil.make_archive(f"./publish/TauStellwerk.{type}-{rid}", "zip", f"./publish/TauStellwerk.{type}-{rid}")
     else:
         raise Exception("Unkown platform")
-    shutil.rmtree(f"./publish/{rid}")
+    shutil.rmtree(f"./publish/TauStellwerk.{type}-{rid}")
 
 def delete_build_folders():
     for folder in glob("./src/*/obj"):

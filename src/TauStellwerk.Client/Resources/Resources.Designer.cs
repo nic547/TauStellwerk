@@ -114,6 +114,15 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decoder Programming.
+        /// </summary>
+        public static string DecoderProgramming {
+            get {
+                return ResourceManager.GetString("DecoderProgramming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -204,6 +213,15 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string NonePlaceholder {
+            get {
+                return ResourceManager.GetString("NonePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
@@ -218,6 +236,24 @@ namespace TauStellwerk.Client.Resources {
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read.
+        /// </summary>
+        public static string Read {
+            get {
+                return ResourceManager.GetString("Read", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read/Write DCC Address.
+        /// </summary>
+        public static string ReadWriteDccAddress {
+            get {
+                return ResourceManager.GetString("ReadWriteDccAddress", resourceCulture);
             }
         }
         
@@ -416,6 +452,15 @@ namespace TauStellwerk.Client.Resources {
         public static string UsernameSettingDescription {
             get {
                 return ResourceManager.GetString("UsernameSettingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write.
+        /// </summary>
+        public static string Write {
+            get {
+                return ResourceManager.GetString("Write", resourceCulture);
             }
         }
     }

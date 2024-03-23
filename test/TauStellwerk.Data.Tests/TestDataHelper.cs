@@ -36,8 +36,8 @@ public static class TestDataHelper
 
     public static IReadOnlyList<Engine> CreateTestEngineList()
     {
-        return new List<Engine>
-        {
+        return
+        [
             new()
             {
                 Name = "Roco BR 193 493 (Hupac Vollblau)",
@@ -220,103 +220,120 @@ public static class TestDataHelper
                     new DccFunction(28, "Train announcements 3", 4000),
                 },
             },
-            new() {
+            new()
+            {
                 Name = "Märklin Re 620 X-Rail",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new() {
+            new()
+            {
                 Name = "Märklin Re 620 058",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new() {
+            new()
+            {
                 Name = "Märklin Re 6/6 Balerna",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new() {
+            new()
+            {
                 Name = "Märklin Re 420 Circus Knie",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new() {
+            new()
+            {
                 Name = "Märklin Re 482 036 (SBB Cargo)",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
-            new() {
+            new()
+            {
                 Name = "ES 64 F4 - 063 (MRCE)",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new() {
+            new()
+            {
                 Name = "Black Pearl",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "Cat's Eye",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "Re 475 BLS Alpinist",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "BR 193 \"Das ist Grün\"",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "BR 193 (Railpool)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "BR 193 (MRCE)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "BR 193 (DB Cargo)",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
 
-            new() {
+            new()
+            {
                 Name = "BLS Re 4/4 185",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new() {
+            new()
+            {
                 Name = "BLS Re 4/4 174",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new() {
+            new()
+            {
                 Name = "BLS Re 4/4 194",
                 SpeedSteps = 128,
                 TopSpeed = 140,
             },
 
-            new() {
+            new()
+            {
                 Name = "SBB Re 460 \"Munot\"",
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
-        };
+        ];
     }
 }

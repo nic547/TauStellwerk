@@ -12,8 +12,8 @@ public class FilePickerFileTypes
     /// </summary>
     public static FilePickerFileType ImageAllExtended { get; } = new FilePickerFileType("All images")
     {
-        Patterns = new[] { "*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif", "*.webp", "*.avif" },
-        AppleUniformTypeIdentifiers = new[] { "public.image" },
-        MimeTypes = new[] { "image/*" },
+        Patterns = ["*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif", "*.webp", "*.avif"],
+        AppleUniformTypeIdentifiers = ["public.image"],
+        MimeTypes = ["image/*"],
     };
 }

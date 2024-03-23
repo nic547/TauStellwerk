@@ -114,7 +114,7 @@ public static class EngineDtoGenerator
         tags.AddRange(engineNameSet.Tags);
         tags.Add(_manufacturerTags.TakeRandom(random));
         tags.Add(_ownerTag.TakeRandom(random));
-        tags.AddRange(new List<string> { "DCC", "Sound" });
+        tags.AddRange(["DCC", "Sound"]);
 
         // Add two random numbers as a tag to simulate the usage as "alternative names"
         // For example one could add the full UIC-Numbers to an engine => many "single-use" tags

@@ -25,13 +25,15 @@ public class StwDbContext : DbContext
 
     public DbSet<Turnout> Turnouts => Set<Turnout>();
 
+    private static readonly char[] TagSeperators = ['\u001F'];
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<Engine>()
             .Property(e => e.Tags)
             .HasConversion(
                 v => string.Join("\u001F", v),
-                v => v.Split(new char[] { '\u001F' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                v => v.Split(TagSeperators, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 new ValueComparer<List<string>>(
                     (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
                     t => t.GetHashCode()));
@@ -40,7 +42,7 @@ public class StwDbContext : DbContext
             .Property(e => e.ImageSizes)
             .HasConversion(
                 list => string.Join("\u001F", list),
-                savedValue => savedValue.Split(new[] { '\u001F' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList(),
+                savedValue => savedValue.Split(TagSeperators, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList(),
                 new ValueComparer<List<int>>(
                     (t1, t2) => t2 != null && t1 != null && t1.SequenceEqual(t2),
                     t => t.GetHashCode()));

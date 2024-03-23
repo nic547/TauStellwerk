@@ -19,6 +19,7 @@ public class CounterDictionaryTests
     [TestCase(new[] { 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 2, 1, 2 }, 1.5d)]
     [TestCase(new[] { 1, 1, 1, 3 }, 1.5d)]
+
     public void AverageCaseTest(int[] values, double? expectedResult)
     {
         var ct = CounterFromArray(values);

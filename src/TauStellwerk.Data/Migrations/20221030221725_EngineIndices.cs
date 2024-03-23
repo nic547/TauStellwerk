@@ -22,17 +22,17 @@ public partial class EngineIndices : Migration
         migrationBuilder.CreateIndex(
             name: "IX_Engines_Created_IsHidden",
             table: "Engines",
-            columns: new[] { "Created", "IsHidden" });
+            columns: ["Created", "IsHidden"]);
 
         migrationBuilder.CreateIndex(
             name: "IX_Engines_LastUsed_IsHidden",
             table: "Engines",
-            columns: new[] { "LastUsed", "IsHidden" });
+            columns: ["LastUsed", "IsHidden"]);
 
         migrationBuilder.CreateIndex(
             name: "IX_Engines_Name_IsHidden",
             table: "Engines",
-            columns: new[] { "Name", "IsHidden" });
+            columns: ["Name", "IsHidden"]);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)

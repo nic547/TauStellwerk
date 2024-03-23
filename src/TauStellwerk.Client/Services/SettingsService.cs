@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using TauStellwerk.Client.Model.Settings;
+using TauStellwerk.Client.Resources;
 
 namespace TauStellwerk.Client.Services;
 
@@ -43,6 +44,7 @@ public class SettingsService : ISettingsService
         await using var stream = File.Open(FileName, FileMode.Create);
         await JsonSerializer.SerializeAsync(stream, mutableSettings, SettingsJsonContext.Default.MutableSettings);
 
+        Languages.SetUILanguage(_immutableSettings.Language);
         SettingsChanged?.Invoke(_immutableSettings);
     }
 
@@ -65,6 +67,7 @@ public class SettingsService : ISettingsService
             {
                 _settings = potentialSettings;
                 _immutableSettings = _settings.GetImmutableCopy();
+                Languages.SetUILanguage(_immutableSettings.Language);
                 SettingsChanged?.Invoke(_immutableSettings);
             }
         }

@@ -126,9 +126,9 @@
     <data name="StatusUnknownSubtitle" xml:space="preserve">
         <value>Status nonig bekannt</value>
     </data>
-    <data name="StatusRunningSubtitle" xml:space="preserve">
-        <value>TauStellwerk isch gstopt worde vo:</value>
-    </data>
+  <data name="StatusRunningSubtitle" xml:space="preserve">
+    <value>TauStellwerk isch gstarted worde vo:</value>
+  </data>
     <data name="Open" xml:space="preserve">
         <value>Öffne</value>
     </data>
@@ -137,5 +137,17 @@
   </data>
   <data name="ToggleLargeStopButton" xml:space="preserve">
     <value>Grosse Stopchnopf aktiviere/deaktiviere</value>
+  </data>
+  <data name="DecoderProgramming" xml:space="preserve">
+    <value>Decoder-Programmierig</value>
+  </data>
+  <data name="ReadWriteDccAddress" xml:space="preserve">
+    <value>Lokadrässe läse/schribe</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Läse</value>
+  </data>
+  <data name="NonePlaceholder" xml:space="preserve">
+    <value>Keini</value>
   </data>
 </root>

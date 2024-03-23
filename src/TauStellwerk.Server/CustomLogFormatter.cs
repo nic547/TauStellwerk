@@ -16,6 +16,7 @@ public sealed class CustomLogFormatter : ConsoleFormatter
 
     private readonly bool _isService;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required here")]
     public CustomLogFormatter(SimpleConsoleFormatterOptions? options = null)
         : base(nameof(CustomLogFormatter))
     {

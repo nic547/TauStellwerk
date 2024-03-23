@@ -237,4 +237,19 @@
   <data name="ToggleLargeStopButton" xml:space="preserve">
     <value>Toggle large stop button</value>
   </data>
+  <data name="DecoderProgramming" xml:space="preserve">
+    <value>Decoder Programming</value>
+  </data>
+  <data name="ReadWriteDccAddress" xml:space="preserve">
+    <value>Read/Write DCC Address</value>
+  </data>
+  <data name="Write" xml:space="preserve">
+    <value>Write</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="NonePlaceholder" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

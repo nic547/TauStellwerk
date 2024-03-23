@@ -78,9 +78,9 @@ public class ConnectionHandlerTests
     {
         var task = _connectionHandler.SendCommandAsync("set(1,1)");
         await _tcpListener.Send("<REPLY set(1,1)>\r\n");
-        await _tcpListener.Send(new byte[] { 0b110_00011 });
+        await _tcpListener.Send([0b110_00011]);
         await Task.Delay(50); // Ensure the incomplete byte was actually read.
-        await _tcpListener.Send(new byte[] { 0b101_00100, 0b0000_1101, 0b0000_1010 });
+        await _tcpListener.Send([0b101_00100, 0b0000_1101, 0b0000_1010]);
         await _tcpListener.Send("<END 0 (OK)>\r\n");
         var result = await task;
 

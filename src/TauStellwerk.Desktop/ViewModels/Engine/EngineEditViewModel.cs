@@ -95,10 +95,10 @@ public partial class EngineEditViewModel : ViewModelBase
         FilePickerOpenOptions options = new()
         {
             AllowMultiple = false,
-            FileTypeFilter = new List<FilePickerFileType>
-            {
+            FileTypeFilter =
+            [
                 Util.FilePickerFileTypes.ImageAllExtended,
-            },
+            ],
         };
 
         var file = await _viewService.ShowFilePicker(this, options);

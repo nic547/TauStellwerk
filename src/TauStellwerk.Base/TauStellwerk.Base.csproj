@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <DocumentationFile>.\bin\TauStellwerk.Base.xml</DocumentationFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -30,7 +30,7 @@ public partial class TauHub
         if (result.IsSuccess && turnout.Address is not 0)
         {
             _ = Clients.OthersInGroup(TurnoutGroupName)
-                .SendCoreAsync("HandleTurnoutChange", new[] { (object)turnout.Address, state });
+                .SendCoreAsync("HandleTurnoutChange", [turnout.Address, state]);
         }
 
         return result;
