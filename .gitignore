@@ -367,3 +367,4 @@ MigrationBackup/
 #Place for user-created images
 src/TauStellwerk.Server/originalImages/*
 src/TauStellwerk.Server/generatedImages/*
+src/TauStellwerk.Server/transfer/*

@@ -15,5 +15,7 @@ public interface IAvaloniaViewService : IViewService
 
     void ShowTurnoutEditWindow(Turnout turnout, object? source = null);
 
+    void ShowDataTransferWindow();
+
     Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null);
 }

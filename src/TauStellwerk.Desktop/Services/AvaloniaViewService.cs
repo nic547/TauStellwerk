@@ -126,6 +126,11 @@ public class AvaloniaViewService : IAvaloniaViewService
         window.Show();
     }
 
+    public void ShowDataTransferWindow()
+    {
+        new DataTransferWindow().Show();
+    }
+
     public async Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null)
     {
         var window = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate window associated with viewmodel.");

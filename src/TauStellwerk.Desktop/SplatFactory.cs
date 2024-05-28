@@ -22,25 +22,31 @@ public static class SplatFactory
 
     public static StatusService CreateClientStatusService()
     {
-        var httpService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
+        var httpService = Locator.Current.GetRequiredService<ConnectionService>();
         return new StatusService(httpService);
     }
 
     public static DecoderProgrammingService CreateProgrammingService()
     {
-        var connectionService = Locator.Current.GetService<ConnectionService>() ?? throw new Exception($"Failed to locate an instance of {nameof(IConnectionService)}");
+        var connectionService = Locator.Current.GetRequiredService<ConnectionService>();
         return new DecoderProgrammingService(connectionService);
     }
 
     public static ConnectionService CreateClientHttpService()
     {
-        var settingService = Locator.Current.GetService<ISettingsService>() ?? throw new InvalidOperationException();
+        var settingService = Locator.Current.GetRequiredService<ISettingsService>();
         return new ConnectionService(settingService);
     }
 
     public static ITurnoutService CreateTurnoutService()
     {
-        var connectionService = Locator.Current.GetService<ConnectionService>() ?? throw new InvalidOperationException();
+        var connectionService = Locator.Current.GetRequiredService<ConnectionService>();
         return new TurnoutService(connectionService);
+    }
+
+    public static DataTransferService CreateDataTransferService()
+    {
+        var connectionService = Locator.Current.GetRequiredService<ConnectionService>();
+        return new DataTransferService(connectionService);
     }
 }

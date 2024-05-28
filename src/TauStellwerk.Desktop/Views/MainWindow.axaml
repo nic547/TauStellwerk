@@ -24,6 +24,8 @@
                     Width="400" Theme="{DynamicResource SolidButton}"/>
             <Button Command="{Binding OpenSettingsCommand}" Content="{x:Static r:Resources.Settings}"
                     Width="400" Theme="{DynamicResource SolidButton}"/>
+            <Button Command="{Binding OpenDataTransferWindowCommand}" Content="{x:Static r:Resources.Backups}"
+                    Width="400" Theme="{DynamicResource SolidButton}"/>
           </StackPanel>
     </DockPanel>
 </Window>

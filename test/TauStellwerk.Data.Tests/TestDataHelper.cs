@@ -1,10 +1,6 @@
 ﻿// This file is part of the TauStellwerk project.
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
-
-// This file is part of the TauStellwerk project.
-//  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
-
 using TauStellwerk.Data.Model;
 
 namespace TauStellwerk.Data.Tests;
@@ -76,6 +72,11 @@ public static class TestDataHelper
                     new DccFunction(27, "Decrease volume", 0),
                     new DccFunction(28, "Inrcease volume", 0),
                 },
+                ECoSEngineData = new()
+                {
+                    Id = 10030,
+                    Name = "BR 193 493",
+                }
             },
 
             new()
@@ -334,6 +335,14 @@ public static class TestDataHelper
                 SpeedSteps = 128,
                 TopSpeed = 200,
             },
+
+            new()
+            {
+                Name = "Newline \n Test",
+                SpeedSteps = 128,
+                TopSpeed = 200,
+                Tags = ["Test", "New\nline"],
+            }
         ];
     }
 }

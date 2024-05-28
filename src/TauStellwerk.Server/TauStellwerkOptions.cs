@@ -13,6 +13,8 @@ public class TauStellwerkOptions
 
     public string GeneratedImageDirectory { get; init; } = "./generatedImages";
 
+    public string DataTransferDirectory { get; init; } = "./transfer";
+
     public DatabaseOptions Database { get; init; } = new();
 
     public class DatabaseOptions

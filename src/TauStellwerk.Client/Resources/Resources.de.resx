@@ -226,7 +226,7 @@
     <value>Status noch nicht bekannt</value>
   </data>
   <data name="StatusRunningSubtitle" xml:space="preserve">
-    <value>Gestartet von:</value>
+    <value>TauStellwerk wurde gestartet von:</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
@@ -252,7 +252,13 @@
   <data name="NonePlaceholder" xml:space="preserve">
     <value>Keine</value>
   </data>
-  <data name="EngineSameAddress" xml:space="preserve">
-    <value>Lokomotiven mit gleicher Adresse</value>
+  <data name="BackupCreate" xml:space="preserve">
+    <value>Datensicherung erstellen</value>
+  </data>
+  <data name="Backups" xml:space="preserve">
+    <value>Datensicherungen</value>
+  </data>
+  <data name="BackupsCurrent" xml:space="preserve">
+    <value>Aktuelle Datensicherungen</value>
   </data>
 </root>

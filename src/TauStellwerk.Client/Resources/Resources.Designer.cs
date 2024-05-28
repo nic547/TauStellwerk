@@ -78,6 +78,33 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Backup.
+        /// </summary>
+        public static string BackupCreate {
+            get {
+                return ResourceManager.GetString("BackupCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backups.
+        /// </summary>
+        public static string Backups {
+            get {
+                return ResourceManager.GetString("Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Backups.
+        /// </summary>
+        public static string BackupsCurrent {
+            get {
+                return ResourceManager.GetString("BackupsCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
