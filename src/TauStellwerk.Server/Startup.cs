@@ -134,5 +134,6 @@ public class Startup(IConfiguration configuration)
     {
         Directory.CreateDirectory(Options.OriginalImageDirectory);
         Directory.CreateDirectory(Options.GeneratedImageDirectory);
+        Directory.CreateDirectory(Options.DataTransferDirectory);
     }
 }
