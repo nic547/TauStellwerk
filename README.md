@@ -21,6 +21,9 @@ Currently supported Command Stations:
 - ESU Command Station (ECoS)
 - DCC++ EX (via USB)
 
+## Requirements
+TauStellwerk requires the ASP.NET Core Runtime 8.0 to be installed.
+See the [Microsoft .NET Download page](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) for downloads and installation instructions.
 
 ### MacOS/iOS
 
