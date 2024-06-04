@@ -211,7 +211,7 @@
     <value>STOPPED</value>
   </data>
   <data name="StatusStoppedSubtitle" xml:space="preserve">
-    <value>TauStellwerk was stopped by:</value>
+    <value>Stopped by:</value>
   </data>
   <data name="StatusStoppedLocked" xml:space="preserve">
     <value>STOPPED (LOCKED)</value>

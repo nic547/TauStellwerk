@@ -211,7 +211,7 @@
     <value>STOP</value>
   </data>
   <data name="StatusStoppedSubtitle" xml:space="preserve">
-    <value>TauStellwerk wurde gestopt von:</value>
+    <value>Gestopt von:</value>
   </data>
   <data name="StatusRunning" xml:space="preserve">
     <value>AKTIV</value>

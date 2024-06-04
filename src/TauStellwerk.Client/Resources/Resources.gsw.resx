@@ -111,9 +111,9 @@
     <data name="StatusStopped" xml:space="preserve">
         <value>STOP</value>
     </data>
-    <data name="StatusStoppedSubtitle" xml:space="preserve">
-        <value>TauStellwerk isch gschtopt worde vo:</value>
-    </data>
+  <data name="StatusStoppedSubtitle" xml:space="preserve">
+    <value>Gschtopt worde vo:</value>
+  </data>
     <data name="StatusRunning" xml:space="preserve">
         <value>AKTIV</value>
     </data>
@@ -149,5 +149,8 @@
   </data>
   <data name="NonePlaceholder" xml:space="preserve">
     <value>Keini</value>
+  </data>
+  <data name="Write" xml:space="preserve">
+    <value>Schribe</value>
   </data>
 </root>
