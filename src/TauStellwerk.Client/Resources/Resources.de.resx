@@ -226,7 +226,7 @@
     <value>Status noch nicht bekannt</value>
   </data>
   <data name="StatusRunningSubtitle" xml:space="preserve">
-    <value>TauStellwerk wurde gestartet von:</value>
+    <value>Gestartet von:</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
