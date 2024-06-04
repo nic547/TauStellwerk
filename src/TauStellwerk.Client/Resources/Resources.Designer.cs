@@ -375,7 +375,7 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TauStellwerk was stopped by:.
+        ///   Looks up a localized string similar to Stopped by:.
         /// </summary>
         public static string StatusStoppedSubtitle {
             get {
