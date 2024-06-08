@@ -70,6 +70,21 @@ public class EngineDao
         return result.Select(e => e.ToEngineDto()).ToList();
     }
 
+    public async Task<List<EngineOverviewDto>> GetEnginesWithAddress(int address)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        
+        var result = await _dbContext.Engines
+            .AsSingleQuery()
+            .Where(e => e.Address == address)
+            .Take(6)
+            .Select(e => e.ToEngineDto())
+            .ToListAsync();
+        
+        _logger.LogDebug("Engines with address {address} were queried in {time}ms", address, stopwatch.Elapsed.TotalMilliseconds.ToString("F2", CultureInfo.CurrentCulture));
+        return result;
+    }
+
     public async Task<Result<EngineFullDto>> UpdateOrAdd(EngineFullDto engineDto)
     {
         Engine? engine;

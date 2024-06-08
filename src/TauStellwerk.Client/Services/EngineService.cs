@@ -65,6 +65,17 @@ public class EngineService
             await connection.SendAsync("ReleaseEngine", id);
         }
     }
+    
+    public async Task<List<EngineOverviewDto>> GetEnginesForAddress(int address)
+    {
+        var connection = await _service.TryGetHubConnection();
+        if (connection != null)
+        {
+            return await connection.InvokeAsync<List<EngineOverviewDto>>("GetEnginesForAddress", address);
+        }
+
+        return [];
+    }
 
     public async Task SetSpeed(int id, int speed, Direction direction)
     {
@@ -87,7 +98,7 @@ public class EngineService
             await connection.SendAsync("SetEngineEStop", id);
         }
     }
-
+    
     public async Task SetEStop(EngineFull activeEngine)
     {
         activeEngine.Throttle = 0;

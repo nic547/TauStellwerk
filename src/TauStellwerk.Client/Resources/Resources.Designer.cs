@@ -159,6 +159,15 @@ namespace TauStellwerk.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Engines with same address.
+        /// </summary>
+        public static string EngineSameAddress {
+            get {
+                return ResourceManager.GetString("EngineSameAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Functions.
         /// </summary>
         public static string Functions {

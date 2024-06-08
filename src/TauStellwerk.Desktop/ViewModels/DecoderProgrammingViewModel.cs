@@ -4,6 +4,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
+using TauStellwerk.Client.Services;
 using TauStellwerk.Client.Services.DecoderProgramming;
 
 namespace TauStellwerk.Desktop.ViewModels;
@@ -11,6 +12,7 @@ namespace TauStellwerk.Desktop.ViewModels;
 public partial class DecoderProgrammingViewModel : ViewModelBase
 {
     private readonly IDecoderProgrammingService _decoderProgrammingService;
+    private readonly EngineService _engineService;
 
     [ObservableProperty]
     private int? _dccAddress;
@@ -20,10 +22,35 @@ public partial class DecoderProgrammingViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isNotProgramming = true;
+    
+    [ObservableProperty]
+    private List<string> _enginesWithSameAddress = new();
 
-    public DecoderProgrammingViewModel(IDecoderProgrammingService? programmingService = null)
+    [ObservableProperty]
+    private bool _hasManyEnginesWithSameAddress;
+
+    public DecoderProgrammingViewModel(IDecoderProgrammingService? programmingService = null, EngineService? engineService = null)
     {
-        _decoderProgrammingService = programmingService ?? Locator.Current.GetService<IDecoderProgrammingService>() ?? throw new InvalidOperationException();
+        _decoderProgrammingService = programmingService ?? Locator.Current.GetRequiredService<IDecoderProgrammingService>();
+        _engineService = engineService ?? Locator.Current.GetRequiredService<EngineService>();
+
+        this.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(DccAddress))
+            {
+                HandleChangedAddress();
+            }
+        };
+    }
+
+    private async void HandleChangedAddress()
+    {
+        if (DccAddress is > 0 and < 10240)
+        {
+            var engines = await _engineService.GetEnginesForAddress((int)DccAddress);
+            EnginesWithSameAddress = engines.Take(5).Select(e => e.Name).ToList();
+            HasManyEnginesWithSameAddress = engines.Count > 5;
+        }
     }
 
     [RelayCommand]

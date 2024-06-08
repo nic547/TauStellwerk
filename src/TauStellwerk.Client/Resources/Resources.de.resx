@@ -252,4 +252,7 @@
   <data name="NonePlaceholder" xml:space="preserve">
     <value>Keine</value>
   </data>
+  <data name="EngineSameAddress" xml:space="preserve">
+    <value>Lokomotiven mit gleicher Adresse</value>
+  </data>
 </root>
