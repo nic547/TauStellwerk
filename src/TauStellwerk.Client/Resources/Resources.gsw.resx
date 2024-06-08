@@ -153,4 +153,7 @@
   <data name="Write" xml:space="preserve">
     <value>Schribe</value>
   </data>
+  <data name="EngineSameAddress" xml:space="preserve">
+    <value>Loks mit gliicher Adresse</value>
+  </data>
 </root>

@@ -66,6 +66,13 @@ public partial class TauHub
         return list;
     }
 
+    public async Task<List<EngineOverviewDto>> GetEnginesForAddress(
+        [FromServices] EngineDao engineDao,
+        int address)
+    {
+        return await engineDao.GetEnginesWithAddress(address);
+    }
+
     public async Task<ResultDto<EngineFullDto>> AddOrUpdateEngine([FromServices] EngineDao engineDao, EngineFullDto engine)
     {
         if (engine.Id is not 0)
