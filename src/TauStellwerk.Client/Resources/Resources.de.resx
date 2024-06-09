@@ -226,7 +226,7 @@
     <value>Status noch nicht bekannt</value>
   </data>
   <data name="StatusRunningSubtitle" xml:space="preserve">
-    <value>TauStellwerk wurde gestartet von:</value>
+    <value>Gestartet von:</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
@@ -251,5 +251,8 @@
   </data>
   <data name="NonePlaceholder" xml:space="preserve">
     <value>Keine</value>
+  </data>
+  <data name="EngineSameAddress" xml:space="preserve">
+    <value>Lokomotiven mit gleicher Adresse</value>
   </data>
 </root>

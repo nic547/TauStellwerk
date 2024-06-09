@@ -66,6 +66,17 @@ public class EngineService
         }
     }
 
+    public async Task<List<EngineOverviewDto>> GetEnginesForAddress(int address)
+    {
+        var connection = await _service.TryGetHubConnection();
+        if (connection != null)
+        {
+            return await connection.InvokeAsync<List<EngineOverviewDto>>("GetEnginesForAddress", address);
+        }
+
+        return [];
+    }
+
     public async Task SetSpeed(int id, int speed, Direction direction)
     {
         var limiter = _activeEngines.TryGet(id) ?? throw new InvalidOperationException();

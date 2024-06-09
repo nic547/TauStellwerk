@@ -127,7 +127,7 @@
         <value>Status nonig bekannt</value>
     </data>
   <data name="StatusRunningSubtitle" xml:space="preserve">
-    <value>TauStellwerk isch gstarted worde vo:</value>
+    <value>Gstarted worde vo:</value>
   </data>
     <data name="Open" xml:space="preserve">
         <value>Öffne</value>
@@ -152,5 +152,8 @@
   </data>
   <data name="Write" xml:space="preserve">
     <value>Schribe</value>
+  </data>
+  <data name="EngineSameAddress" xml:space="preserve">
+    <value>Loks mit gliicher Adresse</value>
   </data>
 </root>

@@ -226,7 +226,7 @@
     <value>State not yet loaded</value>
   </data>
   <data name="StatusRunningSubtitle" xml:space="preserve">
-    <value>TauStellwerk was started by:</value>
+    <value>Started by:</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
@@ -251,5 +251,8 @@
   </data>
   <data name="NonePlaceholder" xml:space="preserve">
     <value>None</value>
+  </data>
+  <data name="EngineSameAddress" xml:space="preserve">
+    <value>Engines with same address</value>
   </data>
 </root>

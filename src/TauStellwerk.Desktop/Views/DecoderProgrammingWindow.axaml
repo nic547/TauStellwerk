@@ -7,7 +7,8 @@
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.DecoderProgrammingWindow"
-        Title="ProgrammingWindow">
+        Title="ProgrammingWindow"
+        Icon="/Assets/tauStellwerk.ico">
     <Design.DataContext>
         <viewModels:DecoderProgrammingViewModel />
     </Design.DataContext>
@@ -22,6 +23,15 @@
                 <Button Command="{Binding WriteDccAddressCommand}" Content="{x:Static r:Resources.Write}" IsEnabled="{Binding IsNotProgramming}"/>
             </StackPanel>
             <Label Content="{Binding Message}" Classes="Warning"></Label>
+            <Label Content="{x:Static r:Resources.EngineSameAddress}"/>
+            <ItemsControl ItemsSource="{Binding EnginesWithSameAddress}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Label IsVisible="{Binding HasManyEnginesWithSameAddress}" Content="..."/>
         </StackPanel>
     </DockPanel>
 </Window>
