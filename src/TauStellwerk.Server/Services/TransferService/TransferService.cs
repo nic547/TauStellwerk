@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Server.Hub;
@@ -25,7 +26,9 @@ public class TransferService(
         await ExportEngines();
         await ExportTurnouts();
 
-        using var zip = new ZipArchive(File.Create($"./transfer/{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip"), ZipArchiveMode.Create);
+        var filename = $"{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip";
+        
+        using var zip = new ZipArchive(File.Create($"./transfer/{filename}"), ZipArchiveMode.Create);
         zip.CreateEntryFromFile("./transfer/temp/engines.ndjson", "engines.ndjson");
         zip.CreateEntryFromFile("./transfer/temp/turnouts.ndjson", "turnouts.ndjson");
 
@@ -34,8 +37,8 @@ public class TransferService(
             zip.CreateEntryFromFile(image, Path.GetFileName(image));
         }
 
-        logger.LogInformation("Backup created: {filename}", $"{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip");
-        await hubContext.Clients.All.SendAsync("BackupCreated", $"{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip");
+        logger.LogInformation("Backup created: {filename}", filename);
+        await hubContext.Clients.All.SendAsync("BackupCreated", new BackupInfoDto(filename, new FileInfo("./transfer/" + filename).Length));
     }
 
     public async Task ImportEverything()

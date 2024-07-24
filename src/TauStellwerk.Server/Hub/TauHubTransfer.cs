@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Server.Services.TransferService;
 
 namespace TauStellwerk.Server.Hub;
@@ -15,11 +16,10 @@ public partial class TauHub
         return Task.CompletedTask;
     }
 
-    public List<string> GetBackups([FromServices] IOptions<TauStellwerkOptions> options)
+    public List<BackupInfoDto> GetBackups([FromServices] IOptions<TauStellwerkOptions> options)
     {
         return Directory.EnumerateFiles(options.Value.DataTransferDirectory, $"*.zip")
-            .Select(Path.GetFileName)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .ToList()!; // Absolutly shouldn't be null since we filter out null or empty strings
+            .Select(path => new BackupInfoDto(Path.GetFileName(path), new FileInfo(path).Length))
+            .ToList();
     }
 }

@@ -2,6 +2,7 @@
 //  Licensed under the GNU GPL license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.SignalR.Client;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Client.Services.Connections;
 
 namespace TauStellwerk.Client.Services;
@@ -9,7 +10,7 @@ public class DataTransferService
 {
     private readonly IConnectionService _connectionService;
 
-    public event EventHandler<string>? BackupCreated;
+    public event EventHandler<BackupInfoDto>? BackupCreated;
 
     public DataTransferService(IConnectionService connectionService)
     {
@@ -21,10 +22,10 @@ public class DataTransferService
     private async void ConnectionSetUp()
     {
         var connection = await _connectionService.TryGetHubConnection();
-        connection?.On("BackupCreated", (string newBackup) => { BackupCreated?.Invoke(null, newBackup); });
+        connection?.On("BackupCreated", (BackupInfoDto newBackup) => { BackupCreated?.Invoke(null, newBackup); });
     }
 
-    public async Task<List<string>> GetBackups()
+    public async Task<List<BackupInfoDto>> GetBackups()
     {
         var hubConnection = await _connectionService.TryGetHubConnection();
         if (hubConnection == null)
@@ -32,7 +33,7 @@ public class DataTransferService
             return [];
         }
 
-        return await hubConnection.InvokeAsync<List<string>>("GetBackups");
+        return await hubConnection.InvokeAsync<List<BackupInfoDto>>("GetBackups");
     }
 
     public async Task StartBackup()

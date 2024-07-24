@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
+using TauStellwerk.Base.Dto;
 using TauStellwerk.Client.Services;
 
 namespace TauStellwerk.Desktop.ViewModels;
@@ -14,7 +15,7 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
     private readonly DataTransferService _service;
 
     [ObservableProperty]
-    private ObservableCollection<string> _backups = [];
+    private ObservableCollection<BackupInfoDto> _backups = [];
 
     public DataTransferViewModel(DataTransferService? service = null)
     {
@@ -24,9 +25,15 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
         _ = InitalLoad();
     }
 
-    private void OnBackupCreated(object? sender, string s)
+    private void OnBackupCreated(object? sender, BackupInfoDto newBackup)
     {
-        Backups.Add(s);
+        var existingBackup = Backups.SingleOrDefault(b => b.FileName == newBackup.FileName);
+        if (existingBackup != null)
+        {
+            Backups.Remove(existingBackup);
+        }
+        
+        Backups.Add(newBackup);
     }
 
     [RelayCommand]
@@ -38,7 +45,7 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
     private async Task InitalLoad()
     {
         var result = await _service.GetBackups();
-        Backups = new ObservableCollection<string>(result);
+        Backups = new ObservableCollection<BackupInfoDto>(result);
     }
 
     public void Dispose()

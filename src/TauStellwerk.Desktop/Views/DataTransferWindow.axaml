@@ -5,14 +5,18 @@
         xmlns:viewModels="clr-namespace:TauStellwerk.Desktop.ViewModels"
         xmlns:r="clr-namespace:TauStellwerk.Client.Resources;assembly=TauStellwerk.Client"
         xmlns:controls="clr-namespace:TauStellwerk.Desktop.Controls"
+        xmlns:util="clr-namespace:TauStellwerk.Desktop.Util"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TauStellwerk.Desktop.Views.DataTransferWindow"
         Title="{x:Static r:Resources.Backups}">
     <Design.DataContext>
         <viewModels:DataTransferViewModel />
     </Design.DataContext>
+    <Window.Resources>
+        <util:ByteSizeConverter x:Key="ByteSizeConverter" />
+    </Window.Resources>
     <DockPanel>
-        <controls:StopButtonControl DockPanel.Dock="Top"/>
+        <controls:TopMenuControl DockPanel.Dock="Top"/>
         <StackPanel Margin="5">
             <TextBlock>
                 <Run Text="{x:Static r:Resources.Backups}"/>
@@ -24,7 +28,10 @@
                         <StackPanel>
                             <TextBlock Classes="Secondary">
                                 <Run Text="- "/>
-                                <Run Text="{Binding}"/>
+                                <Run Text="{Binding FileName}"/>
+                                <Run Text=" ("/>
+                                <Run Text="{Binding FileSize, Converter={StaticResource ByteSizeConverter}, Mode=OneWay}"/>
+                                <Run Text=")"/>
                             </TextBlock>
                         </StackPanel>
                     </DataTemplate>
