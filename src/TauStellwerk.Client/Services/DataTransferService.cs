@@ -46,4 +46,18 @@ public class DataTransferService
 
         await hubConnection.InvokeAsync("StartBackup");
     }
+
+    public async Task DownloadBackup(string fileName, Uri path)
+    {
+        var httpClient = await _connectionService.TryGetHttpClient();
+        if (httpClient == null)
+        {
+            return;
+        }
+
+        await using var localFile = File.Create(path.AbsolutePath);
+        await using var remoteFile = await httpClient.GetStreamAsync($"/backups/{fileName}");
+
+        await remoteFile.CopyToAsync(localFile);
+    }
 }

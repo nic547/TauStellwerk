@@ -252,6 +252,9 @@
   <data name="NonePlaceholder" xml:space="preserve">
     <value>Keine</value>
   </data>
+    <data name="EngineSameAddress" xml:space="preserve">
+    <value>Lokomotiven mit gleicher Adresse</value>
+  </data>
   <data name="BackupCreate" xml:space="preserve">
     <value>Datensicherung erstellen</value>
   </data>
@@ -260,5 +263,8 @@
   </data>
   <data name="BackupsCurrent" xml:space="preserve">
     <value>Aktuelle Datensicherungen</value>
+  </data>
+  <data name="BackupsDownloadTooltip" xml:space="preserve">
+    <value>Datensicherung lokal speichern</value>
   </data>
 </root>

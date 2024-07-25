@@ -153,6 +153,9 @@
   <data name="Write" xml:space="preserve">
     <value>Schribe</value>
   </data>
+    <data name="EngineSameAddress" xml:space="preserve">
+    <value>Loks mit gliicher Adresse</value>
+  </data>
   <data name="Backups" xml:space="preserve">
     <value>Datesicherige</value>
   </data>
@@ -161,5 +164,8 @@
   </data>
   <data name="BackupsCurrent" xml:space="preserve">
     <value>Aktuelli Datesicherige</value>
+  </data>
+  <data name="BackupsDownloadTooltip" xml:space="preserve">
+    <value>Datesicherig lokal speichere</value>
   </data>
 </root>

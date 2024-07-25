@@ -18,4 +18,6 @@ public interface IAvaloniaViewService : IViewService
     void ShowDataTransferWindow();
 
     Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null);
+
+    Task<IStorageFile?> ShowSaveFilePicker(object source, FilePickerSaveOptions? filePickerSaveOptions = null);
 }

@@ -6,11 +6,11 @@ using Avalonia.Data.Converters;
 
 namespace TauStellwerk.Desktop.Util;
 
-public class ByteSizeConverter: IValueConverter
+public class ByteSizeConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        double size = System.Convert.ToDouble(value as long? ?? 0);
+        var size = System.Convert.ToDouble(value as long? ?? 0);
         if (size > 1024 * 1024 * 1024)
         {
             return $"{size / 1024 / 1024 / 1024:0.00} GiB";
@@ -24,7 +24,7 @@ public class ByteSizeConverter: IValueConverter
             return $"{size / 1024:0.00} KiB";
         }
         return $"{size} B";
-        
+
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

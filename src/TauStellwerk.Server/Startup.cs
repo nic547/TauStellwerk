@@ -111,6 +111,12 @@ public class Startup(IConfiguration configuration)
             ContentTypeProvider = GetContentTypeProvider(),
         });
 
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Options.DataTransferDirectory)),
+            RequestPath = "/backups",
+        });
+
         app.UseRouting();
 
         app.UseEndpoints(endpoints =>

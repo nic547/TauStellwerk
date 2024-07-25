@@ -27,7 +27,7 @@ public class TransferService(
         await ExportTurnouts();
 
         var filename = $"{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip";
-        
+
         using var zip = new ZipArchive(File.Create($"./transfer/{filename}"), ZipArchiveMode.Create);
         zip.CreateEntryFromFile("./transfer/temp/engines.ndjson", "engines.ndjson");
         zip.CreateEntryFromFile("./transfer/temp/turnouts.ndjson", "turnouts.ndjson");

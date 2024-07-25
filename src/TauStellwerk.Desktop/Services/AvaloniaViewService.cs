@@ -141,6 +141,14 @@ public class AvaloniaViewService : IAvaloniaViewService
         return file.SingleOrDefault();
     }
 
+    public async Task<IStorageFile?> ShowSaveFilePicker(object source, FilePickerSaveOptions? filePickerSaveOptions = null)
+    {
+        filePickerSaveOptions ??= new FilePickerSaveOptions();
+        var window = TryGetAssociatedWindow(source) ??
+                     throw new InvalidOperationException("Failed to locate window associated with viewmodel.");
+        return await window.StorageProvider.SaveFilePickerAsync(filePickerSaveOptions);
+    }
+
     /// <summary>
     /// Tries to find the window of a given DataContext.
     /// </summary>

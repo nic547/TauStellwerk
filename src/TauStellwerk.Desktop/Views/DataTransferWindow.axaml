@@ -16,28 +16,34 @@
         <util:ByteSizeConverter x:Key="ByteSizeConverter" />
     </Window.Resources>
     <DockPanel>
-        <controls:TopMenuControl DockPanel.Dock="Top"/>
+        <controls:TopMenuControl DockPanel.Dock="Top" />
         <StackPanel Margin="5">
             <TextBlock>
-                <Run Text="{x:Static r:Resources.Backups}"/>
-                <Run Text=":"/>
+                <Run Text="{x:Static r:Resources.Backups}" />
+                <Run Text=":" />
             </TextBlock>
             <ItemsControl ItemsSource="{Binding Backups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Classes="Secondary">
-                                <Run Text="- "/>
-                                <Run Text="{Binding FileName}"/>
-                                <Run Text=" ("/>
-                                <Run Text="{Binding FileSize, Converter={StaticResource ByteSizeConverter}, Mode=OneWay}"/>
-                                <Run Text=")"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="- " />
+                            <TextBlock Text="{Binding FileName}" PointerPressed="FileLabel_OnPointerPressed"
+                                       TextDecorations="Underline">
+                                <ToolTip.Tip>
+                                    <!-- Workaround: Unless we set the TextDecorations to null the Tooltip would have an underline -->
+                                    <TextBlock Text="{x:Static r:Resources.BackupsDownloadTooltip}" TextDecorations="{x:Null}"/>
+                                </ToolTip.Tip>
                             </TextBlock>
+                            <Label Content=" (" />
+                            <Label
+                                Content="{Binding FileSize, Converter={StaticResource ByteSizeConverter}, Mode=OneWay}" />
+                            <Label Content=")" />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Button Command="{Binding CreateNewBackupCommand}" Content="{x:Static r:Resources.BackupCreate}" HorizontalAlignment="Right" />
+            <Button Command="{Binding CreateNewBackupCommand}" Content="{x:Static r:Resources.BackupCreate}"
+                    HorizontalAlignment="Right" />
         </StackPanel>
     </DockPanel>
 </Window>
