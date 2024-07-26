@@ -6,6 +6,8 @@ namespace TauStellwerk.Util.DateTimeProvider;
 public interface IDateTimeProvider
 {
     public DateTime GetUtcNow();
+
+    public DateTime GetLocalNow();
 }
 
 public class DateTimeProvider : IDateTimeProvider
@@ -13,5 +15,10 @@ public class DateTimeProvider : IDateTimeProvider
     public DateTime GetUtcNow()
     {
         return DateTime.UtcNow;
+    }
+
+    public DateTime GetLocalNow()
+    {
+        return DateTime.Now;
     }
 }

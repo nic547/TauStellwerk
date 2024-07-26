@@ -9,6 +9,7 @@ using TauStellwerk.Base.Dto;
 using TauStellwerk.Data;
 using TauStellwerk.Data.Model;
 using TauStellwerk.Server.Hub;
+using TauStellwerk.Util.DateTimeProvider;
 
 namespace TauStellwerk.Server.Services.TransferService;
 
@@ -16,17 +17,20 @@ public class TransferService(
     IDbContextFactory<StwDbContext> dbContextFactory,
     IHubContext<TauHub> hubContext,
     ILogger<TransferService> logger,
-    TauStellwerkOptions options)
+    TauStellwerkOptions options,
+    IDateTimeProvider? nowProvider = null)
     : ITransferService
 {
     private static readonly string BackupPrefix = "TauStellwerk-Backup-";
+    private readonly IDateTimeProvider _nowProvider = nowProvider ?? new DateTimeProvider();
 
     public async Task ExportEverything()
     {
         await ExportEngines();
         await ExportTurnouts();
 
-        var filename = $"{BackupPrefix}{DateTime.UtcNow:yyyy-MM-dd}.zip";
+        // Local time is used intentionally. Format is not quite ISO8601 because windows doesn't like colons in filenames.
+        var filename = $"{BackupPrefix}{_nowProvider.GetLocalNow():yyyy-MM-dd'T'HH_mm}.zip";
 
         using var zip = new ZipArchive(File.Create($"./transfer/{filename}"), ZipArchiveMode.Create);
         zip.CreateEntryFromFile("./transfer/temp/engines.ndjson", "engines.ndjson");

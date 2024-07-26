@@ -11,4 +11,9 @@ public class FakeDateTimeProvider : IDateTimeProvider
     {
         return Value;
     }
+
+    public DateTime GetLocalNow()
+    {
+        return Value;
+    }
 }

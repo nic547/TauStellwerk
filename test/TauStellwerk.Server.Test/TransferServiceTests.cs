@@ -13,16 +13,19 @@ using TauStellwerk.Data.Tests;
 using TauStellwerk.Server;
 using TauStellwerk.Server.Hub;
 using TauStellwerk.Server.Services.TransferService;
+using TauStellwerk.Util.DateTimeProvider;
 
 namespace TauStellwerk.Test;
 public class TransferServiceTests : ContextTestBase
 {
-    private readonly TauStellwerkOptions defaultOptions = new();
+    private readonly TauStellwerkOptions _defaultOptions = new();
+
+    private readonly IDateTimeProvider _dateTimeProvider = new FakeDateTimeProvider();
 
     [SetUp]
     public void TransferSetup()
     {
-        Directory.CreateDirectory(defaultOptions.OriginalImageDirectory);
+        Directory.CreateDirectory(_defaultOptions.OriginalImageDirectory);
         Directory.CreateDirectory("./transfer");
     }
 
@@ -34,9 +37,9 @@ public class TransferServiceTests : ContextTestBase
             Directory.Delete("./transfer", true);
         }
 
-        if (Directory.Exists(defaultOptions.OriginalImageDirectory))
+        if (Directory.Exists(_defaultOptions.OriginalImageDirectory))
         {
-            Directory.Delete(defaultOptions.OriginalImageDirectory, true);
+            Directory.Delete(_defaultOptions.OriginalImageDirectory, true);
         }
     }
 
@@ -46,9 +49,9 @@ public class TransferServiceTests : ContextTestBase
         var engines = TestDataHelper.CreateTestEngineList();
         var context = GetContext();
         context.Engines.AddRange(engines);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), defaultOptions);
+        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
         await service.ExportEngines();
 
         var lines = await File.ReadAllLinesAsync("./transfer/temp/engines.ndjson");
@@ -61,13 +64,13 @@ public class TransferServiceTests : ContextTestBase
         var engines = TestDataHelper.CreateTestEngineList();
         var context = GetContext();
         context.Engines.AddRange(engines);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), defaultOptions);
+        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
         await service.ExportEngines();
 
         var newContext = GetContext();
-        var newService = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), defaultOptions);
+        var newService = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
 
         await newService.ImportEngines();
         newContext.Engines.Count().Should().Be(engines.Count);
@@ -79,12 +82,13 @@ public class TransferServiceTests : ContextTestBase
         var engines = TestDataHelper.CreateTestEngineList();
         var context = GetContext();
         context.Engines.AddRange(engines);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), defaultOptions);
+        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
         await service.ExportEverything();
 
-        File.Exists($"./transfer/TauStellwerk-Backup-{DateTime.UtcNow:yyyy-MM-dd}.zip").Should().BeTrue();
+
+        File.Exists($"./transfer/TauStellwerk-Backup-{_dateTimeProvider.GetLocalNow():yyyy-MM-dd'T'HH_mm}.zip").Should().BeTrue();
     }
 
     [Test]
@@ -96,17 +100,17 @@ public class TransferServiceTests : ContextTestBase
         await context.SaveChangesAsync();
         await CreateImageFiles(engines.Count);
 
-        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), defaultOptions);
+        var service = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
         await service.ExportEverything();
 
-        using var zip = ZipFile.OpenRead($"./transfer/TauStellwerk-Backup-{DateTime.UtcNow:yyyy-MM-dd}.zip");
+        using var zip = ZipFile.OpenRead($"./transfer/TauStellwerk-Backup-{_dateTimeProvider.GetLocalNow():yyyy-MM-dd'T'HH_mm}.zip");
         zip.Entries.Count.Should().Be(engines.Count + 2,
             "There should be one entry for each engine and two for the ndjson files");
     }
 
     private async Task CreateImageFiles(int number)
     {
-        var imageDirectory = defaultOptions.OriginalImageDirectory;
+        var imageDirectory = _defaultOptions.OriginalImageDirectory;
         if (Directory.Exists(imageDirectory))
         {
             Directory.Delete(imageDirectory, true);
@@ -115,18 +119,18 @@ public class TransferServiceTests : ContextTestBase
         Directory.CreateDirectory(imageDirectory);
         for (var i = 1; i <= number; i++)
         {
-            await File.WriteAllTextAsync($"{defaultOptions.OriginalImageDirectory}/{i}.png", "test");
+            await File.WriteAllTextAsync($"{_defaultOptions.OriginalImageDirectory}/{i}.png", "test");
         }
     }
 
     private IDbContextFactory<StwDbContext> CreateFakeContextFactory()
     {
         var fake = Substitute.For<IDbContextFactory<StwDbContext>>();
-        fake.CreateDbContextAsync().Returns(x => Task.FromResult(GetContext()));
+        fake.CreateDbContextAsync().Returns(_ => Task.FromResult(GetContext()));
         return fake;
     }
 
-    private IHubContext<TauHub> CreateFakeHubContext()
+    private static IHubContext<TauHub> CreateFakeHubContext()
     {
         return Substitute.For<IHubContext<TauHub>>();
     }
