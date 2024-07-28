@@ -126,6 +126,11 @@ public class AvaloniaViewService : IAvaloniaViewService
         window.Show();
     }
 
+    public void ShowDataTransferWindow()
+    {
+        new DataTransferWindow().Show();
+    }
+
     public async Task<IStorageFile?> ShowFilePicker(object source, FilePickerOpenOptions? filePickerOpenOptions = null)
     {
         var window = TryGetAssociatedWindow(source) ?? throw new InvalidOperationException("Failed to locate window associated with viewmodel.");
@@ -134,6 +139,14 @@ public class AvaloniaViewService : IAvaloniaViewService
             filePickerOpenOptions ?? new FilePickerOpenOptions());
 
         return file.SingleOrDefault();
+    }
+
+    public async Task<IStorageFile?> ShowSaveFilePicker(object source, FilePickerSaveOptions? filePickerSaveOptions = null)
+    {
+        filePickerSaveOptions ??= new FilePickerSaveOptions();
+        var window = TryGetAssociatedWindow(source) ??
+                     throw new InvalidOperationException("Failed to locate window associated with viewmodel.");
+        return await window.StorageProvider.SaveFilePickerAsync(filePickerSaveOptions);
     }
 
     /// <summary>

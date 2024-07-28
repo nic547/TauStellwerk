@@ -28,6 +28,8 @@ public static class Program
         Locator.CurrentMutable.RegisterConstant<IAvaloniaViewService>(avaloniaViewService);
         Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateTurnoutService());
         Locator.CurrentMutable.RegisterConstant<IDecoderProgrammingService>(SplatFactory.CreateProgrammingService());
+        Locator.CurrentMutable.RegisterConstant(SplatFactory.CreateDataTransferService());
+
         Locator.CurrentMutable.RegisterConstant<IWindowSettingService>(new WindowSettingService());
 
         Locator.CurrentMutable.RegisterConstant(new StopButtonControlViewModel());

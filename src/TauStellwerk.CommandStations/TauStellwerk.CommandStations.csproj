@@ -5,8 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentResults" Version="3.15.2" />
-		<PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+		<PackageReference Include="FluentResults" Version="3.16.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
 		<PackageReference Include="NSubstitute" Version="5.1.0" />
 		<PackageReference Include="System.IO.Ports" Version="8.0.0" />
 	</ItemGroup>
@@ -15,6 +15,10 @@
 		<ProjectReference Include="..\TauStellwerk.Base\TauStellwerk.Base.csproj" />
 		<ProjectReference Include="..\TauStellwerk.Data\TauStellwerk.Data.csproj" />
 		<ProjectReference Include="..\TauStellwerk.Util\TauStellwerk.Util.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.139" />
 	</ItemGroup>
 
 </Project>

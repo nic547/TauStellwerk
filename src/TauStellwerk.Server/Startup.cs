@@ -15,6 +15,7 @@ using TauStellwerk.Data.ImageService;
 using TauStellwerk.Server.Hub;
 using TauStellwerk.Server.Services;
 using TauStellwerk.Server.Services.EngineControlService;
+using TauStellwerk.Server.Services.TransferService;
 
 namespace TauStellwerk.Server;
 
@@ -46,6 +47,8 @@ public class Startup(IConfiguration configuration)
 
         services.AddDbContextPool<StwDbContext>(options =>
             options.UseSqlite(Options.Database.ConnectionString));
+        services.AddDbContextFactory<StwDbContext>(options =>
+            options.UseSqlite(Options.Database.ConnectionString));
 
         services.AddSingleton(p => new SessionService(p.GetRequiredService<ILogger<SessionService>>()));
         services.AddSingleton(p => CommandStationFactory.FromConfig(Configuration, p.GetRequiredService<ILogger<CommandStationBase>>()));
@@ -72,6 +75,12 @@ public class Startup(IConfiguration configuration)
             p.GetRequiredService<ILogger<ImageService>>(),
             Options.OriginalImageDirectory,
             Options.GeneratedImageDirectory));
+
+        services.AddScoped<ITransferService>(p => new TransferService(
+            p.GetRequiredService<IDbContextFactory<StwDbContext>>(),
+            p.GetRequiredService<IHubContext<TauHub>>(),
+            p.GetRequiredService<ILogger<TransferService>>(),
+            Options));
     }
 
     /// <summary>
@@ -100,6 +109,12 @@ public class Startup(IConfiguration configuration)
             FileProvider = new PhysicalFileProvider(Path.GetFullPath(Options.GeneratedImageDirectory)),
             RequestPath = "/images",
             ContentTypeProvider = GetContentTypeProvider(),
+        });
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(Options.DataTransferDirectory)),
+            RequestPath = "/backups",
         });
 
         app.UseRouting();
@@ -134,5 +149,6 @@ public class Startup(IConfiguration configuration)
     {
         Directory.CreateDirectory(Options.OriginalImageDirectory);
         Directory.CreateDirectory(Options.GeneratedImageDirectory);
+        Directory.CreateDirectory(Options.DataTransferDirectory);
     }
 }
