@@ -11,6 +11,7 @@ public class DataTransferService
     private readonly IConnectionService _connectionService;
 
     public event EventHandler<BackupInfoDto>? BackupCreated;
+    public event EventHandler<string>? BackupDeleted;
 
     public DataTransferService(IConnectionService connectionService)
     {
@@ -23,6 +24,7 @@ public class DataTransferService
     {
         var connection = await _connectionService.TryGetHubConnection();
         connection?.On("BackupCreated", (BackupInfoDto newBackup) => { BackupCreated?.Invoke(null, newBackup); });
+        connection?.On("BackupDeleted", (string filename) => { BackupDeleted?.Invoke(null, filename); });
     }
 
     public async Task<List<BackupInfoDto>> GetBackups()
@@ -59,5 +61,16 @@ public class DataTransferService
         await using var remoteFile = await httpClient.GetStreamAsync($"/backups/{fileName}");
 
         await remoteFile.CopyToAsync(localFile);
+    }
+
+    public async Task DeleteBackup(string filename)
+    {
+        var connection = await _connectionService.TryGetHubConnection();
+        if (connection == null)
+        {
+            return;
+        }
+
+        await connection.InvokeAsync("DeleteBackup", filename);
     }
 }

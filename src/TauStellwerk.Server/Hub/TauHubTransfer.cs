@@ -20,6 +20,12 @@ public partial class TauHub
     {
         return Directory.EnumerateFiles(options.Value.DataTransferDirectory, $"*.zip")
             .Select(path => new BackupInfoDto(Path.GetFileName(path), new FileInfo(path).Length))
+            .OrderByDescending(x => x.FileName)
             .ToList();
+    }
+
+    public async Task DeleteBackup(string filename, [FromServices] ITransferService transferService)
+    {
+        await transferService.DeleteBackup(filename);
     }
 }

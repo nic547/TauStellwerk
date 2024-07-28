@@ -8,4 +8,6 @@ public interface ITransferService
     Task ExportEverything();
 
     Task ImportEverything();
+
+    Task DeleteBackup(string filename);
 }

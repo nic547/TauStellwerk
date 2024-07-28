@@ -26,8 +26,18 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
         _viewService = viewService ?? Locator.Current.GetRequiredService<IAvaloniaViewService>();
 
         _service.BackupCreated += OnBackupCreated;
+        _service.BackupDeleted += OnBackupDeleted;
 
         _ = InitalLoad();
+    }
+
+    private void OnBackupDeleted(object? sender, string fileName)
+    {
+        var existingBackup = Backups.SingleOrDefault(b => b.FileName == fileName);
+        if (existingBackup != null)
+        {
+            Backups.Remove(existingBackup);
+        }
     }
 
     private void OnBackupCreated(object? sender, BackupInfoDto newBackup)
@@ -38,7 +48,7 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
             Backups.Remove(existingBackup);
         }
 
-        Backups.Add(newBackup);
+        Backups.Insert(0, newBackup);
     }
 
     [RelayCommand]
@@ -62,6 +72,12 @@ public partial class DataTransferViewModel : ViewModelBase, IDisposable
         }
 
         await _service.DownloadBackup(fileName, storageFile.Path);
+    }
+
+    [RelayCommand]
+    private async Task DeleteBackup(string fileName)
+    {
+        await _service.DeleteBackup(fileName);
     }
 
     private async Task InitalLoad()

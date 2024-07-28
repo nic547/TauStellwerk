@@ -51,6 +51,14 @@ public class TransferService(
         await ImportTurnouts();
     }
 
+    public async Task DeleteBackup(string filename)
+    {
+        File.Delete(Path.Combine(options.DataTransferDirectory, filename));
+        logger.LogInformation("Backup deleted: {filename}", filename);
+
+        await hubContext.Clients.All.SendAsync("BackupDeleted", filename);
+    }
+
     public Task ImportTurnouts()
     {
         throw new NotImplementedException();
