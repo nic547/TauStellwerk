@@ -59,7 +59,7 @@ public class WindowSettingService : IWindowSettingService
     {
         UseLargeButtonChanged?.Invoke(this, (windowType, useLargeButton));
 
-        var existingSettings = _windowSettings[windowType];
+        var existingSettings = _windowSettings.TryGet(windowType);
 
         if (existingSettings is not null)
         {
