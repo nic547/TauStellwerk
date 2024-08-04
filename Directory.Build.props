@@ -12,6 +12,10 @@
       <Version>3.6.133</Version>
     </PackageReference>
   </ItemGroup>
+    <!-- Hack to fix  https://github.com/dotnet/sdk/issues/25294 -->
+    <PropertyGroup>
+        <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);packages.lock.json</DefaultItemExcludesInProjectFolder>
+    </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
