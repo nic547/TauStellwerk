@@ -3,11 +3,12 @@
 
 using Avalonia.Controls;
 using Avalonia.Input;
+using TauStellwerk.Desktop.Controls;
 using TauStellwerk.Desktop.ViewModels;
 
 namespace TauStellwerk.Desktop.Views;
 
-public partial class DataTransferWindow : Window
+public partial class DataTransferWindow : BaseWindow
 {
     private readonly DataTransferViewModel _vm = new();
     public DataTransferWindow()

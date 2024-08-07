@@ -33,7 +33,7 @@
                 <MenuItem Header="{x:Static r:Resources.Options}">
                     <MenuItem Header="{x:Static r:Resources.Settings}" Command="{Binding OpenSettingsCommand}" />
                     <MenuItem Header="{x:Static r:Resources.Backups}" Command="{Binding OpenDataTransferWindowCommand}"/>
-                    <MenuItem Header="{x:Static r:Resources.ToggleLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}"/>
+                    <MenuItem Header="{x:Static r:Resources.UseLargeStopButton}" Command="{Binding ToggleLargeButtonCommand}" ToggleType="CheckBox" IsChecked="{Binding UseLargeButton, Mode=OneWay }"/>
                 </MenuItem>
                 <MenuItem
                     Name="SmallStopButton"

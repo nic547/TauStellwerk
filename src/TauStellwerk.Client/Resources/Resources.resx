@@ -234,8 +234,8 @@
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="ToggleLargeStopButton" xml:space="preserve">
-    <value>Toggle large stop button</value>
+  <data name="UseLargeStopButton" xml:space="preserve">
+    <value>Use large stop button</value>
   </data>
   <data name="DecoderProgramming" xml:space="preserve">
     <value>Decoder Programming</value>
