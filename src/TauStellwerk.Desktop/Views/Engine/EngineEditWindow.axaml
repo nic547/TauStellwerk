@@ -57,7 +57,7 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
         <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
-          <TextBox Text="{Binding TagInputText}" Watermark="{x:Static r:Resources.NewTagPlaceholder}" MinWidth="150"/>
+          <TextBox Text="{Binding TagInputText}" Watermark="{x:Static r:Resources.NewTagPlaceholder}" MinWidth="150" KeyDown="TagInput_KeyDown"/>
           <Button Content="{x:Static r:Resources.AddTag}" Command="{Binding AddTagCommand}"/>
         </StackPanel>
         <Label Content="{x:Static r:Resources.Functions}"/>
