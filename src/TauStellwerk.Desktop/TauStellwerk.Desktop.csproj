@@ -22,7 +22,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.12" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.12" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.8" />
     <PackageReference Include="Semi.Avalonia" Version="11.0.7.4" />
     <PackageReference Include="Splat" Version="15.1.1" />
   </ItemGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.139" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.141" />
   </ItemGroup>
 
 </Project>

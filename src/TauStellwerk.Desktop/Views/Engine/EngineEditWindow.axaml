@@ -57,11 +57,11 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
         <StackPanel Orientation="Horizontal"  Margin="0 2 0 5">
-          <TextBox Text="{Binding TagInputText}" Watermark="{x:Static r:Resources.NewTagPlaceholder}" MinWidth="150"/>
+          <TextBox Text="{Binding TagInputText}" Watermark="{x:Static r:Resources.NewTagPlaceholder}" MinWidth="150" KeyDown="TagInput_KeyDown"/>
           <Button Content="{x:Static r:Resources.AddTag}" Command="{Binding AddTagCommand}"/>
         </StackPanel>
         <Label Content="{x:Static r:Resources.Functions}"/>
-        <ItemsControl ItemsSource="{Binding Engine.Functions}">
+        <ItemsControl ItemsSource="{Binding Engine.Functions}" Name="FunctionItemsControl">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
               <StackPanel/>
@@ -73,16 +73,16 @@
                 <TextBlock Text="F" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Number}" VerticalAlignment="Center"/>
                 <TextBlock Text=" - " VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Name}" MinWidth="200"/>
+                <TextBox Text="{Binding Name}" MinWidth="200" KeyDown="Functions_KeyDown"/>
                 <TextBlock Text="{x:Static r:Resources.Duration}" VerticalAlignment="Center" Padding="5 0"/>
-                <NumericUpDown Value="{Binding Duration}" Minimum="0" Increment="100" VerticalAlignment="Center" Width="140"/>
+                <NumericUpDown Value="{Binding Duration}" Minimum="0" Increment="100" VerticalAlignment="Center" Width="140" KeyDown="Functions_KeyDown"/>
                 <TextBlock Text=" ms" VerticalAlignment="Center"/>
               </StackPanel>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
         <StackPanel Orientation="Horizontal">
-          <Button Content="{x:Static r:Resources.AddFunction}" Command="{Binding AddFunctionCommand}"/>
+          <Button Content="{x:Static r:Resources.AddFunction}" Command="{Binding AddFunctionCommand}" Click="Button_OnClick" />
           <Button Content="{x:Static r:Resources.RemoveFunction}" Command="{Binding RemoveLastFunctionCommand}"/>
         </StackPanel>
       </StackPanel>
