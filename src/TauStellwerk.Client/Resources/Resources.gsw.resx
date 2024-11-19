@@ -135,8 +135,8 @@
   <data name="Options" xml:space="preserve">
     <value>Optione</value>
   </data>
-  <data name="ToggleLargeStopButton" xml:space="preserve">
-    <value>Grosse Stopchnopf aktiviere/deaktiviere</value>
+  <data name="UseLargeStopButton" xml:space="preserve">
+    <value>Grosse Stopchnopf verwende</value>
   </data>
   <data name="DecoderProgramming" xml:space="preserve">
     <value>Decoder-Programmierig</value>
