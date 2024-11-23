@@ -72,7 +72,7 @@ public class TransferServiceTests : ContextTestBase
         var newContext = GetContext();
         var newService = new TransferService(CreateFakeContextFactory(), CreateFakeHubContext(), Substitute.For<ILogger<TransferService>>(), _defaultOptions, _dateTimeProvider);
 
-        await newService.ImportEngines();
+        await newService.ImportEngines("./transfer/temp/");
         newContext.Engines.Count().Should().Be(engines.Count);
     }
 

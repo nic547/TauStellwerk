@@ -23,6 +23,8 @@ public class TransferService(
 {
     private static readonly string BackupPrefix = "TauStellwerk-Backup-";
     private readonly IDateTimeProvider _nowProvider = nowProvider ?? new DateTimeProvider();
+    
+    private static readonly JsonSerializerOptions _serializerOptions = new();
 
     public async Task ExportEverything()
     {
@@ -45,10 +47,21 @@ public class TransferService(
         await hubContext.Clients.All.SendAsync("BackupCreated", new BackupInfoDto(filename, new FileInfo("./transfer/" + filename).Length));
     }
 
-    public async Task ImportEverything()
+    public async Task ImportEverything(string filename)
     {
-        await ImportEngines();
-        await ImportTurnouts();
+        var context = await dbContextFactory.CreateDbContextAsync();
+        var engineCount = await context.Engines.CountAsync();
+        if (engineCount != 0)
+        {
+            return;
+        }
+        
+        var zip = new ZipArchive(File.OpenRead(filename));
+        var destinationDirectory = Path.Combine(options.DataTransferDirectory, "import");
+        zip.ExtractToDirectory(destinationDirectory);
+        
+        await ImportEngines(destinationDirectory);
+        await ImportTurnouts(destinationDirectory);
     }
 
     public async Task DeleteBackup(string filename)
@@ -59,15 +72,16 @@ public class TransferService(
         await hubContext.Clients.All.SendAsync("BackupDeleted", filename);
     }
 
-    public Task ImportTurnouts()
+    public Task ImportTurnouts(string directory)
     {
-        throw new NotImplementedException();
+        // Do Nuthin for now
+        return Task.CompletedTask;
     }
 
-    public async Task ImportEngines()
+    public async Task ImportEngines(string directory)
     {
         await using var dbContext = await dbContextFactory.CreateDbContextAsync();
-        using var reader = File.OpenText("./transfer/temp/engines.ndjson");
+        using var reader = File.OpenText(Path.Combine(directory, "engines.ndjson"));
         while (!reader.EndOfStream)
         {
             var line = await reader.ReadLineAsync();
@@ -89,7 +103,7 @@ public class TransferService(
         {
             foreach (var turnout in turnoutEnumereable)
             {
-                await writer.WriteLineAsync(JsonSerializer.Serialize(turnout, new JsonSerializerOptions() { }));
+                await writer.WriteLineAsync(JsonSerializer.Serialize(turnout, _serializerOptions));
             }
         }
     }
@@ -104,7 +118,7 @@ public class TransferService(
         {
             foreach (var engine in engineEnumereable)
             {
-                await writer.WriteLineAsync(JsonSerializer.Serialize(engine, new JsonSerializerOptions() { }));
+                await writer.WriteLineAsync(JsonSerializer.Serialize(engine, _serializerOptions));
             }
         }
     }

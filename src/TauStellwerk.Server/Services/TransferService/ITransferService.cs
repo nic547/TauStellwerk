@@ -7,7 +7,7 @@ public interface ITransferService
 {
     Task ExportEverything();
 
-    Task ImportEverything();
+    Task ImportEverything(string path);
 
     Task DeleteBackup(string filename);
 }
